@@ -1,0 +1,29 @@
+# ============ #
+# Class  Files #
+# ============ #
+bin/
+
+# ============ #
+#   Libraries  #
+# ============ #
+deps/
+
+# ============ #
+#    Mapdata   #
+# ============ #
+data/data/
+data/world/
+
+# ============ #
+#    IDE shit  #
+# ============ #
+nbproject/
+.classpath
+.project
+build.xml
+manifest.mf
+
+# ============ #
+# Batch scripts#
+# ============ #
+run.bat

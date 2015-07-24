@@ -1,0 +1,191 @@
+[ACCOUNT]
+character-username = Test
+character-password = b257a6c3d085120052586fc9de90f32e
+
+[CHARACTER]
+character-height = 0
+character-posx = 3093
+character-posy = 3491
+character-rights = 3
+Donator = 0
+character-title = 0
+expLock = false
+totalxp =262743
+crystal-bow-shots = 0
+skull-timer = 0
+magic-book = 0
+prayer-book = false
+isDonePicking = false
+Picked = 0
+KC = 0
+DC = 0
+special-amount = 10.0
+selected-coffin = 0
+lastBrother = 0
+barrows-npc-dead = false	false	false	false	false	false
+teleblock-length = 0
+votingPoints = 0
+timesVoted = 0
+Amount-Donated = 0
+pc-points = 0
+SlayerPoints = 0
+DonatorPoints = 0
+splitChat = false
+SLAY-TASK = null	0
+totalTasks = 0
+taskDifficulty = -1
+magePoints = 0
+autoRet = 1
+flagged = false
+hasOverloafalse
+wave = 0
+gwkc = 0
+fightMode = 1
+PKP = 0
+yellTag = Default tag
+constitution = 990
+void = 0	0	0	0	0
+savedClan = Test
+hasSavedClan = false
+lootSharePotential = 0
+lastLootDate = 0
+vengeanceCasted = 0
+familiarSpecialEnergy = 60
+familiar = -1
+RockCrabKills = 0
+run-energy = 200
+
+[GODWARS]
+godwars = 0	3
+godwars = 1	0
+godwars = 2	0
+godwars = 3	0
+
+[QUICKS]
+quickCurses = false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	
+quickPrayers = false	false	false	false	false	false	false	false	false	false	true	false	false	false	false	false	false	false	false	false	false	false	false	false	false	true	
+
+[EQUIPMENT]
+character-equip = 0	1042	1	
+character-equip = 1	-1	1	
+character-equip = 2	-1	1	
+character-equip = 3	4587	1	
+character-equip = 4	-1	1	
+character-equip = 5	-1	1	
+character-equip = 6	-1	0	
+character-equip = 7	-1	1	
+character-equip = 8	-1	0	
+character-equip = 9	-1	1	
+character-equip = 10	-1	1	
+character-equip = 11	-1	0	
+character-equip = 12	-1	1	
+character-equip = 13	-1	0	
+
+[LOOK]
+character-look = 0	0
+character-look = 1	3
+character-look = 2	18
+character-look = 3	26
+character-look = 4	33
+character-look = 5	36
+character-look = 6	42
+character-look = 7	10
+character-look = 8	3
+character-look = 9	1
+character-look = 10	2
+character-look = 11	0
+character-look = 12	0
+
+[SKILLS]
+character-skill = 0	99	13034436
+character-skill = 1	99	13034436
+character-skill = 2	99	13209430
+character-skill = 3	99	13078185
+character-skill = 4	99	13034436
+character-skill = 5	98	13069436
+character-skill = 6	99	13034436
+character-skill = 7	99	13034436
+character-skill = 8	99	13034436
+character-skill = 9	99	13034436
+character-skill = 10	99	13034436
+character-skill = 11	99	13034436
+character-skill = 12	99	13034436
+character-skill = 13	99	13034436
+character-skill = 14	99	13034436
+character-skill = 15	99	13034436
+character-skill = 16	99	13034436
+character-skill = 17	99	13034436
+character-skill = 18	99	13034436
+character-skill = 19	99	13034436
+character-skill = 20	99	13034436
+character-skill = 21	99	13034436
+character-skill = 22	99	13034436
+character-skill = 23	99	13034436
+character-skill = 24	99	13034436
+
+[ITEMS]
+
+[BANK]
+character-bank = 0	996	2020000
+character-bank = 1	1624	1
+character-bank = 2	1334	1
+character-bank = 3	1324	1
+character-bank = 4	842	1
+character-bank = 5	883	200
+character-bank = 6	862	1
+character-bank = 7	893	200
+character-bank = 8	1713	1
+character-bank = 9	1382	1
+character-bank = 10	557	200
+character-bank = 11	559	200
+character-bank = 12	556	200
+character-bank = 13	558	200
+character-bank = 14	555	200
+character-bank = 15	563	200
+character-bank = 16	2437	20
+character-bank = 17	2441	20
+character-bank = 18	2443	20
+character-bank = 19	2435	20
+character-bank = 20	386	200
+character-bank = 21	392	50
+character-bank = 22	4156	1
+character-bank = 23	1898	3
+character-bank = 24	1043	1
+
+[FRIENDS]
+character-friend = 0	1813643468
+character-friend = 1	1814403453333
+
+[BOB]
+
+[GRANDEXCHANGE]
+slot = 1	0	0
+slot = 2	0	0
+slot = 3	0	0
+slot = 4	0	0
+slot = 5	0	0
+slot = 6	0	0
+
+[DEGRADEABLES]
+chaotic = 1	0
+chaotic = 2	0
+chaotic = 3	0
+chaotic = 4	0
+chaotic = 5	0
+chaotic = 6	0
+chaotic = 7	0
+chaotic = 8	0
+chaotic = 9	0
+chaotic = 10	0
+chaotic = 11	0
+chaotic = 12	0
+
+[DUNGEONEERING]
+bound = 1	0	0
+bound = 2	0	0
+bound = 3	0	0
+bound = 4	0	0
+bound = 5	0	0
+
+[EOF]
+
