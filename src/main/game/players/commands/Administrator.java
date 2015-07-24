@@ -66,20 +66,36 @@ public class Administrator extends Commands {
 				c.getVariables().constitution = 990;
 				c.getPA().requestUpdates();
 			}
-			
+
+			/**
+			 * Jesus Christ, PI commands are structured fucking horribly.
+			 * 
+			 * Previously, the command would ONLY process correctly if
+			 * two arguments were given -- ID and amount. I modified the
+			 * command to use an understood-1 for the amount.
+			 * 
+			 * This means we can do ::item 4151 to spawn one whip, as 
+			 * opposed to ::item 4151 1, always having to append the
+			 * number 1 onto the end.
+			 * 
+			 * - KeepBotting
+			 */
 			if (playerCommand.startsWith("item") && !c.inWild()) {
 				try {
 					String[] args = playerCommand.split(" ");
-					if (args.length == 3) {
+					if(args.length == 2 || args.length == 3) {
 						int newItemID = Integer.parseInt(args[1]);
-						int newItemAmount = Integer.parseInt(args[2]);
+						int newItemAmount = 1;
+						if(args.length == 3) {
+							newItemAmount = Integer.parseInt(args[2]);
+						}
 						if ((newItemID <= 20500) && (newItemID >= 0)) {
 							c.getItems().addItem(newItemID, newItemAmount);
 						} else {
-							c.sendMessage("The item command is limited to 20500 -Alex.");
+							c.sendMessage("The item command is apparently limited to 20500.");
 						}
 					} else {
-						c.sendMessage("Wrong usage. Ex:(::item 995 1)");
+						c.sendMessage("Syntax is ::item [id] [count].");
 					}
 				} catch (Exception e) {
 				}
@@ -205,24 +221,6 @@ public class Administrator extends Commands {
 								Player c2 = PlayerHandler.players[i];
 								c2.sendMessage("You have been given mod status by " + c.playerName);
 								c2.getVariables().playerRights = 1;
-								c2.logout();
-								break;
-							}
-						}
-					}
-				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
-				}
-			}
-			if (playerCommand.startsWith("givevet")) {
-				try {
-					String playerToVet = playerCommand.substring(8);
-					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToVet)) {
-								Player c2 = PlayerHandler.players[i];
-								c2.sendMessage("You have been given veteran status by " + c.playerName);
-								c2.getVariables().playerRights = 9;
 								c2.logout();
 								break;
 							}
