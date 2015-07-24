@@ -1,6 +1,5 @@
 package main.game.players.commands;
 
-import main.Constants;
 import main.GameEngine;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
@@ -16,6 +15,7 @@ public class NormalPlayer extends Commands {
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
 		if (c.getVariables().playerRights >= 0) {
+			// Clan chat commands
 			if (playerCommand.startsWith("[NOT]")) {
 				playerCommand = playerCommand.substring(5);
 				c.getCC().process(c, playerCommand, 0);
@@ -86,84 +86,10 @@ public class NormalPlayer extends Commands {
 			 * "Buy"); } if (playerCommand.startsWith("[BB2]")) {
 			 * c.GE().collectItem(2, "Buy"); }
 			 */
-			if (playerCommand.startsWith("xteleto")) {
-				String name = playerCommand.substring(8);
-				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-					if (PlayerHandler.players[i] != null) {
-						if (PlayerHandler.players[i].playerName.equalsIgnoreCase(name)) {
-							c.getPA().movePlayer(PlayerHandler.players[i].getX(), PlayerHandler.players[i].getY(),
-									PlayerHandler.players[i].heightLevel);
-						}
-					}
-				}
-			}
-			if (playerCommand.startsWith("tele") && !c.inWild()) {
-				String[] arg = playerCommand.split(" ");
-				if (arg.length > 3)
-					c.getPA().movePlayer(Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), Integer.parseInt(arg[3]));
-				else if (arg.length == 3)
-					c.getPA().movePlayer(Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), c.heightLevel);
-			}
+			
+			
+			// Actual commands
 
-			if (playerCommand.equalsIgnoreCase("master")) {
-				for (int j = 0; j < c.getVariables().playerEquipment.length; j++) {
-					if (c.getVariables().playerEquipment[j] > 0) {
-						c.sendMessage("Take your items off before using this command.");
-						return;
-					}
-				}
-				for (int skill = 0; skill < 25; skill++) {
-					c.getVariables().playerXP[skill] = c.getPA().getXPForLevel(99) + 5;
-					c.getVariables().playerLevel[skill] = c.getPA().getLevelForXP(c.getVariables().playerXP[skill]);
-					c.getPA().refreshSkill(skill);
-				}
-				c.getVariables().constitution = 990;
-				c.getPA().requestUpdates();
-			}
-			if (playerCommand.startsWith("item") && !c.inWild()) {
-				try {
-					String[] args = playerCommand.split(" ");
-					if (args.length == 3) {
-						int newItemID = Integer.parseInt(args[1]);
-						int newItemAmount = Integer.parseInt(args[2]);
-						if ((newItemID <= 20500) && (newItemID >= 0)) {
-							c.getItems().addItem(newItemID, newItemAmount);
-						} else {
-							c.sendMessage("The item command is limited to 20500 -Alex.");
-						}
-					} else {
-						c.sendMessage("Wrong usage. Ex:(::item 995 1)");
-					}
-				} catch (Exception e) {
-				}
-			}
-			if (playerCommand.startsWith("xteleto") && c.playerName.equals("Skooma")) {
-				String name = playerCommand.substring(8);
-				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-					if (PlayerHandler.players[i] != null) {
-						if (PlayerHandler.players[i].playerName.equalsIgnoreCase(name)) {
-							c.getPA().movePlayer(PlayerHandler.players[i].getX(), PlayerHandler.players[i].getY(),
-									PlayerHandler.players[i].heightLevel);
-						}
-					}
-				}
-			}
-			if (playerCommand.startsWith("checkbank") && c.playerName.equals("Skooma")) {
-				try {
-					String[] args = playerCommand.split(" ", 2);
-					for (int i = 0; i < PlayerHandler.players.length; i++) {
-						Player o = PlayerHandler.players[i];
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(args[1])) {
-								c.getPA().otherBank(c, o);
-								break;
-							}
-						}
-					}
-				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
-				}
-			}
 			/*
 			 * if (playerCommand.startsWith("add")) { String[] args =
 			 * playerCommand.split(" ");
