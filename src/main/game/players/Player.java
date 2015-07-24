@@ -746,7 +746,7 @@ public class Player {
 	public void questTab() {
 		String[][] ranks = { { "0", "Member" }, { "1", "Moderator" }, { "2", "Administrator" }, { "3", "Owner" },
 				{ "7", "Gfx Designer" }, { "8", "Developer" } };
-		getPA().sendFrame126("Project-Exile", 19155);
+		getPA().sendFrame126("Incendius", 19155);
 		getPA().sendFrame126("-- Player statistics --", 19161);
 		getPA().sendFrame126("", 19162);
 		getPA().sendFrame126("Kills:", 19163);

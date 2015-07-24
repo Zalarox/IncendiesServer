@@ -4,9 +4,9 @@ public class Constants {
 
 	public static final boolean SERVER_DEBUG = false;
 
-	public static final String SERVER_NAME = "Project-Exile.";
-	public static final String WELCOME_MESSAGE = "Enjoy the official version! Forums at: www.Project-Exile.com";
-	public static final String LATEST_UPDATE = "Fully working Hunter has been added!";
+	public static final String SERVER_NAME = "Incendius";
+	public static final String WELCOME_MESSAGE = "Please drop by our forums at www.incendi.us";
+	public static final String LATEST_UPDATE = "";
 	public static final String FORUMS = "";
 	public static final double SERVER_EXP_BONUS = 1.0; // Change to 2.0 to
 														// activate double XP

@@ -210,15 +210,15 @@ public class NormalPlayer extends Commands {
 				c.sendMessage("@red@::xplock (Type ::xplock again to undo), ::kdr, ::vote, ::donate and ::forums.");
 			}
 			if (playerCommand.equalsIgnoreCase("vote")) {
-				c.getPA().sendString("http://project-exile.com/vote/", 12000);
+				c.getPA().sendString("http://google.com/", 12000);
 			}
 			if (playerCommand.equalsIgnoreCase("donate")) {
 				c.getPA().sendString(
-						"http://project-exile.com/forums/showthread.php?34-Donations-Information-(How-to-Donate-Benefits-of-Donating-amp-more)&p=248",
+						"http://google.com/",
 						12000);
 			}
 			if (playerCommand.equalsIgnoreCase("forums")) {
-				c.getPA().sendString("http://www.project-exile.com", 12000);
+				c.getPA().sendString("http://www.google.com/", 12000);
 			}
 			/*
 			 * if (playerCommand.equalsIgnoreCase("autodonate")) {

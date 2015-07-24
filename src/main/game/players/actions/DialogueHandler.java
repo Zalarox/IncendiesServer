@@ -110,10 +110,10 @@ public class DialogueHandler {
 			c.getVariables().teleAction = -1;
 			break;
 		case 250:
-			sendNpcChat4("Hello there " + c.playerName + "!", "I am the Zaros Guide and I offer advice for",
-					"Zaros beginners about all they need to know to begin",
+			sendNpcChat4("Hello there " + c.playerName + "!", "I am the Incendius Guide and I offer advice for",
+					"Incendius beginners about all they need to know to begin",
 					"there adventure, would you like to see the information I offer?", c.getVariables().talkingNpc,
-					"Zaros Guide");
+					"Incendius Guide");
 			c.getVariables().nextChat = 251;
 			break;
 		case 251:
@@ -242,7 +242,7 @@ public class DialogueHandler {
 		case 206:
 			sendNpcChat3("Well " + c.playerName + ", through this gate is the Mining Guild.",
 					"Any player with a Mining level of 85+ can enter through the",
-					"gate to mine the best and more valuable ore on Project-Exile.", c.getVariables().talkingNpc,
+					"gate to mine the best and more valuable ore on Incendius.", c.getVariables().talkingNpc,
 					"Mining Instructor");
 			c.getVariables().nextChat = 207;
 			break;
@@ -312,7 +312,7 @@ public class DialogueHandler {
 		case 210:
 			sendNpcChat3("Hello there " + c.playerName + ", you look like the kind of person who",
 					"would be into the Fishing skill. I sell the finest fishing hardware",
-					"in the whole of Project-Exile, trade me to view my wares.", c.getVariables().talkingNpc, "Harry");
+					"in the whole of Incendius, trade me to view my wares.", c.getVariables().talkingNpc, "Harry");
 			c.getVariables().nextChat = 211;
 			break;
 		case 211:

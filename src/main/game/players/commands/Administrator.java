@@ -411,7 +411,7 @@ public class Administrator extends Commands {
 				for (int j = 0; j < PlayerHandler.players.length; j++)
 					if (PlayerHandler.players[j] != null) {
 						Player c2 = PlayerHandler.players[j];
-						c2.getPA().sendString("http://project-exile.com/vote/", 12000);
+						c2.getPA().sendString("http://google.com/", 12000);
 					}
 			}
 			if (playerCommand.equals("donateall")) {
@@ -419,7 +419,7 @@ public class Administrator extends Commands {
 					if (PlayerHandler.players[j] != null) {
 						Player c2 = PlayerHandler.players[j];
 						c2.getPA().sendString(
-								"http://project-exile.com/forums/showthread.php?34-Donations-Information-(How-to-Donate-Benefits-of-Donating-amp-more)&p=248",
+								"http://google.com/",
 								12000);
 					}
 			}
