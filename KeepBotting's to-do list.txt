@@ -1,2 +1,16 @@
  - Implement an audit() method, I guess it'd go in PlayerAssistant. Reference: http://www.rune-server.org/runescape-development/rs2-server/tutorials/491525-pi-destroy-item-dialogue-chosen-items.html
- - Implement an audit() command, which displays the following about a player: Inventory wealth, equipment wealth, bank wealth, creation date, creation IP, creation UUID, current IP, current UUID, original name, current name, other associated accounts ... (ask Rhianne for more)
+
+ - Implement an audit() command, which displays the following about a player: 
+	* Inventory wealth, 
+	* equipment wealth, 
+	* bank wealth, 
+	* creation date, 
+	* creation IP, 
+	* creation UUID, 
+	* current IP, 
+	* current UUID, 
+	* original name, 
+	* current name, 
+	* other associated accounts ... (ask Rhianne for more)
+
+- Fix xlogging while in combat so I can get rid of the stupid hacky fix for the dupe that xlogging causes
