@@ -16,7 +16,7 @@ import main.game.players.commands.Donator;
 //import main.game.players.commands.ExtremeDonator;
 //import main.game.players.commands.GFXDesigner;
 import main.game.players.commands.NormalPlayer;
-import main.game.players.commands.Moderator;
+// TODO import main.game.players.commands.Moderator;
 //import main.game.players.commands.PlayerModerator;
 //import main.game.players.commands.SuperDonator;
 import main.util.Misc;
@@ -32,7 +32,7 @@ public class Commands implements PacketType {
 	private void loadCommands(Player p, String playerCommand) {
 		Developer.handleCommands(p, playerCommand);
 		Administrator.handleCommands(p, playerCommand);
-		Moderator.handleCommands(p, playerCommand);
+// TODO		Moderator.handleCommands(p, playerCommand);
 		Donator.handleCommands(p, playerCommand);
 		NormalPlayer.handleCommands(p, playerCommand);
 		//SuperDonator.handleCommands(p, playerCommand);
