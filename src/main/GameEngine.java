@@ -83,7 +83,8 @@ public class GameEngine {
 	 * @throws InstantiationException
 	 * @throws ClassNotFoundException
 	 */
-	public static void main(final String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+	public static void main(final String[] args) throws IOException, ClassNotFoundException, InstantiationException,
+			IllegalAccessException, UnsupportedLookAndFeelException {
 		System.out.println("[1/7] Starting the server...");
 		loadServerData();
 		bind();
@@ -128,13 +129,14 @@ public class GameEngine {
 	private static void sleep() throws InterruptedException {
 		long sleepTime = cycleRate - cycleTimer.elapsed();
 
-		// System.out.println("Cycle time: " + cycleTimer.elapsed());
+		System.out.println("Cycle rate: " + cycleTimer.elapsed() + " ms, engine load: "
+				+ (100 - (Math.abs(sleepTime) / (cycleRate / 100))) + "%");
 
 		if (sleepTime > 0) {
 			Thread.sleep(sleepTime);
 		} else {
 			// The server has reached maximum load, players may now lag.
-			System.out.println("[WARNING]: Server load: " + (100 + (Math.abs(sleepTime) / (cycleRate / 100))) + "%!");
+			System.out.println("[WARNING]: Engine load has reached a critical level!");
 		}
 		cycleTimer.reset();
 	}
