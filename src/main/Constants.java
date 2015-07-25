@@ -6,45 +6,38 @@ public class Constants {
 
 	public static final String SERVER_NAME = "Incendius";
 	public static final String WELCOME_MESSAGE = "Please drop by our forums at www.incendi.us";
-	public static final String LATEST_UPDATE = "";
+	public static final String LATEST_UPDATE = "Changes as often as the weather!";
 	public static final String FORUMS = "";
-	public static final double SERVER_EXP_BONUS = 1.0; // Change to 2.0 to
-														// activate double XP
-														// weekend
+	public static final double SERVER_EXP_BONUS = 1.0; // XP bonus multiplier
 
 	public static final int CASTLE_WARS_X = 2439;
 	public static final int CASTLE_WARS_Y = 3087;
 
-	public static final int CLIENT_VERSION = 999999;
+	public static final int CLIENT_VERSION = 999999; // TODO change this.
 
-	public static int MESSAGE_DELAY = 6000;
+	public static int MESSAGE_DELAY = 6000; // For chat messages? Alter if so.
 	public static final int ITEM_LIMIT = 25000;
 	public static final int MAXITEM_AMOUNT = Integer.MAX_VALUE;
 	public static final int BANK_SIZE = 352;
-	public static final int MAX_PLAYERS = 1024;
+	public static final int MAX_PLAYERS = 1024; // TODO change this to whatever is good.
 	public static final int MAX_CLANS = 3000;
 
-	public static final int DEVELOPER_AMOUNT = 5;
+	public static final int DEVELOPER_AMOUNT = 5; // ???
 
-	public static final int CONNECTION_DELAY = 100; // how long one ip can keep
-													// connecting
-	public static final int IPS_ALLOWED = 2; // How many ips are allowed
+	public static final int CONNECTION_DELAY = 100; // How long one IP can connect (?)
+	public static final int IPS_ALLOWED = 2; // How many IPs are allowed (?)
 
 	public static final boolean WORLD_LIST_FIX = true;
 
+	// Misnomer: This is what items CANNOT be sold.
 	public static final int[] ITEM_SELLABLE = { 20072, 18349, 18351, 18353, 18355, 18335, 18357, 3842, 3844, 3840, 8844,
 			8845, 8846, 8847, 8848, 8849, 8850, 10551, 6570, 7462, 7461, 7460, 7459, 7458, 7457, 7456, 7455, 7454, 8839,
 			8840, 8842, 11663, 11664, 11665, 10499, 9748, 9754, 9751, 9769, 9757, 9760, 9763, 9802, 9808, 9784, 9799,
 			9805, 9781, 9796, 9793, 9775, 9772, 9778, 9787, 9811, 9766, 9749, 9755, 9752, 9770, 9758, 9761, 9764, 9803,
 			9809, 9785, 9800, 9806, 9782, 9797, 9794, 9776, 9773, 9779, 9788, 9812, 9767, 9747, 9753, 9750, 9768, 9756,
-			9759, 9762, 9801, 9807, 9783, 9798, 9804, 9780, 9795, 9792, 9774, 9771, 9777, 9786, 9810, 9765, 995 }; // what
-																													// items
-																													// can't
-																													// be
-																													// sold
-																													// in
-																													// any
-																													// store
+			9759, 9762, 9801, 9807, 9783, 9798, 9804, 9780, 9795, 9792, 9774, 9771, 9777, 9786, 9810, 9765, 995 };
+
+	// NOTE: Includes items that cannot be stacked!
 	public static final int[] UNTRADEABLE_ITEM = { 20072, 15349, 3842, 3844, 3840, 8844, 8845, 8846, 8847, 8848, 8849,
 			8850, 10551, 6570, 7462, 7461, 7460, 7459, 7458, 7457, 7456, 7455, 7454, 8839, 8840, 8842, 11663, 11664,
 			11665, 10499, 9748, 9754, 9751, 9769, 9757, 9760, 9763, 9802, 9808, 9784, 9799, 9805, 9781, 9796, 9793,
@@ -52,69 +45,50 @@ public class Constants {
 			9782, 9797, 9794, 9776, 9773, 9779, 9788, 9812, 9767, 9747, 9753, 9750, 9768, 9756, 9759, 9762, 9801, 9807,
 			9783, 9798, 9804, 9780, 9795, 9792, 9774, 9771, 9777, 9786, 9810, 9765, 15332, 15333, 15334, 15335, 18349,
 			18350, 18351, 18352, 18353, 18354, 18355, 18356, 18357, 18358, 18359, 18360, 18361, 18362, 18363, 18364,
-			18365, 18366, 18367, 18368, 18369, 18370, 18371, 18372, 18373, 18374 }; // what
-																					// items
-																					// can't
-																					// be
-																					// traded
-																					// or
-																					// staked
+			18365, 18366, 18367, 18368, 18369, 18370, 18371, 18372, 18373, 18374 };
+
 	public static final int[] UNDROPPABLE_ITEMS = { 20072, 15349, 3842, 3844, 3840, 8844, 8845, 8846, 8847, 8848, 8849,
 			8850, 10551, 6570, 7462, 7461, 7460, 7459, 7458, 7457, 7456, 7455, 7454, 8839, 8840, 8842, 11663, 11664,
 			11665, 10499, 9748, 9754, 9751, 9769, 9757, 9760, 9763, 9802, 9808, 9784, 9799, 9805, 9781, 9796, 9793,
 			9775, 9772, 9778, 9787, 9811, 9766, 9749, 9755, 9752, 9770, 9758, 9761, 9764, 9803, 9809, 9785, 9800, 9806,
 			9782, 9797, 9794, 9776, 9773, 9779, 9788, 9812, 9767, 9747, 9753, 9750, 9768, 9756, 9759, 9762, 9801, 9807,
-			9783, 9798, 9804, 9780, 9795, 9792, 9774, 9771, 9777, 9786, 9810, 9765 }; // what
-																						// items
-																						// can't
-																						// be
-																						// dropped
-	public static final int[] DESTROYABLES = { 10548, 10551, 18349, 18351, 18353, 18355, 18357, 18359 }; // Destroyable
+			9783, 9798, 9804, 9780, 9795, 9792, 9774, 9771, 9777, 9786, 9810, 9765 };
+
+	public static final int[] DESTROYABLES = { 10548, 10551, 18349, 18351, 18353, 18355, 18357, 18359 };
 
 	public static final int[] FUN_WEAPONS = { 2460, 2461, 2462, 2463, 2464, 2465, 2466, 2467, 2468, 2469, 2470, 2471,
-			2471, 2473, 2474, 2475, 2476, 2477 }; // fun weapons for dueling
+			2471, 2473, 2474, 2475, 2476, 2477 };
 
-	public static final boolean ADMIN_CAN_TRADE = true; // can admins trade?
-	public static final boolean ADMIN_CAN_SELL_ITEMS = true; // can admins sell
-																// items?
-	public static final boolean ADMIN_DROP_ITEMS = true; // can admin drop
-															// items?
+	public static final boolean ADMIN_CAN_TRADE = true;
+	public static final boolean ADMIN_CAN_SELL_ITEMS = true;
+	public static final boolean ADMIN_DROP_ITEMS = true;
 
 	public static final int START_LOCATION_X = 3080;
 	public static final int START_LOCATION_Y = 3504;
 	public static final int RESPAWN_X = 3087;
 	public static final int RESPAWN_Y = 3490;
-	public static final int DUELING_RESPAWN_X = 3362; // when dead in duel area
-														// spawn here
+	public static final int DUELING_RESPAWN_X = 3362;
 	public static final int DUELING_RESPAWN_Y = 3263;
-	public static final int RANDOM_DUELING_RESPAWN = 5; // random coords
+	public static final int RANDOM_DUELING_RESPAWN = 5; // random coordinates
 
-	public static final int NO_TELEPORT_WILD_LEVEL = 20; // level you can't tele
-															// on and above
-	public static final int SKULL_TIMER = 1200; // how long does the skull last?
-												// seconds x 2
-	public static final int TELEBLOCK_DELAY = 20000; // how long does teleblock
-														// last for.
-	public static final boolean SINGLE_AND_MULTI_ZONES = true; // multi and
-																// single zones?
-	public static final boolean COMBAT_LEVEL_DIFFERENCE = true; // wildy levels
-																// and combat
-																// level
-																// differences
-																// matters
+	public static final int NO_TELEPORT_WILD_LEVEL = 20;
 
-	public static final boolean itemRequirements = true; // attack, def, str,
-															// range or magic
-															// levels required
-															// to wield weapons
-															// or wear items?
+	public static final int SKULL_TIMER = 1200; // seconds*2 (what?)
+
+	public static final int TELEBLOCK_DELAY = 20000;
+
+	public static final boolean SINGLE_AND_MULTI_ZONES = true;
+	public static final boolean COMBAT_LEVEL_DIFFERENCE = true;
+
+	public static final boolean itemRequirements = true; // Stat requirements
 
 	public static final boolean PRAYER_POINTS_REQUIRED = true;
 	public static final boolean PRAYER_LEVEL_REQUIRED = true;
 	public static final boolean MAGIC_LEVEL_REQUIRED = true;
-	public static final int GOD_SPELL_CHARGE = 300000;
-	public static final boolean RUNES_REQUIRED = true;
-	public static final boolean CORRECT_ARROWS = true;
+	public static final int GOD_SPELL_CHARGE = 300000; // Charge? Timer?
+	public static final boolean RUNES_REQUIRED = true; // ??? For any spell?
+	public static final boolean CORRECT_ARROWS = true; // ??? What?
+	
 	public static final boolean CRYSTAL_BOW_DEGRADES = true;
 	public static final int ATTACK = 0;
 	public static final int DEFENCE = 1;
@@ -146,17 +120,13 @@ public class Constants {
 			DUEL_RULE_ID[] = { 1, 2, 16, 32, 64, 128, 256, 512, 1024, 4096, 8192, 16384, 32768, 65536, 131072, 262144,
 					524288, 2097152, 8388608, 16777216, 67108864, 134217728 };
 
-	public static final int SAVE_TIMER = 120; // save every 1 minute
-	public static final int NPC_RANDOM_WALK_DISTANCE = 5; // the square created
-															// , 3x3 so npc
-															// can't move out of
-															// that box when
-															// randomly walking
-	public static final int NPC_FOLLOW_DISTANCE = 10; // how far can the npc
-														// follow you from it's
-														// spawn point,
-	public static final int[] UNDEAD_NPCS = { 90, 91, 92, 93, 94, 103, 104, 73, 74, 75, 76, 77 }; // undead
-																									// npcs
+	public static final int SAVE_TIMER = 120; // Saves every minute.
+	
+	// The square grid the NPC cannot move out of (3x3 apparently?)
+	public static final int NPC_RANDOM_WALK_DISTANCE = 5; 
+	public static final int NPC_FOLLOW_DISTANCE = 10;
+	
+	public static final int[] UNDEAD_NPCS = { 90, 91, 92, 93, 94, 103, 104, 73, 74, 75, 76, 77 };
 
 	/**
 	 * Glory
@@ -233,13 +203,13 @@ public class Constants {
 	/**
 	 * Slayer Variables
 	 */
-	public static final int[][] SLAYER_TASKS = { { 1, 87, 90, 4, 5 }, // low
-																		// tasks
+	public static final int[][] SLAYER_TASKS = { 
+			{ 1, 87, 90, 4, 5 }, // low tasks
 			{ 6, 7, 8, 9, 10 }, // med tasks
 			{ 11, 12, 13, 14, 15 }, // high tasks
-			{ 1, 1, 15, 20, 25 }, // low reqs
-			{ 30, 35, 40, 45, 50 }, // med reqs
-			{ 60, 75, 80, 85, 90 } }; // high reqs
+			{ 1, 1, 15, 20, 25 }, // low requirements
+			{ 30, 35, 40, 45, 50 }, // med requirements
+			{ 60, 75, 80, 85, 90 } }; // high requirements
 
 	public static final int HAT = 0;
 	public static final int CAPE = 1;
@@ -252,9 +222,9 @@ public class Constants {
 	public static final int RING = 12;
 	public static final int ARROWS = 13;
 
-	public static boolean FARMING_ENABLED = true; // Doesnt work
-	public static boolean RUNECRAFTING_ENABLED = true; // works
-	public static boolean HERBLORE_ENABLED = true; // works
+	public static boolean FARMING_ENABLED = true; // Doesn't work, apparently
+	public static boolean RUNECRAFTING_ENABLED = true;
+	public static boolean HERBLORE_ENABLED = true;
 
 	public static final int PACKET_SIZES[] = { 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, // 0
 			0, 0, 0, 0, 8, 0, 6, 2, 2, 0, // 10
