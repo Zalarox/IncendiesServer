@@ -17,6 +17,11 @@ public class Thieving {
 
 	private Player c;
 
+	// Structure: {NPC_ID, THIEV_LEVEL, EXP_GIVEN, COIN_GAINED, ???}
+	
+	public int[][] npcThieving = { { 1, 1, 8, 2000, 1 }, { 18, 25, 26, 5000, 1 }, { 9, 40, 47, 10000, 2 },
+			{ 26, 55, 85, 14000, 3 }, { 20, 70, 152, 17500, 4 }, { 21, 80, 273, 20000, 5 } };
+
 	public Thieving(Player c) {
 		this.c = c;
 	}
@@ -34,18 +39,17 @@ public class Thieving {
 						c.getItems().addItem(995, npcThieving[j][3]);
 						c.startAnimation(881);
 						c.getVariables().lastThieve = System.currentTimeMillis();
-						c.sendMessage("You thieve some money...");
+						c.sendMessage("You manage to steal some money.");
 						break;
 					} else {
 						c.setHitDiff(npcThieving[j][4]);
 						c.setHitUpdateRequired(true);
 						c.getVariables().constitution -= npcThieving[j][4] * 10;
 						c.getVariables().lastThieve = System.currentTimeMillis() + 2000;
-						c.sendMessage("You fail to thieve the NPC.");
 						break;
 					}
 				} else {
-					c.sendMessage("You need a thieving level of " + npcThieving[j][1] + " to thieve from this NPC.");
+					c.sendMessage("You need a thieving level of " + npcThieving[j][1] + " to pickpocket this NPC.");
 				}
 			}
 		}
@@ -56,7 +60,9 @@ public class Thieving {
 		if (System.currentTimeMillis() - c.getVariables().lastThieve < 2500)
 			return;
 		if (c.getVariables().playerLevel[c.getVariables().playerThieving] >= level) {
-			if (c.getItems().addItem(id, 1)) {
+			int quantity = (int) (Math.random() * 2 + 1);
+			
+			if (c.getItems().addItem(id, quantity)) {
 				c.startAnimation(832);
 				c.getPA().addSkillXP(xp * SkillHandler.XPRates.THIEVING.getXPRate(), c.getVariables().playerThieving);
 				c.getVariables().lastThieve = System.currentTimeMillis();
@@ -71,12 +77,8 @@ public class Thieving {
 				});
 			}
 		} else {
-			c.sendMessage("You must have a thieving level of " + level + " to thieve from this stall.");
+			c.sendMessage("You must have a thieving level of " + level + " to steal from this stall.");
 		}
 	}
-
-	// npc, level, exp, coin amount
-	public int[][] npcThieving = { { 1, 1, 8, 200, 1 }, { 18, 25, 26, 500, 1 }, { 9, 40, 47, 1000, 2 },
-			{ 26, 55, 85, 1400, 3 }, { 20, 70, 152, 1750, 4 }, { 21, 80, 273, 2000, 5 } };
 
 }

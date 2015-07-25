@@ -12,14 +12,13 @@ public class Agility {
 	 ** @author Ochroid | Scott
 	 **/
 
-	public void obsticle(final Player p, int Emote, int Req, int newX, int newY, final int agilityTimer, int amtEXP,
+	public void obstacle(final Player p, int Emote, int reqAgility, int newX, int newY, final int agilityTimer, int amtEXP,
 			String message) {
-		if (p.getVariables().playerLevel[16] >= Req) {
+		if (p.getVariables().playerLevel[16] >= reqAgility) {
 			p.getVariables().agilityEmote = true;
 			p.walk(newX, newY, Emote);
 			p.getVariables();
 			p.getPA().addSkillXP(amtEXP, p.getVariables().playerAgility);
-			System.out.println("Agy...");
 			CycleEventHandler.getSingleton().addEvent(new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer c) {
@@ -33,13 +32,13 @@ public class Agility {
 				}
 			}, agilityTimer);
 		} else {
-			p.sendMessage("You Need " + Req + " Agility To Do This Obstacle");
+			p.sendMessage("You need " + reqAgility + " agility to attempt this obstacle.");
 		}
 	}
 
-	public static void agilityDelay(final Player p, int Emote, final int X, final int Y, final int H, int Req,
+	public static void agilityDelay(final Player p, int Emote, final int X, final int Y, final int H, int reqAgility,
 			int amtEXP, String message) {
-		if (p.getVariables().playerLevel[16] >= Req) {
+		if (p.getVariables().playerLevel[16] >= reqAgility) {
 			p.startAnimation(Emote);
 			p.getVariables().agilityEmote = true;
 			p.getVariables();
@@ -58,7 +57,7 @@ public class Agility {
 				}
 			}, 1);
 		} else {
-			p.sendMessage("You Need " + Req + " Agility To Do This Obstacle");
+			p.sendMessage("You need " + reqAgility + " agility to attempt this obstacle.");
 		}
 	}
 

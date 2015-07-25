@@ -111,7 +111,7 @@ public class Player {
 	public boolean bindX = false;
 	public int boundItemId;
 
-	public int altarXCoord, altarYCoord, prayerItemID, timesBuryed;
+	public int altarXCoord, altarYCoord, prayerItemID, timesBuried;
 	public boolean PrayX = false;
 
 	public ArrayList<Integer> addPlayerList = new ArrayList<Integer>();

@@ -54,7 +54,6 @@ public class Firemaking extends SkillHandler {
 				final boolean notInstant = (System.currentTimeMillis() - c.lastSkillingAction) > 2500;
 				int cycle = 2;
 				if (notInstant) {
-					c.sendMessage("You attempt to light a fire.");
 					if (groundObject == false) {
 						c.getItems().deleteItem(logId, c.getItems().getItemSlot(logId), 1);
 						ItemHandler.createGroundItem(c, logId, c.absX, c.absY, c.heightLevel, 1, c.playerId);

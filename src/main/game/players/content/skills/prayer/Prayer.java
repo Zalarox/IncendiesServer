@@ -47,7 +47,7 @@ public class Prayer extends SkillHandler {
 		}
 
 		/**
-		 * Gets the ammount of Exp gained per bone/ashe
+		 * Gets the amount of exp gained per bone/ash
 		 * 
 		 * @return
 		 */
@@ -75,7 +75,7 @@ public class Prayer extends SkillHandler {
 	}
 
 	/**
-	 * Used to bury a bone/ashe without the altar
+	 * Used to bury a bone/ash without the altar
 	 * 
 	 * @param c
 	 * @param itemID
@@ -97,7 +97,7 @@ public class Prayer extends SkillHandler {
 	}
 
 	/**
-	 * Used to bury a bone/ashe in the altar(double xp)(Uses Cycle event)
+	 * Used to bury a bone/ash in the altar(double xp)(Uses Cycle event)
 	 * 
 	 * @param c
 	 * @param itemID
@@ -120,7 +120,7 @@ public class Prayer extends SkillHandler {
 							|| !(c.absX >= altarX - 1 && c.absX <= altarX + 2 && c.absY >= altarY - 1
 									&& c.absY <= altarY + 1))
 						container.stop();
-					if (c.getVariables().timesBuryed == timesToBury)
+					if (c.getVariables().timesBuried == timesToBury)
 						container.stop();
 					if (c.getVariables().playerSkilling[5])
 						placeBonesOnAltar(c, itemID, altarX, altarY, p);
@@ -130,7 +130,7 @@ public class Prayer extends SkillHandler {
 				public void stop() {
 					c.getVariables().playerSkilling[5] = false;
 					c.startAnimation(65535);
-					c.getVariables().timesBuryed = 0;
+					c.getVariables().timesBuried = 0;
 				}
 			}, 4);
 		}
@@ -153,8 +153,8 @@ public class Prayer extends SkillHandler {
 		c.startAnimation(896);
 		c.getPA().createPlayersStillGfx(624, altarX, altarY, 0, 0);
 		c.sendMessage("The gods are pleased with your offerings.");
-		c.getVariables().timesBuryed += 1;
-		// c.sendMessage("Debug - You buryed : "+c.timesBuryed);
+		c.getVariables().timesBuried += 1;
+		// c.sendMessage("Debug - You buried : "+c.timesBuryed);
 	}
 
 	/**

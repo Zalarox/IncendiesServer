@@ -124,11 +124,9 @@ public class Woodcutting extends SkillHandler {
 			return false;
 		}
 		if (!hasAxe(c)) {
-			c.sendMessage("You need a Woodcutting axe to chop this.");
+			c.sendMessage("You need an axe to chop this.");
 			return false;
 		}
-
-		c.sendMessage("You swing your axe at the tree.");
 
 		if (c.getVariables().playerIsWoodcutting) {
 			c.getVariables().playerIsWoodcutting = false;
@@ -138,14 +136,12 @@ public class Woodcutting extends SkillHandler {
 		c.getVariables().playerIsWoodcutting = true;
 		c.getVariables().stopPlayerSkill = true;
 
-		c.getVariables().playerSkillProp[8][1] = Tree.getRespawnTime(); // RESPAWN
-																		// TIME
-		c.getVariables().playerSkillProp[8][2] = Tree.getReqLvl(); // LEVELREQ
-		c.getVariables().playerSkillProp[8][3] = (int) Tree.getXp(); // XP
-		c.getVariables().playerSkillProp[8][4] = getAnimId(c); // ANIM
-		c.getVariables().playerSkillProp[8][5] = Tree.getRespawnTime(); // RESPAWN
-																		// TIME
-		c.getVariables().playerSkillProp[8][6] = Tree.getLogId(); // LOG
+		c.getVariables().playerSkillProp[8][1] = Tree.getRespawnTime(); 
+		c.getVariables().playerSkillProp[8][2] = Tree.getReqLvl();
+		c.getVariables().playerSkillProp[8][3] = (int) Tree.getXp();
+		c.getVariables().playerSkillProp[8][4] = getAnimId(c);
+		c.getVariables().playerSkillProp[8][5] = Tree.getRespawnTime();
+		c.getVariables().playerSkillProp[8][6] = Tree.getLogId();
 
 		c.getVariables().woodcuttingTree = obX + obY;
 
@@ -182,7 +178,7 @@ public class Woodcutting extends SkillHandler {
 						recieveBirdsNest(c);
 					}
 					if (!hasAxe(c)) {
-						c.sendMessage("You need a Woodcutting axe which you need a Woodcutting level to use.");
+						c.sendMessage("You need an axe which you have the Woodcutting level to use.");
 						container.stop();
 					}
 					if ((tree != 1292 && Misc.random(100) <= Tree.getDecayChance())

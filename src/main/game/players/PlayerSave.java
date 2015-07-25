@@ -772,6 +772,7 @@ public class PlayerSave {
 			characterfile.close();
 		} catch (IOException ioexception) {
 			Misc.println(p.playerName + ": error writing file.");
+			ioexception.printStackTrace();
 			return false;
 		}
 		return true;
