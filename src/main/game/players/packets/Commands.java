@@ -32,7 +32,7 @@ public class Commands implements PacketType {
 	private void loadCommands(Player p, String playerCommand) {
 		Developer.handleCommands(p, playerCommand);
 		Administrator.handleCommands(p, playerCommand);
-    	Moderator.handleCommands(p, playerCommand);
+		Moderator.handleCommands(p, playerCommand);
 		Donator.handleCommands(p, playerCommand);
 		NormalPlayer.handleCommands(p, playerCommand);
 		//SuperDonator.handleCommands(p, playerCommand);
