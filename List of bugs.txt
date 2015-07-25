@@ -1,7 +1,9 @@
 [Potential]
 * Random null pointer ex at "Thread-3":
 http://i.gyazo.com/2719bb6d0737c93bf30bf497deaa106c.png
+http://i.gyazo.com/0bfac2e4062f70ea595aa799f29da899.png
 Completely froze client.
+Has occured thrice!
 
 [Known]
 * Player saves are definitely broken.
