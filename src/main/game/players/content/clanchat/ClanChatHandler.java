@@ -70,8 +70,8 @@ public class ClanChatHandler {
 					int rank;
 					rank = getRanks(p.playerName, p, p.playerId, j);
 					if (rank == -1) {
-						p.sendMessage("You have been banned from this clan chat.");
-						p.sendMessage("The ban will be removed once the next hour start.");
+						p.sendMessage("You have been banned from this channel.");
+						p.sendMessage("The ban will be removed in one hour.");
 						return;
 					}
 					if (rank < clans[j].whoCanEnterChat && !clans[j].owner.equalsIgnoreCase(p.playerName)) {
@@ -84,7 +84,7 @@ public class ClanChatHandler {
 				}
 			}
 		}
-		p.sendMessage("A clan chat with this name does not exist.");
+		p.sendMessage("A channel with this name does not exist.");
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class ClanChatHandler {
 	 */
 	public void kickPlayerFromClan(Player c, String name) {
 		if (c.playerName.equalsIgnoreCase(name)) {
-			c.sendMessage("You may not kick yourself from a clan chat!");
+			c.sendMessage("You cannot kick yourself from a channel!");
 			return;
 		}
 		if (c.getVariables().clanId < 0) {
@@ -225,20 +225,23 @@ public class ClanChatHandler {
 			if (PlayerHandler.players[i] != null) {
 				if (PlayerHandler.players[i].playerName.equalsIgnoreCase(name)) {
 					Player c2 = PlayerHandler.players[i];
-					if (c2.getVariables().playerRights == 2 || c2.getVariables().playerRights == 3) {
-						c.sendMessage("You may @red@NOT@bla@ kick an admin from you clan!");
-						c2.sendMessage(c.playerName + " has tried to kick you from his/her clan.");
+
+					if (c2.getVariables().playerRights >= 2) {
+						c.sendMessage("You may not kick a staff member from your clan.");
 						return;
 					}
+
 					GameEngine.clanChat.clans[c.getVariables().clanId].addName(c2.playerName, -1);
 					GameEngine.clanChat.clans[c2.getVariables().clanId].membersNumber -= 1;
+					
 					c2.getVariables().clanId = -1;
 					c2.getVariables().savedClan = null;
 					c2.getPA().sendFrame126("Join chat", 18135);
-					c2.sendMessage("You have been kicked from " + clans[c.getVariables().clanId].name + " by "
-							+ c.playerName + ".");
+					c2.sendMessage("You have been kicked from the channel.");
 					c2.getPA().clearClanChat();
-					c.sendMessage("Attempting to kick a player from the channel.");
+					
+					c.sendMessage("You have kicked " + c2.playerName + " from the channel.");
+					
 					for (int j = 0; j < clans[c.getVariables().clanId].members.length; j++) {
 						if (clans[c.getVariables().clanId].members[j] == i) {
 							clans[c.getVariables().clanId].members[j] = -1;
@@ -258,7 +261,7 @@ public class ClanChatHandler {
 	 */
 	public void changeClanName(Player p, String name) {
 		if (name.length() > 12) {
-			p.sendMessage("Maximum length of the clan name is 12.");
+			p.sendMessage("Maximum length of the channel name is 12.");
 			return;
 		}
 		for (int i = 0; i < clans.length; i++) {
@@ -280,7 +283,8 @@ public class ClanChatHandler {
 	 */
 	public boolean isOwner(Player p) {
 		return (clans[p.getVariables().clanId].owner.equalsIgnoreCase(p.playerName)
-				|| (p.getVariables().playerRights >= 2 && p.getVariables().playerRights <= 3));
+		/** || p.getVariables().playerRights >= 2 */
+		);
 	}
 
 	/**
@@ -375,7 +379,7 @@ public class ClanChatHandler {
 		int rank;
 		rank = getRanks(p.playerName, p, playerId, clanId);
 		if (rank < clans[clanId].whoCanTalkOnChat && !isOwner(p)) {
-			p.sendMessage("You don't have high enough rank to speak in this channel!");
+			p.sendMessage("You don't have a high enough rank to speak in this channel!");
 			return;
 		}
 		if (Connection.containsConnection(PlayerHandler.players[playerId].playerName, ConnectionType.forName("MUTE"),
@@ -384,7 +388,7 @@ public class ClanChatHandler {
 						ConnectionType.forName("IPMUTE"), false)
 				|| Connection.containsConnection(p.getVariables().identityPunishment,
 						ConnectionType.forName("IDENTITY_MUTE"), false)) {
-			p.sendMessage("You are muted and are not permitted to speak!");
+			p.sendMessage("You are muted.");
 			return;
 		}
 		for (int j = 0; j < clans[clanId].members.length; j++) {
@@ -448,7 +452,7 @@ public class ClanChatHandler {
 					return;
 				} else if (GameEngine.clanChat.clans[p.getVariables().clanId].CSLS == 2) {
 					if (GameEngine.clanChat.clans[p.getVariables().clanId].membersNumber <= 1) {
-						p.sendMessage("There must be atleast 2 members in the clan chat to toggle Coinshare ON.");
+						p.sendMessage("There must be at least two members in the channel to toggle CoinShare ON.");
 						GameEngine.clanChat.clans[p.getVariables().clanId].CSLS = 0;
 						GameEngine.clanChat.clans[p.getVariables().clanId].lootshare = 0;
 						GameEngine.clanChat.updateClanChat(p.getVariables().clanId);
