@@ -6,6 +6,9 @@ Completely froze client.
 [Known]
 * Player saves are definitely broken.
 * Combat needs to be fixed - players go inside their attackers often.
+* Attacking while the player is moving seems to cause ^.
+* Pathfinding is messy: during ranged combat, arrows drop at where monsters should actually be (behind obstacles) but the models itself stay many squares off.
+* This ^ also sometimes causes the player to be attacked by an enemy which appears away from the player but is actually at a closer square from which melee is possible (arrow drop locations).
 * Sometimes the players cannot attack their enemies at all.
 * Auto-retaliate is broken
 * Multi-combat is possible ON the player in single-combat areas. Inability to attack anything when this happens (already under attack).
