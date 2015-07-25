@@ -10,15 +10,17 @@ Completely froze client.
 * Pathfinding is messy: during ranged combat, arrows drop at where monsters should actually be (behind obstacles) but the models itself stay many squares off.
 * This ^ also sometimes causes the player to be attacked by an enemy which appears away from the player but is actually at a closer square from which melee is possible (arrow drop locations).
 * Sometimes the players cannot attack their enemies at all.
-* Auto-retaliate is broken
+* Auto-retaliate is broken (apparently only during melee)
 * Multi-combat is possible ON the player in single-combat areas. Inability to attack anything when this happens (already under attack).
 * Causing more damage than health seems to be possible (?) and health UI goes full health when this happens.
 * Magic axes don't have any attack animations or death animations
 * Lesser demons can walk into lava, causing them to be un-attackable from melee (while they can attack the player)
+* Magic spells SEEM not to have projectiles because of the combat bugs.
 
 [Unintended Behaviour]
 * Skeletons do not drop items.
 * Ghosts always seem to drop an axe.
+* There are 2 ways to autocast spells, through the magic book and through staves.
 
 [Missing Animations]
 Skeleton: No death animation.
@@ -31,3 +33,4 @@ Magic axe: No attack or death animation.
 
 [Missing Models]
 Black Knight (invisible legs).
+Fire Rune sprite.
