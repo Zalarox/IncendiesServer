@@ -3326,5 +3326,4 @@ public class PlayerAssistant {
 		c.getVariables().playerLevel[skillID] += getBoostStat1(skillID, sup);
 		c.getPA().refreshSkill(skillID);
 	}
-
 }

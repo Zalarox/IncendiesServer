@@ -12,12 +12,19 @@ public class NormalPlayer extends Commands {
 	 * Handles commands that are available to players with a permission level of
 	 * 0. These players are known as Normal Players.
 	 * 
-	 * Normal Players are defined as Normal Players with the ability to: > view
-	 * the rules > view the commands > teleport home > teleport to the trading
-	 * area > empty their inventory > reset their kill/death ratio > view the
-	 * number of online players > view the names of online staff members > open
-	 * the vote page > open the donation page > open the forums page > claim
-	 * vote and donation rewards
+	 * Normal Players are defined as Normal Players with the ability to: 
+	 * > view the rules
+	 * > view the commands 
+	 * > teleport home 
+	 * > teleport to the trading area
+	 * > empty their inventory 
+	 * > reset their kill/death ratio 
+	 * > view the number of online players 
+	 * > view the names of online staff members 
+	 * > open the vote page 
+	 * > open the donation page 
+	 * > open the forums page 
+	 * > claim vote and donation rewards
 	 * 
 	 * @param c
 	 *            The player executing the command.
