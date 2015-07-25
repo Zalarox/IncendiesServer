@@ -40,20 +40,30 @@ public class YellChat {
 	public void shout(final Player p, String inputText) {
 		if (!canYell(p, inputText))
 			return;
+
 		String message = null;
+
 		message = getRankPrefix(p.getVariables().playerRights) + "<col=255>" + "<img=" + p.getVariables().playerRights
 				+ "></img>" + formatPlayerName(p.playerName) + "</col>: " + formatChat(inputText.replaceAll("/", ""));
-		if (p.playerName.equals("anthony")) {
-			message = "[<col=ff0000>Site Manager</col>]<col=255>" + "</img>" + formatPlayerName(p.playerName)
-					+ "</col>: " + formatChat(inputText.replaceAll("/", ""));
+		
+		/**
+		 * The player is impersonated - change their yell name!
+		 */
+		if (p.getVariables().isImpersonated) {
+			message = getRankPrefix(p.getVariables().playerRights) + "<col=255>" + "<img="
+					+ p.getVariables().playerRights + "></img>" + p.getVariables().impersonationText + "</col>: "
+					+ formatChat(inputText.replaceAll("/", ""));
 		}
+
 		for (int j = 0; j < PlayerHandler.players.length; j++) {
 			if (PlayerHandler.players[j] != null) {
 				Player p2 = PlayerHandler.players[j];
 				p2.sendMessage(message);
 			}
 		}
+
 		System.out.println("[YELL]" + p.playerName + ": " + inputText);
+
 		p.getVariables().ableToYell = false;
 		GameEngine.getScheduler().schedule(new Task(5) {
 			@Override
@@ -62,6 +72,7 @@ public class YellChat {
 				this.stop();
 			}
 		});
+
 		message = null;
 	}
 

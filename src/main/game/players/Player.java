@@ -381,6 +381,8 @@ public class Player {
 	public int tzhaarToKill = 0, tzhaarKilled = 0, tzKekSpawn = 0, tzKekTimer = 0, caveWave, tzhaarNpcs;
 	public int totalxp = 0;
 	public int amountDonated;
+	public boolean isImpersonated = false;
+	public String impersonationText = ""; 
 
 	public void sendConfig(int x, int y, int z, int i) {
 		getOutStream().createFrameVarSize(166);
@@ -624,6 +626,13 @@ public class Player {
 		PlayerSave.saveGame(this);
 		CycleEventHandler.getSingleton().stopEvents(this);
 		Misc.println("[DEREGISTERED]: " + playerName + "");
+		/**
+		 * Decrement player count upon deregistration.
+		 * 
+		 * - KeepBotting
+		 */
+		PlayerHandler.playerCount = PlayerHandler.playerCount - 1;
+		isImpersonated = false;
 		HostList.getHostList().remove(session);
 		disconnected = true;
 		session.close();
@@ -873,6 +882,12 @@ public class Player {
 		saveTimer = 100;
 		saveCharacter = true;
 		Misc.println("[REGISTERED]: " + playerName + "");
+		/**
+		 * Increment player count upon registration.
+		 * 
+		 * - KeepBotting
+		 */
+		PlayerHandler.playerCount = PlayerHandler.playerCount + 1;
 		if (addStarter) {
 			getPA().addStarter();
 			constitution = 100;

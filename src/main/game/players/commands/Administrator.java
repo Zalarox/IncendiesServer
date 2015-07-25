@@ -18,19 +18,30 @@ import main.util.Misc;
 public class Administrator extends Commands {
 
 	/**
-	 * Handles Administrator Commands
+	 * Handles commands that are available to players with a permission level of 2.
+	 * These players are known as Administrators.
 	 * 
-	 * @param c
-	 * @param playerCommand
+	 * Administrators are defined as Moderators with the ability to:
+	 * > give or take moderator
+	 * > issue or quash ipbans
+	 * > view player information
+	 * 
+	 * Additionally, Administrators lack the ability to:
+	 * > trade items
+	 * > drop items (manually or on death)
+	 * > participate in duels
+	 * 
+	 * @param c The player executing the command.
+	 * @param playerCommand The command being executed.
+	 * 
+	 * @author KeepBotting
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
-		if (c.getVariables().playerRights == 3) {
-			if (playerCommand.equals("alex") && c.playerName.equalsIgnoreCase("alex")) {
-				c.getVariables().CANNOT_BE_ATTACKED = !c.getVariables().CANNOT_BE_ATTACKED;
-				c.sendMessage("" + c.getVariables().CANNOT_BE_ATTACKED);
-			}
-			
-			
+		/**
+		 * Check permission level. These commands are available for permission levels of 2 and above.
+		 */
+		if (c.getVariables().playerRights >= 2) {
+				
 			if (playerCommand.startsWith("xteleto")) {
 				String name = playerCommand.substring(8);
 				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
@@ -338,41 +349,7 @@ public class Administrator extends Commands {
 					c.sendMessage("Player Must Be Offline.");
 				}
 			}
-			if (playerCommand.startsWith("idban")) {
-				try {
-					String playerToBan = playerCommand.substring(6);
-					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
-								Connection.addConnection(PlayerHandler.players[i], ConnectionType.IDENTITY_BAN);
-								c.sendMessage(
-										"You have IDENTITY banned the user: " + PlayerHandler.players[i].playerName
-												+ " with the host: " + PlayerHandler.players[i].connectedFrom);
-								PlayerHandler.players[i].disconnected = true;
-							}
-						}
-					}
-				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
-				}
-			}
-			if (playerCommand.startsWith("unidban")) {
-				try {
-					String playerToBan = playerCommand.substring(8);
-					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
-								Connection.removeConnection(playerToBan, ConnectionType.IDENTITY_BAN);
-								c.sendMessage(
-										"You have Un IDENTITY-Banned the user: " + PlayerHandler.players[i].playerName);
-								break;
-							}
-						}
-					}
-				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
-				}
-			}
+
 			if (playerCommand.startsWith("item")) {
 				try {
 					String[] args = playerCommand.split(" ");

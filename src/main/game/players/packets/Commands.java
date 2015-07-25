@@ -13,12 +13,12 @@ import main.game.players.Player;
 import main.game.players.commands.Administrator;
 import main.game.players.commands.Developer;
 import main.game.players.commands.Donator;
-import main.game.players.commands.ExtremeDonator;
-import main.game.players.commands.GFXDesigner;
+//import main.game.players.commands.ExtremeDonator;
+//import main.game.players.commands.GFXDesigner;
 import main.game.players.commands.NormalPlayer;
-import main.game.players.commands.PXModerator;
-import main.game.players.commands.PlayerModerator;
-import main.game.players.commands.SuperDonator;
+import main.game.players.commands.Moderator;
+//import main.game.players.commands.PlayerModerator;
+//import main.game.players.commands.SuperDonator;
 import main.util.Misc;
 
 /**
@@ -27,18 +27,20 @@ import main.util.Misc;
 public class Commands implements PacketType {
 
 	/**
-	 * Loads every command
+	 * Loads every command. Make sure this always loads in DECENDING order of permission level.
 	 */
 	private void loadCommands(Player p, String playerCommand) {
-		NormalPlayer.handleCommands(p, playerCommand);
-		Donator.handleCommands(p, playerCommand);
-		SuperDonator.handleCommands(p, playerCommand);
-		ExtremeDonator.handleCommands(p, playerCommand);
-		PlayerModerator.handleCommands(p, playerCommand);
-		GFXDesigner.handleCommands(p, playerCommand);
 		Developer.handleCommands(p, playerCommand);
-		PXModerator.handleCommands(p, playerCommand);
 		Administrator.handleCommands(p, playerCommand);
+		Moderator.handleCommands(p, playerCommand);
+		Donator.handleCommands(p, playerCommand);
+		NormalPlayer.handleCommands(p, playerCommand);
+		//SuperDonator.handleCommands(p, playerCommand);
+		//ExtremeDonator.handleCommands(p, playerCommand);
+		//PlayerModerator.handleCommands(p, playerCommand);
+		//GFXDesigner.handleCommands(p, playerCommand);
+		
+		
 
 	}
 
