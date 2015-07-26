@@ -32,6 +32,12 @@ public class ConnectionHandler implements IoHandler {
 		if (arg0.getAttachment() != null) {
 			Player plr = (Player) arg0.getAttachment();
 			plr.disconnected = true;
+			/**
+			 * The root cause of xlogging -- unless destruct() is called here,
+			 * player sessions are not properly destroyed if the socket is
+			 * closed unexpectedly.
+			 */
+			plr.destruct();
 		}
 		HostList.getHostList().remove(arg0);
 	}
