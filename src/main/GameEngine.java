@@ -36,7 +36,7 @@ import main.world.map.ObjectDef;
 import main.world.map.Region;
 
 /**
- * Game engine
+ * Project Insanity's game engine.
  * 
  * @author Balla
  */
@@ -46,14 +46,28 @@ public class GameEngine {
 	private static ConnectionHandler connectionHandler;
 	private static ConnectionThrottleFilter throttleFilter;
 	private static Misc.Stopwatch cycleTimer;
+
+	/**
+	 * Used for the shutdown hook.
+	 */
 	public static boolean shutdownServer = false;
+
+	/**
+	 * Used for the update hook.
+	 */
 	public static boolean UpdateServer = false;
+
 	private static long minutesCounter;
 
 	/**
 	 * Used to identify the server port.
 	 */
 	public static int serverlistenerPort = 43594;
+
+	/**
+	 * Defines the cycle rate. PI cycles at 600 milliseconds, meaning that as
+	 * far as this game engine is concerned, one "game tick" == 600ms.
+	 */
 	private final static int cycleRate = 600;
 
 	public static ItemHandler itemHandler = new ItemHandler();
@@ -91,6 +105,11 @@ public class GameEngine {
 		cycleTimer = new Misc.Stopwatch();
 		System.out.println("[7/7] The server has loaded and is accepting connections.");
 		try {
+			/**
+			 * Here it is -- the massive loop that PI is so famous for. Using a
+			 * loop to manage some events in a game isn't a bad thing -- unless
+			 * EVERYTHING is handled by the same loop.
+			 */
 			while (!shutdownServer) {
 				cycle();
 				sleep();
@@ -102,10 +121,11 @@ public class GameEngine {
 	}
 
 	/**
-	 * Performs a server cycle.
+	 * Performs a server cycle. This is where the magic happens. Each of the
+	 * core subsystems will perform their process() for each cycle. At the end
+	 * of the cycle, we'll sleep for however much time we have remaining
 	 */
 	private static void cycle() {
-		// Next, perform game processing.
 		try {
 			playerHandler.process();
 			npcHandler.process();
@@ -122,25 +142,70 @@ public class GameEngine {
 	}
 
 	/**
-	 * Sleeps for the cycle delay.
+	 * Sleeps for the remainder of the cycle. The method above performed the
+	 * processing for the current cycle. The method below sleeps for the amount
+	 * of time left over in the cycle.
+	 * 
+	 * Imagine, for a moment, that the server needed 100ms to perform all of its
+	 * operations. This means that 100ms of the cycle is spent processing, 500ms
+	 * is spent sleeping.
+	 * 
+	 * That's all well and good. But what happens if the server needs 500ms for
+	 * processing, and spends 100ms sleeping? Still, we've managed to get all of
+	 * our processing done in time. We're good.
+	 * 
+	 * But you can see where I'm going with this.
+	 * 
+	 * Now imagine that there are 300 players on the server, all actively
+	 * performing tasks in-game: fighting, skilling, changing regions, clicking
+	 * action buttons, etc. What happens if the server takes over 600ms to
+	 * process all of these players?
+	 * 
+	 * Enter the big problem with PI. If a cycle takes more than 600ms to
+	 * complete, the server begins a phase which I arbitrarily refer to as
+	 * "over-cycling." This means that the game engine is taking MORE than a
+	 * single game tick to process a single game tick's worth of events.
+	 * 
+	 * This causes all sorts of issues. Global server lag is the most obvious
+	 * and the most disrupting to gameplay.
+	 * 
+	 * The server will also begin to ignore events submitted after the
+	 * over-cycling begins. For example: if the engine is over-cycling by 50ms
+	 * (taking 650ms to complete a cycle), then the FIRST 50ms of the NEXT game
+	 * tick will be ignored, since that time is being used to play catch-up with
+	 * the LAST tick's processing.
 	 * 
 	 * @throws InterruptedException
 	 */
 	private static void sleep() throws InterruptedException {
+		/**
+		 * The time we sleep is set to the server's cycle rate minus the time it
+		 * took to complete the cycle.
+		 */
 		long sleepTime = cycleRate - cycleTimer.elapsed();
+		long engineLoad = (100 - (Math.abs(sleepTime) / (cycleRate / 100)));
 
-		System.out.println("Cycle rate: " + cycleTimer.elapsed() + " ms, engine load: "
-				+ (100 - (Math.abs(sleepTime) / (cycleRate / 100))) + "%");
+		System.out.println("Cycle rate: " + cycleTimer.elapsed() + " ms, engine load: " + engineLoad + "%");
 
 		if (sleepTime > 0) {
 			Thread.sleep(sleepTime);
+			/**
+			 * If sleepTime is equal to or less than zero, it means the server
+			 * is cycling at 600ms, or over-cycling at more than 600ms -- an
+			 * engine load of 100% or greater.
+			 */
 		} else {
-			// The server has reached maximum load, players may now lag.
-			System.out.println("[WARNING]: Engine load has reached a critical level!");
+			System.out.println("[WARNING]: Server is over-cycling by " + Math.abs(sleepTime) + "ms, engine load: "
+					+ engineLoad + "%");
 		}
 		cycleTimer.reset();
 	}
 
+	/**
+	 * Binds the server to the port.
+	 * 
+	 * @throws IOException
+	 */
 	public static void bind() throws IOException {
 		acceptor = new SocketAcceptor();
 		connectionHandler = new ConnectionHandler();
@@ -155,7 +220,7 @@ public class GameEngine {
 	}
 
 	/**
-	 * Initialize Handlers
+	 * Initialize core subsystems.
 	 * 
 	 * @throws IOException
 	 * @throws UnsupportedLookAndFeelException
@@ -178,7 +243,7 @@ public class GameEngine {
 		pJClans.initialize();
 		pJClans.loadOptions();
 		System.out.println("[4/7] Loaded clan data.");
-		HunterGui.showGUI = false;
+		HunterGui.showGUI = true;
 		npcHandler.loadNpcs();
 		System.out.println("[5/7] Loaded NPC data.");
 		new HunterGui();

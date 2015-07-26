@@ -71,19 +71,7 @@ public class DropItem implements PacketType {
 				}
 				ItemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel,
 						c.getVariables().playerItemsN[slot], c.getId());
-				c.getItems().deleteItem(itemId, slot, c.getVariables().playerItemsN[slot]);
-				
-				/**
-				 * Hacky fix for the method of duping that involves dropping an
-				 * item, then xlogging.
-				 * 
-				 * This fixes the dupe. But it doesn't fix the xlog. This can be
-				 * removed once the xlog is properly fixed.
-				 * 
-				 * - KeepBotting
-				 */
-				PlayerSave.saveGame(c);
-				
+				c.getItems().deleteItem(itemId, slot, c.getVariables().playerItemsN[slot]);			
 			} else {
 				c.sendMessage("This item cannot be dropped.");
 			}
