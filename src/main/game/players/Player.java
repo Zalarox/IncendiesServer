@@ -991,9 +991,7 @@ public class Player {
 		 * 
 		 * - KeepBotting
 		 */
-		if (displayName.equalsIgnoreCase("")) {
-			displayName = playerName;
-		}
+		playerProps.writeQWord(Misc.playerNameToInt64(displayName == "" ? playerName : displayName));
 		
 		if (addStarter) {
 			getPA().addStarter();
