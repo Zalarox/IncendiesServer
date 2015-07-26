@@ -1,5 +1,13 @@
 package main.game.players;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import main.Connection;
 import main.Connection.ConnectionType;
 import main.Constants;
@@ -32,13 +40,98 @@ public class PlayerAssistant {
 	public PlayerAssistant(Player Player) {
 		this.c = Player;
 	}
+	
+	/**
+	 * Checks if a display name is in use.
+	 * 
+	 * @param name
+	 *            The display name to check.
+	 *            
+	 * @return True if the display name is in use. False if it is not.
+	 */
+	@SuppressWarnings("resource")
+	public boolean isDisplayNameTaken(String name) {
+		try {
+			File list = new File("./data/displaynames.txt");
+			FileReader read = new FileReader(list);
+			BufferedReader reader = new BufferedReader(read);
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+				if (line.equalsIgnoreCase(name)) {
+					return true;
+				}
+			}
+
+			reader.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Checks if a name is in use.
+	 * 
+	 * @param name
+	 *            The name to check.
+	 *            
+	 * @return True if the name is in use, false if not.
+	 */
+	public boolean isNameTaken(String name) {
+		try {
+			File names = new File("./data/characters/" + name + ".txt");
+
+			if (names.exists()) {
+				return true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Creates a display name.
+	 * 
+	 * @param name
+	 *            The display name to create.
+	 */
+	public void createDisplayName(String name) {
+		BufferedWriter names = null;
+		
+		try {
+			names = new BufferedWriter(new FileWriter("./data/displaynames.txt", true));
+			names.write(name);
+			names.newLine();
+			names.flush();
+			
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			
+		} finally {
+			
+			if (names != null) {
+				try {
+					names.close();
+					
+				} catch (IOException ioe2) {
+					ioe2.printStackTrace();
+				}
+			}
+		}
+	}
 
 	public void createArrow(final int x, final int y, final int height, final int pos) {
 		if (c != null) {
 			c.getOutStream().createFrame(254); // The packet ID
 			c.getOutStream().writeByte(pos); // Position on Square(2 = middle, 3
-												// = west, 4 = east, 5 = south,
-												// 6 = north)
+			// = west, 4 = east, 5 = south,
+			// 6 = north)
 			c.getOutStream().writeWord(x); // X-Coord of Object
 			c.getOutStream().writeWord(y); // Y-Coord of Object
 			c.getOutStream().writeByte(height); // Height off Ground
@@ -807,7 +900,7 @@ public class PlayerAssistant {
 	public void sendFrame34(int id, int slot, int column, int amount) {
 		if (c.getOutStream() != null && c != null) {
 			c.getOutStream().createFrameVarSizeWord(34); // init item to smith
-															// screen
+			// screen
 			c.getOutStream().writeWord(column); // Column Across Smith Screen
 			c.getOutStream().writeByte(4); // Total Rows?
 			c.getOutStream().writeDWord(slot); // Row Down The Smith Screen
@@ -820,7 +913,7 @@ public class PlayerAssistant {
 	public void sendUpdateItem(Item item, int slot, int column) {
 		if (c.getOutStream() != null && c != null) {
 			c.getOutStream().createFrameVarSizeWord(34); // init item to smith
-															// screen
+			// screen
 			c.getOutStream().writeWord(column); // Column Across Smith Screen
 			c.getOutStream().writeByte(4); // Total Rows?
 			c.getOutStream().writeDWord(slot); // Row Down The Smith Screen
@@ -833,7 +926,7 @@ public class PlayerAssistant {
 	public void sendUpdateItem(int slot, int column, Item item) {
 		if (c.getOutStream() != null && c != null) {
 			c.getOutStream().createFrameVarSizeWord(34); // init item to smith
-															// screen
+			// screen
 			c.getOutStream().writeWord(column); // Column Across Smith Screen
 			c.getOutStream().writeByte(4); // Total Rows?
 			c.getOutStream().writeDWord(slot); // Row Down The Smith Screen
@@ -1154,7 +1247,7 @@ public class PlayerAssistant {
 						if (o != null) {
 							if (c.getVariables().playerRights >= 2 || p.getVariables().privateChat == 0
 									|| (p.getVariables().privateChat == 1
-											&& o.getPA().isInPM(Misc.playerNameToInt64(c.playerName)))) {
+									&& o.getPA().isInPM(Misc.playerNameToInt64(c.playerName)))) {
 								loadPM(c.getVariables().friends[i], 1);
 								pmLoaded = true;
 							}
@@ -1343,9 +1436,9 @@ public class PlayerAssistant {
 			// c.sendMessage("Banking items with your pack yak has been disabled
 			// untill further notice");
 			break;
-		/*
-		 * case 1155: handleAlt(itemId); break;
-		 */
+			/*
+			 * case 1155: handleAlt(itemId); break;
+			 */
 		}
 	}
 
@@ -1705,8 +1798,8 @@ public class PlayerAssistant {
 		c.faceUpdate(-1);
 		c.getVariables().freezeTimer = 0;
 		if (!DuelPlayer.contains(c) && !safeZones()) { // if we are not in a
-														// duel we must be in
-														// wildy so remove items
+			// duel we must be in
+			// wildy so remove items
 			removeItems();
 		} else if (FightPits.getState(c) != null) {
 			FightPits.handleDeath(c);
@@ -1729,7 +1822,7 @@ public class PlayerAssistant {
 			 * movePlayer(2424 + Misc.random(5), 3075 + Misc.random(4), 1); }
 			 */
 		} else if (!DuelPlayer.contains(c)) { // if we are not in a duel repawn
-												// to wildy
+			// to wildy
 			movePlayer(Constants.RESPAWN_X, Constants.RESPAWN_Y, 0);
 			c.getVariables().isSkulled = false;
 			c.getVariables().skullTimer = 0;
@@ -2140,18 +2233,18 @@ public class PlayerAssistant {
 		if (c == null)
 			return 0;
 		int totalLevel = (getLevelForXP(c.getVariables().playerXP[0]) + getLevelForXP(c.getVariables().playerXP[1])
-				+ getLevelForXP(c.getVariables().playerXP[2]) + getLevelForXP(c.getVariables().playerXP[3])
-				+ getLevelForXP(c.getVariables().playerXP[4]) + getLevelForXP(c.getVariables().playerXP[5])
-				+ getLevelForXP(c.getVariables().playerXP[6]) + getLevelForXP(c.getVariables().playerXP[7])
-				+ getLevelForXP(c.getVariables().playerXP[8]) + getLevelForXP(c.getVariables().playerXP[9])
-				+ getLevelForXP(c.getVariables().playerXP[10]) + getLevelForXP(c.getVariables().playerXP[11])
-				+ getLevelForXP(c.getVariables().playerXP[12]) + getLevelForXP(c.getVariables().playerXP[13])
-				+ getLevelForXP(c.getVariables().playerXP[14]) + getLevelForXP(c.getVariables().playerXP[15])
-				+ getLevelForXP(c.getVariables().playerXP[16]) + getLevelForXP(c.getVariables().playerXP[17])
-				+ getLevelForXP(c.getVariables().playerXP[18]) + getLevelForXP(c.getVariables().playerXP[19])
-				+ getLevelForXP(c.getVariables().playerXP[20]) + getLevelForXP(c.getVariables().playerXP[21])
-				+ getLevelForXP(c.getVariables().playerXP[22]) + getLevelForXP(c.getVariables().playerXP[23])
-				+ getLevelForXP(c.getVariables().playerXP[24]));
+		+ getLevelForXP(c.getVariables().playerXP[2]) + getLevelForXP(c.getVariables().playerXP[3])
+		+ getLevelForXP(c.getVariables().playerXP[4]) + getLevelForXP(c.getVariables().playerXP[5])
+		+ getLevelForXP(c.getVariables().playerXP[6]) + getLevelForXP(c.getVariables().playerXP[7])
+		+ getLevelForXP(c.getVariables().playerXP[8]) + getLevelForXP(c.getVariables().playerXP[9])
+		+ getLevelForXP(c.getVariables().playerXP[10]) + getLevelForXP(c.getVariables().playerXP[11])
+		+ getLevelForXP(c.getVariables().playerXP[12]) + getLevelForXP(c.getVariables().playerXP[13])
+		+ getLevelForXP(c.getVariables().playerXP[14]) + getLevelForXP(c.getVariables().playerXP[15])
+		+ getLevelForXP(c.getVariables().playerXP[16]) + getLevelForXP(c.getVariables().playerXP[17])
+		+ getLevelForXP(c.getVariables().playerXP[18]) + getLevelForXP(c.getVariables().playerXP[19])
+		+ getLevelForXP(c.getVariables().playerXP[20]) + getLevelForXP(c.getVariables().playerXP[21])
+		+ getLevelForXP(c.getVariables().playerXP[22]) + getLevelForXP(c.getVariables().playerXP[23])
+		+ getLevelForXP(c.getVariables().playerXP[24]));
 		return totalLevel;
 	}
 
@@ -2810,7 +2903,7 @@ public class PlayerAssistant {
 			c.setSidebarInterface(11, 904); // wrench tab
 			c.setSidebarInterface(12, 147); // run tab
 			c.setSidebarInterface(13, 962); // music tab 6299 for lowdetail. 962
-											// for highdetail
+			// for highdetail
 			c.setSidebarInterface(14, 2449); // acheivement
 			c.setSidebarInterface(15, 17000); // blank
 			c.setSidebarInterface(16, 17000); // blank

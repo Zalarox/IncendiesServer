@@ -198,7 +198,16 @@ public class PlayerSave {
 						}
 					} else if (token.equals("run-energy")) {
 						p.getVariables().runEnergy = Integer.parseInt(token2);
+						
+					/**
+					 * Support for saving display names to character files.
+					 * 
+					 * - KeepBotting
+					 */
+					} else if (line.startsWith("displayName")) {
+						p.displayName = token2;
 					}
+					
 					break;
 				case 3:
 					if (token.equals("character-equip")) {
@@ -316,15 +325,38 @@ public class PlayerSave {
 	 * Saving
 	 **/
 	public static boolean saveGame(Player p) {
+		/**
+		 * If the player's name or ID happens to be null, don't continue.
+		 */
 		if (PlayerHandler.players[p.playerId] == null || p.playerName == null) {
 			System.out.println(PlayerHandler.players[p.playerId] + " " + p.playerName);
 			return false;
 		}
+		
+		/**
+		 * saveFile is initialized as false, and never set anywhere else.
+		 * 
+		 * newPlayer is set to false when this class fails to find a player's
+		 * existing character file, and thus creates a character file for the
+		 * first time, OR when a seemingly un-implemented "Rules Interface" is
+		 * closed.
+		 * 
+		 * saveCharacter seems to be a flag dictating that a player should be saved.
+		 */
 		if (!p.getVariables().saveFile || p.getVariables().newPlayer || !p.getVariables().saveCharacter) {
 			System.out.println("ugh.. 2");
 			return false;
 		}
+		
+		/**
+		 * playerName and playerName2 are exactly the same...
+		 */
 		p.playerName = p.playerName2;
+		
+		/**
+		 * If our tele-block time is over 30000 or less than 0, reset it to 0. I
+		 * guess this is to prevent teleblocks from persisting across logins?
+		 */
 		int tbTime = (int) (p.getVariables().teleBlockDelay - System.currentTimeMillis()
 				+ p.getVariables().teleBlockLength);
 		if (tbTime > 300000 || tbTime < 0) {
@@ -567,6 +599,18 @@ public class PlayerSave {
 			characterfile.write(Integer.toString(p.getVariables().runEnergy), 0,
 					Integer.toString(p.getVariables().runEnergy).length());
 			characterfile.newLine();
+			
+			/**
+			 * Support for writing display names to the character file.
+			 * 
+			 * - KeepBotting
+			 */
+			if (p.displayName != null) {
+				characterfile.write("displayName = ", 0, 14);
+				characterfile.write(p.displayName, 0, p.displayName.length());	
+			}
+			
+			characterfile.newLine();
 			characterfile.newLine();
 
 			characterfile.write("[GODWARS]");
@@ -631,15 +675,64 @@ public class PlayerSave {
 			characterfile.newLine();
 
 			/* SKILLS */
+			/**
+			 * So, as near as I can gather, PI saves skills like the following:
+			 * 
+			 * character-skill = [id] [lvl] [xp]
+			 * 
+			 * Where [id] is the ID of the skill (1 to 25), [lvl] is the skill
+			 * level (1 to 99), and [xp] is the experience points of the skill
+			 * (0 to 200000000).
+			 */
 			characterfile.write("[SKILLS]", 0, 8);
 			characterfile.newLine();
+			/**
+			 * playerLevel seems to be the amount of skills a player has, it's
+			 * hardcoded to 25.
+			 */
 			for (int i = 0; i < p.getVariables().playerLevel.length; i++) {
+				/**
+				 * Write the prefix.
+				 */
 				characterfile.write("character-skill = ", 0, 18);
+				/**
+				 * All integers are written as strings, which makes sense since
+				 * they're being written to a textfile.
+				 * 
+				 * write() is used here, which writes like the following:
+				 * 
+				 * file.write([string], [offset], [length]);
+				 * 
+				 * Where [string] is the string to be written, [offset] is the
+				 * offset from which to start reading characters, and [length]
+				 * is the number of characters to be written.
+				 * 
+				 * So here, we're writing the ID of the skill. 
+				 */
 				characterfile.write(Integer.toString(i), 0, Integer.toString(i).length());
+				/**
+				 * Next, we write a tab. Note that this is actually a hard-tab
+				 * and not five spaces. Note also that a new line is not created
+				 * until characterfile.newLine(); is called, so this is all on
+				 * the same line.
+				 */
 				characterfile.write("	", 0, 1);
+				/**
+				 * Now, we're writing the level of the skill, ascertained from
+				 * playerLevel. At this point, I can only include that
+				 * playerLevel represents both the ID of a skill (its index) and
+				 * its level (its value).
+				 */
 				characterfile.write(Integer.toString(p.getVariables().playerLevel[i]), 0,
 						Integer.toString(p.getVariables().playerLevel[i]).length());
+				/**
+				 * Another hard-tab.
+				 */
 				characterfile.write("	", 0, 1);
+				/**
+				 * Last thing write is the player's xp for the given skill,
+				 * ascertained from playerXP.
+				 */
 				characterfile.write(Integer.toString(p.getVariables().playerXP[i]), 0,
 						Integer.toString(p.getVariables().playerXP[i]).length());
 				characterfile.newLine();
@@ -772,7 +865,6 @@ public class PlayerSave {
 			characterfile.close();
 		} catch (IOException ioexception) {
 			Misc.println(p.playerName + ": error writing file.");
-			ioexception.printStackTrace();
 			return false;
 		}
 		return true;

@@ -111,7 +111,7 @@ public class Player {
 	public boolean bindX = false;
 	public int boundItemId;
 
-	public int altarXCoord, altarYCoord, prayerItemID, timesBuried;
+	public int altarXCoord, altarYCoord, prayerItemID, timesBuryed;
 	public boolean PrayX = false;
 
 	public ArrayList<Integer> addPlayerList = new ArrayList<Integer>();
@@ -150,8 +150,8 @@ public class Player {
 	public boolean inMulti() {
 		if ((absX >= 3136 && absX <= 3327 && absY >= 3519 && absY <= 3607)
 				|| (absX >= 2625 && absX <= 2685 && absY >= 2550 && absY <= 2620) || // Pest
-																						// Control
-				(absX >= 3190 && absX <= 3327 && absY >= 3648 && absY <= 3839)
+		// Control
+		(absX >= 3190 && absX <= 3327 && absY >= 3648 && absY <= 3839)
 				|| (absX >= 3334 && absX <= 3355 && absY >= 3208 && absY <= 3217)
 				|| (absX >= 3200 && absX <= 3390 && absY >= 3840 && absY <= 3967)
 				|| (absX >= 2992 && absX <= 3007 && absY >= 3912 && absY <= 3967)
@@ -164,7 +164,7 @@ public class Player {
 				|| (absX >= 2896 && absX <= 2927 && absY >= 3595 && absY <= 3630)
 				|| (absX >= 2892 && absX <= 2932 && absY >= 4435 && absY <= 4464)
 				|| (absX >= 2882 && absX <= 3000 && absY >= 4357 && absY <= 4406) // Corp
-																					// beast
+		// beast
 				|| (absX >= 3147 && absX <= 3193 && absY >= 9737 && absY <= 9778)
 				|| (absX >= 3100 && absX <= 3300 && absY >= 5300 && absY <= 5600)
 				|| (absX >= 2256 && absX <= 2287 && absY >= 4680 && absY <= 4711)
@@ -381,8 +381,21 @@ public class Player {
 	public int tzhaarToKill = 0, tzhaarKilled = 0, tzKekSpawn = 0, tzKekTimer = 0, caveWave, tzhaarNpcs;
 	public int totalxp = 0;
 	public int amountDonated;
+	
+	/**
+	 * Used for tracking a player's name in yell.
+	 * 
+	 * - KeepBotting
+	 */
 	public boolean isImpersonated = false;
-	public String impersonationText = ""; 
+	public String impersonationText = "";
+	
+	/**
+	 * Used for tracking a player's display name.
+	 *
+	 * - KeepBotting
+	 */
+	public String displayName = "";
 
 	public void sendConfig(int x, int y, int z, int i) {
 		getOutStream().createFrameVarSize(166);
@@ -585,56 +598,138 @@ public class Player {
 	}
 
 	public void destruct() {
+		/**
+		 * TODO fix xlogs
+		 */
+		System.out.println("");
+		System.out.println("--- Started the deregistration process for " + this.playerName + " ---");
+		
+		/**
+		 * Mark 'em as disconnected.
+		 */
+		disconnected = true;
+		
+		/**
+		 * Remove the player from Fight Pits.
+		 */
 		if (FightPits.getState(this) != null) {
+			System.out.println("[DEREGISTRATION]: Removed from fight pits");
 			FightPits.removePlayer(this, true);
 		}
-		if (party != null)
+
+		/**
+		 * Remove the player from their Dungeoneering party.
+		 */
+		if (party != null) {
+			System.out.println("[DEREGISTRATION]: Removed from dungeoneering party");
 			party.leave(this);
+		}
+			
+
+		/**
+		 * I guess this checks if the player is in combat? And makes sure it
+		 * saves their game? Probably to prevent xlogging.
+		 */
 		if (underAttackBy > 0 || underAttackBy2 > 0) {
+			System.out.println("[DEREGISTRATION]: Still in combat, saving NOW");
 			saveCharacter = true;
 			PlayerSave.saveGame(this);
 			autoGive = true;
 			return;
 		}
-		if (clanId >= 0)
+
+		/**
+		 * Leave their clan chat, if they're in one.
+		 */
+		if (clanId >= 0) {
+			System.out.println("[DEREGISTRATION]: Leaving cc");
 			GameEngine.clanChat.leaveClan(playerId, clanId, true);
+		}
+			
+
+		/**
+		 * Pick up their cannon, if they've placed one.
+		 */
 		getCannon().pickUpCannon(cannonBaseX, cannonBaseY, cannonBaseH);
-		if (disconnected == true) {
-			Dueling.declineDuel(this, true, true);
-			getTradeHandler().declineTrade(false);
-			saveCharacter = true;
-		}
-		if (session == null) {
-			return;
-		}
+
+		/**
+		 * Get them out of the Pest Control boat, if they're in there.
+		 */
 		if (PestControl.isInPcBoat(this)) {
+			System.out.println("[DEREGISTRATION]: Removed from pest control");
 			PestControl.removePlayerGame(this);
 			getPA().movePlayer(2440, 3089, 0);
 		}
+		
+		/**
+		 * Kill ongoing player tasks.
+		 */
 		killPlayerTasks();
+		System.out.println("[DEREGISTRATION]: Killed player tasks");
+		
+		/**
+		 * I really have no idea what this does or why it's here.
+		 */
 		if (playerRights == 3) {
+			System.out.println("[DEREGISTRATION]: Weird developer block did something");
 			for (int i = 0; i < GameEngine.developer.length; i++) {
 				if (GameEngine.developer[i] == this) {
 					GameEngine.developer[i] = null;
 					break;
 				}
 			}
-		}
+		}	
+		
+		/**
+		 * Get their summoned creature out of the way, if they have one.
+		 */
 		if (getSummoning().summonedFamiliar != null && summoned != null) {
+			System.out.println("[DEREGISTRATION]: Got rid of summoned creature");
 			summoned.npcTeleport(0, 0, 0);
 		}
+		
+		/**
+		 * Decline duels or trades, make sure we mark the character for saving.
+		 */
+		if (disconnected == true) {
+			System.out.println("[DEREGISTRATION]: Declined trades/duels");
+			Dueling.declineDuel(this, true, true);
+			getTradeHandler().declineTrade(false);
+			saveCharacter = true;
+		}
+		
+		/**
+		 * May as well save again, just to be sure.
+		 */
 		PlayerSave.saveGame(this);
+		System.out.println("[DEREGISTRATION]: Saved game");
+		
+		/**
+		 * ???
+		 */
+		if (session == null) {
+			return;
+		}
+		
+		/**
+		 * Stop cycled events for this player.
+		 */
 		CycleEventHandler.getSingleton().stopEvents(this);
-		Misc.println("[DEREGISTERED]: " + playerName + "");
+		System.out.println("[DEREGISTRATION]: Stopped cycled events");
+		
 		/**
 		 * Decrement player count upon deregistration.
-		 * 
-		 * - KeepBotting
 		 */
 		PlayerHandler.playerCount = PlayerHandler.playerCount - 1;
+		System.out.println("[DEREGISTRATION]: Decremented player count, it's now " + PlayerHandler.playerCount);
+		
+		/**
+		 * No longer impersonated.
+		 */
 		isImpersonated = false;
+		
+		
 		HostList.getHostList().remove(session);
-		disconnected = true;
 		session.close();
 		session = null;
 		inStream = null;
@@ -654,6 +749,9 @@ public class Player {
 		mapRegionX = mapRegionY = -1;
 		currentX = currentY = 0;
 		resetWalkingQueue();
+		
+		System.out.println("--- Completed the deregistration process for " + this.playerName + " ---");
+		System.out.println("");
 	}
 
 	public boolean inArea(Area area) {
@@ -753,24 +851,26 @@ public class Player {
 	}
 
 	public void questTab() {
-		getPA().sendFrame126("Player Statistics", 19155);
-		getPA().sendFrame126("-- PVP --", 19161);
+		String[][] ranks = { { "0", "Member" }, { "1", "Moderator" }, { "2", "Administrator" }, { "3", "Owner" },
+				{ "7", "Gfx Designer" }, { "8", "Developer" } };
+		getPA().sendFrame126("Incendius", 19155);
+		getPA().sendFrame126("-- Player statistics --", 19161);
 		getPA().sendFrame126("", 19162);
 		getPA().sendFrame126("Kills:", 19163);
 		getPA().sendFrame126("" + KC, 19164);
 		getPA().sendFrame126("Deaths:", 663);
 		getPA().sendFrame126("" + DC, 16026);
-		getPA().sendFrame126("PK Points: " + pkp, 16027);
-		getPA().sendFrame126("", 16028);
-		getPA().sendFrame126("Vote Points: " + votingPoints, 16029);
-		getPA().sendFrame126("Slayer Points: " + SlayerPoints, 16030);
-
-		for (int i = 16032; i < 16126; i++)
+		getPA().sendFrame126("Pk Points: " + pkp, 16027);
+		getPA().sendFrame126("Vote Points: " + votingPoints, 16028);
+		getPA().sendFrame126("Slayer Points: " + SlayerPoints, 16029);
+		for (String[] i : ranks) {
+			if (Integer.parseInt(i[0]) == playerRights) {
+				getPA().sendFrame126("Player Rank: " + i[1], 16030);
+				break;
+			}
+		}
+		for (int i = 16031; i < 16126; i++)
 			getPA().sendFrame126("", i);
-	}
-	
-	public void taskTab() {
-		// TODO
 	}
 
 	public void initialize() {
@@ -804,7 +904,6 @@ public class Player {
 			getPA().sendFrame36(502, 1);
 			getPA().sendFrame36(287, 1);
 		}
-
 		getPA().setConfig(173, isRunning ? 0 : 1);
 		questTab();
 		isFullHelm = ItemLoader.isFullHelm(playerEquipment[playerHat]);
@@ -850,7 +949,7 @@ public class Player {
 		if (specAmount > 10) {
 			specAmount = 10;
 		}
-		sendMessage("Welcome to " + Constants.SERVER_NAME);
+		sendMessage("Welcome to " + Constants.SERVER_NAME + ".");
 		sendMessage(Constants.WELCOME_MESSAGE);
 		sendMessage("@blu@Latest Update: @bla@" + Constants.LATEST_UPDATE);
 		getPA().showOption(4, 0, "Follow", 4);
@@ -879,12 +978,23 @@ public class Player {
 		saveTimer = 100;
 		saveCharacter = true;
 		Misc.println("[REGISTERED]: " + playerName + "");
+		
 		/**
 		 * Increment player count upon registration.
 		 * 
 		 * - KeepBotting
 		 */
 		PlayerHandler.playerCount = PlayerHandler.playerCount + 1;
+		
+		/**
+		 * If they don't have a display name, ensure their playerName is shown.
+		 * 
+		 * - KeepBotting
+		 */
+		if (displayName.equalsIgnoreCase("")) {
+			displayName = playerName;
+		}
+		
 		if (addStarter) {
 			getPA().addStarter();
 			constitution = 100;
@@ -1835,27 +1945,27 @@ public class Player {
 			{ 1160, 17, 10546, 457, 459, 464, 9, 13, 556, 2, 562, 1, 0, 0, 0, 0 }, // wind
 			// bolt
 			{ 1163, 23, 10542, 2701, 2704, 2709, 10, 16, 556, 2, 555, 2, 562, 1, 0, 0 }, // water
-																							// bolt
+			// bolt
 			{ 1166, 29, 14209, 2714, 2719, 2724, 11, 20, 556, 2, 557, 3, 562, 1, 0, 0 }, // earth
-																							// bolt
+			// bolt
 			{ 1169, 35, 2791, 2728, 2730, 2738, 12, 22, 556, 3, 554, 4, 562, 1, 0, 0 }, // fire
-																						// bolt
+			// bolt
 			{ 1172, 41, 10546, 457, 460, 1863, 13, 25, 556, 3, 560, 1, 0, 0, 0, 0 }, // wind
 			// blast
 			{ 1175, 47, 10542, 2701, 2705, 2706, 14, 28, 556, 3, 555, 3, 560, 1, 0, 0 }, // water
-																							// blast
+			// blast
 			{ 1177, 53, 14209, 2715, 2720, 2425, 15, 31, 556, 3, 557, 4, 560, 1, 0, 0 }, // earth
-																							// blast
+			// blast
 			{ 1181, 59, 2791, 2728, 2731, 2739, 16, 35, 556, 4, 554, 5, 560, 1, 0, 0 }, // fire
-																						// blast
+			// blast
 			{ 1183, 62, 10546, 457, 461, 2699, 17, 36, 556, 5, 565, 1, 0, 0, 0, 0 }, // wind
 			// wave
 			{ 1185, 65, 10542, 2701, 2706, 2711, 18, 37, 556, 5, 555, 7, 565, 1, 0, 0 }, // water
-																							// wave
+			// wave
 			{ 1188, 70, 14209, 2716, 2721, 2726, 19, 40, 556, 5, 557, 7, 565, 1, 0, 0 }, // earth
-																							// wave
+			// wave
 			{ 1189, 75, 2791, 2728, 2733, 2740, 20, 42, 556, 5, 554, 7, 565, 1, 0, 0 }, // fire
-																						// wave
+			// wave
 			{ 1153, 3, 716, 102, 103, 104, 0, 13, 555, 3, 557, 2, 559, 1, 0, 0 }, // confuse
 			{ 1157, 11, 716, 105, 106, 107, 0, 20, 555, 3, 557, 2, 559, 1, 0, 0 }, // weaken
 			{ 1161, 19, 716, 108, 109, 110, 0, 29, 555, 2, 557, 3, 559, 1, 0, 0 }, // curse
@@ -1866,11 +1976,11 @@ public class Player {
 			{ 1582, 50, 710, 177, 178, 180, 2, 60, 557, 4, 555, 4, 561, 3, 0, 0 }, // snare
 			{ 1592, 79, 710, 177, 178, 179, 4, 90, 557, 5, 555, 5, 561, 4, 0, 0 }, // entangle
 			{ 1171, 39, 724, 145, 146, 147, 15, 25, 556, 2, 557, 2, 562, 1, 0, 0 }, // crumble
-																					// undead
+			// undead
 			{ 1539, 50, 708, 87, 88, 89, 25, 42, 554, 5, 560, 1, 0, 0, 0, 0 }, // iban
 			// blast
 			{ 12037, 50, 1576, 327, 328, 329, 19, 30, 560, 1, 558, 4, 0, 0, 0, 0 }, // magic
-																					// dart
+			// dart
 			{ 1190, 60, 811, 0, 0, 76, 20, 60, 554, 2, 565, 2, 556, 4, 0, 0 }, // sara
 			// strike
 			{ 1191, 60, 811, 0, 0, 77, 20, 60, 554, 1, 565, 2, 556, 4, 0, 0 }, // cause
@@ -1883,33 +1993,33 @@ public class Player {
 
 			// Ancient Spells
 			{ 12939, 50, 1978, 0, 384, 385, 13, 30, 560, 2, 562, 2, 554, 1, 556, 1 }, // smoke
-																						// rush
+			// rush
 			{ 12987, 52, 1978, 0, 378, 379, 14, 31, 560, 2, 562, 2, 566, 1, 556, 1 }, // shadow
-																						// rush
+			// rush
 			{ 12901, 56, 1978, 0, 0, 373, 15, 33, 560, 2, 562, 2, 565, 1, 0, 0 }, // blood
 			// rush
 			{ 12861, 58, 1978, 0, 360, 361, 16, 34, 560, 2, 562, 2, 555, 2, 0, 0 }, // ice
-																					// rush
+			// rush
 			{ 12963, 62, 1979, 0, 0, 389, 19, 36, 560, 2, 562, 4, 556, 2, 554, 2 }, // smoke
-																					// burst
+			// burst
 			{ 13011, 64, 1979, 0, 0, 382, 20, 37, 560, 2, 562, 4, 556, 2, 566, 2 }, // shadow
-																					// burst
+			// burst
 			{ 12919, 68, 1979, 0, 0, 376, 21, 39, 560, 2, 562, 4, 565, 2, 0, 0 }, // blood
 			// burst
 			{ 12881, 70, 1979, 0, 0, 363, 22, 40, 560, 2, 562, 4, 555, 4, 0, 0 }, // ice
 			// burst
 			{ 12951, 74, 1978, 0, 386, 387, 23, 42, 560, 2, 554, 2, 565, 2, 556, 2 }, // smoke
-																						// blitz
+			// blitz
 			{ 12999, 76, 1978, 0, 380, 381, 24, 43, 560, 2, 565, 2, 556, 2, 566, 2 }, // shadow
-																						// blitz
+			// blitz
 			{ 12911, 80, 1978, 0, 374, 375, 25, 45, 560, 2, 565, 4, 0, 0, 0, 0 }, // blood
 			// blitz
 			{ 12871, 82, 1978, 366, 0, 367, 26, 46, 560, 2, 565, 2, 555, 3, 0, 0 }, // ice
-																					// blitz
+			// blitz
 			{ 12975, 86, 1979, 0, 0, 391, 27, 48, 560, 4, 565, 2, 556, 4, 554, 4 }, // smoke
-																					// barrage
+			// barrage
 			{ 13023, 88, 1979, 0, 0, 383, 28, 49, 560, 4, 565, 2, 556, 4, 566, 3 }, // shadow
-																					// barrage
+			// barrage
 			{ 12929, 92, 1979, 0, 0, 377, 29, 51, 560, 4, 565, 4, 566, 1, 0, 0 }, // blood
 			// barrage
 			{ 12891, 94, 1979, 0, 0, 369, 30, 52, 560, 4, 565, 2, 555, 6, 0, 0 }, // ice
@@ -2075,14 +2185,14 @@ public class Player {
 	public int lastBrother;
 	public int reduceSpellId;
 	public final int[] REDUCE_SPELL_TIME = { 250000, 250000, 250000, 500000, 500000, 500000 }; // how
-																								// long
-																								// does
-																								// the
-																								// other
-																								// player
-																								// stay
-																								// immune
-																								// to
+	// long
+	// does
+	// the
+	// other
+	// player
+	// stay
+	// immune
+	// to
 	// the spell
 	public long[] reduceSpellDelay = new long[6];
 	public final int[] REDUCE_SPELLS = { 1153, 1157, 1161, 1542, 1543, 1562 };
@@ -2530,7 +2640,7 @@ public class Player {
 			}
 			if (dir1 != -1 || dir2 != -1) {
 				updateVisiblePlayers(); // they/you could come in or out of
-										// their/your area
+				// their/your area
 			}
 			if (mapRegionDidChange/*
 									 * && VirtualWorld.I(heightLevel, currentX,
@@ -2929,8 +3039,14 @@ public class Player {
 		playerProps.writeWord(playerRunIndex); // runAnimIndex
 		playerProps.writeWord(constitution);
 		playerProps.writeWord(calculateMaxLifePoints(this));
-
-		playerProps.writeQWord(Misc.playerNameToInt64(playerName));
+		
+		/**
+		 * Handling for display names.
+		 * 
+		 * - KeepBotting
+		 */
+		playerProps.writeQWord(Misc.playerNameToInt64(displayName));
+		
 		CombatLevel = calculateCombatLevel();
 		playerProps.writeByte(CombatLevel); // combat level
 		if (inWild()) {
