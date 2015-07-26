@@ -111,7 +111,7 @@ public class Player {
 	public boolean bindX = false;
 	public int boundItemId;
 
-	public int altarXCoord, altarYCoord, prayerItemID, timesBuryed;
+	public int altarXCoord, altarYCoord, prayerItemID, timesBuried;
 	public boolean PrayX = false;
 
 	public ArrayList<Integer> addPlayerList = new ArrayList<Integer>();
@@ -851,24 +851,17 @@ public class Player {
 	}
 
 	public void questTab() {
-		String[][] ranks = { { "0", "Member" }, { "1", "Moderator" }, { "2", "Administrator" }, { "3", "Owner" },
-				{ "7", "Gfx Designer" }, { "8", "Developer" } };
-		getPA().sendFrame126("Incendius", 19155);
-		getPA().sendFrame126("-- Player statistics --", 19161);
+		getPA().sendFrame126("Player Statistics", 19155);
+		getPA().sendFrame126("-- PVP --", 19161);
 		getPA().sendFrame126("", 19162);
-		getPA().sendFrame126("Kills:", 19163);
-		getPA().sendFrame126("" + KC, 19164);
-		getPA().sendFrame126("Deaths:", 663);
-		getPA().sendFrame126("" + DC, 16026);
-		getPA().sendFrame126("Pk Points: " + pkp, 16027);
-		getPA().sendFrame126("Vote Points: " + votingPoints, 16028);
-		getPA().sendFrame126("Slayer Points: " + SlayerPoints, 16029);
-		for (String[] i : ranks) {
-			if (Integer.parseInt(i[0]) == playerRights) {
-				getPA().sendFrame126("Player Rank: " + i[1], 16030);
-				break;
-			}
-		}
+		getPA().sendFrame126("Kills:" + KC, 19163);
+		getPA().sendFrame126("Deaths:" + DC, 663);
+		getPA().sendFrame126("", 16026);
+		getPA().sendFrame126("PK Points: " + pkp, 16027);
+		getPA().sendFrame126("", 16028);
+		getPA().sendFrame126("Vote Points: " + votingPoints, 16029);
+		getPA().sendFrame126("Slayer Points: " + SlayerPoints, 16030);
+		
 		for (int i = 16031; i < 16126; i++)
 			getPA().sendFrame126("", i);
 	}
@@ -2182,16 +2175,7 @@ public class Player {
 	public boolean[] brotherKilled = new boolean[6];
 	public int lastBrother;
 	public int reduceSpellId;
-	public final int[] REDUCE_SPELL_TIME = { 250000, 250000, 250000, 500000, 500000, 500000 }; // how
-	// long
-	// does
-	// the
-	// other
-	// player
-	// stay
-	// immune
-	// to
-	// the spell
+	public final int[] REDUCE_SPELL_TIME = { 250000, 250000, 250000, 500000, 500000, 500000 }; //how long does the other player stay immune to the spell
 	public long[] reduceSpellDelay = new long[6];
 	public final int[] REDUCE_SPELLS = { 1153, 1157, 1161, 1542, 1543, 1562 };
 	public boolean[] canUseReducingSpell = { true, true, true, true, true, true };

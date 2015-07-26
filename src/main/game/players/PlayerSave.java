@@ -863,11 +863,12 @@ public class PlayerSave {
 			characterfile.newLine();
 			characterfile.newLine();
 			characterfile.close();
-		} catch (IOException ioexception) {
+			
+		} catch (IOException ioe) {
 			Misc.println(p.playerName + ": error writing file.");
+			ioe.printStackTrace();
 			return false;
 		}
 		return true;
 	}
-
 }
