@@ -768,6 +768,10 @@ public class Player {
 		for (int i = 16032; i < 16126; i++)
 			getPA().sendFrame126("", i);
 	}
+	
+	public void taskTab() {
+		// TODO
+	}
 
 	public void initialize() {
 		variables = new PlayerVariables();
