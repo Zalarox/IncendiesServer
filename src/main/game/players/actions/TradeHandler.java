@@ -91,7 +91,13 @@ public class TradeHandler {
 
 					p.getVariables().tradeRequested = true;
 					p.sendMessage("Sending trade request...");
-					o.sendMessage(p.playerName + ":tradereq:");
+					
+					/**
+					 * Support for display names during trade requests.
+					 * 
+					 *  - KeepBotting
+					 */
+					o.sendMessage(p.getPA().getDisplayName() + ":tradereq:");			
 				}
 			} else {
 				p.getVariables().headingTowardsPlayer = true;
@@ -178,9 +184,9 @@ public class TradeHandler {
 		p.getPA().sendFrame126(playerValue2, 53507);
 		o.getPA().sendFrame126(playerValue2, 53506);
 		o.getPA().sendFrame126(playerValue1, 53507);
-		p.getPA().sendFrame126(Misc.formatPlayerName(o.playerName) + " has\\n " + o.getItems().freeSlots()
+		p.getPA().sendFrame126(Misc.formatPlayerName(o.getPA().getDisplayName()) + " has\\n " + o.getItems().freeSlots()
 				+ " free\\n inventory slots.", 53505);
-		o.getPA().sendFrame126(Misc.formatPlayerName(p.playerName) + " has\\n " + p.getItems().freeSlots()
+		o.getPA().sendFrame126(Misc.formatPlayerName(p.getPA().getDisplayName()) + " has\\n " + p.getItems().freeSlots()
 				+ " free\\n inventory slots.", 53505);
 	}
 
@@ -216,7 +222,7 @@ public class TradeHandler {
 			out = "@cr2@" + out;
 		}
 		p.getPA().sendString(
-				"Trading with: " + o.playerName + " who has @gre@" + o.getItems().freeSlots() + " free slots", 3417);
+				"Trading with: " + o.getPA().getDisplayName() + " who has @gre@" + o.getItems().freeSlots() + " free slots", 3417);
 		displayWealthInfo(p);
 		p.getPA().sendString("", 3431);
 		p.getPA().sendString("Are you sure you want to make this trade?", 3535);
@@ -277,25 +283,25 @@ public class TradeHandler {
 							if (!item.stackable) {
 								offeredItems.remove(item);
 								p.getItems().addItem(itemID, 1);
-								o.getPA().sendString("Trading with: " + p.playerName + " who has @gre@"
+								o.getPA().sendString("Trading with: " + p.getPA().getDisplayName() + " who has @gre@"
 										+ p.getItems().freeSlots() + " free slots", 3417);
 							} else {
 								if (item.amount > amount) {
 									item.amount -= amount;
 									p.getItems().addItem(itemID, amount);
-									o.getPA().sendString("Trading with: " + p.playerName + " who has @gre@"
+									o.getPA().sendString("Trading with: " + p.getPA().getDisplayName() + " who has @gre@"
 											+ p.getItems().freeSlots() + " free slots", 3417);
 								} else {
 									amount = item.amount;
 									offeredItems.remove(item);
 									p.getItems().addItem(itemID, amount);
-									o.getPA().sendString("Trading with: " + p.playerName + " who has @gre@"
+									o.getPA().sendString("Trading with: " + p.getPA().getDisplayName() + " who has @gre@"
 											+ p.getItems().freeSlots() + " free slots", 3417);
 								}
 							}
 							break;
 						}
-						o.getPA().sendString("Trading with: " + p.playerName + " who has @gre@"
+						o.getPA().sendString("Trading with: " + p.getPA().getDisplayName() + " who has @gre@"
 								+ p.getItems().freeSlots() + " free slots", 3417);
 						p.getVariables().tradeConfirmed = false;
 						o.getVariables().tradeConfirmed = false;
@@ -315,13 +321,13 @@ public class TradeHandler {
 						if (item.amount > amount) {
 							item.amount -= amount;
 							p.getItems().addItem(itemID, amount);
-							o.getPA().sendString("Trading with: " + p.playerName + " who has @gre@"
+							o.getPA().sendString("Trading with: " + p.getPA().getDisplayName() + " who has @gre@"
 									+ p.getItems().freeSlots() + " free slots", 3417);
 						} else {
 							amount = item.amount;
 							offeredItems.remove(item);
 							p.getItems().addItem(itemID, amount);
-							o.getPA().sendString("Trading with: " + p.playerName + " who has @gre@"
+							o.getPA().sendString("Trading with: " + p.getPA().getDisplayName() + " who has @gre@"
 									+ p.getItems().freeSlots() + " free slots", 3417);
 						}
 					}
@@ -330,7 +336,7 @@ public class TradeHandler {
 			}
 
 			o.getPA().sendString(
-					"Trading with: " + p.playerName + " who has @gre@" + p.getItems().freeSlots() + " free slots",
+					"Trading with: " + p.getPA().getDisplayName() + " who has @gre@" + p.getItems().freeSlots() + " free slots",
 					3417);
 			p.getVariables().tradeConfirmed = false;
 			o.getVariables().tradeConfirmed = false;
@@ -372,12 +378,12 @@ public class TradeHandler {
 				if (p.getItems().playerHasItem(itemID, 1)) {
 					offeredItems.add(new GameItem(itemID, 1));
 					p.getItems().deleteItem(itemID, p.getItems().getItemSlot(itemID), 1);
-					o.getPA().sendString("Trading with: " + p.playerName + " who has @gre@" + p.getItems().freeSlots()
+					o.getPA().sendString("Trading with: " + p.getPA().getDisplayName() + " who has @gre@" + p.getItems().freeSlots()
 							+ " free slots", 3417);
 				}
 			}
 			o.getPA().sendString(
-					"Trading with: " + p.playerName + " who has @gre@" + p.getItems().freeSlots() + " free slots",
+					"Trading with: " + p.getPA().getDisplayName() + " who has @gre@" + p.getItems().freeSlots() + " free slots",
 					3417);
 			p.getItems().resetItems(3322);
 			resetTItems(3415);
@@ -410,7 +416,7 @@ public class TradeHandler {
 					inTrade = true;
 					item.amount += amount;
 					p.getItems().deleteItem2(itemID, amount);
-					o.getPA().sendString("Trading with: " + p.playerName + " who has @gre@" + p.getItems().freeSlots()
+					o.getPA().sendString("Trading with: " + p.getPA().getDisplayName() + " who has @gre@" + p.getItems().freeSlots()
 							+ " free slots", 3417);
 					break;
 				}
@@ -420,12 +426,12 @@ public class TradeHandler {
 				offeredItems.add(new GameItem(itemID, amount));
 				p.getItems().deleteItem2(itemID, amount);
 				o.getPA().sendFrame126(
-						"Trading with: " + p.playerName + " who has @gre@" + p.getItems().freeSlots() + " free slots",
+						"Trading with: " + p.getPA().getDisplayName() + " who has @gre@" + p.getItems().freeSlots() + " free slots",
 						3417);
 			}
 		}
 		o.getPA().sendString(
-				"Trading with: " + p.playerName + " who has @gre@" + p.getItems().freeSlots() + " free slots", 3417);
+				"Trading with: " + p.getPA().getDisplayName() + " who has @gre@" + p.getItems().freeSlots() + " free slots", 3417);
 		p.getItems().resetItems(3322);
 		resetTItems(3415);
 		o.getTradeHandler().resetOTItems(3416);

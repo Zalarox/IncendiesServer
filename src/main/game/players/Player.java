@@ -984,7 +984,9 @@ public class Player {
 		 * 
 		 * - KeepBotting
 		 */
-		playerProps.writeQWord(Misc.playerNameToInt64(displayName == "" ? playerName : displayName));
+		 if (displayName.equalsIgnoreCase("") || displayName == null) {
+			displayName = playerName;
+			}
 		
 		if (addStarter) {
 			getPA().addStarter();
@@ -3027,7 +3029,7 @@ public class Player {
 		 * 
 		 * - KeepBotting
 		 */
-		playerProps.writeQWord(Misc.playerNameToInt64(displayName));
+		playerProps.writeQWord(Misc.playerNameToInt64(displayName == "" ? playerName : displayName));
 		
 		CombatLevel = calculateCombatLevel();
 		playerProps.writeByte(CombatLevel); // combat level

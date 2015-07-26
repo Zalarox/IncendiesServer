@@ -605,10 +605,8 @@ public class PlayerSave {
 			 * 
 			 * - KeepBotting
 			 */
-			if (p.displayName != null) {
-				characterfile.write("displayName = ", 0, 14);
-				characterfile.write(p.displayName, 0, p.displayName.length());	
-			}
+			characterfile.write("displayName = ", 0, 14);
+			characterfile.write(p.displayName, 0, p.displayName.length());	
 			
 			characterfile.newLine();
 			characterfile.newLine();

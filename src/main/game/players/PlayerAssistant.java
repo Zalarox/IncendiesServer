@@ -42,6 +42,19 @@ public class PlayerAssistant {
 	}
 	
 	/**
+	 * Gets a player's display name, if they have one.
+	 * 
+	 * @return The player's display name, if applicable.
+	 */
+	public String getDisplayName() {
+		if ((c.displayName == "")) {
+			return c.playerName;
+		} else {
+			return c.displayName;
+		}
+	}
+	
+	/**
 	 * Checks if a display name is in use.
 	 * 
 	 * @param name
@@ -73,12 +86,12 @@ public class PlayerAssistant {
 	}
 	
 	/**
-	 * Checks if a name is in use.
+	 * Checks if a real name is in use.
 	 * 
 	 * @param name
-	 *            The name to check.
+	 *            The real name to check.
 	 *            
-	 * @return True if the name is in use, false if not.
+	 * @return True if the real name is in use, false if not.
 	 */
 	public boolean isNameTaken(String name) {
 		try {
