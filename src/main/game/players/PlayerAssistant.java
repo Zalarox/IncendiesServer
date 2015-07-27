@@ -3,7 +3,6 @@ package main.game.players;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -1472,7 +1471,7 @@ public class PlayerAssistant {
 			Player o = PlayerHandler.players[c.getVariables().killerId];
 			if (o != null) {
 				if (c.getVariables().killerId != c.playerId) {
-					o.sendMessage("You have defeated " + c.playerName + "!");
+					o.sendMessage("You have defeated " + c.getPA().getDisplayName() + "!");
 					o.getVariables().killedDuelOpponent = true;
 					c.getVariables().killedDuelOpponent = false;
 					if (!DuelPlayer.contains(c)) {

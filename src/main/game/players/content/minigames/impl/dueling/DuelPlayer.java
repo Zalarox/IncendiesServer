@@ -107,7 +107,7 @@ public class DuelPlayer {
 				opponent.turnPlayerTo(player.getX(), player.getY());
 			} else {
 				player.sendMessage("Sending duel request...");
-				opponent.sendMessage(player.playerName + ":duelreq:");
+				opponent.sendMessage(player.getPA().getDisplayName() + ":duelreq:");
 			}
 		} catch (Exception e) {
 			Misc.println("Error requesting duel.");
@@ -117,7 +117,7 @@ public class DuelPlayer {
 	public void duelVictory(final Player c) {
 		if (c.opponent != null) {
 			c.getPA().sendString("" + c.opponent.calculateCombatLevel(), 6839);
-			c.getPA().sendString(c.opponent.playerName, 6840);
+			c.getPA().sendString(c.opponent.getPA().getDisplayName(), 6840);
 		} else {
 			c.getPA().sendString("", 6839);
 			c.getPA().sendString("", 6840);
@@ -315,7 +315,7 @@ public class DuelPlayer {
 			sendDuelEquipment(player.getVariables().playerEquipment[i], player.getVariables().playerEquipmentN[i], i,
 					player);
 		}
-		player.getPA().sendString("Dueling with: " + player.opponent.playerName + " (level: "
+		player.getPA().sendString("Dueling with: " + player.opponent.getPA().getDisplayName() + " (level: "
 				+ player.opponent.calculateCombatLevel() + ")", 6671);
 		player.getPA().sendString("", 6684);
 		player.getPA().sendFrame248(6575, 3321);
