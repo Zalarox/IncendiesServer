@@ -7,6 +7,7 @@ Has occured thrice!
 
 [Known]
 * Player saves are definitely broken.
+* Following while attacking needs some tweaking.
 * Combat needs to be fixed - players go inside their attackers often.
 * Attacking while the player is moving seems to cause ^.
 * Pathfinding is messy: during ranged combat, arrows drop at where monsters should actually be (behind obstacles) but the models itself stay many squares off.

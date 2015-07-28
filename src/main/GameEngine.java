@@ -184,9 +184,11 @@ public class GameEngine {
 		 */
 		long sleepTime = cycleRate - cycleTimer.elapsed();
 		long engineLoad = (100 - (Math.abs(sleepTime) / (cycleRate / 100)));
-
-		System.out.println("Cycle rate: " + cycleTimer.elapsed() + " ms, engine load: " + engineLoad + "%");
-
+		
+		if(engineLoad > 60) {
+			System.out.println("Cycle rate: " + cycleTimer.elapsed() + " ms, engine load: " + engineLoad + "%");
+		}
+		
 		if (sleepTime > 0) {
 			Thread.sleep(sleepTime);
 			/**
