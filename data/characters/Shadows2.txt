@@ -4,7 +4,7 @@ character-password = 0b231f128c786616f92bed2a94f76ac0
 
 [CHARACTER]
 character-height = 0
-character-posx = 3093
+character-posx = 3085
 character-posy = 3529
 character-rights = 2
 Donator = 0
@@ -53,7 +53,7 @@ vengeanceCasted = 0
 familiarSpecialEnergy = 60
 familiar = -1
 RockCrabKills = 0
-run-energy = 176
+run-energy = 200
 displayName = Shadows2
 
 [GODWARS]

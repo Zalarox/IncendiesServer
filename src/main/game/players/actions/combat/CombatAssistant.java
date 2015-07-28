@@ -933,7 +933,7 @@ public class CombatAssistant {
 			
 			// Just respawned
 			if (c.respawnTimer > 0 || c2.respawnTimer > 0) {
-				c2.playerIndex = 0; // TODO What is the point of this?
+				c2.playerIndex = 0;
 				resetPlayerAttack();
 				return;
 			}
@@ -943,7 +943,7 @@ public class CombatAssistant {
 				return;
 			}
 			
-			// TODO What is this condition?
+			// Players far away from each other
 			if (!c.goodDistance(c2.getX(), c2.getY(), c.getX(), c.getY(),
 					25) && !sameSpot) {
 				resetPlayerAttack();
@@ -954,11 +954,6 @@ public class CombatAssistant {
 			if (c2.heightLevel != c.heightLevel) {
 				resetPlayerAttack();
 				return;
-			}
-			
-			// If in the same spot as player, step away
-			if(sameSpot) {
-				Following.stepAway(c);
 			}
 			
 			Following.triggerFollowing(i, 0, c);
@@ -975,11 +970,12 @@ public class CombatAssistant {
 				c.projectileStage = 0;
 
 				if (sameSpot) {
+					System.out.println("Issue...");
 					if (c.freezeTimer > 0) {
 						resetPlayerAttack();
 						return;
 					}
-					Following.triggerFollowing(i, 0, c);
+					Following.stepAway(c);
 					c.attackTimer = 0;
 					return;
 				}
@@ -1005,7 +1001,7 @@ public class CombatAssistant {
 				
 				// Go to the required attacking square with correct orientation
 				// TODO USE FOR NPC COMBAT AS WELL
-				if (!sameSpot && !usingOtherRangeWeapons && !usingHally()
+				if (c.getX() != c2.getX() && c.getY() != c2.getY() && !usingOtherRangeWeapons && !usingHally()
 						&& !usingBow && !c.usingMagic) {
 					// face the player
 					c.faceUpdate(i + 32768); // TODO wtf is this?

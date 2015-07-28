@@ -4,13 +4,13 @@ character-password = ec4a83b77e35992fa96dd21f2993e39e
 
 [CHARACTER]
 character-height = 0
-character-posx = 3087
-character-posy = 3503
+character-posx = 3090
+character-posy = 3529
 character-rights = 3
 Donator = 0
 character-title = 0
 expLock = false
-totalxp =844854
+totalxp =911518
 crystal-bow-shots = 0
 skull-timer = 0
 magic-book = 0
@@ -19,7 +19,7 @@ isDonePicking = false
 Picked = 0
 KC = 0
 DC = 0
-special-amount = 10.0
+special-amount = 0.5
 selected-coffin = 0
 lastBrother = 0
 barrows-npc-dead = false	false	false	false	false	false
@@ -43,7 +43,7 @@ gwkc = 0
 fightMode = 1
 PKP = 0
 yellTag = Default tag
-constitution = 856
+constitution = 827
 void = 0	0	0	0	0
 savedClan = null
 hasSavedClan = false
@@ -54,6 +54,7 @@ familiarSpecialEnergy = 60
 familiar = -1
 RockCrabKills = 0
 run-energy = 200
+displayName = Shadows
 
 [GODWARS]
 godwars = 0	3
@@ -99,8 +100,8 @@ character-look = 12	0
 [SKILLS]
 character-skill = 0	99	13034436
 character-skill = 1	99	13034436
-character-skill = 2	99	13698322
-character-skill = 3	99	13200404
+character-skill = 2	99	13751653
+character-skill = 3	99	13213737
 character-skill = 4	99	13034436
 character-skill = 5	75	13034436
 character-skill = 6	99	13034436
