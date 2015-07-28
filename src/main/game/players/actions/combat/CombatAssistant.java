@@ -970,7 +970,6 @@ public class CombatAssistant {
 				c.projectileStage = 0;
 
 				if (sameSpot) {
-					System.out.println("Issue...");
 					if (c.freezeTimer > 0) {
 						resetPlayerAttack();
 						return;

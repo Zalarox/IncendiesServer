@@ -21,6 +21,7 @@ Has occured thrice!
 * Magic spells SEEM not to have projectiles because of the combat bugs.
 
 [Unintended Behaviour]
+* Attempting to spec without enough energy stops combat
 * Skeletons do not drop items.
 * Ghosts always seem to drop an axe.
 * There are 2 ways to autocast spells, through the magic book and through staves.
