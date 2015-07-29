@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import main.Constants;
 import main.GameEngine;
 import main.game.npcs.NPCHandler;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.util.Misc;
 import main.util.Stream;
 
@@ -108,11 +108,11 @@ public class PlayerHandler {
 					c.opponent.Dueling.declineDuel(c.opponent, true, false);
 				}
 			}
-			if (c != null && DuelPlayer.contains(c)) {
+			if (c != null && DuelArena.isDueling(c)) {
 				if (c.opponent != null) {
-					c.opponent.Dueling.duelVictory(c.opponent);
+					c.opponent.Dueling.endDuel(c.opponent);
 				}
-			} else if (c != null && !DuelPlayer.contains(c)) {
+			} else if (c != null && !DuelArena.isDueling(c)) {
 				if (c.opponent != null) {
 					c.opponent.Dueling.declineDuel(c.opponent, true, false);
 				}
@@ -149,11 +149,11 @@ public class PlayerHandler {
 				}
 			}
 			c = PlayerHandler.players[i];
-			if (c != null && DuelPlayer.contains(c)) {
+			if (c != null && DuelArena.isDueling(c)) {
 				if (c.opponent != null) {
-					c.opponent.Dueling.duelVictory(c.opponent);
+					c.opponent.Dueling.endDuel(c.opponent);
 				}
-			} else if (c != null && !DuelPlayer.contains(c)) {
+			} else if (c != null && !DuelArena.isDueling(c)) {
 				if (c.opponent != null) {
 					c.opponent.Dueling.declineDuel(c.opponent, true, false);
 				}
@@ -228,11 +228,11 @@ public class PlayerHandler {
 						c.opponent.Dueling.declineDuel(c.opponent, true, false);
 					}
 				}
-				if (c != null && DuelPlayer.contains(c)) {
+				if (c != null && DuelArena.isDueling(c)) {
 					if (c.opponent != null) {
-						c.opponent.Dueling.duelVictory(c.opponent);
+						c.opponent.Dueling.endDuel(c.opponent);
 					}
-				} else if (c != null && !DuelPlayer.contains(c)) {
+				} else if (c != null && !DuelArena.isDueling(c)) {
 					if (c.opponent != null) {
 						c.opponent.Dueling.declineDuel(c.opponent, true, false);
 					}
@@ -270,11 +270,11 @@ public class PlayerHandler {
 					}
 				}
 				Player c = PlayerHandler.players[i];
-				if (c != null && DuelPlayer.contains(c)) {
+				if (c != null && DuelArena.isDueling(c)) {
 					if (c.opponent != null) {
-						c.opponent.Dueling.duelVictory(c.opponent);
+						c.opponent.Dueling.endDuel(c.opponent);
 					}
-				} else if (c != null && !DuelPlayer.contains(c)) {
+				} else if (c != null && !DuelArena.isDueling(c)) {
 					if (c.opponent != null) {
 						c.opponent.Dueling.declineDuel(c.opponent, true, false);
 					}
