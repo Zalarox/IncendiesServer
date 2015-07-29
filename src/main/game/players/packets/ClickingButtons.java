@@ -13,8 +13,8 @@ import main.game.players.content.ItemsKeptOnDeath;
 import main.game.players.content.QuickCurses;
 import main.game.players.content.QuickPrayers;
 import main.game.players.content.TeleportHandler;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.minigames.impl.barrows.Barrows;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
 import main.game.players.content.skills.cooking.Cooking;
 import main.game.players.content.skills.cooking.DairyChurn;
 import main.game.players.content.skills.cooking.FlourRelated;
@@ -928,166 +928,166 @@ public class ClickingButtons implements PacketType {
 		/** Dueling **/
 		case 26065: // no forfeit
 		case 26040:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(0, p);
+				p.Dueling.toggleDuelRule(0, p);
 			}
 			break;
 
 		case 26066: // no movement
 		case 26048:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(1, p);
+				p.Dueling.toggleDuelRule(1, p);
 			}
 			break;
 
 		case 26069: // no range
 		case 26042:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(2, p);
+				p.Dueling.toggleDuelRule(2, p);
 			}
 			break;
 
 		case 26070: // no melee
 		case 26043:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(3, p);
+				p.Dueling.toggleDuelRule(3, p);
 			}
 			break;
 
 		case 26071: // no mage
 		case 26041:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(4, p);
+				p.Dueling.toggleDuelRule(4, p);
 			}
 			break;
 
 		case 26072: // no drinks
 		case 26045:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(5, p);
+				p.Dueling.toggleDuelRule(5, p);
 			}
 			break;
 
 		case 26073: // no food
 		case 26046:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(6, p);
+				p.Dueling.toggleDuelRule(6, p);
 			}
 			break;
 
 		case 26074: // no prayer
 		case 26047:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(7, p);
+				p.Dueling.toggleDuelRule(7, p);
 			}
 			break;
 
 		case 26076: // obsticals
 		case 26075:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(8, p);
+				p.Dueling.toggleDuelRule(8, p);
 			}
 			break;
 
 		case 2158: // fun weapons
 		case 2157:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(9, p);
+				p.Dueling.toggleDuelRule(9, p);
 			}
 			break;
 
 		case 30136: // sp attack
 		case 30137:
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = -1;
-				p.Dueling.selectRule(10, p);
+				p.Dueling.toggleDuelRule(10, p);
 			}
 			break;
 
 		case 53245: // no helm
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 0;
-				p.Dueling.selectRule(11, p);
+				p.Dueling.toggleDuelRule(11, p);
 			}
 			break;
 
 		case 53246: // no cape
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 1;
-				p.Dueling.selectRule(12, p);
+				p.Dueling.toggleDuelRule(12, p);
 			}
 			break;
 
 		case 53247: // no ammy
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 2;
-				p.Dueling.selectRule(13, p);
+				p.Dueling.toggleDuelRule(13, p);
 			}
 			break;
 
 		case 53249: // no weapon.
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 3;
-				p.Dueling.selectRule(14, p);
+				p.Dueling.toggleDuelRule(14, p);
 			}
 			break;
 
 		case 53250: // no body
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 4;
-				p.Dueling.selectRule(15, p);
+				p.Dueling.toggleDuelRule(15, p);
 			}
 			break;
 
 		case 53251: // no shield
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 5;
-				p.Dueling.selectRule(16, p);
+				p.Dueling.toggleDuelRule(16, p);
 			}
 			break;
 
 		case 53252: // no legs
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 7;
-				p.Dueling.selectRule(17, p);
+				p.Dueling.toggleDuelRule(17, p);
 			}
 			break;
 
 		case 53255: // no gloves
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 9;
-				p.Dueling.selectRule(18, p);
+				p.Dueling.toggleDuelRule(18, p);
 			}
 			break;
 
 		case 53254: // no boots
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 10;
-				p.Dueling.selectRule(19, p);
+				p.Dueling.toggleDuelRule(19, p);
 			}
 			break;
 
 		case 53253: // no rings
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 12;
-				p.Dueling.selectRule(20, p);
+				p.Dueling.toggleDuelRule(20, p);
 			}
 			break;
 
 		case 53248: // no arrows
-			if (!DuelPlayer.isInSecondScreen(p) && DuelPlayer.isInFirstScreen(p)) {
+			if (!DuelArena.isInSecondInterface(p) && DuelArena.isInFirstInterface(p)) {
 				p.getVariables().duelSlot = 13;
-				p.Dueling.selectRule(21, p);
+				p.Dueling.toggleDuelRule(21, p);
 			}
 			break;
 
@@ -1097,8 +1097,8 @@ public class ClickingButtons implements PacketType {
 				return;
 			}
 
-			if (p.getVariables().duelRule[DuelPlayer.RULE_RANGED] && p.getVariables().duelRule[DuelPlayer.RULE_MELEE]
-					&& p.getVariables().duelRule[DuelPlayer.RULE_MAGIC]) {
+			if (p.getVariables().duelRule[DuelArena.RULE_RANGED] && p.getVariables().duelRule[DuelArena.RULE_MELEE]
+					&& p.getVariables().duelRule[DuelArena.RULE_MAGIC]) {
 				p.sendMessage("You won't be able to attack the player with the rules you have set.");
 				break;
 			}
@@ -1115,16 +1115,16 @@ public class ClickingButtons implements PacketType {
 			if (p.getVariables().acceptedFirst == true && p.opponent.getVariables().acceptedFirst == true) {
 				p.getVariables().acceptedSecond = false;
 				p.opponent.getVariables().acceptedSecond = false;
-				DuelPlayer.removeFromFirstScreen(p);
-				DuelPlayer.removeFromFirstScreen(p.opponent);
-				DuelPlayer.addToSecondScreen(p.opponent, p);
+				DuelArena.removeFromFirstInterface(p);
+				DuelArena.removeFromFirstInterface(p.opponent);
+				DuelArena.addToSecondInterface(p.opponent, p);
 				p.Dueling.confirmDuel(p);
 				p.opponent.Dueling.confirmDuel(p.opponent);
 			}
 			break;
 
 		case 25120:
-			if (DuelPlayer.contains(p)) {
+			if (DuelArena.isDueling(p)) {
 				break;
 			}
 			if (p.opponent == null) {
@@ -1132,7 +1132,7 @@ public class ClickingButtons implements PacketType {
 				return;
 			}
 			p.getVariables().acceptedSecond = true;
-			if (DuelPlayer.isInSecondScreen(p) && p.getVariables().acceptedSecond
+			if (DuelArena.isInSecondInterface(p) && p.getVariables().acceptedSecond
 					&& p.opponent.getVariables().acceptedSecond) {
 				p.Dueling.startDuel(p);
 				p.opponent.Dueling.startDuel(p.opponent);
@@ -2286,8 +2286,8 @@ public class ClickingButtons implements PacketType {
 			break;
 
 		case 118098: // Vengeance
-			if (DuelPlayer.contains(p)) {
-				if (p.getVariables().duelRule[DuelPlayer.RULE_MAGIC]) {
+			if (DuelArena.isDueling(p)) {
+				if (p.getVariables().duelRule[DuelArena.RULE_MAGIC]) {
 					p.sendMessage("Magic has been disabled in this duel!");
 					return;
 				}

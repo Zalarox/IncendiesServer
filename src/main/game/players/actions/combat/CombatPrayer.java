@@ -2,7 +2,7 @@ package main.game.players.actions.combat;
 
 import main.Constants;
 import main.game.players.Player;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 
 public class CombatPrayer {
 
@@ -52,7 +52,7 @@ public class CombatPrayer {
 			1, 0, -1, -1, 3, 5, 4, -1, -1 };
 
 	public static void activatePrayer(Player c, int i) {
-		if (c.getVariables().duelRule[DuelPlayer.RULE_PRAYER]) {
+		if (c.getVariables().duelRule[DuelArena.RULE_PRAYER]) {
 			for (int p = 0; p < PRAYER.length; p++) {
 				c.getVariables().prayerActive[p] = false;
 				c.getPA().sendFrame36(PRAYER_GLOW[p], 0);

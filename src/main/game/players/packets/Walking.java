@@ -3,7 +3,7 @@ package main.game.players.packets;
 import main.game.players.PacketType;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.handlers.Following;
 import main.handlers.SkillHandler;
 
@@ -23,9 +23,9 @@ public class Walking implements PacketType {
 		}
 		c.sentWarning = false;
 		c.getPA().resetSkills();
-		if (!DuelPlayer.contains(c))
+		if (!DuelArena.isDueling(c))
 			c.getPA().closeActivities();
-		if (DuelPlayer.isInFirstScreen(c) || DuelPlayer.isInSecondScreen(c)) {
+		if (DuelArena.isInFirstInterface(c) || DuelArena.isInSecondInterface(c)) {
 			if (c.opponent != null)
 				c.opponent.Dueling.declineDuel(c.opponent, true, true);
 			c.Dueling.declineDuel(c, true, true);
@@ -47,12 +47,12 @@ public class Walking implements PacketType {
 				Following.resetFollow(c);
 		}
 		c.getPA().removeAllWindows();
-		if (c.getVariables().duelRule[DuelPlayer.RULE_WALKING] && DuelPlayer.contains(c)) {
+		if (c.getVariables().duelRule[DuelArena.RULE_MOVEMENT] && DuelArena.isDueling(c)) {
 			if (PlayerHandler.players[c.getVariables().duelingWith] != null) {
 				if (!c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getVariables().duelingWith].getX(),
 						PlayerHandler.players[c.getVariables().duelingWith].getY(), 1)
 						|| c.getVariables().attackTimer == 0) {
-					c.sendMessage("Walking has been disabled in this duel!");
+					c.sendMessage("Movement has been disabled in this duel!");
 				}
 			}
 			c.getVariables().playerIndex = 0;
@@ -110,9 +110,9 @@ public class Walking implements PacketType {
 			c.getVariables().mageAllowed = true;
 		}
 
-		if (DuelPlayer.contains(c)) {
+		if (DuelArena.isDueling(c)) {
 			if (c.getVariables().killedDuelOpponent) {
-				c.Dueling.claimStakedItems(c);
+				c.Dueling.claimDuelRewards(c);
 				return;
 			}
 		}

@@ -16,7 +16,7 @@ import main.game.players.Boundaries.Area;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.content.minigames.impl.PestControl;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.following.PathFinder;
 import main.handlers.Following;
 import main.handlers.ItemHandler;
@@ -1031,17 +1031,22 @@ public class CombatAssistant {
 						return;
 					}
 				}
+<<<<<<< Updated upstream
 				// c.sendMessage("Made it here3.");
 				if (c.duelRule[DuelPlayer.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
+=======
+				
+				if (c.duelRule[DuelArena.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
+>>>>>>> Stashed changes
 					c.sendMessage("Range has been disabled in this duel!");
 					return;
 				}
-				if (c.duelRule[DuelPlayer.RULE_MELEE] && (!usingBow && !usingOtherRangeWeapons && !c.usingMagic)) {
+				if (c.duelRule[DuelArena.RULE_MELEE] && (!usingBow && !usingOtherRangeWeapons && !c.usingMagic)) {
 					c.sendMessage("Melee has been disabled in this duel!");
 					return;
 				}
 
-				if (c.duelRule[DuelPlayer.RULE_MAGIC] && c.usingMagic) {
+				if (c.duelRule[DuelArena.RULE_MAGIC] && c.usingMagic) {
 					c.sendMessage("Magic has been disabled in this duel!");
 					resetPlayerAttack();
 					return;
@@ -1115,7 +1120,7 @@ public class CombatAssistant {
 				}
 				c.faceUpdate(i + 32768);
 
-				if (!DuelPlayer.contains(c)) {
+				if (!DuelArena.isDueling(c)) {
 					if (!c.attackedPlayers.contains(c.playerIndex)
 							&& !PlayerHandler.players[c.playerIndex].attackedPlayers.contains(c.playerId)) {
 						c.attackedPlayers.add(c.playerIndex);
@@ -1129,7 +1134,7 @@ public class CombatAssistant {
 				c.specDamage = 1.0;
 				c.delayedDamage = c.delayedDamage2 = 0;
 				if (c.usingSpecial && !c.usingMagic) {
-					if (c.duelRule[DuelPlayer.RULE_SPECIAL_ATTACK] && DuelPlayer.contains(c)) {
+					if (c.duelRule[DuelArena.RULE_SPECIAL_ATTACK] && DuelArena.isDueling(c)) {
 						c.sendMessage("Special attacks have been disabled during this duel!");
 						c.usingSpecial = false;
 						c.getItems().updateSpecialBar();
@@ -1322,7 +1327,7 @@ public class CombatAssistant {
 		if (c2.getVariables().CANNOT_BE_ATTACKED) {
 			return;
 		}
-		if (DuelPlayer.contains(c2) && c2.killedDuelOpponent) {
+		if (DuelArena.isDueling(c2) && c2.killedDuelOpponent) {
 			return;
 		}
 		if (playerHitting) {
@@ -1393,7 +1398,7 @@ public class CombatAssistant {
 		if (c2.getVariables().CANNOT_BE_ATTACKED) {
 			return;
 		}
-		if (DuelPlayer.contains(c2) && c2.killedDuelOpponent) {
+		if (DuelArena.isDueling(c2) && c2.killedDuelOpponent) {
 			return;
 		}
 		if (playerHitting) {
@@ -3277,9 +3282,9 @@ public class CombatAssistant {
 		 * if (c.inCwSafe() || PlayerHandler.players[c.playerIndex].inCwSafe())
 		 * { return false; }
 		 */
-		if (PlayerHandler.players[c.playerIndex].getVariables().inDuelArena() && !DuelPlayer.contains(c)
+		if (PlayerHandler.players[c.playerIndex].getVariables().inDuelArena() && !DuelArena.isDueling(c)
 				&& !c.usingMagic) {
-			if (Boundaries.checkBoundaries(Area.ARENAS, c.getX(), c.getY()) || DuelPlayer.contains(c)) {
+			if (Boundaries.checkBoundaries(Area.ARENAS, c.getX(), c.getY()) || DuelArena.isDueling(c)) {
 				c.sendMessage("You can't challenge inside the arena!");
 				return false;
 			}
@@ -3288,7 +3293,7 @@ public class CombatAssistant {
 			return false;
 		}
 		Player o = PlayerHandler.players[c.playerIndex];
-		if (o != null && DuelPlayer.contains(o) && DuelPlayer.contains(c)) {
+		if (o != null && DuelArena.isDueling(o) && DuelArena.isDueling(c)) {
 			if (o.opponent == c) {
 				return true;
 			} else {

@@ -4,7 +4,7 @@ import main.Constants;
 import main.game.npcs.NPCHandler;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.skills.runecrafting.Tiaras;
 import main.handlers.ItemHandler;
 import main.util.Misc;
@@ -2432,8 +2432,8 @@ public class ItemAssistant {
 			c.sendMessage("You may not withdraw items from a bank that isn't yours.");
 			return;
 		}
-		if (c.getVariables().inTrade || DuelPlayer.contains(c) || DuelPlayer.isInFirstScreen(c)
-				|| DuelPlayer.isInSecondScreen(c)) {
+		if (c.getVariables().inTrade || DuelArena.isDueling(c) || DuelArena.isInFirstInterface(c)
+				|| DuelArena.isInSecondInterface(c)) {
 			c.getPA().closeAllWindows();
 			return;
 		}

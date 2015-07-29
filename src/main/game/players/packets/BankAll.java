@@ -4,7 +4,7 @@ import main.game.items.GameItem;
 import main.game.items.ItemLoader;
 import main.game.players.PacketType;
 import main.game.players.Player;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 
 /**
  * Bank All Items
@@ -51,7 +51,7 @@ public class BankAll implements PacketType {
 			break;
 
 		case 3322:
-			if (!DuelPlayer.contains(c) && !DuelPlayer.isInFirstScreen(c) && !DuelPlayer.isInSecondScreen(c)) {
+			if (!DuelArena.isDueling(c) && !DuelArena.isInFirstInterface(c) && !DuelArena.isInSecondInterface(c)) {
 				if (ItemLoader.isStackable(removeId)) {
 					c.getTradeHandler().tradeItem(removeId, removeSlot, c.getVariables().playerItemsN[removeSlot]);
 				} else {
@@ -59,15 +59,15 @@ public class BankAll implements PacketType {
 				}
 			} else {
 				if (ItemLoader.isStackable(removeId) || ItemLoader.isNote(removeId)) {
-					c.Dueling.stakeItem(removeId, removeSlot, c.getVariables().playerItemsN[removeSlot], c);
+					c.Dueling.addStakedItem(removeId, removeSlot, c.getVariables().playerItemsN[removeSlot], c);
 				} else {
-					c.Dueling.stakeItem(removeId, removeSlot, 28, c);
+					c.Dueling.addStakedItem(removeId, removeSlot, 28, c);
 				}
 			}
 			break;
 
 		case 3415:
-			if (!DuelPlayer.contains(c) && !DuelPlayer.isInFirstScreen(c) && !DuelPlayer.isInSecondScreen(c)) {
+			if (!DuelArena.isDueling(c) && !DuelArena.isInFirstInterface(c) && !DuelArena.isInSecondInterface(c)) {
 				if (ItemLoader.isStackable(removeId)) {
 					for (GameItem item : c.getTradeHandler().offeredItems) {
 						if (item.id == removeId) {
@@ -90,14 +90,14 @@ public class BankAll implements PacketType {
 				for (GameItem item : c.getVariables().stakedItems) {
 					if (item.id == removeId) {
 						c.sendMessage("bankAll");
-						c.Dueling.fromDuel(removeId, removeSlot, c.getVariables().stakedItems.get(removeSlot).amount,
-								c);
+						c.Dueling.removeStakedItem(removeId, removeSlot,
+								c.getVariables().stakedItems.get(removeSlot).amount, c);
 					}
 				}
 
 			} else {
 				c.sendMessage("bankAll");
-				c.Dueling.fromDuel(removeId, removeSlot, 28, c);
+				c.Dueling.removeStakedItem(removeId, removeSlot, 28, c);
 			}
 			break;
 

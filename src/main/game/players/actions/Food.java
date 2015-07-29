@@ -6,7 +6,7 @@ import main.event.CycleEvent;
 import main.event.CycleEventContainer;
 import main.event.CycleEventHandler;
 import main.game.players.Player;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.util.Misc;
 
 public class Food {
@@ -114,7 +114,7 @@ public class Food {
 		 * 
 		 * - KeepBotting
 		 */
-		if (c.getVariables().duelRule[DuelPlayer.RULE_FOOD]) {
+		if (c.getVariables().duelRule[DuelArena.RULE_FOOD]) {
 			c.sendMessage("Food has been disabled in this duel!");
 			return;
 		}

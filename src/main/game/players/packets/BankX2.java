@@ -2,7 +2,7 @@ package main.game.players.packets;
 
 import main.game.players.PacketType;
 import main.game.players.Player;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.skills.cooking.Cooking;
 import main.game.players.content.skills.crafting.SilverCrafting;
 import main.game.players.content.skills.dungeoneering.Items;
@@ -51,12 +51,12 @@ public class BankX2 implements PacketType {
 		case 3322:
 			if (!player.getItems().playerHasItem(player.getVariables().xRemoveId, amount))
 				return;
-			if (!DuelPlayer.contains(player) && !DuelPlayer.isInFirstScreen(player)
-					&& !DuelPlayer.isInSecondScreen(player)) {
+			if (!DuelArena.isDueling(player) && !DuelArena.isInFirstInterface(player)
+					&& !DuelArena.isInSecondInterface(player)) {
 				player.getTradeHandler().tradeItem(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot,
 						amount);
 			} else {
-				player.Dueling.stakeItem(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot, amount,
+				player.Dueling.addStakedItem(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot, amount,
 						player);
 			}
 			break;
@@ -64,8 +64,8 @@ public class BankX2 implements PacketType {
 		case 3415:
 			if (!player.getItems().playerHasItem(player.getVariables().xRemoveId, amount))
 				return;
-			if (!DuelPlayer.contains(player) && !DuelPlayer.isInFirstScreen(player)
-					&& !DuelPlayer.isInSecondScreen(player)) {
+			if (!DuelArena.isDueling(player) && !DuelArena.isInFirstInterface(player)
+					&& !DuelArena.isInSecondInterface(player)) {
 				player.getTradeHandler().fromTrade(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot,
 						amount);
 			}
@@ -74,11 +74,12 @@ public class BankX2 implements PacketType {
 		case 6669:
 			if (!player.getItems().playerHasItem(player.getVariables().xRemoveId, amount)) {
 				player.sendMessage("return1");// returns here in x not sure were
-												// in All
+				// in All
 				return;
 			}
 			player.sendMessage("bankX2");
-			player.Dueling.fromDuel(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot, amount, player);
+			player.Dueling.removeStakedItem(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot, amount,
+					player);
 			break;
 		}
 	}

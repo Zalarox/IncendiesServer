@@ -5,7 +5,7 @@ import main.game.players.Boundaries.Area;
 import main.game.players.PacketType;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 
 /**
  * Challenge Player
@@ -27,7 +27,7 @@ public class ChallengePlayer implements PacketType {
 				return;
 			}
 
-			if (Boundaries.checkBoundaries(Area.ARENAS, c.getX(), c.getY()) || DuelPlayer.contains(c)) {
+			if (Boundaries.checkBoundaries(Area.ARENAS, c.getX(), c.getY()) || DuelArena.isDueling(c)) {
 				c.sendMessage("You can't challenge inside the arena!");
 				return;
 			}

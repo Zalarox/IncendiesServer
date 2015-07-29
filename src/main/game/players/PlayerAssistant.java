@@ -23,10 +23,10 @@ import main.game.npcs.NPCHandler;
 import main.game.players.Boundaries.Area;
 import main.game.players.actions.combat.CombatPrayer;
 import main.game.players.content.Enchanting;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.minigames.impl.FightPits;
 import main.game.players.content.minigames.impl.Godwars;
 import main.game.players.content.minigames.impl.PestControl;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
 import main.handlers.Following;
 import main.handlers.SkillHandler;
 import main.util.Misc;
@@ -870,7 +870,7 @@ public class PlayerAssistant {
 	public void removeAllWindows() {
 		if (c.getOutStream() != null && c != null) {
 			if (c.getVariables().killedDuelOpponent) {
-				c.Dueling.claimStakedItems(c);
+				c.Dueling.claimDuelRewards(c);
 			}
 			c.getOutStream().createFrame(219);
 			c.flushOutStream();
@@ -893,7 +893,7 @@ public class PlayerAssistant {
 	public void closeAllWindows() {
 		if (c.getOutStream() != null && c != null) {
 			if (c.getVariables().killedDuelOpponent) {
-				c.Dueling.claimStakedItems(c);
+				c.Dueling.claimDuelRewards(c);
 			}
 			c.getOutStream().createFrame(219);
 			c.flushOutStream();
@@ -1353,7 +1353,7 @@ public class PlayerAssistant {
 	public void potionPoisonHeal(int itemId, int itemSlot, int newItemId, int healType) {
 		c.getVariables().attackTimer = c.getCombat().getAttackDelay(
 				c.getItems().getItemName(c.getVariables().playerEquipment[c.playerWeapon]).toLowerCase());
-		if (c.getVariables().duelRule[DuelPlayer.RULE_POTIONS]) {
+		if (c.getVariables().duelRule[DuelArena.RULE_POTIONS]) {
 			c.sendMessage("Potions has been disabled in this duel!");
 			return;
 		}
@@ -1474,7 +1474,7 @@ public class PlayerAssistant {
 					o.sendMessage("You have defeated " + c.getPA().getDisplayName() + "!");
 					o.getVariables().killedDuelOpponent = true;
 					c.getVariables().killedDuelOpponent = false;
-					if (!DuelPlayer.contains(c)) {
+					if (!DuelArena.isDueling(c)) {
 						if (!c.connectedFrom.equals(o.getVariables().lastKilled)) {
 							o.getVariables().pkp += 1 + c.getVariables().isDonator;
 							c.getVariables().DC++;
@@ -1510,7 +1510,7 @@ public class PlayerAssistant {
 						o.getVariables().isFullBody = ItemLoader
 								.isFullBody(o.getVariables().playerEquipment[c.getVariables().playerChest]);
 						o.getPA().requestUpdates();
-						o.Dueling.duelVictory(o);
+						o.Dueling.endDuel(o);
 						resetDamageDone();
 						c.getVariables().specAmount = 10;
 						c.getItems().addSpecialBar(c.getVariables().playerEquipment[c.getVariables().playerWeapon]);
@@ -1548,7 +1548,7 @@ public class PlayerAssistant {
 			}
 		});
 		c.stopMovement();
-		if (!DuelPlayer.contains(c)) {
+		if (!DuelArena.isDueling(c)) {
 			c.getVariables().stakedItems.clear();
 			c.sendMessage("Oh dear you are dead!");
 		}
@@ -1809,7 +1809,7 @@ public class PlayerAssistant {
 		c.isDead = false;
 		c.faceUpdate(-1);
 		c.getVariables().freezeTimer = 0;
-		if (!DuelPlayer.contains(c) && !safeZones()) { // if we are not in a
+		if (!DuelArena.isDueling(c) && !safeZones()) { // if we are not in a
 			// duel we must be in
 			// wildy so remove items
 			removeItems();
@@ -1833,7 +1833,7 @@ public class PlayerAssistant {
 			 * Misc.random(5), 3128 + Misc.random(5), 1); } else {
 			 * movePlayer(2424 + Misc.random(5), 3075 + Misc.random(4), 1); }
 			 */
-		} else if (!DuelPlayer.contains(c)) { // if we are not in a duel repawn
+		} else if (!DuelArena.isDueling(c)) { // if we are not in a duel repawn
 			// to wildy
 			movePlayer(Constants.RESPAWN_X, Constants.RESPAWN_Y, 0);
 			c.getVariables().isSkulled = false;
@@ -1844,13 +1844,13 @@ public class PlayerAssistant {
 		} else if (PestControl.isInGame(c) || c.inPcGame()) {
 			PestControl.removePlayerGame(c);
 			c.getDH().sendDialogues(82, 3790);
-		} else if (DuelPlayer.contains(c)) { // we are in a duel, respawn
+		} else if (DuelArena.isDueling(c)) { // we are in a duel, respawn
 			c.Dueling.resetDuel(c);
 			c.Dueling.resetDuelItems(c);
-			DuelPlayer.remove(c);
-			DuelPlayer.removeFromFirstScreen(c);
-			DuelPlayer.removeFromSecondScreen(c);
-			movePlayer(DuelPlayer.LOSS_X_COORD, DuelPlayer.LOSS_Y_COORD, 0);
+			DuelArena.removeFromDueling(c);
+			DuelArena.removeFromFirstInterface(c);
+			DuelArena.removeFromSecondInterface(c);
+			movePlayer(DuelArena.LOSER_X_COORD, DuelArena.LOSER_Y_COORD, 0);
 		}
 		// PlayerSaving.getSingleton().requestSave(c.playerId);
 		PlayerSave.saveGame(c);
@@ -1960,7 +1960,7 @@ public class PlayerAssistant {
 			c.sendMessage("You can't teleport from a Pest Control Game!");
 			return;
 		}
-		if (DuelPlayer.contains(c)) {
+		if (DuelArena.isDueling(c)) {
 			c.sendMessage("You can't teleport during a duel!");
 			return;
 		}

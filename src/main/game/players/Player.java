@@ -44,11 +44,11 @@ import main.game.players.content.SkillInterfaces;
 import main.game.players.content.YellChat;
 import main.game.players.content.clanchat.load.ClanProcessor;
 import main.game.players.content.grandexchange.GrandExchange;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.minigames.impl.FightPits;
 import main.game.players.content.minigames.impl.PestControl;
 import main.game.players.content.minigames.impl.barrows.Barrows;
 import main.game.players.content.minigames.impl.barrows.BarrowsConstants;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
 import main.game.players.content.skills.construction.BuildObject;
 import main.game.players.content.skills.construction.ConstructionData;
 import main.game.players.content.skills.construction.EnterHouse;
@@ -150,8 +150,8 @@ public class Player {
 	public boolean inMulti() {
 		if ((absX >= 3136 && absX <= 3327 && absY >= 3519 && absY <= 3607)
 				|| (absX >= 2625 && absX <= 2685 && absY >= 2550 && absY <= 2620) || // Pest
-		// Control
-		(absX >= 3190 && absX <= 3327 && absY >= 3648 && absY <= 3839)
+				// Control
+				(absX >= 3190 && absX <= 3327 && absY >= 3648 && absY <= 3839)
 				|| (absX >= 3334 && absX <= 3355 && absY >= 3208 && absY <= 3217)
 				|| (absX >= 3200 && absX <= 3390 && absY >= 3840 && absY <= 3967)
 				|| (absX >= 2992 && absX <= 3007 && absY >= 3912 && absY <= 3967)
@@ -164,7 +164,7 @@ public class Player {
 				|| (absX >= 2896 && absX <= 2927 && absY >= 3595 && absY <= 3630)
 				|| (absX >= 2892 && absX <= 2932 && absY >= 4435 && absY <= 4464)
 				|| (absX >= 2882 && absX <= 3000 && absY >= 4357 && absY <= 4406) // Corp
-		// beast
+				// beast
 				|| (absX >= 3147 && absX <= 3193 && absY >= 9737 && absY <= 9778)
 				|| (absX >= 3100 && absX <= 3300 && absY >= 5300 && absY <= 5600)
 				|| (absX >= 2256 && absX <= 2287 && absY >= 4680 && absY <= 4711)
@@ -318,7 +318,7 @@ public class Player {
 	private InfernoAdze adze = new InfernoAdze();
 	private SmithingInterface smithInt = new SmithingInterface(this);
 	private Thieving thieving = new Thieving(this);
-	public DuelPlayer Dueling = new DuelPlayer();
+	public DuelArena Dueling = new DuelArena();
 	private SkillInterfaces skillInterfaces = new SkillInterfaces(this);
 	private ProcessHandler processHandler = new ProcessHandler();
 	private ClanProcessor cc = new ClanProcessor();
@@ -381,7 +381,7 @@ public class Player {
 	public int tzhaarToKill = 0, tzhaarKilled = 0, tzKekSpawn = 0, tzKekTimer = 0, caveWave, tzhaarNpcs;
 	public int totalxp = 0;
 	public int amountDonated;
-	
+
 	/**
 	 * Used for tracking a player's name in yell.
 	 * 
@@ -389,7 +389,7 @@ public class Player {
 	 */
 	public boolean isImpersonated = false;
 	public String impersonationText = "";
-	
+
 	/**
 	 * Used for tracking a player's display name.
 	 *
@@ -499,7 +499,7 @@ public class Player {
 				if (i + 1 < s.length()) {
 					s = String.format("%s%s%s", s.subSequence(0, i + 1), Character.toUpperCase(s.charAt(i + 1)),
 
-					s.substring(i + 2));
+							s.substring(i + 2));
 				}
 			}
 
@@ -603,12 +603,12 @@ public class Player {
 		 */
 		System.out.println("");
 		System.out.println("--- Started the deregistration process for " + this.playerName + " ---");
-		
+
 		/**
 		 * Mark 'em as disconnected.
 		 */
 		disconnected = true;
-		
+
 		/**
 		 * Remove the player from Fight Pits.
 		 */
@@ -624,7 +624,6 @@ public class Player {
 			System.out.println("[DEREGISTRATION]: Removed from dungeoneering party");
 			party.leave(this);
 		}
-			
 
 		/**
 		 * I guess this checks if the player is in combat? And makes sure it
@@ -645,7 +644,6 @@ public class Player {
 			System.out.println("[DEREGISTRATION]: Leaving cc");
 			GameEngine.clanChat.leaveClan(playerId, clanId, true);
 		}
-			
 
 		/**
 		 * Pick up their cannon, if they've placed one.
@@ -660,13 +658,13 @@ public class Player {
 			PestControl.removePlayerGame(this);
 			getPA().movePlayer(2440, 3089, 0);
 		}
-		
+
 		/**
 		 * Kill ongoing player tasks.
 		 */
 		killPlayerTasks();
 		System.out.println("[DEREGISTRATION]: Killed player tasks");
-		
+
 		/**
 		 * I really have no idea what this does or why it's here.
 		 */
@@ -678,8 +676,8 @@ public class Player {
 					break;
 				}
 			}
-		}	
-		
+		}
+
 		/**
 		 * Get their summoned creature out of the way, if they have one.
 		 */
@@ -687,7 +685,7 @@ public class Player {
 			System.out.println("[DEREGISTRATION]: Got rid of summoned creature");
 			summoned.npcTeleport(0, 0, 0);
 		}
-		
+
 		/**
 		 * Decline duels or trades, make sure we mark the character for saving.
 		 */
@@ -697,38 +695,37 @@ public class Player {
 			getTradeHandler().declineTrade(false);
 			saveCharacter = true;
 		}
-		
+
 		/**
 		 * May as well save again, just to be sure.
 		 */
 		PlayerSave.saveGame(this);
 		System.out.println("[DEREGISTRATION]: Saved game");
-		
+
 		/**
 		 * ???
 		 */
 		if (session == null) {
 			return;
 		}
-		
+
 		/**
 		 * Stop cycled events for this player.
 		 */
 		CycleEventHandler.getSingleton().stopEvents(this);
 		System.out.println("[DEREGISTRATION]: Stopped cycled events");
-		
+
 		/**
 		 * Decrement player count upon deregistration.
 		 */
 		PlayerHandler.playerCount = PlayerHandler.playerCount - 1;
 		System.out.println("[DEREGISTRATION]: Decremented player count, it's now " + PlayerHandler.playerCount);
-		
+
 		/**
 		 * No longer impersonated.
 		 */
 		isImpersonated = false;
-		
-		
+
 		HostList.getHostList().remove(session);
 		session.close();
 		session = null;
@@ -749,7 +746,7 @@ public class Player {
 		mapRegionX = mapRegionY = -1;
 		currentX = currentY = 0;
 		resetWalkingQueue();
-		
+
 		System.out.println("--- Completed the deregistration process for " + this.playerName + " ---");
 		System.out.println("");
 	}
@@ -861,7 +858,7 @@ public class Player {
 		getPA().sendFrame126("", 16028);
 		getPA().sendFrame126("Vote Points: " + votingPoints, 16029);
 		getPA().sendFrame126("Slayer Points: " + SlayerPoints, 16030);
-		
+
 		for (int i = 16031; i < 16126; i++)
 			getPA().sendFrame126("", i);
 	}
@@ -971,23 +968,23 @@ public class Player {
 		saveTimer = 100;
 		saveCharacter = true;
 		Misc.println("[REGISTERED]: " + playerName + "");
-		
+
 		/**
 		 * Increment player count upon registration.
 		 * 
 		 * - KeepBotting
 		 */
 		PlayerHandler.playerCount = PlayerHandler.playerCount + 1;
-		
+
 		/**
 		 * If they don't have a display name, ensure their playerName is shown.
 		 * 
 		 * - KeepBotting
 		 */
-		 if (displayName.equalsIgnoreCase("") || displayName == null) {
+		if (displayName.equalsIgnoreCase("") || displayName == null) {
 			displayName = playerName;
-			}
-		
+		}
+
 		if (addStarter) {
 			getPA().addStarter();
 			constitution = 100;
@@ -1013,7 +1010,7 @@ public class Player {
 			}
 		}
 		if (Boundaries.checkBoundaries(Area.ARENAS, getX(), getY()))
-			c.getPA().movePlayer(DuelPlayer.LOSS_X_COORD, DuelPlayer.LOSS_Y_COORD, 0);
+			c.getPA().movePlayer(DuelArena.LOSER_X_COORD, DuelArena.LOSER_Y_COORD, 0);
 		Following.resetFollow(this);
 		getPA().sendFrame36(172, autoRet);
 		getPA().sendFrame36(173, isRunning2 ? 1 : 0);
@@ -1098,7 +1095,7 @@ public class Player {
 			getPA().showOption(3, 0, "Attack", 1);
 		} else if (inDuelArena()) {
 			getPA().walkableInterface(201);
-			if (DuelPlayer.contains(this)) {
+			if (DuelArena.isDueling(this)) {
 				getPA().showOption(3, 0, "Attack", 1);
 			} else {
 				getPA().showOption(3, 0, "Challenge", 1);
@@ -1722,7 +1719,7 @@ public class Player {
 	public ArrayList<String> killedPlayers = new ArrayList<String>();
 	public ArrayList<Integer> attackedPlayers = new ArrayList<Integer>();
 	public int doAnim, oldItem, oldItem2, gainXp, gainXp2, levelReq, levelReq2, newItem, newItem2, objectType, chance,
-			leatherType, skillSpeed, doAmount;
+	leatherType, skillSpeed, doAmount;
 	public boolean settingUpCannon, hasCannon, cannonIsShooting, setUpBase, setUpStand, setUpBarrels, setUpFurnace;
 	public int cannonBalls, cannonBaseX, cannonBaseY, cannonBaseH, rotation, cannonID;
 	public Objects oldCannon;
@@ -1846,7 +1843,7 @@ public class Player {
 			clue = 0, casket = 0;
 	public double attackLeechBonus, rangedLeechBonus, magicLeechBonus, defenceLeechBonus, strengthLeechBonus = 1.0;
 	public double attackLeechDefence, rangedLeechDefence, magicLeechDefence, defenceLeechDefence,
-			strengthLeechDefence = 1.0;
+	strengthLeechDefence = 1.0;
 	public int leechDelay = 0;
 	public int leechType;
 	public String[] leechTypes = { "Attack", "Ranged", "Magic", "Defence", "Strength", "energy", "special attack" };
@@ -1905,11 +1902,11 @@ public class Player {
 	public double specDamage = 1;
 	public double prayerPoint = 1.0;
 	public int teleGrabItem, teleGrabX, teleGrabY, duelCount, underAttackBy, underAttackBy2, wildLevel, teleTimer,
-			respawnTimer = 0, teleBlockLength, poisonDelay;
+	respawnTimer = 0, teleBlockLength, poisonDelay;
 	public long lastPlayerMove, lastPoison, lastPoisonSip, poisonImmune, lastSpear, lastProtItem, dfsDelay, lastVeng,
-			lastYell, teleGrabDelay, protMageDelay, protMeleeDelay, protRangeDelay, lastAction, lastThieve,
-			lastLockPick, alchDelay, duelDelay, teleBlockDelay, godSpellDelay, singleCombatDelay, singleCombatDelay2,
-			reduceStat, logoutDelay, buryDelay, foodDelay, potDelay, restoreDelay, lastButton;
+	lastYell, teleGrabDelay, protMageDelay, protMeleeDelay, protRangeDelay, lastAction, lastThieve,
+	lastLockPick, alchDelay, duelDelay, teleBlockDelay, godSpellDelay, singleCombatDelay, singleCombatDelay2,
+	reduceStat, logoutDelay, buryDelay, foodDelay, potDelay, restoreDelay, lastButton;
 	public boolean canChangeAppearance = false;
 	public boolean mageAllowed;
 	public byte poisonMask = 0;
@@ -2177,7 +2174,17 @@ public class Player {
 	public boolean[] brotherKilled = new boolean[6];
 	public int lastBrother;
 	public int reduceSpellId;
-	public final int[] REDUCE_SPELL_TIME = { 250000, 250000, 250000, 500000, 500000, 500000 }; //how long does the other player stay immune to the spell
+	public final int[] REDUCE_SPELL_TIME = { 250000, 250000, 250000, 500000, 500000, 500000 }; // how
+	// long
+	// does
+	// the
+	// other
+	// player
+	// stay
+	// immune
+	// to
+	// the
+	// spell
 	public long[] reduceSpellDelay = new long[6];
 	public final int[] REDUCE_SPELLS = { 1153, 1157, 1161, 1542, 1543, 1562 };
 	public boolean[] canUseReducingSpell = { true, true, true, true, true, true };
@@ -2192,8 +2199,8 @@ public class Player {
 			false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 	/* Curse Prayers */
 	public int leechEnergyDelay, soulSplitDelay, leechAttackDelay, attackMultiplier, rangedMultiplier, leechRangedDelay,
-			leechDefenceDelay, defenceMultiplier, leechMagicDelay, magicMultiplier, leechStrengthDelay,
-			strengthMultiplier, leechSpecialDelay;
+	leechDefenceDelay, defenceMultiplier, leechMagicDelay, magicMultiplier, leechStrengthDelay,
+	strengthMultiplier, leechSpecialDelay;
 	public final int[] CURSE_DRAIN_RATE = { 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500,
 			500, 500, 500, 500, 500 };
 	public final int[] CURSE_LEVEL_REQUIRED = { 50, 50, 52, 54, 56, 59, 62, 65, 68, 71, 74, 76, 78, 80, 82, 84, 86, 89,
@@ -2224,14 +2231,14 @@ public class Player {
 	public int saveTimer = 100;
 	public boolean magicFailed, oldMagicFailed;
 	public int bowSpecShot, clickNpcType, clickObjectType, objectId, objectX, objectY, objectXOffset, objectYOffset,
-			objectDistance;
+	objectDistance;
 	public int pItemX, pItemY, pItemId;
 	public boolean isMoving, walkingToItem, headingTowardsPlayer = false;
 	public boolean isShopping, updateShop;
 	public int myShopId;
 	public int tradeStatus, tradeWith, playerTradeWealth;;
 	public boolean forcedChatUpdateRequired, inDuel, tradeAccepted, goodTrade, inTrade, tradeRequested,
-			tradeResetNeeded, tradeConfirmed, tradeConfirmed2, canOffer, acceptTrade, acceptedTrade;
+	tradeResetNeeded, tradeConfirmed, tradeConfirmed2, canOffer, acceptTrade, acceptedTrade;
 	public int attackAnim, animationRequest = -1, animationWaitCycles;
 	public int[] playerBonus = new int[12];
 	public double[] soakingBonus = new double[3];
@@ -2627,10 +2634,10 @@ public class Player {
 				// their/your area
 			}
 			if (mapRegionDidChange/*
-									 * && VirtualWorld.I(heightLevel, currentX,
-									 * currentY, currentX + deltaX, currentY +
-									 * deltaY, 0)
-									 */) {
+			 * && VirtualWorld.I(heightLevel, currentX,
+			 * currentY, currentX + deltaX, currentY +
+			 * deltaY, 0)
+			 */) {
 				currentX += deltaX;
 				currentY += deltaY;
 				for (int i = 0; i < walkingQueueSize; i++) {
@@ -3023,14 +3030,14 @@ public class Player {
 		playerProps.writeWord(playerRunIndex); // runAnimIndex
 		playerProps.writeWord(constitution);
 		playerProps.writeWord(calculateMaxLifePoints(this));
-		
+
 		/**
 		 * Handling for display names.
 		 * 
 		 * - KeepBotting
 		 */
 		playerProps.writeQWord(Misc.playerNameToInt64(displayName == "" ? playerName : displayName));
-		
+
 		CombatLevel = calculateCombatLevel();
 		playerProps.writeByte(CombatLevel); // combat level
 		if (inWild()) {
@@ -3484,23 +3491,23 @@ public class Player {
 								+ "), " + "wp2=(" + wayPointX2 + ", " + wayPointY2 + ")");
 					} else {
 						dir >>= 1;
-						found = false;
-						int x = wayPointX1, y = wayPointY1;
-						while (x != wayPointX2 || y != wayPointY2) {
-							x += Misc.directionDeltaX[dir];
-							y += Misc.directionDeltaY[dir];
-							if ((Misc.direction(x, y, firstX, firstY) & 1) == 0) {
-								found = true;
-								break;
-							}
+					found = false;
+					int x = wayPointX1, y = wayPointY1;
+					while (x != wayPointX2 || y != wayPointY2) {
+						x += Misc.directionDeltaX[dir];
+						y += Misc.directionDeltaY[dir];
+						if ((Misc.direction(x, y, firstX, firstY) & 1) == 0) {
+							found = true;
+							break;
 						}
-						if (!found) {
-							println_debug("Fatal: Internal error: unable to determine connection vertex!" + "  wp1=("
-									+ wayPointX1 + ", " + wayPointY1 + "), wp2=(" + wayPointX2 + ", " + wayPointY2
-									+ "), " + "first=(" + firstX + ", " + firstY + ")");
-						} else {
-							addToWalkingQueue(wayPointX1, wayPointY1);
-						}
+					}
+					if (!found) {
+						println_debug("Fatal: Internal error: unable to determine connection vertex!" + "  wp1=("
+								+ wayPointX1 + ", " + wayPointY1 + "), wp2=(" + wayPointX2 + ", " + wayPointY2
+								+ "), " + "first=(" + firstX + ", " + firstY + ")");
+					} else {
+						addToWalkingQueue(wayPointX1, wayPointY1);
+					}
 					}
 				} else {
 					for (int i = 0; i < numTravelBackSteps; i++) {
@@ -3700,7 +3707,7 @@ public class Player {
 	public int[] keepItems = new int[4];
 	public int[] keepItemsN = new int[4];
 	public int WillKeepAmt1, WillKeepAmt2, WillKeepAmt3, WillKeepAmt4, WillKeepItem1, WillKeepItem2, WillKeepItem3,
-			WillKeepItem4, WillKeepItem1Slot, WillKeepItem2Slot, WillKeepItem3Slot, WillKeepItem4Slot, EquipStatus;
+	WillKeepItem4, WillKeepItem1Slot, WillKeepItem2Slot, WillKeepItem3Slot, WillKeepItem4Slot, EquipStatus;
 
 	private Player c = this;
 
@@ -3833,7 +3840,7 @@ public class Player {
 				int hpLimit = (int) Math.ceil(maxConstitution * 0.2);
 				int futureDamage = constitution - damage;
 				if (futureDamage <= hpLimit) {
-					if (!c.duelRule[DuelPlayer.RULE_FOOD]) {
+					if (!c.duelRule[DuelArena.RULE_FOOD]) {
 						int toHeal = (int) Math.ceil(maxConstitution * 0.3);
 						constitution += toHeal;
 						c.getItems().deleteEquipment(10, playerAmulet);

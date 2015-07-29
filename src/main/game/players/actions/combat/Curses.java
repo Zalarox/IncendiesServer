@@ -5,7 +5,7 @@ import main.game.npcs.NPC;
 import main.game.npcs.NPCHandler;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.util.Misc;
 
 public class Curses {
@@ -62,7 +62,13 @@ public class Curses {
 	}
 
 	public void activateCurse(int i) {
+<<<<<<< Updated upstream
 		if (c.getVariables().duelRule[DuelPlayer.RULE_PRAYER]) {
+=======
+
+		// Inside duel arena
+		if (c.getVariables().duelRule[DuelArena.RULE_PRAYER]) {
+>>>>>>> Stashed changes
 			for (int p = 0; p < 19; p++) {
 				c.getVariables().curseActive[p] = false;
 				c.getPA().sendFrame36(GLOW[p], 0);

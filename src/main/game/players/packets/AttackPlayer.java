@@ -4,7 +4,7 @@ import main.Constants;
 import main.game.players.PacketType;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.skills.dungeoneering.Dungeon;
 import main.handlers.Following;
 
@@ -80,13 +80,13 @@ public class AttackPlayer implements PacketType {
 					usingOtherRangeWeapons = true;
 				}
 			}
-			if (DuelPlayer.contains(c)) {
+			if (DuelArena.isDueling(c)) {
 				if (c.getVariables().duelCount > 0) {
 					c.sendMessage("The duel hasn't started yet!");
 					c.getVariables().playerIndex = 0;
 					return;
 				}
-				if (c.getVariables().duelRule[DuelPlayer.RULE_FUN_WEAPONS]) {
+				if (c.getVariables().duelRule[DuelArena.RULE_FUN_WEAPONS]) {
 					boolean canUseWeapon = false;
 					for (int funWeapon : Constants.FUN_WEAPONS) {
 						if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == funWeapon) {
@@ -99,11 +99,11 @@ public class AttackPlayer implements PacketType {
 					}
 				}
 
-				if (c.getVariables().duelRule[DuelPlayer.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
+				if (c.getVariables().duelRule[DuelArena.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
 					c.sendMessage("Range has been disabled in this duel!");
 					return;
 				}
-				if (c.getVariables().duelRule[DuelPlayer.RULE_MELEE] && (!usingBow && !usingOtherRangeWeapons)) {
+				if (c.getVariables().duelRule[DuelArena.RULE_MELEE] && (!usingBow && !usingOtherRangeWeapons)) {
 					c.sendMessage("Melee has been disabled in this duel!");
 					return;
 				}
@@ -209,13 +209,13 @@ public class AttackPlayer implements PacketType {
 			if (!c.getCombat().checkReqs()) {
 				break;
 			}
-			if (DuelPlayer.contains(c)) {
+			if (DuelArena.isDueling(c)) {
 				if (c.getVariables().duelCount > 0) {
 					c.sendMessage("The duel hasn't started yet!");
 					c.getVariables().playerIndex = 0;
 					return;
 				}
-				if (c.getVariables().duelRule[DuelPlayer.RULE_MAGIC]) {
+				if (c.getVariables().duelRule[DuelArena.RULE_MAGIC]) {
 					c.sendMessage("Magic has been disabled in this duel!");
 					return;
 				}

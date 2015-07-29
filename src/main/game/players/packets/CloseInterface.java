@@ -2,7 +2,7 @@ package main.game.players.packets;
 
 import main.game.players.PacketType;
 import main.game.players.Player;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.skills.cooking.FlourRelated;
 
 /**
@@ -22,12 +22,12 @@ public class CloseInterface implements PacketType {
 		}
 
 		if (c.opponent != null) {
-			if (DuelPlayer.isInFirstScreen(c) || DuelPlayer.isInSecondScreen(c)) {
+			if (DuelArena.isInFirstInterface(c) || DuelArena.isInSecondInterface(c)) {
 				c.Dueling.declineDuel(c, true, false);
 			}
 		}
 		if (c.getVariables().killedDuelOpponent) {
-			c.Dueling.claimStakedItems(c);
+			c.Dueling.claimDuelRewards(c);
 		}
 		c.getPA().closeActivities();
 	}

@@ -2,7 +2,7 @@ package main.game.players.packets;
 
 import main.game.players.PacketType;
 import main.game.players.Player;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.skills.crafting.GemCrafting;
 import main.game.players.content.skills.crafting.GemData;
 
@@ -59,18 +59,18 @@ public class RemoveItem implements PacketType {
 			break;
 
 		case 3322:
-			if (!DuelPlayer.contains(c) && !DuelPlayer.isInFirstScreen(c) && !DuelPlayer.isInSecondScreen(c)) {
+			if (!DuelArena.isDueling(c) && !DuelArena.isInFirstInterface(c) && !DuelArena.isInSecondInterface(c)) {
 				if (!c.getVariables().inTrade) {
 					return;
 				}
 				c.getTradeHandler().tradeItem(removeId, slot, 1);
 			} else {
-				c.Dueling.stakeItem(removeId, slot, 1, c);
+				c.Dueling.addStakedItem(removeId, slot, 1, c);
 			}
 			break;
 
 		case 3415:
-			if (!DuelPlayer.contains(c) && !DuelPlayer.isInFirstScreen(c) && !DuelPlayer.isInSecondScreen(c)) {
+			if (!DuelArena.isDueling(c) && !DuelArena.isInFirstInterface(c) && !DuelArena.isInSecondInterface(c)) {
 				if (!c.getVariables().inTrade) {
 					return;
 				}
@@ -79,7 +79,7 @@ public class RemoveItem implements PacketType {
 			break;
 
 		case 6669:
-			c.Dueling.fromDuel(removeId, slot, 1, c);
+			c.Dueling.removeStakedItem(removeId, slot, 1, c);
 			break;
 
 		case 1119:

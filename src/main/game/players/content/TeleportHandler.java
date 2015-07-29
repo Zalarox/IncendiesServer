@@ -9,10 +9,10 @@ import main.game.npcs.NPCHandler;
 import main.game.players.Boundaries;
 import main.game.players.Boundaries.Area;
 import main.game.players.Player;
+import main.game.players.content.minigames.DuelArena;
 import main.game.players.content.minigames.impl.FightPits;
 import main.game.players.content.minigames.impl.Godwars;
 import main.game.players.content.minigames.impl.PestControl;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
 import main.handlers.SkillHandler;
 
 /**
@@ -164,7 +164,7 @@ public class TeleportHandler {
 			player.sendMessage("You can't teleport from a Pest Control Game!");
 			return false;
 		}
-		if (DuelPlayer.contains(player)) {
+		if (DuelArena.isDueling(player)) {
 			player.sendMessage("You can't teleport during a duel!");
 			return false;
 		}

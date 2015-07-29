@@ -2,7 +2,7 @@ package main.game.players.packets;
 
 import main.game.players.PacketType;
 import main.game.players.Player;
-import main.game.players.content.minigames.impl.dueling.DuelPlayer;
+import main.game.players.content.minigames.DuelArena;
 
 /**
  * Move Items
@@ -25,7 +25,7 @@ public class MoveItems implements PacketType {
 			c.getTradeHandler().declineTrade(false);
 			return;
 		}
-		if (DuelPlayer.isInFirstScreen(c)) {
+		if (DuelArena.isInFirstInterface(c)) {
 			c.Dueling.declineDuel(c, true, false);
 			return;
 		}
