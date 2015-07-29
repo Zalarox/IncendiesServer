@@ -46,3 +46,5 @@
 [] Shadows used command (spec)
 [] Shadows2 used command (xteleto shadows)
 [] Shadows2 used command (heal)
+[] Shadows2 used command (audit shadows)
+[] Shadows used command (audit shadows)

@@ -9,6 +9,7 @@ import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.PlayerSave;
 import main.game.players.actions.combat.CombatPrayer;
+import main.game.players.content.AuditInterface;
 import main.game.players.content.minigames.impl.barrows.Barrows;
 import main.game.players.content.skills.dungeoneering.Dungeon;
 import main.game.players.packets.Commands;
@@ -41,7 +42,31 @@ public class Administrator extends Commands {
 		 * Check permission level. These commands are available for permission levels of 2 and above.
 		 */
 		if (c.getVariables().playerRights >= 2) {
-				
+			/* 
+			 * Audit command for debugging added by Sid
+			 * Pls remove later much love
+			 * */
+			if(playerCommand.startsWith("audit")) {
+				String[] args = playerCommand.split(" ", 2);
+				if(args.length == 2) {
+					for (int i = 0; i < PlayerHandler.players.length; i++) {
+						Player c2 = PlayerHandler.players[i];
+						if (c2 != null) {
+							if (c2.playerName.equalsIgnoreCase(args[1])) {
+								AuditInterface pAudit = new AuditInterface(c2);
+								pAudit.showInfo(1);
+								break;
+							}
+						}
+					}
+				} else {
+					c.sendMessage("Syntax is ::audit (player)");
+				}
+			}
+			/*
+			 * End of debug audit command
+			 *  */
+			
 			if (playerCommand.startsWith("xteleto")) {
 				String name = playerCommand.substring(8);
 				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
