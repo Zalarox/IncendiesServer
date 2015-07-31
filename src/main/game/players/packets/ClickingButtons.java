@@ -1418,7 +1418,7 @@ public class ClickingButtons implements PacketType {
 		case 9193:
 			if (p.getVariables().teleAction == 1) {
 				// Brimhaven getDung
-				TeleportHandler.teleport(p, 22710, 9466, 0, "auto");
+				TeleportHandler.teleport(p, 2710, 9466, 0, "auto");
 			} else if (p.getVariables().teleAction == 2) {
 				// Fight Caves
 				TeleportHandler.teleport(p, 2441, 5171, 0, "auto");
