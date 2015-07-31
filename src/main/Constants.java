@@ -5,7 +5,7 @@ public class Constants {
 	public static final boolean SERVER_DEBUG = false;
 
 	public static final String SERVER_NAME = "Incendius";
-	public static final String WELCOME_MESSAGE = "Please drop by our forums at www.incendi.us";
+	public static final String WELCOME_MESSAGE = "Drop by our forums at www.incendi.us & don't forget to vote daily for rewards!";
 	public static final String LATEST_UPDATE = "Changes as often as the weather!";
 	public static final String FORUMS = "";
 	public static final double SERVER_EXP_BONUS = 1.0; // XP bonus multiplier
@@ -15,14 +15,17 @@ public class Constants {
 
 	public static final int CLIENT_VERSION = 999999; // TODO change this.
 
-	public static int MESSAGE_DELAY = 6000; // For chat messages? Alter if so.
 	public static final int ITEM_LIMIT = 25000;
 	public static final int MAXITEM_AMOUNT = Integer.MAX_VALUE;
 	public static final int BANK_SIZE = 352;
 	public static final int MAX_PLAYERS = 1024; // TODO change this to whatever is good.
 	public static final int MAX_CLANS = 3000;
 
-	public static final int DEVELOPER_AMOUNT = 5; // ???
+	/**
+	 * How many developers there are. The server will not allow more than this
+	 * number of developers to be logged in at once.
+	 */
+	public static final int DEVELOPER_AMOUNT = 5;
 
 	public static final int CONNECTION_DELAY = 100; // How long one IP can connect (?)
 	public static final int IPS_ALLOWED = 2; // How many IPs are allowed (?)
@@ -134,12 +137,15 @@ public class Constants {
 	public static final int EDGEVILLE_X = 3087;
 	public static final int EDGEVILLE_Y = 3500;
 	public static final String EDGEVILLE = "";
+	
 	public static final int AL_KHARID_X = 2916;
 	public static final int AL_KHARID_Y = 3176;
 	public static final String AL_KHARID = "";
+	
 	public static final int KARAMJA_X = 3293;
 	public static final int KARAMJA_Y = 3183;
 	public static final String KARAMJA = "";
+	
 	public static final int MAGEBANK_X = 3084;
 	public static final int MAGEBANK_Y = 3248;
 	public static final String MAGEBANK = "";
@@ -151,21 +157,27 @@ public class Constants {
 	public static final int VARROCK_X = 3210;
 	public static final int VARROCK_Y = 3424;
 	public static final String VARROCK = "";
+	
 	public static final int LUMBY_X = 3222;
 	public static final int LUMBY_Y = 3218;
 	public static final String LUMBY = "";
+	
 	public static final int FALADOR_X = 2964;
 	public static final int FALADOR_Y = 3378;
 	public static final String FALADOR = "";
+	
 	public static final int CAMELOT_X = 2757;
 	public static final int CAMELOT_Y = 3477;
 	public static final String CAMELOT = "";
+	
 	public static final int ARDOUGNE_X = 2662;
 	public static final int ARDOUGNE_Y = 3305;
 	public static final String ARDOUGNE = "";
+	
 	public static final int WATCHTOWER_X = 3054;
 	public static final int WATCHTOWER_Y = 3508;
 	public static final String WATCHTOWER = "";
+	
 	public static final int TROLLHEIM_X = 3243;
 	public static final int TROLLHEIM_Y = 3513;
 	public static final String TROLLHEIM = "";
@@ -228,7 +240,7 @@ public class Constants {
 
 	public static final int PACKET_SIZES[] = { 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, // 0
 			0, 0, 0, 0, 8, 0, 6, 2, 2, 0, // 10
-			0, 2, 0, 6, 0, 12, 0, 0, 0, 0, // 20
+			0, 2, 0, 6, 0, 12, 0, 0, 0, 0, // 20`
 			0, 0, 0, 0, 0, 8, 4, 0, 0, 2, // 30
 			2, 6, 0, 6, 0, -1, 0, 0, 0, 0, // 40
 			0, 0, 0, 12, 0, 0, 0, 8, 8, 12, // 50

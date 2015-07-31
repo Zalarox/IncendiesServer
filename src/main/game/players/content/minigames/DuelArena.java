@@ -376,7 +376,7 @@ public class DuelArena {
 				 * them on their way.
 				 */
 				player.sendMessage("Sending duel request...");
-				opponent.sendMessage(player.getPA().getDisplayName() + ":duelreq:");
+				opponent.sendMessage(player.getDisplayName() + ":duelreq:");
 			}
 			
 		} catch (Exception e) {
@@ -419,7 +419,7 @@ public class DuelArena {
 					player);
 		}
 		
-		player.getPA().sendString("Dueling with: " + player.opponent.getPA().getDisplayName() + " (level: "
+		player.getPA().sendString("Dueling with: " + player.opponent.getDisplayName() + " (level: "
 				+ player.opponent.calculateCombatLevel() + ")", 6671);
 		
 		player.getPA().sendString("", 6684);
@@ -809,7 +809,7 @@ public class DuelArena {
 		 */
 		if (player.opponent != null) {
 			player.getPA().sendString("" + player.opponent.calculateCombatLevel(), 6839);
-			player.getPA().sendString(player.opponent.getPA().getDisplayName(), 6840);
+			player.getPA().sendString(player.opponent.getDisplayName(), 6840);
 		} else {
 			player.getPA().sendString("", 6839);
 			player.getPA().sendString("", 6840);

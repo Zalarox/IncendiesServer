@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import main.Constants;
+import main.Data;
 import main.GameEngine;
 import main.event.CycleEvent;
 import main.event.CycleEventContainer;
@@ -17,6 +18,7 @@ import main.game.npcs.data.NPCDrops;
 import main.game.npcs.data.SummoningData;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
+import main.game.players.Boundaries.Area;
 import main.game.players.content.minigames.impl.FightCaves;
 import main.game.players.content.minigames.impl.Godwars;
 import main.game.players.content.minigames.impl.PestControl;
@@ -46,16 +48,13 @@ public class NPCHandler {
 			loadSizes();
 		} catch (IOException e) {
 		}
-		loadNPCList("./Data/cfg/npc.cfg");
-		loadAutoSpawn("./Data/cfg/spawn-config.cfg");
+		loadNPCList(Data.NPC_LIST);
+		loadAutoSpawn(Data.NPC_SPAWN);
 		HunterNpcs.hunterStartup();
 	}
 
 	public static void loadSizes() throws IOException {
-		File parentDir = new File("Data");
-		parentDir.mkdir();
-		final String filename = "npcSizes.txt";
-		File file = new File(parentDir, filename);
+		File file = new File(Data.NPC_SIZES);
 		BufferedReader reader = null;
 
 		try {
@@ -1345,13 +1344,21 @@ public class NPCHandler {
 	}
 
 	/**
+	 * Updates a player's killcount in regards to the NPC they have killed.
 	 * 
-	 * @param i
+	 * @param i The NPC who has died.
 	 */
 	public void appendKillCount(int i) {
 		Player c = PlayerHandler.players[npcs[i].killedBy];
+
 		if (c != null) {
+			
+			if (!c.inArea(Area.GOD_WARS)) {
+				return;
+			}
+			
 			int[] kcMonsters = { 122, 49, 2558, 2559, 2560, 2561, 2550, 2551, 2552, 2553, 2562, 2563, 2564, 2565 };
+
 			for (int j : kcMonsters) {
 				if (npcs[i].npcType == j) {
 					if (c.getVariables().killCount < 20) {

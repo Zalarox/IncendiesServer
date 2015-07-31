@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import main.Data;
 import main.game.items.GroundItem;
 import main.processors.GameProcessor;
 
@@ -324,7 +325,7 @@ public class Region {
 	public static void load() {
 		startup = true;
 		try {
-			File f = new File("./Data/world/map_index");
+			File f = new File(Data.MAP_INDEX);
 			byte[] buffer = new byte[(int) f.length()];
 			DataInputStream dis = new DataInputStream(new FileInputStream(f));
 			dis.readFully(buffer);
@@ -345,8 +346,8 @@ public class Region {
 				regions[i] = new Region(regionIds[i], isMembers[i]);
 			}
 			for (int i = 0; i < size; i++) {
-				byte[] file1 = getBuffer(new File("./Data/world/map/" + mapObjectsFileIds[i] + ".gz"));
-				byte[] file2 = getBuffer(new File("./Data/world/map/" + mapGroundFileIds[i] + ".gz"));
+				byte[] file1 = getBuffer(new File(Data.MAP_CONFIG_DIRECTORY + mapObjectsFileIds[i] + ".gz"));
+				byte[] file2 = getBuffer(new File(Data.MAP_CONFIG_DIRECTORY + mapGroundFileIds[i] + ".gz"));
 				if (file1 == null || file2 == null) {
 					continue;
 				}

@@ -31,6 +31,18 @@ public class PlayerHandler {
 	public static Player[] getPlayers() {
 		return players;
 	}
+	
+	/**
+	 * Returns a Player object based on their index in the array.
+	 * 
+	 * @param idx
+	 *            The index of the specified player.
+	 *            
+	 * @return The Player object.
+	 */
+	public static Player getPlayer(int idx) {
+		return players[idx];
+	}
 
 	public boolean newPlayerPlayer(Player player1) {
 		int slot = -1;
@@ -76,7 +88,7 @@ public class PlayerHandler {
 	}
 
 	public static int getPlayerCount() {
-		return playerCount;
+		return players.length;
 	}
 
 	public static boolean isPlayerOn(final String playerName) {

@@ -13,25 +13,27 @@ import java.util.List;
 import main.game.players.Player;
 
 /**
- * A class for handling punishments and connections.
+ * A class for handling punishments.
  * 
- * @author Thock321
- * @credits Tringan
+ * @author Thock321, Tringan, KeepBotting
  *
  */
 public class Connection {
 
 	/**
-	 * An enum containing the types of punishments.
-	 * 
-	 * @author Thock321
+	 * An enumerated type, containing the various types of punishment.
 	 *
 	 */
 	public static enum ConnectionType {
-		BAN(new ArrayList<String>()), IPBAN(new ArrayList<String>()), MUTE(new ArrayList<String>()), IPMUTE(
-				new ArrayList<String>()), IDENTITY_BAN((new ArrayList<String>())), IDENTITY_MUTE(
-						(new ArrayList<String>())), FIRST_STARTER(new ArrayList<String>()), SECOND_STARTER(
-								new ArrayList<String>());
+		BAN           (new ArrayList<String>()), 
+		IPBAN         (new ArrayList<String>()), 
+		MUTE          (new ArrayList<String>()), 
+		IPMUTE        (new ArrayList<String>()), 
+		IDENTITY_BAN  (new ArrayList<String>()), 
+		IDENTITY_MUTE (new ArrayList<String>()), 
+		
+		FIRST_STARTER (new ArrayList<String>()), 
+		SECOND_STARTER(new ArrayList<String>());
 
 		/**
 		 * The list that contains punishment data.
@@ -74,8 +76,6 @@ public class Connection {
 	}
 
 	public static Collection<String> loginLimitExceeded = new ArrayList<String>();
-	private static String FilesFolder = "./Data/";
-	private static File _FilesFolder = new File(FilesFolder);
 	private static File connectionFile;
 	private static BufferedReader reader;
 	private static BufferedWriter writer;
@@ -89,7 +89,7 @@ public class Connection {
 	 *            The type of connection
 	 */
 	public static void addConnection(Player player, ConnectionType type) {
-		connectionFile = new File(FilesFolder + (type.toString().contains("STARTER") ? "starters" : "/bans/")
+		connectionFile = new File(Data.DATA_DIRECTORY + (type.toString().contains("STARTER") ? "starters" : "/bans/")
 				+ type.toString().toLowerCase() + ".txt");
 		String toAdd = (type.toString().contains("IP") || type.toString().contains("STARTER"))
 				? player.playerName + ":" + player.connectedFrom
@@ -118,7 +118,7 @@ public class Connection {
 	 *            The type of connection.
 	 */
 	public static void removeConnection(String toRemove, ConnectionType type) {
-		connectionFile = new File(FilesFolder + "/bans/" + type.toString().toLowerCase() + ".txt");
+		connectionFile = new File(Data.DATA_DIRECTORY + "/bans/" + type.toString().toLowerCase() + ".txt");
 		type.getList().remove(toRemove);
 		try {
 			writer = new BufferedWriter(new FileWriter(connectionFile));
@@ -139,18 +139,53 @@ public class Connection {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Checks if a connection of the specified type exists for the specified
+	 * player name.
+	 * 
+	 * @param toRemove
+	 *            The string to remove from the file.
+	 * @param type
+	 *            The type of connection.
+	 */
+	public static boolean connectionExists(String player, ConnectionType type) {
+		connectionFile = new File(Data.DATA_DIRECTORY + "/bans/" + type.toString().toLowerCase() + ".txt");
+		boolean success = false;
+		try {
+
+			reader = new BufferedReader(new FileReader(connectionFile));
+			String line;
+			try {
+				
+				while ((line = reader.readLine()) != null) {
+					if (line.toLowerCase().contains(player.toLowerCase())) {
+						success = true;
+					}
+				}
+				
+			} finally {
+				reader.close();
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return success;
+	}
 
 	/**
 	 * Loads all punishments.
 	 */
 	public static void loadConnectionData(boolean starter) {
-		_FilesFolder = new File(FilesFolder + (starter ? "starters" : "/bans/"));
-		for (File file : _FilesFolder.listFiles()) {
-			ConnectionType type = ConnectionType.forName(file.getName().replace(".txt", ""));
+		File ff = new File(Data.DATA_DIRECTORY + (starter ? "starters" : "/bans/"));
+		for (File f : ff.listFiles()) {
+			ConnectionType type = ConnectionType.forName(f.getName().replace(".txt", ""));
 			if (type == null)
 				continue;
 			try {
-				reader = new BufferedReader(new FileReader(file));
+				reader = new BufferedReader(new FileReader(f));
 				String line;
 				try {
 					while ((line = reader.readLine()) != null) {
@@ -179,7 +214,7 @@ public class Connection {
 	public static boolean containsConnection(String playerName, ConnectionType type, boolean starter) {
 		try {
 			connectionFile = new File(
-					FilesFolder + (starter ? "starters" : "/bans/") + type.toString().toLowerCase() + ".txt");
+					Data.DATA_DIRECTORY + (starter ? "starters" : "/bans/") + type.toString().toLowerCase() + ".txt");
 			reader = new BufferedReader(new FileReader(connectionFile));
 			try {
 				String line;

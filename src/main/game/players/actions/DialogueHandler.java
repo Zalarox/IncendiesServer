@@ -29,7 +29,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 0;
 			break;
 		case 254:
-			sendNpcChat4("Hello there " + c.getPA().getDisplayName() + ".", "I am Sigmund the stall merchant.",
+			sendNpcChat4("Hello there " + c.getDisplayName() + ".", "I am Sigmund the stall merchant.",
 					"I can buy any items from the", "stalls next to me for a set price.", c.getVariables().talkingNpc,
 					"Sigmund The Merchent");
 			c.getVariables().nextChat = 255;
@@ -43,7 +43,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 0;
 			break;
 		case 170:
-			sendNpcChat4("Hello there " + c.getPA().getDisplayName() + "!", "If you have a skill level 99 in any given skill,",
+			sendNpcChat4("Hello there " + c.getDisplayName() + "!", "If you have a skill level 99 in any given skill,",
 					"and wish to buy a cape of achievment.", "Then please trade me to purchase a cape.",
 					c.getVariables().talkingNpc, "Wise Old Man");
 			c.getVariables().nextChat = 171;
@@ -53,7 +53,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 0;
 			break;
 		case 180:
-			sendNpcChat4("Hello there " + c.getPA().getDisplayName() + ".", "I am the Pest control points, shopkeeper.",
+			sendNpcChat4("Hello there " + c.getDisplayName() + ".", "I am the Pest control points, shopkeeper.",
 					"I sell various Void Knight items for points which",
 					"can be obtained through winning Pest control games.", c.getVariables().talkingNpc, "Void Knight");
 			c.getVariables().nextChat = 181;
@@ -63,7 +63,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 0;
 			break;
 		case 198:
-			sendNpcChat3("Hello there " + c.getPA().getDisplayName() + ".", "I am Thok, the dungeoneering master, I can lead you to ",
+			sendNpcChat3("Hello there " + c.getDisplayName() + ".", "I am Thok, the dungeoneering master, I can lead you to ",
 					"the dungeoneering lobby, would you like to?", c.getVariables().talkingNpc,
 					"Thok, Master of Dungeoneering");
 			c.getVariables().nextChat = 199;
@@ -86,7 +86,7 @@ public class DialogueHandler {
 			c.getVariables().dialogueAction = 3683;
 			break;
 		case 150:
-			sendNpcChat4("Hello there " + c.getPA().getDisplayName() + "!", "I am the mage of Zamorak and I can teleport",
+			sendNpcChat4("Hello there " + c.getDisplayName() + "!", "I am the mage of Zamorak and I can teleport",
 					"you to a number of Runecrafting altars.", "Which Runecrafting Altar do you want to go to?",
 					c.getVariables().talkingNpc, "Mage of Zamorak");
 			c.getVariables().nextChat = 151;
@@ -110,7 +110,7 @@ public class DialogueHandler {
 			c.getVariables().teleAction = -1;
 			break;
 		case 250:
-			sendNpcChat4("Hello there " + c.getPA().getDisplayName() + "!", "I am the Incendius Guide and I offer advice for",
+			sendNpcChat4("Hello there " + c.getDisplayName() + "!", "I am the Incendius Guide and I offer advice for",
 					"Incendius beginners about all they need to know to begin",
 					"there adventure, would you like to see the information I offer?", c.getVariables().talkingNpc,
 					"Incendius Guide");
@@ -163,7 +163,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 0;
 			break;
 		case 7:
-			sendNpcChat1("Hello " + c.getPA().getDisplayName() + ", what can I do for you?", c.getVariables().talkingNpc,
+			sendNpcChat1("Hello " + c.getDisplayName() + ", what can I do for you?", c.getVariables().talkingNpc,
 					"Strange Old Man");
 			c.getVariables().nextChat = 8;
 			break;
@@ -188,7 +188,7 @@ public class DialogueHandler {
 			break;
 		case 14:
 			c.getPA().fixAllBarrows();
-			sendNpcChat1("Here you go, " + c.getPA().getDisplayName() + ", all fixed!", c.getVariables().talkingNpc,
+			sendNpcChat1("Here you go, " + c.getDisplayName() + ", all fixed!", c.getVariables().talkingNpc,
 					"Strange Old Man");
 			c.getVariables().nextChat = 0;
 			break;
@@ -212,7 +212,7 @@ public class DialogueHandler {
 			c.getVariables().dialogueAction = 982;
 			break;
 		case 30:
-			sendNpcChat3("Hello there " + c.getPA().getDisplayName() + ".", "If you are interested in training the farming skill,",
+			sendNpcChat3("Hello there " + c.getDisplayName() + ".", "If you are interested in training the farming skill,",
 					"then please trade with me to buy farming supplies.", c.getVariables().talkingNpc, "Vanessa");
 			c.getVariables().nextChat = 31;
 			break;
@@ -225,7 +225,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 201;
 			break;
 		case 201:
-			sendNpcChat3("Yes of course I can " + c.getPA().getDisplayName() + ". You can buy a any Pickaxe",
+			sendNpcChat3("Yes of course I can " + c.getDisplayName() + ". You can buy a any Pickaxe",
 					"you need from me, for a certain price. All the ore you can mine",
 					"can be found around this area, and in the Guild located South. ", c.getVariables().talkingNpc,
 					"Bob");
@@ -240,7 +240,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 206;
 			break;
 		case 206:
-			sendNpcChat3("Well " + c.getPA().getDisplayName() + ", through this gate is the Mining Guild.",
+			sendNpcChat3("Well " + c.getDisplayName() + ", through this gate is the Mining Guild.",
 					"Any player with a Mining level of 85+ can enter through the",
 					"gate to mine the best and more valuable ore on Incendius.", c.getVariables().talkingNpc,
 					"Mining Instructor");
@@ -255,7 +255,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 311;
 			break;
 		case 311:
-			sendNpcChat4("Indeed I do " + c.getPA().getDisplayName() + ", I sell a wide range of rare and",
+			sendNpcChat4("Indeed I do " + c.getDisplayName() + ", I sell a wide range of rare and",
 					"powerful items in exchange for Donator Points. You can get",
 					"Donator Points by simply typing ::Donate and by following",
 					"the instructions on that page or by talking to Raw Envy.", c.getVariables().talkingNpc, "Zambo");
@@ -276,7 +276,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 216;
 			break;
 		case 216:
-			sendNpcChat3("Well " + c.getPA().getDisplayName() + ", I sell a wide range of rare and",
+			sendNpcChat3("Well " + c.getDisplayName() + ", I sell a wide range of rare and",
 					"expensive items in exchange for Voting Points. You can",
 					"obtain voting Points & a reward by Voting every 24 hours!", c.getVariables().talkingNpc, "Grum");
 			c.getVariables().nextChat = 217;
@@ -288,7 +288,7 @@ public class DialogueHandler {
 			break;
 
 		case 225:
-			sendNpcChat3("Hello " + c.getPA().getDisplayName() + ", I am the Make-Over mage. I have",
+			sendNpcChat3("Hello " + c.getDisplayName() + ", I am the Make-Over mage. I have",
 					"a magical ability which allows me to change the appearance",
 					"of players, this is free of charge and costs nothing!", c.getVariables().talkingNpc, "Grum");
 			c.getVariables().nextChat = 226;
@@ -310,7 +310,7 @@ public class DialogueHandler {
 			c.getVariables().nextChat = 19;
 			break;
 		case 210:
-			sendNpcChat3("Hello there " + c.getPA().getDisplayName() + ", you look like the kind of person who",
+			sendNpcChat3("Hello there " + c.getDisplayName() + ", you look like the kind of person who",
 					"would be into the Fishing skill. I sell the finest fishing hardware",
 					"in the whole of Incendius, trade me to view my wares.", c.getVariables().talkingNpc, "Harry");
 			c.getVariables().nextChat = 211;
@@ -402,7 +402,7 @@ public class DialogueHandler {
 			c.getPA().closeAllWindows();
 			break;
 		case 77:
-			sendNpcChat4("" + c.getPA().getDisplayName() + " you have Failed.", "You didn't participate enough to take down",
+			sendNpcChat4("" + c.getDisplayName() + " you have Failed.", "You didn't participate enough to take down",
 					"the portals. ", "Try Harder next time.", c.getVariables().talkingNpc, "Void Knight");
 			break;
 		case 78:
@@ -410,13 +410,13 @@ public class DialogueHandler {
 					c.getVariables().talkingNpc, "Void Knight");
 			break;
 		case 79:
-			sendNpcChat4("Congratulations " + c.getPA().getDisplayName() + "!", "You took down all the portals whilst keeping",
+			sendNpcChat4("Congratulations " + c.getDisplayName() + "!", "You took down all the portals whilst keeping",
 					"the void knight alive.", "You been awarded, well done.", c.getVariables().talkingNpc,
 					"Void Knight");
 			break;
 
 		case 401:
-			sendNpcChat4("Hello there " + c.getPA().getDisplayName() + "!", " I can reset any combat skill for you,",
+			sendNpcChat4("Hello there " + c.getDisplayName() + "!", " I can reset any combat skill for you,",
 					"but remember, this is irreversable!", "Choose wisely", c.getVariables().talkingNpc, "Town Crier");
 			c.getVariables().nextChat = 402;
 			break;
@@ -618,7 +618,7 @@ public class DialogueHandler {
 
 	private void sendPlayerChat1(String s, int emoteid) {
 		c.getPA().sendFrame200(969, emoteid);
-		c.getPA().sendString(Misc.capitalize(c.getPA().getDisplayName()), 970);
+		c.getPA().sendString(Misc.capitalize(c.getDisplayName()), 970);
 		c.getPA().sendString(s, 971);
 		c.getPA().sendFrame185(969);
 		c.getPA().sendChatInterface(968);
@@ -626,7 +626,7 @@ public class DialogueHandler {
 
 	public void sendPlayerChat2(String s, String s1) {
 		c.getPA().sendFrame200(974, 9850);
-		c.getPA().sendString(c.getPA().getDisplayName(), 975);
+		c.getPA().sendString(c.getDisplayName(), 975);
 		c.getPA().sendString(s, 976);
 		c.getPA().sendString(s1, 977);
 		c.getPA().sendFrame185(974);
@@ -635,7 +635,7 @@ public class DialogueHandler {
 
 	public void sendPlayerChat3(String s, String s1, String s2) {
 		c.getPA().sendFrame200(980, 9850);
-		c.getPA().sendString(c.getPA().getDisplayName(), 981);
+		c.getPA().sendString(c.getDisplayName(), 981);
 		c.getPA().sendString(s, 982);
 		c.getPA().sendString(s1, 983);
 		c.getPA().sendString(s2, 984);
@@ -645,7 +645,7 @@ public class DialogueHandler {
 
 	public void sendPlayerChat4(String s, String s1, String s2, String s3) {
 		c.getPA().sendFrame200(987, 9850);
-		c.getPA().sendString(c.getPA().getDisplayName(), 988);
+		c.getPA().sendString(c.getDisplayName(), 988);
 		c.getPA().sendString(s, 989);
 		c.getPA().sendString(s1, 990);
 		c.getPA().sendString(s2, 991);

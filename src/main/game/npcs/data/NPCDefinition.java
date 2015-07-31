@@ -25,11 +25,6 @@ public class NPCDefinition {
 	public static NPCDefinition[] definitions;
 
 	/**
-	 * String leading to the directory of which the xml file is stored.
-	 */
-	public static final String DIRECTORY = "./Data/npcanims.xml";
-
-	/**
 	 * Initializes the reading of xml file containing the item definitions.
 	 * 
 	 * @throws SAXException

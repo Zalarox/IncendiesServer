@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
+import main.Data;
 import main.GameEngine;
 
 /**
@@ -67,7 +68,7 @@ public class Clans {
 				Write(owner, "Enter", i);
 
 				try {
-					BufferedWriter out = new BufferedWriter(new FileWriter("./Data/Clans/" + owner + ".ini"));
+					BufferedWriter out = new BufferedWriter(new FileWriter(Data.CLAN_DATA_CONFIG_DIRECTORY + owner + ".ini"));
 					try {
 						out.write("owner=" + owner);
 						out.newLine();
@@ -88,12 +89,12 @@ public class Clans {
 
 	public void saveClan(String owner, String name, int lootshare) {
 		try {
-			File parentDir = new File("./Data/Clans");
+			File parentDir = new File(Data.CLAN_DATA_CONFIG_DIRECTORY);
 			final String fileName = owner + ".ini";
 			File file = new File(parentDir, fileName);
 			file.delete();
 			file.createNewFile();
-			BufferedWriter out = new BufferedWriter(new FileWriter("./Data/Clans/" + owner + ".ini"));
+			BufferedWriter out = new BufferedWriter(new FileWriter(Data.CLAN_DATA_CONFIG_DIRECTORY + owner + ".ini"));
 			try {
 				out.write("owner=" + owner);
 				out.newLine();
@@ -112,7 +113,7 @@ public class Clans {
 
 	@SuppressWarnings("unused")
 	public void loadClans() {
-		File clanDir = new File("./Data/Clans/");
+		File clanDir = new File(Data.CLAN_DATA_CONFIG_DIRECTORY);
 		File[] files = clanDir.listFiles();
 		int numClans = files.length;
 		int loot = 0;
@@ -151,21 +152,21 @@ public class Clans {
 		BufferedReader File = null;
 		BufferedWriter fileW = null;
 		try {
-			File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/" + file + ".txt"));
+			File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/" + file + ".txt"));
 		} catch (FileNotFoundException e) {
 			try {
-				fileW = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/" + file + ".txt"));
+				fileW = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/" + file + ".txt"));
 			} catch (IOException a) {
 
 			}
 		}
 		try {
-			cc = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/" + file + ".txt"));
+			cc = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/" + file + ".txt"));
 		} catch (IOException ioexception) {
 		}
 
 		try {
-			cc = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/" + file + ".txt"));
+			cc = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/" + file + ".txt"));
 			if (file == "Kick") {
 				cc.write(Integer.toString(GameEngine.clanChat.clans[i].whoCanKickOnChat), 0,
 						Integer.toString(GameEngine.clanChat.clans[i].whoCanKickOnChat).length());
@@ -193,12 +194,12 @@ public class Clans {
 			BufferedReader File = null;
 			BufferedWriter fileW = null;
 			try {
-				File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/" + file + ".txt"));
+				File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/" + file + ".txt"));
 			} catch (FileNotFoundException e) {
-				fileW = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/" + file + ".txt"));
+				fileW = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/" + file + ".txt"));
 				Write(name, file, a);
 			}
-			bufferedreader = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/" + file + ".txt"));
+			bufferedreader = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/" + file + ".txt"));
 			for (String s1 = bufferedreader.readLine(); s1 != null; s1 = bufferedreader.readLine()) {
 				s1 = s1.trim();
 				cc = Integer.parseInt(s1);

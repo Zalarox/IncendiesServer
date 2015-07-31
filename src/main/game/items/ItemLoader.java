@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import main.Data;
 import main.handlers.ItemHandler;
 
 public class ItemLoader {
@@ -183,7 +184,7 @@ public class ItemLoader {
 		}
 
 		try {
-			FileInputStream dataIn = new FileInputStream(new File("./Data/data/stackable.dat"));
+			FileInputStream dataIn = new FileInputStream(new File(Data.ITEM_STACKABLE));
 			while ((c = dataIn.read()) != -1) {
 				if (c == 0 && ItemDefinition.forId(counter) != null) {
 					ItemDefinition.forId(counter).itemStackable = false;
@@ -194,14 +195,14 @@ public class ItemLoader {
 			}
 			dataIn.close();
 		} catch (IOException e) {
-			System.out.println("Critical error while loading stackabledata! Trace:");
+			System.out.println("Critical error while loading stackable item data! Trace:");
 			e.printStackTrace();
 		}
 
 		counter = 0;
 
 		try {
-			FileInputStream dataIn = new FileInputStream(new File("./Data/data/notes.dat"));
+			FileInputStream dataIn = new FileInputStream(new File(Data.ITEM_NOTABLE));
 			while ((c = dataIn.read()) != -1) {
 				if (c == 0 && ItemDefinition.forId(counter) != null) {
 					ItemDefinition.forId(counter).itemIsNote = true;
@@ -212,20 +213,20 @@ public class ItemLoader {
 			}
 			dataIn.close();
 		} catch (IOException e) {
-			System.out.println("Critical error while loading notedata! Trace:");
+			System.out.println("Critical error while loading notable item data! Trace:");
 			e.printStackTrace();
 		}
 
 		counter = 0;
 		try {
-			FileInputStream dataIn = new FileInputStream(new File("./Data/data/equipment.dat"));
+			FileInputStream dataIn = new FileInputStream(new File(Data.ITEM_EQUIPPABLE));
 			while ((c = dataIn.read()) != -1) {
 				if (ItemDefinition.forId(counter) != null)
 					ItemDefinition.forId(counter++).targetSlot = c;
 			}
 			dataIn.close();
 		} catch (IOException e) {
-			System.out.println("Critical error while loading notedata! Trace:");
+			System.out.println("Critical error while loading equippable item data! Trace:");
 			e.printStackTrace();
 		}
 

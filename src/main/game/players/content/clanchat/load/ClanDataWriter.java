@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import main.Data;
 import main.game.players.Player;
 
 /**
@@ -74,53 +75,53 @@ public class ClanDataWriter {
 
 	public void removeFriend(String name, String owner) {
 		Friends.remove(name.toLowerCase());
-		deleteFromFile("./Data/ClanData/" + owner + "/Friends.txt", name);
+		deleteFromFile(Data.CLAN_CHAT_CONFIG_DIRECTORY + owner + "/Friends.txt", name);
 	}
 
 	public void removeRecruit(String name, String owner) {
 		Recruits.remove(name.toLowerCase());
-		deleteFromFile("./Data/ClanData/" + owner + "/Recruits.txt", name);
+		deleteFromFile(Data.CLAN_CHAT_CONFIG_DIRECTORY + owner + "/Recruits.txt", name);
 	}
 
 	public void removeCorporal(String name, String owner) {
 		Corporals.remove(name.toLowerCase());
-		deleteFromFile("./Data/ClanData/" + owner + "/Corporals.txt", name);
+		deleteFromFile(Data.CLAN_CHAT_CONFIG_DIRECTORY + owner + "/Corporals.txt", name);
 	}
 
 	public void removeSergeant(String name, String owner) {
 		Sergeants.remove(name.toLowerCase());
-		deleteFromFile("./Data/ClanData/" + owner + "/Sergeants.txt", name);
+		deleteFromFile(Data.CLAN_CHAT_CONFIG_DIRECTORY + owner + "/Sergeants.txt", name);
 	}
 
 	public void removeLieutenant(String name, String owner) {
 		Lieutenants.remove(name.toLowerCase());
-		deleteFromFile("./Data/ClanData/" + owner + "/Lieutenants.txt", name);
+		deleteFromFile(Data.CLAN_CHAT_CONFIG_DIRECTORY + owner + "/Lieutenants.txt", name);
 	}
 
 	public void removeCaptain(String name, String owner) {
 		Captains.remove(name.toLowerCase());
-		deleteFromFile("./Data/ClanData/" + owner + "/Captains.txt", name);
+		deleteFromFile(Data.CLAN_CHAT_CONFIG_DIRECTORY + owner + "/Captains.txt", name);
 	}
 
 	public void removeGeneral(String name, String owner) {
 		Generals.remove(name.toLowerCase());
-		deleteFromFile("./Data/ClanData/" + owner + "/Generals.txt", name);
+		deleteFromFile(Data.CLAN_CHAT_CONFIG_DIRECTORY + owner + "/Generals.txt", name);
 	}
 
 	@SuppressWarnings("unused")
 	public void loadFriends(String name) {
 		try {
 			boolean folderName;
-			folderName = (new File("./Data/ClanData/" + name + "")).mkdirs();
+			folderName = (new File(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "")).mkdirs();
 			BufferedWriter file = null;
 			BufferedReader File = null;
 			try {
-				File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Friends.txt"));
+				File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Friends.txt"));
 			} catch (FileNotFoundException e) {
-				file = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/Friends.txt"));
+				file = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Friends.txt"));
 			}
 
-			BufferedReader in = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Friends.txt"));
+			BufferedReader in = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Friends.txt"));
 			String data = null;
 			try {
 				while ((data = in.readLine()) != null) {
@@ -138,16 +139,16 @@ public class ClanDataWriter {
 	public void loadRecruits(String name) {
 		try {
 			boolean folderName;
-			folderName = (new File("./Data/ClanData/" + name + "")).mkdirs();
+			folderName = (new File(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "")).mkdirs();
 			BufferedWriter file = null;
 			BufferedReader File = null;
 			try {
-				File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Recruits.txt"));
+				File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Recruits.txt"));
 			} catch (FileNotFoundException e) {
-				file = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/Recruits.txt"));
+				file = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Recruits.txt"));
 			}
 
-			BufferedReader in = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Recruits.txt"));
+			BufferedReader in = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Recruits.txt"));
 			String data = null;
 			try {
 				while ((data = in.readLine()) != null) {
@@ -165,15 +166,15 @@ public class ClanDataWriter {
 	public void loadCorporals(String name) {
 		try {
 			boolean folderName;
-			folderName = (new File("./Data/ClanData/" + name + "")).mkdirs();
+			folderName = (new File(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "")).mkdirs();
 			BufferedWriter file = null;
 			BufferedReader File = null;
 			try {
-				File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Corporals.txt"));
+				File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Corporals.txt"));
 			} catch (FileNotFoundException e) {
-				file = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/Corporals.txt"));
+				file = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Corporals.txt"));
 			}
-			BufferedReader in = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Corporals.txt"));
+			BufferedReader in = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Corporals.txt"));
 			String data = null;
 			try {
 				while ((data = in.readLine()) != null) {
@@ -191,15 +192,15 @@ public class ClanDataWriter {
 	public void loadSergeants(String name) {
 		try {
 			boolean folderName;
-			folderName = (new File("./Data/ClanData/" + name + "")).mkdirs();
+			folderName = (new File(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "")).mkdirs();
 			BufferedWriter file = null;
 			BufferedReader File = null;
 			try {
-				File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Sergeants.txt"));
+				File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Sergeants.txt"));
 			} catch (FileNotFoundException e) {
-				file = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/Sergeants.txt"));
+				file = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Sergeants.txt"));
 			}
-			BufferedReader in = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Sergeants.txt"));
+			BufferedReader in = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Sergeants.txt"));
 			String data = null;
 			try {
 				while ((data = in.readLine()) != null) {
@@ -217,15 +218,15 @@ public class ClanDataWriter {
 	public void loadLieutenants(String name) {
 		try {
 			boolean folderName;
-			folderName = (new File("./Data/ClanData/" + name + "")).mkdirs();
+			folderName = (new File(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "")).mkdirs();
 			BufferedWriter file = null;
 			BufferedReader File = null;
 			try {
-				File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Lieutenants.txt"));
+				File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Lieutenants.txt"));
 			} catch (FileNotFoundException e) {
-				file = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/Lieutenants.txt"));
+				file = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Lieutenants.txt"));
 			}
-			BufferedReader in = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Lieutenants.txt"));
+			BufferedReader in = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Lieutenants.txt"));
 			String data = null;
 			try {
 				while ((data = in.readLine()) != null) {
@@ -243,15 +244,15 @@ public class ClanDataWriter {
 	public void loadCaptains(String name) {
 		try {
 			boolean folderName;
-			folderName = (new File("./Data/ClanData/" + name + "")).mkdirs();
+			folderName = (new File(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "")).mkdirs();
 			BufferedWriter file = null;
 			BufferedReader File = null;
 			try {
-				File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Captains.txt"));
+				File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Captains.txt"));
 			} catch (FileNotFoundException e) {
-				file = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/Captains.txt"));
+				file = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Captains.txt"));
 			}
-			BufferedReader in = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Captains.txt"));
+			BufferedReader in = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Captains.txt"));
 			String data = null;
 			try {
 				while ((data = in.readLine()) != null) {
@@ -269,15 +270,15 @@ public class ClanDataWriter {
 	public void loadGenerals(String name) {
 		try {
 			boolean folderName;
-			folderName = (new File("./Data/ClanData/" + name + "")).mkdirs();
+			folderName = (new File(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "")).mkdirs();
 			BufferedWriter file = null;
 			BufferedReader File = null;
 			try {
-				File = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Generals.txt"));
+				File = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Generals.txt"));
 			} catch (FileNotFoundException e) {
-				file = new BufferedWriter(new FileWriter("./Data/ClanData/" + name + "/Generals.txt"));
+				file = new BufferedWriter(new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Generals.txt"));
 			}
-			BufferedReader in = new BufferedReader(new FileReader("./Data/ClanData/" + name + "/Generals.txt"));
+			BufferedReader in = new BufferedReader(new FileReader(Data.CLAN_CHAT_CONFIG_DIRECTORY + name + "/Generals.txt"));
 			String data = null;
 			try {
 				while ((data = in.readLine()) != null) {
@@ -353,7 +354,7 @@ public class ClanDataWriter {
 	public void addNameToFile(Player c, String Name, String rank) {
 		try {
 			BufferedWriter out = new BufferedWriter(
-					new FileWriter("./Data/ClanData/" + c.playerName + "/" + rank + ".txt", true));
+					new FileWriter(Data.CLAN_CHAT_CONFIG_DIRECTORY + c.playerName + "/" + rank + ".txt", true));
 			try {
 				out.newLine();
 				out.write(Name);

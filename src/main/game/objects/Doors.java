@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import main.Data;
 import main.GameEngine;
 
 /**
@@ -24,7 +25,7 @@ public class Doors {
 
 	public static Doors getSingleton() {
 		if (singleton == null) {
-			singleton = new Doors("./Data/doors.txt");
+			singleton = new Doors(Data.DOOR_SINGLE);
 		}
 		return singleton;
 	}

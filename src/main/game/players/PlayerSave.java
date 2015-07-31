@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import main.Data;
 import main.util.Misc;
 
 public class PlayerSave {
@@ -25,7 +26,7 @@ public class PlayerSave {
 		boolean File1 = false;
 
 		try {
-			characterfile = new BufferedReader(new FileReader(("./Data/characters/") + playerName + ".txt"));
+			characterfile = new BufferedReader(new FileReader(Data.CHARACTER_DIRECTORY + playerName + ".txt"));
 			File1 = true;
 		} catch (FileNotFoundException fileex1) {
 		}
@@ -365,7 +366,7 @@ public class PlayerSave {
 
 		BufferedWriter characterfile = null;
 		try {
-			characterfile = new BufferedWriter(new FileWriter(("./Data/characters/") + p.playerName + ".txt"));
+			characterfile = new BufferedWriter(new FileWriter(Data.CHARACTER_DIRECTORY + p.playerName + ".txt"));
 
 			/* ACCOUNT */
 			characterfile.write("[ACCOUNT]", 0, 9);

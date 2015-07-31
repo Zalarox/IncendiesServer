@@ -716,12 +716,6 @@ public class Player {
 		System.out.println("[DEREGISTRATION]: Stopped cycled events");
 
 		/**
-		 * Decrement player count upon deregistration.
-		 */
-		PlayerHandler.playerCount = PlayerHandler.playerCount - 1;
-		System.out.println("[DEREGISTRATION]: Decremented player count, it's now " + PlayerHandler.playerCount);
-
-		/**
 		 * No longer impersonated.
 		 */
 		isImpersonated = false;
@@ -968,13 +962,6 @@ public class Player {
 		saveTimer = 100;
 		saveCharacter = true;
 		Misc.println("[REGISTERED]: " + playerName + "");
-
-		/**
-		 * Increment player count upon registration.
-		 * 
-		 * - KeepBotting
-		 */
-		PlayerHandler.playerCount = PlayerHandler.playerCount + 1;
 
 		/**
 		 * If they don't have a display name, ensure their playerName is shown.
@@ -3524,23 +3511,53 @@ public class Player {
 			isRunning = isNewWalkCmdIsRunning() || isRunning2;
 		}
 	}
-
-	public int getMapRegionX() {
-		return mapRegionX;
+	
+	public int getId() {
+		return playerId;
+	}
+	
+	public String getHost() {
+		return connectedFrom;
+	}
+	
+	public void disconnect() {
+		disconnected = true;
+	}
+	
+	public String getPlayerName() {
+		return playerName;
 	}
 
-	public int getMapRegionY() {
-		return mapRegionY;
+	public String getDisplayName() {
+		return (displayName == "" ? playerName : displayName);
 	}
-
-	public int getLocalX() {
-		return getX() - 8 * getMapRegionX();
+	
+	/**
+	 * TODO transition playerRights and everything dealing with player rights to
+	 * its own class, main.game.players.Rights
+	 * 
+	 * Eventually we'll phase out PlayerVariables entirely because it's just a
+	 * dumping ground for PI's shit
+	 */
+	
+	public static int
+	RIGHTS_PLAYER        = 0,
+	RIGHTS_MODERATOR     = 1,
+	RIGHTS_ADIMINISTRATOR = 2,
+	RIGHTS_DEVELOPER     = 3;
+	
+	public void setRights(int i) {
+		getVariables().playerRights = i;
 	}
-
-	public int getLocalY() {
-		return getY() - 8 * getMapRegionY();
+	
+	public int getRights() {
+		return getVariables().playerRights;
 	}
-
+	
+	public boolean hasRights(int i) {
+		return (getVariables().playerRights == i ? true : false);
+	}
+	
 	public int getX() {
 		return absX;
 	}
@@ -3548,17 +3565,33 @@ public class Player {
 	public int getY() {
 		return absY;
 	}
-
+	
+	public int getZ() {
+		return heightLevel;
+	}
+	
 	public int getLastX() {
 		return lastAbsX;
 	}
 
 	public int getLastY() {
 		return lastAbsY;
+	}	
+	
+	public int getLocalX() {
+		return getX() - 8 * getMapRegionX();
 	}
 
-	public int getId() {
-		return playerId;
+	public int getLocalY() {
+		return getY() - 8 * getMapRegionY();
+	}	
+	
+	public int getMapRegionX() {
+		return mapRegionX;
+	}
+	
+	public int getMapRegionY() {
+		return mapRegionY;
 	}
 
 	public boolean inPcGame() {

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.Data;
 import main.GameEngine;
 import main.game.objects.Objects;
 import main.game.players.Player;
@@ -22,7 +23,7 @@ public class ObjectHandler {
 	public static List<Objects> globalObjects = new ArrayList<Objects>();
 
 	public ObjectHandler() {
-		loadGlobalObjects("./Data/cfg/global-objects.cfg");
+		loadGlobalObjects(Data.OBJECT_LIST);
 	}
 
 	/**

@@ -5,8 +5,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import main.Constants;
+import main.Data;
 import main.GameEngine;
 import main.game.players.PacketType;
 import main.game.players.Player;
@@ -45,17 +47,18 @@ public class Commands implements PacketType {
 	}
 
 	@Override
-	@SuppressWarnings("unused")
 	public void processPacket(Player p, int packetType, int packetSize) {
 		String playerCommand = p.getInStream().readString();
 		if (p.getVariables().playerRights >= 1 && p.getVariables().playerRights != 4
 				&& !playerCommand.startsWith("/")) {
 			try {
-				DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-				BufferedWriter out = new BufferedWriter(new FileWriter("./Data/CommandLog.txt", true));
+				DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss");
+				Date date = new Date();
+				BufferedWriter out = new BufferedWriter(new FileWriter(Data.COMMAND_LOG, true));
 				try {
 					out.newLine();
-					out.write("[] " + p.getVariables().properName + " used command (" + playerCommand + ")");
+					out.write("On " + dateFormat.format(date) + ", " + p.getDisplayName() + " used the command ["
+							+ playerCommand + "]");
 				} finally {
 					out.close();
 				}

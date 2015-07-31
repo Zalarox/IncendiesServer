@@ -1,5 +1,7 @@
 package main.world.map;
 
+import main.Data;
+
 public final class ObjectDef {
 
 	public static ObjectDef getObjectDef(int i) {
@@ -45,7 +47,7 @@ public final class ObjectDef {
 	}
 
 	public static void loadConfig() {
-		archive = new MemoryArchive(new ByteStream(getBuffer("loc.dat")), new ByteStream(getBuffer("loc.idx")));
+		archive = new MemoryArchive(new ByteStream(getBuffer(Data.OBJECT_LOC_DATA)), new ByteStream(getBuffer(Data.OBJECT_LOC_INDEX)));
 		cache = new ObjectDef[20];
 		for (int k = 0; k < 20; k++)
 			cache[k] = new ObjectDef();
@@ -78,7 +80,7 @@ public final class ObjectDef {
 
 	public static byte[] getBuffer(String s) {
 		try {
-			java.io.File f = new java.io.File("./Data/world/object/" + s);
+			java.io.File f = new java.io.File(s);
 			if (!f.exists())
 				return null;
 			byte[] buffer = new byte[(int) f.length()];

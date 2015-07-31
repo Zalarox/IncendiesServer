@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import main.Data;
 import main.GameEngine;
 
 /**
@@ -24,7 +25,7 @@ public class DoubleDoors {
 
 	public static DoubleDoors getSingleton() {
 		if (singleton == null) {
-			singleton = new DoubleDoors("./Data/doubledoors.txt");
+			singleton = new DoubleDoors(Data.DOOR_DOUBLE);
 		}
 		return singleton;
 	}

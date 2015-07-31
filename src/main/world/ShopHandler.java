@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import main.Constants;
+import main.Data;
 import main.game.players.PlayerHandler;
 import main.util.Misc;
 
@@ -42,7 +43,7 @@ public class ShopHandler {
 			ShopName[i] = "";
 		}
 		TotalShops = 0;
-		loadShops("shops.cfg");
+		loadShops(Data.SHOP_LIST);
 	}
 
 	public static void shophandler() {
@@ -113,7 +114,7 @@ public class ShopHandler {
 		int ReadMode = 0;
 		BufferedReader characterfile = null;
 		try {
-			characterfile = new BufferedReader(new FileReader("./Data/CFG/" + FileName));
+			characterfile = new BufferedReader(new FileReader(FileName));
 		} catch (FileNotFoundException fileex) {
 			Misc.println(FileName + ": file not found.");
 			return false;

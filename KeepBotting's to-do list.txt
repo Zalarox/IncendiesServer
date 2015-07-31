@@ -1,16 +1,44 @@
- - Implement an audit() method, I guess it'd go in PlayerAssistant. Reference: http://www.rune-server.org/runescape-development/rs2-server/tutorials/491525-pi-destroy-item-dialogue-chosen-items.html
+ >>> Known
+ 
+ - Implement a new command with syntax ::audit [name], which displays the following about a player: 
+	* Inventory contents,
+	* equipment contents,
+	* bank contents,
+	* creation date,
+	* creation IP,
+	* creation MAC,
+	* current IP,
+	* current MAC,
+	* accounts associated by IP,
+	* accounts associated by MAC,
+	* original display name,
+	* current display name,
+	* ... more?
+	
+- Fix the ladder object in the Taverley dungeon that is somehow tied to the KBD's lair
+	
+- Add "inventory is full" messages where they are missing
+	
+- Finalize the display name system & add support for display names in clan chat
+	
+- Implement a server-side XP lock system w/ a client-side action button
 
- - Implement an audit() command, which displays the following about a player: 
-	* Inventory wealth, 
-	* equipment wealth, 
-	* bank wealth, 
-	* creation date, 
-	* creation IP, 
-	* creation UUID, 
-	* current IP, 
-	* current UUID, 
-	* original name, 
-	* current name, 
-	* other associated accounts ... (ask Rhianne for more)
+- Implement a manual save button
+	
+- Finalize commands overhaul
+	
+- Fix combat pathfinding -- diagonal paths are ignored which makes combat following nasty
 
-- Fix xlogging while in combat so I can get rid of the stupid hacky fix for the dupe that xlogging causes
+- Update the 655 (634?) model header to prevent the client from incorrectly applying transparency to certain items
+
+- Fix timing for poision so it actually has a chance to hit before wearing off
+
+- Remove famished mage-eyes from Relekka slayer dungeon & the list of possible slayer tasks
+	
+
+
+>>> Pending approval from other developers 
+
+- Implement a "loadout" system that will allow users to perform the following actions:
+	* Set, view or change inventory/equipment presets,
+	* automatically withdraw/equip presets if they are close to a bank

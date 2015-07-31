@@ -1,11 +1,12 @@
 package main.game.players.commands;
 
-import main.Connection;
-import main.Constants;
+import main.*;
 import main.Connection.ConnectionType;
+import main.game.npcs.NPCHandler;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.packets.Commands;
+import main.handlers.ItemHandler;
 
 public class Developer extends Commands {
 
@@ -18,41 +19,58 @@ public class Developer extends Commands {
 	 * 
 	 * @param c
 	 *            The player executing the command.
-	 * @param playerCommand
+	 * @param cmd
 	 *            The command being executed.
 	 * 
 	 * @author KeepBotting
 	 */
-	public static void handleCommands(Player c, String playerCommand) {
+	public static void handleCommands(Player c, String cmd) {
 		boolean success = false;
 
 		/**
 		 * Check permission level. These commands are available for permission
 		 * levels of 3.
 		 */
-		if (c.getVariables().playerRights == 3) {
+		if (c.hasRights(Player.RIGHTS_DEVELOPER)) {
 
 			/**
 			 * Returns your position.
 			 */
-			if (playerCommand.equalsIgnoreCase("mypos")) {
-				c.sendMessage("Your position is {X = " + c.absX + ", Y = " + c.absY + ", Z = " + c.heightLevel + "}");
+			if (cmd.equalsIgnoreCase("mypos")) {
+				c.sendMessage("{X = " + c.getX() + ", Y = " + c.getY() + ", Z = " + c.getZ() + "}");
+			}
+			
+			/**
+			 * Schedule a game update. Argument is interpreted in minutes, e.g.
+			 * ::update 5 will initiate a system update in 5 minutes.
+			 */
+			if (cmd.startsWith("update")) {
+				String[] args = cmd.split(" ");
+				int a = Integer.parseInt(args[1]);
+				
+				PlayerHandler.updateSeconds = (a * 60);
+				PlayerHandler.updateAnnounced = false;
+				PlayerHandler.updateRunning = true;
+				PlayerHandler.updateStartTime = System.currentTimeMillis();
+				
+				c.declinePlayerTrades();
 			}
 
 			/**
-			 * UUID-bans a user.
+			 * MAC-bans a user.
 			 */
-			if (playerCommand.startsWith("macban")) {
+			if (cmd.startsWith("macban")) {
 				try {
-					String playerToBan = playerCommand.substring(7);
+					String playerToMacBan = cmd.substring(7);
 
-					for (int i = 0; i < PlayerHandler.players.length; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
-								Connection.addConnection(PlayerHandler.players[i], ConnectionType.IDENTITY_BAN);
-								c.sendMessage("You have UUID-banned the player: " + PlayerHandler.players[i].playerName
-										+ " with the host: " + PlayerHandler.players[i].connectedFrom);
-								PlayerHandler.players[i].disconnected = true;
+					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+						if (PlayerHandler.getPlayer(i) != null) {
+							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(playerToMacBan)) {
+								Player c2 = PlayerHandler.getPlayer(i);
+								Connection.addConnection(c2, ConnectionType.IDENTITY_BAN);
+								c.sendMessage("You have MAC-banned " + c2.getDisplayName() + ", whose host is "
+										+ c2.getHost() + ".");
+								c2.disconnect();
 							}
 						}
 					}
@@ -62,18 +80,18 @@ public class Developer extends Commands {
 			}
 
 			/**
-			 * Un-UUID-bans a user.
+			 * Un-MAC-bans a user.
 			 */
-			if (playerCommand.startsWith("unmacban")) {
+			if (cmd.startsWith("unmacban")) {
 				try {
-					String playerToBan = playerCommand.substring(9);
+					String playerToBan = cmd.substring(9);
 
-					for (int i = 0; i < PlayerHandler.players.length; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
+					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+						if (PlayerHandler.getPlayer(i) != null) {
+							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(playerToBan)) {
+								Player c2 = PlayerHandler.getPlayer(i);
 								Connection.removeConnection(playerToBan, ConnectionType.IDENTITY_BAN);
-								c.sendMessage(
-										"You have un-UUID-banned the user: " + PlayerHandler.players[i].playerName);
+								c.sendMessage("You have un-MAC-banned the user: " + c2.getDisplayName());
 								break;
 							}
 						}
@@ -86,16 +104,17 @@ public class Developer extends Commands {
 			/**
 			 * Tell the players something (essentially sends a server message)
 			 */
-			if (playerCommand.startsWith("tell")) {
-				String message = playerCommand.substring(5);
+			if (cmd.startsWith("tell")) {
+				String message = cmd.substring(5);
 
 				try {
-					for (int i = 0; i < PlayerHandler.players.length; i++) {
-						if (PlayerHandler.players[i] != null) {
-							Player c2 = PlayerHandler.players[i];
-							c2.sendMessage(message);
+					
+					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+						if (PlayerHandler.getPlayer(i) != null) {
+							PlayerHandler.getPlayer(i).sendMessage(message);
 						}
 					}
+					
 				} catch (Exception e) {
 					c.sendMessage("Exception!");
 				}
@@ -106,13 +125,13 @@ public class Developer extends Commands {
 		/**
 		 * Change a player's name in yell
 		 */
-		if (playerCommand.startsWith("impersonate")) {
+		if (cmd.startsWith("impersonate")) {
 			/**
 			 * This got a little complicated. First we pull the entire
 			 * substring, everything after "::impersonate " (with that space at
 			 * the end)
 			 */
-			String str = playerCommand.substring(12);
+			String str = cmd.substring(12);
 
 			/**
 			 * Then we split it by what's before the first space, this gives us
@@ -127,15 +146,17 @@ public class Developer extends Commands {
 			String impersonateTo = str.substring(str.indexOf(" ") + 1);
 
 			try {
-				for (int i = 0; i < PlayerHandler.players.length; i++) {
-					if (PlayerHandler.players[i] != null) {
-						Player c2 = PlayerHandler.players[i];
-						if (c2.playerName.equalsIgnoreCase(player)) {
+				
+				for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					if (PlayerHandler.getPlayer(i) != null) {
+						Player c2 = PlayerHandler.getPlayer(i);
+						if (c2.getDisplayName().equalsIgnoreCase(player)) {
 							c2.getVariables().isImpersonated = true;
 							c2.getVariables().impersonationText = impersonateTo;
 						}
 					}
 				}
+				
 			} catch (Exception e) {
 				c.sendMessage("Exception!");
 			}
@@ -144,30 +165,37 @@ public class Developer extends Commands {
 		/**
 		 * Promote a player to Administrator.
 		 */
-		if (playerCommand.startsWith("giveadmin")) {
-			String playerToGiveAdmin = playerCommand.substring(10);
+		if (cmd.startsWith("giveadmin")) {
+			String playerToGiveAdmin = cmd.substring(10);
 			success = false;
 
 			try {
-				for (int i = 0; i < PlayerHandler.players.length; i++) {
-					if (PlayerHandler.players[i] != null) {
-						Player c2 = PlayerHandler.players[i];
-						if (c2.playerName.equalsIgnoreCase(playerToGiveAdmin)) {
-							c2.getVariables().playerRights = 2;
-							if (c2.getVariables().playerRights == 2) {
+				
+				for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					if (PlayerHandler.getPlayer(i) != null) {
+						Player c2 = PlayerHandler.getPlayer(i);
+						if (c2.getDisplayName().equalsIgnoreCase(playerToGiveAdmin)) {
+							c2.setRights(Player.RIGHTS_ADIMINISTRATOR);
+							
+							if (c2.hasRights(Player.RIGHTS_ADIMINISTRATOR)) {
 								success = true;
 							}
-							c2.logout();
+							
 							break;
 						}
+						
 						if (success) {
-							c.sendMessage("You have granted Administrator rights to " + c2.playerName + ".");
-							c2.sendMessage("Congratulations! You have been granted Administrator permissions by "
-									+ c.playerName + ".");
+							c.sendMessage("You have granted Administrator rights to " + c2.getDisplayName() + ".");
+							c2.sendMessage("Congratulations! You have been granted Administrator rights by "
+									+ c.getDisplayName() + ".");
+							c2.sendMessage("You must refresh your game session for the changes to take effect.");
+						} else {
+							c.sendMessage("Unable to promote " + c2.getDisplayName() + ".");
 						}
 
 					}
 				}
+				
 			} catch (Exception e) {
 				c.sendMessage("Exception!");
 			}
@@ -175,29 +203,36 @@ public class Developer extends Commands {
 			/**
 			 * Promote a player to Moderator.
 			 */
-			if (playerCommand.startsWith("givemod")) {
-				String playerToGiveMod = playerCommand.substring(8);
+			if (cmd.startsWith("givemod")) {
+				String playerToGiveMod = cmd.substring(8);
 				success = false;
 
 				try {
-					for (int i = 0; i < PlayerHandler.players.length; i++) {
-						if (PlayerHandler.players[i] != null) {
-							Player c2 = PlayerHandler.players[i];
-							if (c2.playerName.equalsIgnoreCase(playerToGiveMod)) {
-								c2.getVariables().playerRights = 1;
-								if (c2.getVariables().playerRights == 1) {
+					
+					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+						if (PlayerHandler.getPlayer(i) != null) {
+							Player c2 = PlayerHandler.getPlayer(i);
+							if (c2.getDisplayName().equalsIgnoreCase(playerToGiveMod)) {
+								c2.setRights(Player.RIGHTS_MODERATOR);
+								
+								if (c2.hasRights(Player.RIGHTS_MODERATOR)) {
 									success = true;
 								}
-								c2.logout();
+								
 								break;
 							}
+							
 							if (success) {
-								c.sendMessage("You have granted Moderator rights to " + c2.playerName + ".");
-								c2.sendMessage("Congratulations! You have been granted Moderator permissions by "
-										+ c.playerName + ".");
+								c.sendMessage("You have granted Moderator rights to " + c2.getDisplayName() + ".");
+								c2.sendMessage("Congratulations! You have been granted Moderator rights by "
+										+ c.getDisplayName() + ".");
+								c2.sendMessage("You must refresh your game session for the changes to take effect.");
+							} else {
+								c.sendMessage("Unable to promote " + c2.getDisplayName() + ".");
 							}
 						}
 					}
+					
 				} catch (Exception e) {
 					c.sendMessage("Exception!");
 				}
@@ -205,27 +240,32 @@ public class Developer extends Commands {
 				/**
 				 * Demote a player.
 				 */
-				if (playerCommand.startsWith("demote")) {
-					String playerToDemote = playerCommand.substring(10);
+				if (cmd.startsWith("demote")) {
+					String playerToDemote = cmd.substring(10);
 					success = false;
 
 					try {
-						for (int i = 0; i < PlayerHandler.players.length; i++) {
-							if (PlayerHandler.players[i] != null) {
-								Player c2 = PlayerHandler.players[i];
-								if (c2.playerName.equalsIgnoreCase(playerToDemote)) {
-									c2.getVariables().playerRights = 0;
-									if (c2.getVariables().playerRights == 0) {
+						
+						for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+							if (PlayerHandler.getPlayer(i) != null) {
+								Player c2 = PlayerHandler.getPlayer(i);
+								if (c2.getDisplayName().equalsIgnoreCase(playerToDemote)) {
+									c2.setRights(Player.RIGHTS_PLAYER);
+									
+									if (c2.hasRights(Player.RIGHTS_PLAYER)) {
 										success = true;
 									}
+									
 									c2.logout();
 									break;
 								}
+								
 								if (success) {
-									c.sendMessage("You have demoted " + c2.playerName + ".");
+									c.sendMessage("You have demoted " + c2.getDisplayName() + ".");
 								}
 							}
 						}
+						
 					} catch (Exception e) {
 						c.sendMessage("Exception!");
 					}
@@ -234,25 +274,163 @@ public class Developer extends Commands {
 				/**
 				 * View detailed statistics on a player.
 				 */
-				if (playerCommand.startsWith("audit")) {
-					String playerToAudit = playerCommand.substring(6);
+				if (cmd.startsWith("audit")) {
+					String playerToAudit = cmd.substring(6);
 
 					try {
-						for (int i = 0; i < PlayerHandler.players.length; i++) {
-							if (PlayerHandler.players[i] != null) {
-								Player c2 = PlayerHandler.players[i];
-								if (c2.playerName.equalsIgnoreCase(playerToAudit)) {
+						
+						for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+							if (PlayerHandler.getPlayer(i) != null) {
+								Player c2 = PlayerHandler.getPlayer(i);
+								if (c2.getDisplayName().equalsIgnoreCase(playerToAudit)) {
 									break;
 								}
 							}
 						}
+						
+					} catch (Exception e) {
+						c.sendMessage("Exception!");
+					}
+				}
+				
+				/**
+				 * Open the specified interface.
+				 */
+				if (cmd.startsWith("interface")) {
+					String[] args = cmd.split(" ");
+					c.getPA().showInterface(Integer.parseInt(args[1]));
+				}
+				
+				/**
+				 * Spawn the specified object.
+				 */
+				if (cmd.startsWith("object")) {
+					String[] args = cmd.split(" ");					
+					c.getPA().object(Integer.parseInt(args[1]), c.getX(), c.getY(), 0, 10);
+				}
+				
+				/**
+				 * Spawn the specified NPC.
+				 */
+				if (cmd.startsWith("npc")) {
+					int npc = Integer.parseInt(cmd.substring(4));
+					
+					try {
+						
+						if (npc > 0) {
+							NPCHandler.spawnNpc(c, npc, c.getX(), c.getY(), c.getZ(), 0, 120, 7, 70, 70, false,
+									false);
+							c.sendMessage("You spawn an NPC.");
+						} else {
+							c.sendMessage("No NPC by that ID.");
+						}
+						
+					} catch (Exception e) {
+						c.sendMessage("Exception!");
+					}
+				}
+				
+				/**
+				 * Assume the appearance of the specified NPC.
+				 */
+				if (cmd.startsWith("pnpc")) {
+					int pnpc = Integer.parseInt(cmd.substring(5));
+					
+					try {	
+						
+						c.getVariables().npcId2 = pnpc;
+						c.getPA().requestUpdates();
+						
+					} catch (Exception e) {
+						c.sendMessage("Exception!");
+					}
+				}
+				
+				/**
+				 * Initiate the specified dialogue.
+				 */
+				if (cmd.startsWith("dialogue")) {
+					int dialogue = Integer.parseInt(cmd.substring(9));
+					
+					try {
+						
+						c.getVariables().talkingNpc = dialogue;
+						c.getDH().sendDialogues(11, c.getVariables().talkingNpc);
+						
+					} catch (Exception e) {
+						c.sendMessage("Exception!");
+					}
+				}
+				
+				/**
+				 * Play the specified graphic.
+				 */
+				if (cmd.startsWith("gfx")) {
+					String[] args = cmd.split(" ");
+
+					try {
+
+						c.gfx0(Integer.parseInt(args[1]));
+
 					} catch (Exception e) {
 						c.sendMessage("Exception!");
 					}
 				}
 
+				/**
+				 * Play the specified animation.
+				 */
+				if (cmd.startsWith("anim")) {
+					String[] args = cmd.split(" ");
+
+					try {
+
+						c.startAnimation(Integer.parseInt(args[1]));
+						c.getPA().requestUpdates();
+
+					} catch (Exception e) {
+						c.sendMessage("Exception!");
+					}
+				}
+				
+				/**
+				 * Reload the "ItemHandler" subsystem.
+				 */
+				if (cmd.equals("reloaditems")) {
+					for (int i = 0; i < Constants.ITEM_LIMIT; i++)
+						ItemHandler.ItemList[i] = null;
+					ItemHandler.loadItemList("item.cfg");
+					ItemHandler.loadItemPrices("prices.txt");
+					c.sendMessage("Items reloaded.");
+				}
+				
+				/**
+				 * Reload the "NPCHandler" subsystem.
+				 */				
+				if (cmd.equals("reloadnpcs")) {
+					for (int i = 0; i < NPCHandler.maxNPCs; i++) {
+						NPCHandler.npcs[i] = null;
+					}
+					GameEngine.npcHandler.loadNPCList(Data.NPC_LIST);
+					GameEngine.npcHandler.loadAutoSpawn(Data.NPC_SPAWN);
+					c.sendMessage("NPCs reloaded.");
+				}
+
+				/**
+				 * Reload the "NPCDrops" subsystem.
+				 */
+				if (cmd.startsWith("reloaddrops")) {
+					GameEngine.npcDrops = null;
+					GameEngine.npcDrops = new main.game.npcs.data.NPCDrops();
+				}
+
+				/**
+				 * Reload the "ShopHandler" subsystem.
+				 */
+				if (cmd.startsWith("reloadshops")) {
+					GameEngine.shopHandler = new main.world.ShopHandler();
+				}
 			}
 		}
 	}
-
 }

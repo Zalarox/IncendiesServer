@@ -12,200 +12,191 @@ import main.handlers.ItemHandler;
 public class Moderator extends Commands {
 
 	/**
-	 * Handles commands that are available to players with a permission level of 1.
-	 * These players are known as Moderators.
+	 * Handles commands that are available to players with a permission level of
+	 * 1. These players are known as Moderators.
 	 * 
-	 * Moderators are defined as Normal Players with the ability to:
+	 * Moderators are defined as Normal Players with the ability to: 
 	 * > issue or quash mutes
+	 * > issue or quash timed mutes
+	 * > issue or quash IP-mutes
 	 * > send players to and from jail
-	 * > teleport to players
+	 * > teleport to players (but not teleport players to them)
 	 * 
-	 * @param c The player executing the command.
-	 * @param playerCommand The command being executed.
-	 *  
+	 * @param c
+	 *            The player executing the command.
+	 * @param cmd
+	 *            The command being executed.
+	 * 
 	 * @author KeepBotting
 	 */
-	public static void handleCommands(Player c, String playerCommand) {
+	public static void handleCommands(Player c, String cmd) {
+		boolean success = false;
+		
 		/**
-		 * Check permission level. These commands are available for permission levels of 1 and above.
+		 * Check permission level. These commands are available for permission
+		 * levels of 1 and above.
 		 */
-		if (c.getVariables().playerRights >= 1) {
+		if (c.getRights() >= Player.RIGHTS_MODERATOR) {
 			
-			if (playerCommand.startsWith("interface")) {
-				String[] args = playerCommand.split(" ");
-				c.getPA().showInterface(Integer.parseInt(args[1]));
-			}
-			if (playerCommand.startsWith("object")) {
-				String[] args = playerCommand.split(" ");
-				c.getPA().object(Integer.parseInt(args[1]), c.absX, c.absY, 0, 10);
-			}
-			if (playerCommand.startsWith("dialogue")) {
+			/**
+			 * Prevent a player from speaking. Optional argument dictates the
+			 * number of hours the mute should last.
+			 * 
+			 * @usage ::mute [name]
+			 *        Mute a player indefinitely (until they are manually unmuted).
+			 * 
+			 * @usage ::mute [name] 12
+			 *        Mute a player for 12 hours, after which the mute will automatically expire.
+			 *        
+			 * TODO support for timed mutes.
+			 */
+			if (cmd.startsWith("mute")) {
+				String playerToMute = cmd.substring(5);
 				try {
-					int newNPC = Integer.parseInt(playerCommand.substring(9));
-					c.getVariables().talkingNpc = newNPC;
-					c.getDH().sendDialogues(11, c.getVariables().talkingNpc);
-				} catch (Exception e) {
-				}
-			}
-			if (playerCommand.startsWith("gfx")) {
-				String[] args = playerCommand.split(" ");
-				c.gfx0(Integer.parseInt(args[1]));
-			}
-			if (playerCommand.startsWith("anim")) {
-				String[] args = playerCommand.split(" ");
-				c.startAnimation(Integer.parseInt(args[1]));
-				c.getPA().requestUpdates();
-			}
-			if (playerCommand.startsWith("tele")) {
-				String[] arg = playerCommand.split(" ");
-				if (arg.length > 3)
-					c.getPA().movePlayer(Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), Integer.parseInt(arg[3]));
-				else if (arg.length == 3)
-					c.getPA().movePlayer(Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), c.heightLevel);
-			}
-			if (playerCommand.startsWith("ban")) {
-				try {
-					String playerToBan = playerCommand.substring(4);
+			
 					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
-								Connection.addConnection(PlayerHandler.players[i], ConnectionType.BAN);
-								PlayerHandler.players[i].disconnected = true;
-							}
-						}
-					}
-				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
-				}
-			}
-			if (playerCommand.startsWith("unban")) {
-				try {
-					String playerToBan = playerCommand.substring(6);
-					Connection.removeConnection(playerToBan, ConnectionType.BAN);
-					c.sendMessage(playerToBan + " has been unbanned.");
-				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
-				}
-			}
-			if (playerCommand.startsWith("unmute")) {
-				try {
-					String playerToBan = playerCommand.substring(6);
-					Connection.removeConnection(playerToBan, ConnectionType.MUTE);
-					c.sendMessage(playerToBan + " has been unmuted.");
-				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
-				}
-			}
-			if (playerCommand.startsWith("getip")) {
-				String getPlayerIP = playerCommand.substring(6);
-				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-					if (PlayerHandler.players[i] != null) {
-						if (PlayerHandler.players[i].playerName.equalsIgnoreCase(getPlayerIP))
-							c.sendMessage(PlayerHandler.players[i].playerName + "'s IP is "
-									+ PlayerHandler.players[i].connectedFrom);
-					}
-				}
-			}
-			if (playerCommand.startsWith("ipmute")) {
-				try {
-					String playerToBan = playerCommand.substring(7);
-					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
-								Connection.addConnection(PlayerHandler.players[i], ConnectionType.forName("IPMUTE"));
-								c.sendMessage("You have IP Muted the user: " + PlayerHandler.players[i].playerName);
+							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToMute)) {
+								
 								Player c2 = PlayerHandler.players[i];
-								c2.sendMessage("You have been muted by: " + c.playerName);
+								Connection.addConnection(c2, ConnectionType.MUTE);
+								
+								c2.sendMessage("You have been muted by " + c.getDisplayName() + ".");
+								c.sendMessage("You have muted " + c.getDisplayName() + ".");
 								break;
 							}
 						}
 					}
+					
 				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
+					c.sendMessage("Exception!");
 				}
 			}
-			if (playerCommand.startsWith("bpane")) {
-				String opacity = playerCommand.substring(6);// my mistake
-				c.getPA().drawBlackPane(Integer.parseInt(opacity), true);
-			}
-			if (playerCommand.startsWith("search")) {
-				String a[] = playerCommand.split(" ");
-				String name = "";
-				int results = 0;
-				for (int i = 1; i < a.length; i++)
-					name = name + a[i] + " ";
-				name = name.substring(0, name.length() - 1);
-				c.sendMessage("Searching: " + name);
-				for (int j = 0; j < ItemHandler.ItemList.length; j++) {
-					if (ItemHandler.ItemList[j] != null)
-						if (ItemHandler.ItemList[j].itemName.replace("_", " ").toLowerCase()
-								.contains(name.toLowerCase())) {
-							c.sendMessage("<col=16711680>" + ItemHandler.ItemList[j].itemName.replace("_", " ") + " - "
-									+ ItemHandler.ItemList[j].itemId);
-							results++;
-						}
-				}
-				c.sendMessage(results + " results found...");
-			}
-			if (playerCommand.startsWith("movehome")) {
+			
+			
+			/**
+			 * Remove a mute that was placed on a player.
+			 */
+			if (cmd.startsWith("unmute")) {
+				String playerToUnmute = cmd.substring(6);
 				try {
-					String playerToBan = playerCommand.substring(9);
+					
+					Connection.removeConnection(playerToUnmute, ConnectionType.MUTE);
+					c.sendMessage(playerToUnmute + " has been unmuted.");
+					
+				} catch (Exception e) {
+					c.sendMessage("Exception!");
+				}
+			}
+			
+			/**
+			 * Prevent all players on an IP from speaking.
+			 */
+			if (cmd.startsWith("ipmute")) {
+				String ipToMute = cmd.substring(7);
+				try {
+				
 					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
+							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(ipToMute)) {
+								
 								Player c2 = PlayerHandler.players[i];
-								c2.teleportToX = 3096;
-								c2.teleportToY = 3468;
-								c2.heightLevel = c.heightLevel;
-								c.sendMessage("You have teleported " + c2.playerName + " to home.");
-								c2.sendMessage("You have been teleported to home.");
-							}
-						}
-					}
-				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
-				}
-			}
-			if (playerCommand.startsWith("unipmute")) {
-				try {
-					String playerToBan = playerCommand.substring(9);
-					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
-								Connection.removeConnection(playerToBan, ConnectionType.forName("IPMUTE"));
-								c.sendMessage("You have Un Ip-Muted the user: " + PlayerHandler.players[i].playerName);
+								Connection.addConnection(c2, ConnectionType.forName("IPMUTE"));
+								
+								c.sendMessage("You have IP-muted " + c2.getDisplayName() + ".");
+								c2.sendMessage("You have been muted by " + c.getDisplayName() + ".");
 								break;
 							}
 						}
 					}
+					
 				} catch (Exception e) {
-					c.sendMessage("Player Must Be Offline.");
+					c.sendMessage("Exception!");
 				}
 			}
-			if (playerCommand.startsWith("pnpc")) {
-				try {
-					int newNPC = Integer.parseInt(playerCommand.substring(5));
-					c.getVariables().npcId2 = newNPC;
-					c.getPA().requestUpdates();
-				} catch (Exception e) {
-				}
-			}
-			if (playerCommand.startsWith("npcname")) {
-				int npc = Integer.parseInt(playerCommand.substring(8));
-				c.sendMessage("The name of the npc with the id " + npc + " is " + NPCHandler.getNpcListName(npc) + ".");
-			}
-			if (playerCommand.startsWith("npc")) {
-				try {
-					int newNPC = Integer.parseInt(playerCommand.substring(4));
-					if (newNPC > 0) {
-						NPCHandler.spawnNpc(c, newNPC, c.absX - 4, c.absY, c.heightLevel, 0, 120, 7, 70, 70, false,
-								false);
-						c.sendMessage("You spawn a Npc.");
-					} else {
-						c.sendMessage("No such NPC.");
-					}
-				} catch (Exception e) {
 
+			/**
+			 * Remove an mute that was placed on an IP.
+			 */
+			if (cmd.startsWith("unipmute")) {
+				String IPToUnmute = cmd.substring(9);
+				try {
+					
+					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
+						if (PlayerHandler.players[i] != null) {
+							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(IPToUnmute)) {
+								Player c2 = PlayerHandler.players[i];
+								Connection.removeConnection(IPToUnmute, ConnectionType.forName("IPMUTE"));
+								c.sendMessage("You have un-IP-muted " + c2.getDisplayName() + ".");
+								break;
+							}
+						}
+					}
+					
+				} catch (Exception e) {
+					c.sendMessage("Exception!");
+				}
+			}
+			
+			/**
+			 * Demote a player.
+			 */
+			if (cmd.startsWith("demote")) {
+				String playerToDemote = cmd.substring(7);
+				try {
+					
+					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+						if (PlayerHandler.getPlayer(i) != null) {
+							Player c2 = PlayerHandler.getPlayer(i);
+							if (c2.getDisplayName().equalsIgnoreCase(playerToDemote)) {
+							
+								if ((c2.getRights() == c.getRights()) && (c.getRights() < Player.RIGHTS_DEVELOPER)) {
+									c.sendMessage("You may not demote a staff member with a rank equal to yourself.");
+									return;
+								} else if ((c2.getRights() >= c.getRights()) && (c.getRights() < Player.RIGHTS_DEVELOPER)) {
+									c.sendMessage("You may not demote a staff member with a higher rank than you.");
+									return;
+								}
+
+								c2.setRights(Player.RIGHTS_PLAYER);
+								
+								if (c2.hasRights(Player.RIGHTS_PLAYER)) {
+									success = true;
+								}
+								
+								c2.logout();
+								break;
+							}
+							
+							if (success) {
+								c.sendMessage("You have demoted " + c2.getDisplayName() + ".");
+							} else {
+								c.sendMessage("Unable to demote " + c2.getDisplayName() + ".");
+							}
+						}
+					}
+					
+				} catch (Exception e) {
+					c.sendMessage("Exception!");
+				}
+			}
+			
+			/**
+			 * Teleport to a player.
+			 */
+			if (cmd.startsWith("goto")) {
+				String name = cmd.substring(5);
+
+				for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					if (PlayerHandler.getPlayer(i) != null) {
+						Player c2 = PlayerHandler.getPlayer(i);
+						if (c2.getDisplayName().equalsIgnoreCase(name)) {
+							c.getPA().movePlayer(c2.getX(), c2.getY(), c2.getZ());
+							
+							c.sendMessage("You have teleported to " + c2.getDisplayName() + ".");
+							c2.sendMessage(c.getDisplayName() + " has teleported to you.");
+						}
+					}
 				}
 			}
 		}

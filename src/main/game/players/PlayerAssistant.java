@@ -10,6 +10,7 @@ import java.io.IOException;
 import main.Connection;
 import main.Connection.ConnectionType;
 import main.Constants;
+import main.Data;
 import main.GameEngine;
 import main.event.CycleEvent;
 import main.event.CycleEventContainer;
@@ -41,19 +42,6 @@ public class PlayerAssistant {
 	}
 	
 	/**
-	 * Gets a player's display name, if they have one.
-	 * 
-	 * @return The player's display name, if applicable.
-	 */
-	public String getDisplayName() {
-		if ((c.displayName == "")) {
-			return c.playerName;
-		} else {
-			return c.displayName;
-		}
-	}
-	
-	/**
 	 * Checks if a display name is in use.
 	 * 
 	 * @param name
@@ -64,7 +52,7 @@ public class PlayerAssistant {
 	@SuppressWarnings("resource")
 	public boolean isDisplayNameTaken(String name) {
 		try {
-			File list = new File("./data/displaynames.txt");
+			File list = new File(Data.PLAYER_DISPLAY_NAMES);
 			FileReader read = new FileReader(list);
 			BufferedReader reader = new BufferedReader(read);
 			String line = null;
@@ -94,7 +82,7 @@ public class PlayerAssistant {
 	 */
 	public boolean isNameTaken(String name) {
 		try {
-			File names = new File("./data/characters/" + name + ".txt");
+			File names = new File(Data.CHARACTER_DIRECTORY + name + ".txt");
 
 			if (names.exists()) {
 				return true;
@@ -117,7 +105,7 @@ public class PlayerAssistant {
 		BufferedWriter names = null;
 		
 		try {
-			names = new BufferedWriter(new FileWriter("./data/displaynames.txt", true));
+			names = new BufferedWriter(new FileWriter(Data.PLAYER_DISPLAY_NAMES, true));
 			names.write(name);
 			names.newLine();
 			names.flush();
@@ -1471,7 +1459,7 @@ public class PlayerAssistant {
 			Player o = PlayerHandler.players[c.getVariables().killerId];
 			if (o != null) {
 				if (c.getVariables().killerId != c.playerId) {
-					o.sendMessage("You have defeated " + c.getPA().getDisplayName() + "!");
+					o.sendMessage("You have defeated " + c.getDisplayName() + "!");
 					o.getVariables().killedDuelOpponent = true;
 					c.getVariables().killedDuelOpponent = false;
 					if (!DuelArena.isDueling(c)) {

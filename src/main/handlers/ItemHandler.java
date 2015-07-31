@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 import main.Constants;
+import main.Data;
 import main.game.items.GroundItem;
 import main.game.items.ItemList;
 import main.game.players.Player;
@@ -30,16 +31,16 @@ public class ItemHandler {
 		for (int i = 0; i < Constants.ITEM_LIMIT; i++) {
 			ItemList[i] = null;
 		}
-		loadItemList("item.cfg");
-		loadItemPrices("prices.txt");
+		loadItemList(Data.ITEM_LIST);
+		loadItemPrices(Data.ITEM_PRICES);
 	}
 
 	public void reloadAllItems() {
 		for (int i = 0; i < Constants.ITEM_LIMIT; i++) {
 			ItemList[i] = null;
 		}
-		loadItemList("item.cfg");
-		loadItemPrices("prices.txt");
+		loadItemList(Data.ITEM_LIST);
+		loadItemPrices(Data.ITEM_PRICES);
 	}
 
 	/**
@@ -265,7 +266,7 @@ public class ItemHandler {
 
 	public static void loadItemPrices(String filename) {
 		try {
-			s = new Scanner(new File("./data/cfg/" + filename));
+			s = new Scanner(new File(filename));
 			while (s.hasNextLine()) {
 				String[] line = s.nextLine().split(" ");
 				ItemList temp = getItemList(Integer.parseInt(line[0]));
@@ -368,7 +369,7 @@ public class ItemHandler {
 		int ReadMode = 0;
 		BufferedReader characterfile = null;
 		try {
-			characterfile = new BufferedReader(new FileReader("./Data/cfg/" + FileName));
+			characterfile = new BufferedReader(new FileReader(FileName));
 		} catch (FileNotFoundException fileex) {
 			Misc.println(FileName + ": file not found.");
 			return false;
