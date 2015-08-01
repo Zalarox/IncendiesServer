@@ -143,6 +143,7 @@ public class Moderator extends Commands {
 			 */
 			if (cmd.startsWith("demote")) {
 				String playerToDemote = cmd.substring(7);
+				
 				try {
 					
 					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {

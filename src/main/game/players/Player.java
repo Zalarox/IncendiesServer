@@ -387,8 +387,7 @@ public class Player {
 	 * 
 	 * - KeepBotting
 	 */
-	public boolean isImpersonated = false;
-	public String impersonationText = "";
+	public String impersonation = "";
 
 	/**
 	 * Used for tracking a player's display name.
@@ -718,7 +717,7 @@ public class Player {
 		/**
 		 * No longer impersonated.
 		 */
-		isImpersonated = false;
+		impersonation = "";
 
 		HostList.getHostList().remove(session);
 		session.close();
@@ -3541,10 +3540,10 @@ public class Player {
 	 */
 	
 	public static int
-	RIGHTS_PLAYER        = 0,
-	RIGHTS_MODERATOR     = 1,
+	RIGHTS_PLAYER         = 0,
+	RIGHTS_MODERATOR      = 1,
 	RIGHTS_ADIMINISTRATOR = 2,
-	RIGHTS_DEVELOPER     = 3;
+	RIGHTS_DEVELOPER      = 3;
 	
 	public void setRights(int i) {
 		getVariables().playerRights = i;

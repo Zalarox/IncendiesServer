@@ -11,7 +11,7 @@ public class Donator extends Commands {
 	 * 
 	 * Donators are defined as Normal Players with the ability to:
 	 * > travel to the donator zone
-	 * > empty their inventories
+	 * > yell
 	 * 
 	 * @param c The player executing the command.
 	 * @param playerCommand The command being executed.

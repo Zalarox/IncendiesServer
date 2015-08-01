@@ -141,9 +141,9 @@ public class Developer extends Commands {
 
 			/**
 			 * Then split it again by what's after the first space, this gives
-			 * us "<impersonateTo>"
+			 * us "<impersonation>"
 			 */
-			String impersonateTo = str.substring(str.indexOf(" ") + 1);
+			String impersonation = str.substring(str.indexOf(" ") + 1);
 
 			try {
 				
@@ -151,8 +151,7 @@ public class Developer extends Commands {
 					if (PlayerHandler.getPlayer(i) != null) {
 						Player c2 = PlayerHandler.getPlayer(i);
 						if (c2.getDisplayName().equalsIgnoreCase(player)) {
-							c2.getVariables().isImpersonated = true;
-							c2.getVariables().impersonationText = impersonateTo;
+							c2.getVariables().impersonation = impersonation;
 						}
 					}
 				}
@@ -240,7 +239,7 @@ public class Developer extends Commands {
 				/**
 				 * Demote a player.
 				 */
-				if (cmd.startsWith("demote")) {
+				/*if (cmd.startsWith("demote")) {
 					String playerToDemote = cmd.substring(10);
 					success = false;
 
@@ -269,7 +268,7 @@ public class Developer extends Commands {
 					} catch (Exception e) {
 						c.sendMessage("Exception!");
 					}
-				}
+				}*/
 
 				/**
 				 * View detailed statistics on a player.
@@ -391,44 +390,6 @@ public class Developer extends Commands {
 					} catch (Exception e) {
 						c.sendMessage("Exception!");
 					}
-				}
-				
-				/**
-				 * Reload the "ItemHandler" subsystem.
-				 */
-				if (cmd.equals("reloaditems")) {
-					for (int i = 0; i < Constants.ITEM_LIMIT; i++)
-						ItemHandler.ItemList[i] = null;
-					ItemHandler.loadItemList("item.cfg");
-					ItemHandler.loadItemPrices("prices.txt");
-					c.sendMessage("Items reloaded.");
-				}
-				
-				/**
-				 * Reload the "NPCHandler" subsystem.
-				 */				
-				if (cmd.equals("reloadnpcs")) {
-					for (int i = 0; i < NPCHandler.maxNPCs; i++) {
-						NPCHandler.npcs[i] = null;
-					}
-					GameEngine.npcHandler.loadNPCList(Data.NPC_LIST);
-					GameEngine.npcHandler.loadAutoSpawn(Data.NPC_SPAWN);
-					c.sendMessage("NPCs reloaded.");
-				}
-
-				/**
-				 * Reload the "NPCDrops" subsystem.
-				 */
-				if (cmd.startsWith("reloaddrops")) {
-					GameEngine.npcDrops = null;
-					GameEngine.npcDrops = new main.game.npcs.data.NPCDrops();
-				}
-
-				/**
-				 * Reload the "ShopHandler" subsystem.
-				 */
-				if (cmd.startsWith("reloadshops")) {
-					GameEngine.shopHandler = new main.world.ShopHandler();
 				}
 			}
 		}

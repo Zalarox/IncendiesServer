@@ -22,8 +22,7 @@ public class YellChat {
 	/**
 	 * Player rank names
 	 */
-	private static final String[] rankNames = { "Player", "Moderator", "PX-Moderator", "Administrator", "Donator",
-			"Super Donator", "Extreme Donator", "Graphic's Designer", "Developer", "Veteran" };
+	private static final String[] rankNames = { "Player", "Moderator", "Administrator", "Developer" };
 
 	/**
 	 * The color codes used to create the prefix
@@ -44,14 +43,14 @@ public class YellChat {
 		String message = null;
 
 		message = getRankPrefix(p.getVariables().playerRights) + "<col=255>" + "<img=" + p.getVariables().playerRights
-				+ "></img>" + formatPlayerName(p.playerName) + "</col>: " + formatChat(inputText.replaceAll("/", ""));
+				+ "></img> " + formatPlayerName(p.playerName) + "</col>: " + formatChat(inputText.replaceAll("/", ""));
 		
 		/**
 		 * The player is impersonated - change their yell name!
 		 */
-		if (p.getVariables().isImpersonated) {
+		if (p.getVariables().impersonation != "") {
 			message = getRankPrefix(p.getVariables().playerRights) + "<col=255>" + "<img="
-					+ p.getVariables().playerRights + "></img>" + p.getVariables().impersonationText + "</col>: "
+					+ p.getVariables().playerRights + "></img> " + p.getVariables().impersonation + "</col>: "
 					+ formatChat(inputText.replaceAll("/", ""));
 		}
 
@@ -61,8 +60,6 @@ public class YellChat {
 				p2.sendMessage(message);
 			}
 		}
-
-		System.out.println("[YELL]" + p.playerName + ": " + inputText);
 
 		p.getVariables().ableToYell = false;
 		GameEngine.getScheduler().schedule(new Task(5) {
@@ -84,9 +81,9 @@ public class YellChat {
 	 * @return
 	 */
 	private boolean canYell(final Player p, String inputText) {
-		if (p.getVariables().playerRights == 0 && p.playerName != "anthony") {
-			p.sendMessage("@red@You must be a Donator to use yell!");
-			p.sendMessage("@blu@Type ::Donate for more information.");
+		if (p.hasRights(Player.RIGHTS_PLAYER) && p.isDonator == 0) {
+			p.sendMessage("@red@You must be a donator to use the yell channel.");
+			p.sendMessage("@blu@Use ::donate for more information.");
 			return false;
 		}
 		if (Connection.containsConnection(p.playerName, ConnectionType.forName("MUTE"), false)
@@ -96,15 +93,12 @@ public class YellChat {
 			p.sendMessage("You are muted.");
 			return false;
 		}
-		if (!p.getVariables().ableToYell) {
+		if (!p.getVariables().ableToYell && p.hasRights(Player.RIGHTS_PLAYER)) {
 			p.sendMessage("Please wait a few seconds between yells.");
 			return false;
 		}
 		for (int i = 0; i < forbiddenText.length; i++) {
 			if (inputText.substring(1).contains(forbiddenText[i])) {
-				p.sendMessage("Your submission contains illegal phrases or characters.");
-				System.out.println(
-						formatPlayerName(p.playerName) + " is attempting to use illegal phrases in yell chat.");
 				return false;
 			}
 		}

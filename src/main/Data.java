@@ -20,6 +20,13 @@ public class Data {
 	public static final String CHARACTER_DIRECTORY  = DATA_DIRECTORY + "characters/";
 	
 	/**
+	 * The map directory, containing the server's mapdata in .gz format.
+	 * 
+	 * TODO transfer mapdata to this directory instead of MAP_CONFIG_DIRECTORY
+	 */
+	public static final String MAP_DIRECTORY        = DATA_DIRECTORY + "map/";
+	
+	/**
 	 * The config directory, containing the server's configuration files.
 	 */
 	public static final String CONFIG_DIRECTORY     = DATA_DIRECTORY + "config/";
