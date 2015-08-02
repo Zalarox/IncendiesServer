@@ -195,6 +195,12 @@ public class ItemHandler {
 					if (add) {
 						if (!c.getItems().specialCase(itemId)) {
 							if (c.getInventory().add(i.getItemId(), i.getItemAmount())) {
+								
+								/**
+								 * Log the pickup.
+								 */
+								c.getLogging().logDrop(itemId, i.getItemAmount(), itemX, itemY, false);
+								
 								i.taken = true;
 								removeGroundItem(c, i, r);
 								return true;

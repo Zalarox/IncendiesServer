@@ -243,7 +243,7 @@ public class GameEngine {
 		pJClans.initialize();
 		pJClans.loadOptions();
 		System.out.println("[4/7] Loaded clan data.");
-		HunterGui.showGUI = true;
+		HunterGui.showGUI = false;
 		npcHandler.loadNpcs();
 		System.out.println("[5/7] Loaded NPC data.");
 		new HunterGui();

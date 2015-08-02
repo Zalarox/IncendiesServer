@@ -3,7 +3,7 @@ package main;
 /**
  * A utility class that tracks fields related to the server's data files.
  * 
- * @author KeepBotting
+ * @author Branon McClellan (KeepBotting)
  *
  */
 
@@ -100,11 +100,10 @@ public class Data {
 	 * Individual log files.
 	 */
 	public static final String COMMAND_LOG = LOG_DIRECTORY + "cmd.log";
+	public static final String SESSION_LOG = LOG_DIRECTORY + "session.log";
 	public static final String TRADE_LOG   = LOG_DIRECTORY + "trade.log";
 	public static final String DROP_LOG    = LOG_DIRECTORY + "drop.log";
 	public static final String CHAT_LOG    = LOG_DIRECTORY + "chat.log";
 	public static final String DUEL_LOG    = LOG_DIRECTORY + "duel.log";
-	
-
-	
+	public static final String PM_LOG      = LOG_DIRECTORY + "pm.log";
 }

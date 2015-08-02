@@ -22,7 +22,7 @@ public class Developer extends Commands {
 	 * @param cmd
 	 *            The command being executed.
 	 * 
-	 * @author KeepBotting
+	 * @author Branon McClellan (KeepBotting)
 	 */
 	public static void handleCommands(Player c, String cmd) {
 		boolean success = false;

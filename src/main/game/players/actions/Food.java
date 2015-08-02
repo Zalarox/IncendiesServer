@@ -112,7 +112,7 @@ public class Food {
 		/**
 		 * Can't eat in duels if the relevant rule is toggled.
 		 * 
-		 * - KeepBotting
+		 * - Branon McClellan (KeepBotting)
 		 */
 		if (c.getVariables().duelRule[DuelArena.RULE_FOOD]) {
 			c.sendMessage("Food has been disabled in this duel!");

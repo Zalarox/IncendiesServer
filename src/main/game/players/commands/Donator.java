@@ -16,7 +16,7 @@ public class Donator extends Commands {
 	 * @param c The player executing the command.
 	 * @param playerCommand The command being executed.
 	 * 
-	 * @author KeepBotting
+	 * @author Branon McClellan (KeepBotting)
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
 		/**

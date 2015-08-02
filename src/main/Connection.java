@@ -15,7 +15,7 @@ import main.game.players.Player;
 /**
  * A class for handling punishments.
  * 
- * @author Thock321, Tringan, KeepBotting
+ * @author Thock321, Tringan, Branon McClellan (KeepBotting)
  *
  */
 public class Connection {

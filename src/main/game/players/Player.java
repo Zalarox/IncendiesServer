@@ -24,6 +24,7 @@ import main.game.npcs.NPCHandler;
 import main.game.npcs.data.SummoningAttacking;
 import main.game.npcs.transformers.TransformHandler;
 import main.game.objects.Objects;
+import main.game.players.Logging;
 import main.game.players.Boundaries.Area;
 import main.game.players.actions.ActionHandler;
 import main.game.players.actions.Bank;
@@ -322,7 +323,14 @@ public class Player {
 	private SkillInterfaces skillInterfaces = new SkillInterfaces(this);
 	private ProcessHandler processHandler = new ProcessHandler();
 	private ClanProcessor cc = new ClanProcessor();
+	
+	private Logging logging = new Logging(this);
+	
+	public Logging getLogging() {
+		return logging;
+	}
 
+	
 	public int barbObstacle = 0;
 	public boolean doingAgility, agilityEmote = false, logBalance, obstacleNetUp, treeBranchUp, balanceRope,
 			treeBranchDown, obstacleNetOver;
@@ -385,14 +393,14 @@ public class Player {
 	/**
 	 * Used for tracking a player's name in yell.
 	 * 
-	 * - KeepBotting
+	 * - Branon McClellan (KeepBotting)
 	 */
 	public String impersonation = "";
 
 	/**
 	 * Used for tracking a player's display name.
 	 *
-	 * - KeepBotting
+	 * - Branon McClellan (KeepBotting)
 	 */
 	public String displayName = "";
 
@@ -965,7 +973,7 @@ public class Player {
 		/**
 		 * If they don't have a display name, ensure their playerName is shown.
 		 * 
-		 * - KeepBotting
+		 * - Branon McClellan (KeepBotting)
 		 */
 		if (displayName.equalsIgnoreCase("") || displayName == null) {
 			displayName = playerName;
@@ -3020,7 +3028,7 @@ public class Player {
 		/**
 		 * Handling for display names.
 		 * 
-		 * - KeepBotting
+		 * - Branon McClellan (KeepBotting)
 		 */
 		playerProps.writeQWord(Misc.playerNameToInt64(displayName == "" ? playerName : displayName));
 

@@ -1,5 +1,7 @@
 package main.game.players.packets;
 
+import java.util.ArrayList;
+
 import main.Constants;
 import main.GameEngine;
 import main.event.Task;
@@ -8,6 +10,7 @@ import main.game.items.GameItem;
 import main.game.players.PacketType;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
+import main.game.players.actions.TradeHandler;
 import main.game.players.actions.combat.CombatPrayer;
 import main.game.players.content.ItemsKeptOnDeath;
 import main.game.players.content.QuickCurses;
@@ -38,6 +41,11 @@ import main.util.Misc;
  * Clicking most buttons
  **/
 public class ClickingButtons implements PacketType {
+	
+	public static ArrayList<Integer> ids1 = new ArrayList<Integer>();
+	public static ArrayList<Integer> ids2 = new ArrayList<Integer>();
+	public static ArrayList<Integer> amounts1 = new ArrayList<Integer>();
+	public static ArrayList<Integer> amounts2 = new ArrayList<Integer>();
 
 	@SuppressWarnings("static-access")
 	@Override
@@ -1669,14 +1677,39 @@ public class ClickingButtons implements PacketType {
 					ot1.getVariables().acceptedTrade = true;
 					p.sendMessage("Accepted trade.");
 					ot1.sendMessage("Accepted trade.");
-					p.getTradeHandler().giveItems();// after that it goes into
-													// this method, where they
-													// recieve the items
+					
+					p.getTradeHandler().giveItems();
+					/**
+					 * Populate the arrays for player 1's items, we'll parse
+					 * them over in Logging.logTrade()
+					 */
+					for (GameItem i : p.getTradeHandler().offeredItems) {
+							ids1.add(i.id);
+							amounts1.add(i.amount);	
+					}
+					System.out.println(ids1);
+					System.out.println(amounts1);
+					
 					ot1.getTradeHandler().giveItems();
+					/**
+					 * Same thing for player 2's items.
+					 */
+					for (GameItem i : ot1.getTradeHandler().offeredItems) {
+						ids2.add(i.id);
+						amounts2.add(i.amount);	
+					}
+					System.out.println(ids2);
+					System.out.println(amounts2);
+					
 					p.inTrade = false;
 					ot1.inTrade = false;
 					p.getPA().removeAllWindows();
 					ot1.getPA().removeAllWindows();
+					
+					/**
+					 * Log the trade. Parsing of the arrays populated above is done by the logging method.
+					 */
+					p.getLogging().logTrade(p.getDisplayName(), ot1.getDisplayName());
 					break;
 				}
 				ot1.getPA().sendString("Other player has accepted.", 3535);

@@ -95,7 +95,7 @@ public class TradeHandler {
 					/**
 					 * Support for display names during trade requests.
 					 * 
-					 *  - KeepBotting
+					 *  - Branon McClellan (KeepBotting)
 					 */
 					o.sendMessage(p.getDisplayName() + ":tradereq:");			
 				}
@@ -611,30 +611,41 @@ public class TradeHandler {
 	@SuppressWarnings("unused")
 	public void giveItems() {
 		Player o = PlayerHandler.players[p.getVariables().tradeWith];
+		
 		if (o == null) {
 			return;
 		}
+		
 		try {
 			for (GameItem item : o.getTradeHandler().offeredItems) {
-				if (item.id > 0)
+				if (item.id > 0) {
 					p.getInventory().add(item.id, item.amount);
+				}
+					
 			}
+			
 			for (GameItem item : o.getTradeHandler().offeredItems)
 				p.getPA().removeAllWindows();
+			
 			p.getVariables().tradeResetNeeded = true;
+			
 			CycleEventHandler.getInstance().addEvent(this, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
 					if (p.getVariables().inTrade && p.getVariables().tradeResetNeeded) {
 						Player o = PlayerHandler.players[p.getVariables().tradeWith];
+						
 						if (o != null) {
+							
 							if (o.getVariables().tradeResetNeeded) {
 								p.getTradeHandler().resetTrade();
 								o.getTradeHandler().resetTrade();
 								container.stop();
+								
 							} else {
 								container.stop();
 							}
+							
 						} else {
 							container.stop();
 						}

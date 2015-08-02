@@ -4,15 +4,15 @@ character-password = c8478c62575f55ef26e875c3403ca230
 
 [CHARACTER]
 character-height = 0
-character-posx = 3366
-character-posy = 3265
+character-posx = 3086
+character-posy = 3502
 character-rights = 3
 Donator = 0
 character-title = 0
 expLock = false
 totalxp =7291
 crystal-bow-shots = 0
-skull-timer = -1
+skull-timer = 0
 magic-book = 0
 prayer-book = false
 isDonePicking = false
@@ -43,7 +43,7 @@ gwkc = 0
 fightMode = 0
 PKP = 0
 yellTag = Default tag
-constitution = 990
+constitution = 706
 void = 0	0	0	0	0
 savedClan = Keepbotting
 hasSavedClan = false
@@ -125,12 +125,6 @@ character-skill = 23	99	13034436
 character-skill = 24	99	13034436
 
 [ITEMS]
-character-item = 0	112	1
-character-item = 1	112	1
-character-item = 2	112	1
-character-item = 3	112	1
-character-item = 4	112	1
-character-item = 5	112	1
 
 [BANK]
 

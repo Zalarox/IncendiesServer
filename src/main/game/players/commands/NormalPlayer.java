@@ -31,7 +31,7 @@ public class NormalPlayer extends Commands {
 	 * @param playerCommand
 	 *            The command being executed.
 	 * 
-	 * @author KeepBotting
+	 * @author Branon McClellan (KeepBotting)
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
 		if (c.getVariables().playerRights >= 0) {

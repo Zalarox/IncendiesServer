@@ -18,7 +18,7 @@ import main.util.Misc;
 
 /**
  * 
- * @author Sanity, TheLife, KeepBotting 
+ * @author Sanity, TheLife, Branon McClellan (KeepBotting) 
  */
 
 public class DuelArena {

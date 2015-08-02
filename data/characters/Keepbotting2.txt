@@ -4,8 +4,8 @@ character-password = 1b8f577612e5026f2d0135219ad8539c
 
 [CHARACTER]
 character-height = 0
-character-posx = 3083
-character-posy = 3504
+character-posx = 3086
+character-posy = 3503
 character-rights = 1
 Donator = 0
 character-title = 0

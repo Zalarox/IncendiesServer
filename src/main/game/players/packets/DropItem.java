@@ -4,7 +4,6 @@ import main.Constants;
 import main.event.CycleEventHandler;
 import main.game.players.PacketType;
 import main.game.players.Player;
-import main.game.players.PlayerSave;
 import main.handlers.ItemHandler;
 
 /**
@@ -69,9 +68,22 @@ public class DropItem implements PacketType {
 						return;
 					}
 				}
+				int amount = c.getVariables().playerItemsN[slot];
+				
 				ItemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel,
-						c.getVariables().playerItemsN[slot], c.getId());
-				c.getItems().deleteItem(itemId, slot, c.getVariables().playerItemsN[slot]);			
+						amount, c.getId());
+				
+				
+				int x = c.getX();
+				int y = c.getY();
+				
+				c.getItems().deleteItem(itemId, slot, amount);	
+				
+				/**
+				 * Log the drop.
+				 */
+				c.getLogging().logDrop(itemId, amount, x, y, true);
+				
 			} else {
 				c.sendMessage("This item cannot be dropped.");
 			}

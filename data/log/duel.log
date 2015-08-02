@@ -1,0 +1,11 @@
+On MM/DD/YYY at HH:MM:SS, [Player 1] initiated a staked duel with [Player 2].
+<newline>
+[Player 1]'s stake was: [Item amount]x [Item name], [Item amount 2]x [Item name 2], . . .
+<newline>
+[Player 2]'s stake was: [Item amount]x [Item name], [Item amount 2]x [Item name 2], . . .
+<newline>
+The outcome was decided in favor of [Player who won].
+<newline>
+<newline>
+<newline>
+

@@ -203,7 +203,7 @@ public class PlayerSave {
 					/**
 					 * Support for saving display names to character files.
 					 * 
-					 * - KeepBotting
+					 * - Branon McClellan (KeepBotting)
 					 */
 					} else if (line.startsWith("displayName")) {
 						p.displayName = token2;
@@ -604,7 +604,7 @@ public class PlayerSave {
 			/**
 			 * Support for writing display names to the character file.
 			 * 
-			 * - KeepBotting
+			 * - Branon McClellan (KeepBotting)
 			 */
 			characterfile.write("displayName = ", 0, 14);
 			characterfile.write(p.displayName, 0, p.displayName.length());	
