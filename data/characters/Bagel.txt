@@ -1,18 +1,18 @@
 [ACCOUNT]
-character-username = Keepbotting2
-character-password = 1b8f577612e5026f2d0135219ad8539c
+character-username = Bagel
+character-password = 8a341bcaf0946804435ff0b1fccdb5e7
 
 [CHARACTER]
 character-height = 0
 character-posx = -1
 character-posy = -1
-character-rights = 1
+character-rights = 0
 Donator = 0
 character-title = 0
 expLock = false
-totalxp =0
+totalxp =625
 crystal-bow-shots = 0
-skull-timer = 0
+skull-timer = -1
 magic-book = 0
 prayer-book = false
 isDonePicking = false
@@ -43,7 +43,7 @@ gwkc = 0
 fightMode = 0
 PKP = 0
 yellTag = Default tag
-constitution = 100
+constitution = 110
 void = 0	0	0	0	0
 savedClan = null
 hasSavedClan = false
@@ -54,7 +54,7 @@ familiarSpecialEnergy = 60
 familiar = -1
 RockCrabKills = 0
 run-energy = 200
-displayName = Keepbotting2
+displayName = Bagel
 
 [GODWARS]
 godwars = 0	3
@@ -98,10 +98,10 @@ character-look = 11	0
 character-look = 12	0
 
 [SKILLS]
-character-skill = 0	1	0
+character-skill = 0	5	500
 character-skill = 1	1	0
 character-skill = 2	1	0
-character-skill = 3	10	1300
+character-skill = 3	11	1425
 character-skill = 4	1	0
 character-skill = 5	1	0
 character-skill = 6	1	0

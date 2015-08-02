@@ -346,8 +346,8 @@ public class Region {
 				regions[i] = new Region(regionIds[i], isMembers[i]);
 			}
 			for (int i = 0; i < size; i++) {
-				byte[] file1 = getBuffer(new File(Data.MAP_CONFIG_DIRECTORY + mapObjectsFileIds[i] + ".gz"));
-				byte[] file2 = getBuffer(new File(Data.MAP_CONFIG_DIRECTORY + mapGroundFileIds[i] + ".gz"));
+				byte[] file1 = getBuffer(new File(Data.MAP_DIRECTORY + mapObjectsFileIds[i] + ".gz"));
+				byte[] file2 = getBuffer(new File(Data.MAP_DIRECTORY + mapGroundFileIds[i] + ".gz"));
 				if (file1 == null || file2 == null) {
 					continue;
 				}

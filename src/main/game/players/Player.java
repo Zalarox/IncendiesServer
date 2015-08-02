@@ -606,12 +606,6 @@ public class Player {
 
 	public void destruct() {
 		/**
-		 * TODO fix xlogs
-		 */
-		System.out.println("");
-		System.out.println("--- Started the deregistration process for " + this.playerName + " ---");
-
-		/**
 		 * Mark 'em as disconnected.
 		 */
 		disconnected = true;
@@ -620,7 +614,6 @@ public class Player {
 		 * Remove the player from Fight Pits.
 		 */
 		if (FightPits.getState(this) != null) {
-			System.out.println("[DEREGISTRATION]: Removed from fight pits");
 			FightPits.removePlayer(this, true);
 		}
 
@@ -628,16 +621,15 @@ public class Player {
 		 * Remove the player from their Dungeoneering party.
 		 */
 		if (party != null) {
-			System.out.println("[DEREGISTRATION]: Removed from dungeoneering party");
 			party.leave(this);
 		}
 
 		/**
-		 * I guess this checks if the player is in combat? And makes sure it
-		 * saves their game? Probably to prevent xlogging.
+		 * If this block runs, it means the player was in combat when they
+		 * logged off -- via socket closure (commonly known as an x-log).
+		 * 
 		 */
 		if (underAttackBy > 0 || underAttackBy2 > 0) {
-			System.out.println("[DEREGISTRATION]: Still in combat, saving NOW");
 			saveCharacter = true;
 			PlayerSave.saveGame(this);
 			autoGive = true;
@@ -648,7 +640,6 @@ public class Player {
 		 * Leave their clan chat, if they're in one.
 		 */
 		if (clanId >= 0) {
-			System.out.println("[DEREGISTRATION]: Leaving cc");
 			GameEngine.clanChat.leaveClan(playerId, clanId, true);
 		}
 
@@ -661,7 +652,6 @@ public class Player {
 		 * Get them out of the Pest Control boat, if they're in there.
 		 */
 		if (PestControl.isInPcBoat(this)) {
-			System.out.println("[DEREGISTRATION]: Removed from pest control");
 			PestControl.removePlayerGame(this);
 			getPA().movePlayer(2440, 3089, 0);
 		}
@@ -670,13 +660,8 @@ public class Player {
 		 * Kill ongoing player tasks.
 		 */
 		killPlayerTasks();
-		System.out.println("[DEREGISTRATION]: Killed player tasks");
 
-		/**
-		 * I really have no idea what this does or why it's here.
-		 */
 		if (playerRights == 3) {
-			System.out.println("[DEREGISTRATION]: Weird developer block did something");
 			for (int i = 0; i < GameEngine.developer.length; i++) {
 				if (GameEngine.developer[i] == this) {
 					GameEngine.developer[i] = null;
@@ -689,7 +674,6 @@ public class Player {
 		 * Get their summoned creature out of the way, if they have one.
 		 */
 		if (getSummoning().summonedFamiliar != null && summoned != null) {
-			System.out.println("[DEREGISTRATION]: Got rid of summoned creature");
 			summoned.npcTeleport(0, 0, 0);
 		}
 
@@ -697,7 +681,6 @@ public class Player {
 		 * Decline duels or trades, make sure we mark the character for saving.
 		 */
 		if (disconnected == true) {
-			System.out.println("[DEREGISTRATION]: Declined trades/duels");
 			Dueling.declineDuel(this, true, true);
 			getTradeHandler().declineTrade(false);
 			saveCharacter = true;
@@ -707,7 +690,6 @@ public class Player {
 		 * May as well save again, just to be sure.
 		 */
 		PlayerSave.saveGame(this);
-		System.out.println("[DEREGISTRATION]: Saved game");
 
 		/**
 		 * ???
@@ -720,8 +702,7 @@ public class Player {
 		 * Stop cycled events for this player.
 		 */
 		CycleEventHandler.getSingleton().stopEvents(this);
-		System.out.println("[DEREGISTRATION]: Stopped cycled events");
-
+		
 		/**
 		 * No longer impersonated.
 		 */
@@ -747,9 +728,6 @@ public class Player {
 		mapRegionX = mapRegionY = -1;
 		currentX = currentY = 0;
 		resetWalkingQueue();
-
-		System.out.println("--- Completed the deregistration process for " + this.playerName + " ---");
-		System.out.println("");
 	}
 
 	public boolean inArea(Area area) {

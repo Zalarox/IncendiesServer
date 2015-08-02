@@ -11,8 +11,7 @@ deps/
 # ============ #
 #    Mapdata   #
 # ============ #
-data/data/
-data/world/
+data/map/
 
 # ============ #
 #    IDE shit  #

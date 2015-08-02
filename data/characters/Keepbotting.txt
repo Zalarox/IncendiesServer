@@ -4,8 +4,8 @@ character-password = c8478c62575f55ef26e875c3403ca230
 
 [CHARACTER]
 character-height = 0
-character-posx = 3086
-character-posy = 3502
+character-posx = -1
+character-posy = -1
 character-rights = 3
 Donator = 0
 character-title = 0
@@ -43,7 +43,7 @@ gwkc = 0
 fightMode = 0
 PKP = 0
 yellTag = Default tag
-constitution = 706
+constitution = 990
 void = 0	0	0	0	0
 savedClan = Keepbotting
 hasSavedClan = false
@@ -125,6 +125,7 @@ character-skill = 23	99	13034436
 character-skill = 24	99	13034436
 
 [ITEMS]
+character-item = 0	996	10000
 
 [BANK]
 

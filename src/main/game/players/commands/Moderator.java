@@ -3,11 +3,9 @@ package main.game.players.commands;
 import main.Connection;
 import main.Connection.ConnectionType;
 import main.Constants;
-import main.game.npcs.NPCHandler;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.packets.Commands;
-import main.handlers.ItemHandler;
 
 public class Moderator extends Commands {
 

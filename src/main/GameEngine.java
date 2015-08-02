@@ -18,6 +18,7 @@ import main.game.npcs.data.NPCDefinition;
 import main.game.npcs.data.NPCDrops;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
+import main.game.players.PlayerSave;
 import main.game.players.content.clanchat.ClanChatHandler;
 import main.game.players.content.clanchat.load.Clans;
 import main.game.players.content.minigames.impl.CastleWars;
@@ -57,7 +58,15 @@ public class GameEngine {
 	 */
 	public static boolean UpdateServer = false;
 
+	/**
+	 * Used for various farming skill-related processes.
+	 */
 	private static long minutesCounter;
+	
+	/**
+	 * Used for timing mass-saves.
+	 */
+	public static long lastMassSave = System.currentTimeMillis();
 
 	/**
 	 * Used to identify the server port.
@@ -112,6 +121,7 @@ public class GameEngine {
 			 */
 			while (!shutdownServer) {
 				cycle();
+				save();
 				sleep();
 			}
 		} catch (Exception ex) {
@@ -137,8 +147,46 @@ public class GameEngine {
 			CycleEventHandler.getSingleton().process();
 			objectHandler.process();
 		} catch (Exception ex) {
+			System.out.println("A fatal error has occured during the game engine's cycling process.");
 			ex.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Mass-saving is done here, after the cycle ends. Saving is done once every
+	 * thirty seconds.
+	 * 
+	 * TODO:
+	 * 
+	 * Mass-saves are a horrible way to do things, it's lazy, inefficient and
+	 * puts undue stress on the server, eating up more cycle time than is
+	 * necessary.
+	 * 
+	 * The best saving scheme I can think of is a randomized schedule generated
+	 * on a per-player basis. When a player logs in, he or she is given a save
+	 * timer of anywhere from 10 to 30 seconds.
+	 * 
+	 * Every time the server cycles, it checks the players' save timers against
+	 * the last time it saved that player. If it's been long enough, the server
+	 * will save them again. This spreads out and staggers player saving over
+	 * several cycles instead of trying to shove an entire mass-save into a
+	 * 600ms window.
+	 * 
+	 * Scheduled saving MUST be implemented before the server goes live. hades5
+	 * couldn't get above ~80-100 players without lagging, this is why.
+	 */
+	private static void save() {
+		if (System.currentTimeMillis() - lastMassSave > Constants.SAVE_TIMER) {
+			System.out.println("Mass save for everybody.");
+			for (int i = 0; i < PlayerHandler.getPlayerCount() + 1; i++) {
+				if (PlayerHandler.getPlayer(i) != null) {
+					Player c = PlayerHandler.getPlayer(i);
+					PlayerSave.saveGame(c);
+				}
+			}
+			lastMassSave = System.currentTimeMillis();
+		}
+
 	}
 
 	/**
@@ -198,7 +246,7 @@ public class GameEngine {
 			 */
 		} else {
 			System.out.println("[WARNING]: Server is over-cycling by " + Math.abs(sleepTime) + "ms, engine load: "
-					+ engineLoad + "%");
+					+ (100 + Math.abs(engineLoad)) + "%");
 		}
 		cycleTimer.reset();
 	}

@@ -123,7 +123,7 @@ public class Constants {
 			DUEL_RULE_ID[] = { 1, 2, 16, 32, 64, 128, 256, 512, 1024, 4096, 8192, 16384, 32768, 65536, 131072, 262144,
 					524288, 2097152, 8388608, 16777216, 67108864, 134217728 };
 
-	public static final int SAVE_TIMER = 120; // Saves every minute.
+	public static final int SAVE_TIMER = 30000; //Used over in GameEngine, mass-saves players every thirty seconds.
 	
 	// The square grid the NPC cannot move out of (3x3 apparently?)
 	public static final int NPC_RANDOM_WALK_DISTANCE = 5; 
