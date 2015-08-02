@@ -10,6 +10,9 @@ import main.handlers.Following;
 
 /**
  * Attack Player
+ * 
+ * has duplicate code! check with CombatAssistant.java and fix.
+ * 
  **/
 public class AttackPlayer implements PacketType {
 

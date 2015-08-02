@@ -1201,7 +1201,6 @@ public class CombatAssistant {
 					if (checkSpecAmount(c.playerEquipment[c.playerWeapon])) {
 						c.lastArrowUsed = c.playerEquipment[c.playerArrows];
 						activateSpecial(c.playerEquipment[c.playerWeapon], i);
-						Following.triggerFollowing(c.playerIndex, 0, c);
 						return;
 					} else {
 						c.sendMessage("You don't have the required special energy to use this attack.");

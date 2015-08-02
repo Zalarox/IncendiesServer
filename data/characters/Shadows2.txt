@@ -4,8 +4,8 @@ character-password = 0b231f128c786616f92bed2a94f76ac0
 
 [CHARACTER]
 character-height = 0
-character-posx = 3085
-character-posy = 3529
+character-posx = 3094
+character-posy = 3532
 character-rights = 2
 Donator = 0
 character-title = 0
@@ -18,7 +18,7 @@ prayer-book = false
 isDonePicking = false
 Picked = 0
 KC = 0
-DC = 1
+DC = 2
 special-amount = 10.0
 selected-coffin = 0
 lastBrother = 0
@@ -67,7 +67,7 @@ quickCurses = false	false	false	false	false	false	false	false	false	false	false	
 quickPrayers = false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	
 
 [EQUIPMENT]
-character-equip = 0	-1	1	
+character-equip = 0	-1	-2	
 character-equip = 1	-1	1	
 character-equip = 2	-1	1	
 character-equip = 3	-1	0	
