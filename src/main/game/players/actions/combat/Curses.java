@@ -15,10 +15,7 @@ public class Curses {
 		this.c = player;
 	}
 
-	@SuppressWarnings("unused")
-	private boolean appendedLeeches;
-
-	/* All of the configuration such as activation, curse names, etc. */
+	// private boolean appendedLeeches; // UNUSED
 
 	public final int[] PRAYER_LEVEL_REQUIRED = { 50, 50, 52, 54, 56, 59, 62, 65, 68, 71, 74, 76, 78, 80, 82, 84, 86, 89,
 			92, 95 };
@@ -62,8 +59,14 @@ public class Curses {
 	}
 
 	public void activateCurse(int i) {
+<<<<<<< HEAD
 		// Inside duel arena
 		if (c.getVariables().duelRule[DuelArena.RULE_PRAYER]) {
+=======
+
+		// Inside duel arena
+		if (c.getVariables().duelRule[DuelPlayer.RULE_PRAYER]) {
+>>>>>>> Combat_Overhaul
 			for (int p = 0; p < 19; p++) {
 				c.getVariables().curseActive[p] = false;
 				c.getPA().sendFrame36(GLOW[p], 0);
@@ -71,16 +74,14 @@ public class Curses {
 			c.sendMessage("Prayer has been disabled in this duel!");
 			return;
 		}
-		if (c.getVariables().playerLevel[1] < 30) {
-			c.getPA().sendFrame36(GLOW[i], 0);
-			c.sendMessage("You need 30 Defence to use this prayer.");
-			return;
-		}
+
+		// Inside barbarian defence/assault
 		if (c.getVariables().inBarbDef) {
 			c.getPA().sendFrame36(GLOW[i], 0);
 			c.sendMessage("The barbarians are strongly against the use of prayers!");
 			return;
 		}
+
 		int[] leeches = { LEECH_ATTACK, LEECH_RANGED, LEECH_MAGIC, LEECH_DEFENCE, LEECH_STRENGTH, LEECH_ENERGY,
 				LEECH_SPEC };
 		int[] saps = { SAP_WARRIOR, SAP_RANGER, SAP_MAGE, SAP_SPIRIT };
@@ -95,7 +96,8 @@ public class Curses {
 				case PROTECT_ITEM:
 					c.getVariables().lastProtItem = System.currentTimeMillis();
 					break;
-
+				
+					// Sap curses TODO code functionality
 				case SAP_WARRIOR:
 				case SAP_RANGER:
 				case SAP_MAGE:
@@ -108,7 +110,8 @@ public class Curses {
 						deactivate(TURMOIL);
 					}
 					break;
-
+					
+					// Leech curses TODO code functionality
 				case LEECH_ATTACK:
 				case LEECH_RANGED:
 				case LEECH_MAGIC:
@@ -125,11 +128,12 @@ public class Curses {
 						deactivate(TURMOIL);
 					}
 					break;
-
+					
+					// Deflect curses TODO code functionality
 				case DEFLECT_SUMMONING:
 				case DEFLECT_MAGIC:
 				case DEFLECT_MISSILES:
-				case DEFLECT_MELEE:
+				case DEFLECT_MELEE: // Horrible code, TODO fix
 					if (System.currentTimeMillis() - c.getVariables().stopPrayerDelay < 5000) {
 						c.sendMessage("You have been injured and can't use this prayer!");
 						deactivate(i);
@@ -141,7 +145,9 @@ public class Curses {
 						c.getVariables().protRangeDelay = System.currentTimeMillis();
 					else if (i == DEFLECT_MELEE)
 						c.getVariables().protMeleeDelay = System.currentTimeMillis();
-				case WRATH:
+					
+				case WRATH: // TODO code functionality
+					
 				case SOUL_SPLIT:
 					headIcon = true;
 					if (i != DEFLECT_SUMMONING) {
@@ -168,6 +174,7 @@ public class Curses {
 					}
 					break;
 				}
+				
 				if (i == DEFLECT_MAGIC)
 					c.getVariables().protMageDelay = System.currentTimeMillis();
 				else if (i == DEFLECT_MISSILES)

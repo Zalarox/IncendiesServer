@@ -7,6 +7,7 @@ Has occured thrice!
 
 [Known]
 * Player saves are definitely broken.
+* Following while attacking needs some tweaking.
 * Combat needs to be fixed - players go inside their attackers often.
 * Attacking while the player is moving seems to cause ^.
 * Pathfinding is messy: during ranged combat, arrows drop at where monsters should actually be (behind obstacles) but the models itself stay many squares off.
@@ -20,6 +21,7 @@ Has occured thrice!
 * Magic spells SEEM not to have projectiles because of the combat bugs.
 
 [Unintended Behaviour]
+* Attempting to spec without enough energy stops combat
 * Skeletons do not drop items.
 * Ghosts always seem to drop an axe.
 * There are 2 ways to autocast spells, through the magic book and through staves.

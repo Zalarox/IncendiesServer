@@ -219,7 +219,7 @@ public class Following {
 		}
 	}
 
-	private static void stepAway(Player p) {
+	public static void stepAway(Player p) {
 		if (Region.getClipping(p.getX() - 1, p.getY(), p.heightLevel, -1, 0)) {
 			p.getPA().walkTo(-1, 0);
 			return;

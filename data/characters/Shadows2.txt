@@ -1,25 +1,25 @@
 [ACCOUNT]
-character-username = Shadows
-character-password = ec4a83b77e35992fa96dd21f2993e39e
+character-username = Shadows2
+character-password = 0b231f128c786616f92bed2a94f76ac0
 
 [CHARACTER]
 character-height = 0
-character-posx = 3090
-character-posy = 3529
-character-rights = 3
+character-posx = 3094
+character-posy = 3532
+character-rights = 2
 Donator = 0
 character-title = 0
 expLock = false
-totalxp =911518
+totalxp =72916
 crystal-bow-shots = 0
 skull-timer = 0
 magic-book = 0
-prayer-book = true
+prayer-book = false
 isDonePicking = false
 Picked = 0
 KC = 0
-DC = 0
-special-amount = 2.5
+DC = 2
+special-amount = 10.0
 selected-coffin = 0
 lastBrother = 0
 barrows-npc-dead = false	false	false	false	false	false
@@ -35,7 +35,7 @@ SLAY-TASK = null	0
 totalTasks = 0
 taskDifficulty = -1
 magePoints = 0
-autoRet = 1
+autoRet = 0
 flagged = false
 hasOverloafalse
 wave = 0
@@ -43,7 +43,7 @@ gwkc = 0
 fightMode = 1
 PKP = 0
 yellTag = Default tag
-constitution = 841
+constitution = 990
 void = 0	0	0	0	0
 savedClan = null
 hasSavedClan = false
@@ -54,7 +54,7 @@ familiarSpecialEnergy = 60
 familiar = -1
 RockCrabKills = 0
 run-energy = 200
-displayName = Shadows
+displayName = Shadows2
 
 [GODWARS]
 godwars = 0	3
@@ -67,17 +67,17 @@ quickCurses = false	false	false	false	false	false	false	false	false	false	false	
 quickPrayers = false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	false	
 
 [EQUIPMENT]
-character-equip = 0	2920	1	
+character-equip = 0	-1	-2	
 character-equip = 1	-1	1	
 character-equip = 2	-1	1	
-character-equip = 3	14484	1	
-character-equip = 4	2916	1	
+character-equip = 3	-1	0	
+character-equip = 4	-1	1	
 character-equip = 5	-1	1	
 character-equip = 6	-1	0	
-character-equip = 7	2918	1	
+character-equip = 7	-1	1	
 character-equip = 8	-1	0	
 character-equip = 9	-1	1	
-character-equip = 10	2914	1	
+character-equip = 10	-1	1	
 character-equip = 11	-1	0	
 character-equip = 12	-1	1	
 character-equip = 13	-1	0	
@@ -98,12 +98,12 @@ character-look = 11	0
 character-look = 12	0
 
 [SKILLS]
-character-skill = 0	99	13034436
+character-skill = 0	99	13035186
 character-skill = 1	99	13034436
-character-skill = 2	99	13751653
-character-skill = 3	99	13213737
+character-skill = 2	99	13092017
+character-skill = 3	99	13049021
 character-skill = 4	99	13034436
-character-skill = 5	75	13034436
+character-skill = 5	99	13034436
 character-skill = 6	99	13034436
 character-skill = 7	99	13034436
 character-skill = 8	99	13034436
@@ -125,8 +125,6 @@ character-skill = 23	99	13034436
 character-skill = 24	99	13034436
 
 [ITEMS]
-character-item = 0	996	31270
-character-item = 1	11485	2
 
 [BANK]
 

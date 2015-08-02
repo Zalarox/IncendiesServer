@@ -6,26 +6,14 @@ public class PlayerKilling {
 
 	private Player c;
 
-	/**
-	 * Constructor class
-	 */
-
-	public PlayerKilling(Player Player) {
-		this.c = Player;
+	public PlayerKilling(Player c) {
+		this.c = c;
 	}
+	
+	// Unique kills needed for PK Points.
+	public final int NEEDED_KILLS = 3;
 
-	/**
-	 * How many people you have to kill before getting points again for killing
-	 * the same person.
-	 */
-
-	public final int NEEDED_KILLS = 10;
-
-	/**
-	 * First the method checks if the array list contains the person and if it
-	 * doesn't then add there name but if it does then return the method false.
-	 */
-
+	// Add player to the list of killed players.
 	public boolean addPlayer(String i) {
 		if (!c.getVariables().killedPlayers.contains(i)) {
 			c.getVariables().killedPlayers.add(i);
@@ -33,12 +21,8 @@ public class PlayerKilling {
 		}
 		return false;
 	}
-
-	/**
-	 * Checking if the array list contains the player and if the person has
-	 * killed 20 or more people since that person.
-	 */
-
+	
+	// If the killed player is in the list, and the index is more than unique kills, remove from list.
 	public void checkForPlayer(String i) {
 		if (c.getVariables().killedPlayers.contains(i) && c.getVariables().killedPlayers.indexOf(i) >= NEEDED_KILLS) {
 			c.getVariables().killedPlayers.remove(i);

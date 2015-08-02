@@ -84,13 +84,13 @@ public class EnchantedBolts {
 				c.getPA().refreshSkill(5);
 			}
 			break;
-		case 9241: // Magical Posion
+		case 9241: // Magical Poison
 			createCombatGFX(c, i, 752, false);
 			if (c.getVariables().playerIndex > 0) {
 				c.getPA().appendPoison(6);
 			}
 			break;
-		case 9242: // Blood Forfiet //TODO:Fix the ruby bolts enchanted hit
+		case 9242: // Blood Forfeit // TODO Fix the ruby bolts enchanted hit
 			createCombatGFX(c, i, 754, false);
 			if (c.constitution - c.constitution / 20 < 1) {
 				break;
