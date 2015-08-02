@@ -5,14 +5,6 @@ import main.Connection.ConnectionType;
 import main.Constants;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
-<<<<<<< HEAD
-=======
-import main.game.players.PlayerSave;
-import main.game.players.actions.combat.CombatPrayer;
-import main.game.players.content.AuditInterface;
-import main.game.players.content.minigames.impl.barrows.Barrows;
-import main.game.players.content.skills.dungeoneering.Dungeon;
->>>>>>> Combat_Overhaul
 import main.game.players.packets.Commands;
 import main.handlers.ItemHandler;
 
@@ -40,17 +32,16 @@ public class Administrator extends Commands {
 	 * @param cmd
 	 *            The command being executed.
 	 * 
-	 * @author Branon McClellan (KeepBotting)
+	 * @author KeepBotting
 	 */
-
+	
 	public static void handleCommands(Player c, String cmd) {
 		boolean success = false;
-
+		
 		/**
 		 * Check permission level. These commands are available for permission
 		 * levels of 2 and above.
 		 */
-<<<<<<< HEAD
 		if (c.getRights() >= Player.RIGHTS_ADIMINISTRATOR) {
 
 			if (cmd.startsWith("ban")) {
@@ -62,41 +53,6 @@ public class Administrator extends Commands {
 								Connection.addConnection(PlayerHandler.players[i], ConnectionType.BAN);
 								PlayerHandler.players[i].disconnected = true;
 							}
-=======
-		if (c.getVariables().playerRights >= 2) {
-			/* 
-			 * Audit command for debugging added by Sid
-			 * Pls remove later much love
-			 * */
-			if(playerCommand.startsWith("audit")) {
-				String[] args = playerCommand.split(" ", 2);
-				if(args.length == 2) {
-					for (int i = 0; i < PlayerHandler.players.length; i++) {
-						Player c2 = PlayerHandler.players[i];
-						if (c2 != null) {
-							if (c2.playerName.equalsIgnoreCase(args[1])) {
-								AuditInterface pAudit = new AuditInterface(c2);
-								pAudit.showInfo(1);
-								break;
-							}
-						}
-					}
-				} else {
-					c.sendMessage("Syntax is ::audit (player)");
-				}
-			}
-			/*
-			 * End of debug audit command
-			 *  */
-			
-			if (playerCommand.startsWith("xteleto")) {
-				String name = playerCommand.substring(8);
-				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-					if (PlayerHandler.players[i] != null) {
-						if (PlayerHandler.players[i].playerName.equalsIgnoreCase(name)) {
-							c.getPA().movePlayer(PlayerHandler.players[i].getX(), PlayerHandler.players[i].getY(),
-									PlayerHandler.players[i].heightLevel);
->>>>>>> Combat_Overhaul
 						}
 					}
 				} catch (Exception e) {
@@ -138,161 +94,157 @@ public class Administrator extends Commands {
 					c.sendMessage("Exception!");
 				}
 			}
-			
+
 			/**
 			 * Spawn an item with the specified ID.
 			 */
-			if (cmd.startsWith("item")) {
+			if (cmd.startsWith("item") && !c.inWild()) {
 				String[] args = cmd.split(" ");
+				int id = 0;
+				int amount = 1;
+
 				try {
 
-					if (args.length == 3) {
-						int id = Integer.parseInt(args[1]);
-						int amount = Integer.parseInt(args[2]);
-						if ((id <= 20500) && (id >= 0)) {
-							c.getItems().addItem(id, amount);
-						} else {
-							c.sendMessage("No such item.");
-						}
+					if (args.length == 2) {
+						id = Integer.parseInt(args[1]);
+					} else if (args.length == 3) {
+						amount = Integer.parseInt(args[2]);
+					}
 
+					if ((id <= 20500) && (id >= 0)) {
+						c.getItems().addItem(id, amount);
 					} else {
-						int id2 = Integer.parseInt(args[1]);
-						if ((id2 <= 20500) && (id2 >= 0)) {
-							c.getItems().addItem(id2, 1);
-						} else {
-							c.sendMessage("No such item");
-						}
+						c.sendMessage("No item by that ID.");
 					}
 
 				} catch (Exception e) {
 					c.sendMessage("Exception!");
 				}
 			}
+		}
 
-			/**
-			 * Search item definitions by name.
-			 */
-			if (cmd.startsWith("search")) {
-				String a[] = cmd.split(" ");
-				String name = "";
-				int results = 0;
+		/**
+		 * Search item definitions by name.
+		 */
+		if (cmd.startsWith("search")) {
+			String a[] = cmd.split(" ");
+			String name = "";
+			int results = 0;
 
-				for (int i = 1; i < a.length; i++)
-					name = name + a[i] + " ";
+			for (int i = 1; i < a.length; i++)
+				name = name + a[i] + " ";
 
-				name = name.substring(0, name.length() - 1);
-				c.sendMessage("Searching: " + name);
+			name = name.substring(0, name.length() - 1);
+			c.sendMessage("Searching: " + name);
 
-				for (int j = 0; j < ItemHandler.ItemList.length; j++) {
-					if (ItemHandler.ItemList[j] != null)
-						if (ItemHandler.ItemList[j].itemName.replace("_", " ").toLowerCase()
-								.contains(name.toLowerCase())) {
-							c.sendMessage("<col=16711680>" + ItemHandler.ItemList[j].itemName.replace("_", " ") + " - "
-									+ ItemHandler.ItemList[j].itemId);
-							results++;
-						}
-				}
-				c.sendMessage(results + " results found...");
-			}
-
-			if (cmd.startsWith("heal")) {
-				if (cmd.indexOf(" ") > -1 && c.getVariables().playerRights > 1) {
-					String name = cmd.substring(5);
-					if (c.validClient(name)) {
-						Player p = c.getClient(name);
-						for (int i = 0; i < 20; i++) {
-							p.getVariables().playerLevel[i] = p.getLevelForXP(p.getVariables().playerXP[i]);
-							p.getPA().refreshSkill(i);
-							p.getVariables().constitution = p.getVariables().maxConstitution;
-						}
-						p.sendMessage("You have been healed by " + c.playerName + ".");
-					} else {
-						c.sendMessage("Player must be offline.");
+			for (int j = 0; j < ItemHandler.ItemList.length; j++) {
+				if (ItemHandler.ItemList[j] != null)
+					if (ItemHandler.ItemList[j].itemName.replace("_", " ").toLowerCase().contains(name.toLowerCase())) {
+						c.sendMessage("<col=16711680>" + ItemHandler.ItemList[j].itemName.replace("_", " ") + " - "
+								+ ItemHandler.ItemList[j].itemId);
+						results++;
 					}
-				} else {
-					for (int i = 0; i < 22; i++) {
-						c.getVariables().playerLevel[i] = c.getLevelForXP(c.getVariables().playerXP[i]);
-						c.getPA().refreshSkill(i);
-						c.getVariables().constitution = c.getVariables().maxConstitution;
-					}
-					c.getVariables().freezeTimer = -1;
-					c.getVariables().frozenBy = -1;
-					c.sendMessage("You have been healed.");
-				}
 			}
+			c.sendMessage(results + " results found...");
+		}
 
-			if (cmd.equalsIgnoreCase("bank")) {
-				c.getPA().openUpBank();
-			}
-
-			if (cmd.startsWith("ipban")) {
-				String ipToBan = cmd.substring(6);
-
-				try {
-
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
-						if (PlayerHandler.getPlayer(i) != null) {
-							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToBan)) {
-								Player c2 = PlayerHandler.getPlayer(i);
-								Connection.addConnection(c2, ConnectionType.IPBAN);
-								c.sendMessage("You have IP-banned " + c2.getDisplayName() + ", whose host is "
-										+ c2.getHost() + ".");
-								c2.disconnect();
-							}
-						}
-					}
-
-				} catch (Exception e) {
-					c.sendMessage("Exception!");
-				}
-			}
-
-			if (cmd.startsWith("unipban")) {
-				String ipToUnban = cmd.substring(8);
-
-				try {
-
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
-						if (PlayerHandler.getPlayer(i) != null) {
-							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToUnban)) {
-								Player c2 = PlayerHandler.getPlayer(i);
-								Connection.removeConnection(ipToUnban, ConnectionType.IPBAN);
-								c.sendMessage("You have un-IP-banned " + c2.getDisplayName() + ".");
-								break;
-							}
-						}
-					}
-
-				} catch (Exception e) {
-					c.sendMessage("Exception!");
-				}
-			}
-
-			if (cmd.startsWith("copy")) {
+		if (cmd.startsWith("heal")) {
+			if (cmd.indexOf(" ") > -1 && c.getVariables().playerRights > 1) {
 				String name = cmd.substring(5);
-
 				if (c.validClient(name)) {
-					Player c2 = c.getClient(name);
-
-					for (int i = 0; i < c.getVariables().playerEquipment.length; i++)
-						c.getVariables().playerEquipment[i] = c2.getVariables().playerEquipment[i];
-
-					for (int i = 0; i < c.getVariables().playerAppearance.length; i++)
-						c.getVariables().playerAppearance[i] = c2.getVariables().playerAppearance[i];
-
-					c.sendMessage("You have copied " + c2.getDisplayName() + ".");
-					c.updateRequired = true;
-					c.appearanceUpdateRequired = true;
+					Player p = c.getClient(name);
+					for (int i = 0; i < 20; i++) {
+						p.getVariables().playerLevel[i] = p.getLevelForXP(p.getVariables().playerXP[i]);
+						p.getPA().refreshSkill(i);
+						p.getVariables().constitution = p.getVariables().maxConstitution;
+					}
+					p.sendMessage("You have been healed by " + c.playerName + ".");
+				} else {
+					c.sendMessage("Player must be offline.");
 				}
+			} else {
+				for (int i = 0; i < 22; i++) {
+					c.getVariables().playerLevel[i] = c.getLevelForXP(c.getVariables().playerXP[i]);
+					c.getPA().refreshSkill(i);
+					c.getVariables().constitution = c.getVariables().maxConstitution;
+				}
+				c.getVariables().freezeTimer = -1;
+				c.getVariables().frozenBy = -1;
+				c.sendMessage("You have been healed.");
 			}
+		}
 
-			if (cmd.startsWith("maxhp")) {
-				c.getVariables().constitution += 99999;
-			}
+		if (cmd.equalsIgnoreCase("bank")) {
+			c.getPA().openUpBank();
+		}
 
-			if (cmd.equals("spec")) {
-				c.getVariables().specAmount = 100.0;
+		if (cmd.startsWith("ipban")) {
+			String ipToBan = cmd.substring(6);
+			
+			try {
+				
+				for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					if (PlayerHandler.getPlayer(i) != null) {
+						if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToBan)) {
+							Player c2 = PlayerHandler.getPlayer(i);
+							Connection.addConnection(c2, ConnectionType.IPBAN);
+							c.sendMessage("You have IP-banned " + c2.getDisplayName() + ", whose host is "
+									+ c2.getHost() + ".");
+							c2.disconnect();
+						}
+					}
+				}
+				
+			} catch (Exception e) {
+				c.sendMessage("Exception!");
 			}
+		}
+
+		if (cmd.startsWith("unipban")) {
+			String ipToUnban = cmd.substring(8);
+			
+			try {
+				
+				for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					if (PlayerHandler.getPlayer(i) != null) {
+						if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToUnban)) {
+							Player c2 = PlayerHandler.getPlayer(i);
+							Connection.removeConnection(ipToUnban, ConnectionType.IPBAN);
+							c.sendMessage("You have un-IP-banned " + c2.getDisplayName() + ".");
+							break;
+						}
+					}
+				}
+				
+			} catch (Exception e) {
+				c.sendMessage("Exception!");
+			}
+		}
+
+		if (cmd.startsWith("copy")) {
+			String name = cmd.substring(5);
+			
+			if (c.validClient(name)) {
+				Player c2 = c.getClient(name);
+				
+				for (int i = 0; i < c.getVariables().playerEquipment.length; i++)
+					c.getVariables().playerEquipment[i] = c2.getVariables().playerEquipment[i];
+				
+				for (int i = 0; i < c.getVariables().playerAppearance.length; i++)
+					c.getVariables().playerAppearance[i] = c2.getVariables().playerAppearance[i];
+				
+				c.sendMessage("You have copied " + c2.getDisplayName() + ".");
+				c.updateRequired = true;
+				c.appearanceUpdateRequired = true;
+			}
+		}
+
+		if (cmd.startsWith("maxhp")) {
+			c.getVariables().constitution += 99999;
+		}
+
+		if (cmd.equals("spec")) {
+			c.getVariables().specAmount = 100.0;
 		}
 	}
 }

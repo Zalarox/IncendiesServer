@@ -1087,13 +1087,8 @@ public class CombatAssistant {
 						return;
 					}
 				}
-<<<<<<< HEAD
-				// c.sendMessage("Made it here3.");
-				if (c.duelRule[DuelArena.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
-=======
 
-				if (c.duelRule[DuelPlayer.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
->>>>>>> Combat_Overhaul
+				if (c.duelRule[DuelArena.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
 					c.sendMessage("Range has been disabled in this duel!");
 					return;
 				}

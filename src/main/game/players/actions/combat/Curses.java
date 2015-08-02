@@ -59,14 +59,8 @@ public class Curses {
 	}
 
 	public void activateCurse(int i) {
-<<<<<<< HEAD
 		// Inside duel arena
 		if (c.getVariables().duelRule[DuelArena.RULE_PRAYER]) {
-=======
-
-		// Inside duel arena
-		if (c.getVariables().duelRule[DuelPlayer.RULE_PRAYER]) {
->>>>>>> Combat_Overhaul
 			for (int p = 0; p < 19; p++) {
 				c.getVariables().curseActive[p] = false;
 				c.getPA().sendFrame36(GLOW[p], 0);
