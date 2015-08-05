@@ -96,9 +96,15 @@ public class ItemLoader {
 
 	public static boolean isFullBody(int itemId) {
 		String weapon = getItemName(itemId);
+		
 		if (weapon == null) {
 			return false;
 		}
+		
+		if (itemId == 10564) { //Granite body
+			return true;
+		}
+		
 		for (int i = 0; i < fullbody.length; i++) {
 			if (weapon.toLowerCase().contains(fullbody[i]) && !weapon.toLowerCase().contains("pirate")) {
 				return true;

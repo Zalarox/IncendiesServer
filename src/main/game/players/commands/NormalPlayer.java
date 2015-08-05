@@ -3,7 +3,6 @@ package main.game.players.commands;
 import main.GameEngine;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
-import main.game.players.content.TeleportHandler;
 import main.game.players.packets.Commands;
 
 public class NormalPlayer extends Commands {
@@ -84,8 +83,16 @@ public class NormalPlayer extends Commands {
 			/**
 			 * View the number of online players.
 			 */
-			if (playerCommand.equalsIgnoreCase("players"))
-				c.sendMessage("There are currently " + PlayerHandler.getPlayerCount() + " players online.");
+			if (playerCommand.equalsIgnoreCase("players")) {
+				int players = PlayerHandler.getPlayerCount();
+
+				if (players == 1) {
+					c.sendMessage("There is currently 1 player online.");
+				} else {
+					c.sendMessage("There are currently " + players + " players online.");
+				}
+
+			}
 
 			/**
 			 * Empty their inventory.

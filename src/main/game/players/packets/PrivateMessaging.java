@@ -82,6 +82,8 @@ public class PrivateMessaging implements PacketType {
 									o.getPA().sendPM(Misc.playerNameToInt64(c.playerName),
 											c.getVariables().playerRights, pmchatText, pmchatTextSize);
 									pmSent = true;
+				
+									c.getLogging().logPM(o.getDisplayName(), Misc.textUnpack(pmchatText, pmchatTextSize));
 								}
 							}
 							break;

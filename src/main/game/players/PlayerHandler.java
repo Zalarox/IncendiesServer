@@ -88,15 +88,14 @@ public class PlayerHandler {
 	}
 
 	public static int getPlayerCount() {
-		int result = 0;
+		int count = 0;
 
 		for (int i = 0; i < players.length; i++) {
 			if (players[i] != null) {
-				result += 1;
+				count = count + 1;
 			}
 		}
-
-		return result;
+		return count;
 	}
 
 	public static boolean isPlayerOn(final String playerName) {

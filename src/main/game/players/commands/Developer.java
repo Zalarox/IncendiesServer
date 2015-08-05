@@ -6,7 +6,6 @@ import main.game.npcs.NPCHandler;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.packets.Commands;
-import main.handlers.ItemHandler;
 
 public class Developer extends Commands {
 
@@ -63,7 +62,7 @@ public class Developer extends Commands {
 				try {
 					String playerToMacBan = cmd.substring(7);
 
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.getPlayer(i) != null) {
 							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(playerToMacBan)) {
 								Player c2 = PlayerHandler.getPlayer(i);
@@ -86,7 +85,7 @@ public class Developer extends Commands {
 				try {
 					String playerToBan = cmd.substring(9);
 
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.getPlayer(i) != null) {
 							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(playerToBan)) {
 								Player c2 = PlayerHandler.getPlayer(i);
@@ -109,7 +108,7 @@ public class Developer extends Commands {
 
 				try {
 					
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.getPlayer(i) != null) {
 							PlayerHandler.getPlayer(i).sendMessage(message);
 						}
@@ -147,7 +146,7 @@ public class Developer extends Commands {
 
 			try {
 				
-				for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 					if (PlayerHandler.getPlayer(i) != null) {
 						Player c2 = PlayerHandler.getPlayer(i);
 						if (c2.getDisplayName().equalsIgnoreCase(player)) {
@@ -170,7 +169,7 @@ public class Developer extends Commands {
 
 			try {
 				
-				for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 					if (PlayerHandler.getPlayer(i) != null) {
 						Player c2 = PlayerHandler.getPlayer(i);
 						if (c2.getDisplayName().equalsIgnoreCase(playerToGiveAdmin)) {
@@ -208,7 +207,7 @@ public class Developer extends Commands {
 
 				try {
 					
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.getPlayer(i) != null) {
 							Player c2 = PlayerHandler.getPlayer(i);
 							if (c2.getDisplayName().equalsIgnoreCase(playerToGiveMod)) {
@@ -237,40 +236,6 @@ public class Developer extends Commands {
 				}
 
 				/**
-				 * Demote a player.
-				 */
-				/*if (cmd.startsWith("demote")) {
-					String playerToDemote = cmd.substring(10);
-					success = false;
-
-					try {
-						
-						for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
-							if (PlayerHandler.getPlayer(i) != null) {
-								Player c2 = PlayerHandler.getPlayer(i);
-								if (c2.getDisplayName().equalsIgnoreCase(playerToDemote)) {
-									c2.setRights(Player.RIGHTS_PLAYER);
-									
-									if (c2.hasRights(Player.RIGHTS_PLAYER)) {
-										success = true;
-									}
-									
-									c2.logout();
-									break;
-								}
-								
-								if (success) {
-									c.sendMessage("You have demoted " + c2.getDisplayName() + ".");
-								}
-							}
-						}
-						
-					} catch (Exception e) {
-						c.sendMessage("Exception!");
-					}
-				}*/
-
-				/**
 				 * View detailed statistics on a player.
 				 */
 				if (cmd.startsWith("audit")) {
@@ -278,7 +243,7 @@ public class Developer extends Commands {
 
 					try {
 						
-						for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+						for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 							if (PlayerHandler.getPlayer(i) != null) {
 								Player c2 = PlayerHandler.getPlayer(i);
 								if (c2.getDisplayName().equalsIgnoreCase(playerToAudit)) {

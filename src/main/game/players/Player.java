@@ -605,6 +605,9 @@ public class Player {
 	}
 
 	public void destruct() {
+		System.out.println("[DEREGISTERED]: " + this.getDisplayName());
+		getLogging().logSession(false);
+		
 		/**
 		 * Mark 'em as disconnected.
 		 */
@@ -841,7 +844,7 @@ public class Player {
 		for (int i = 16031; i < 16126; i++)
 			getPA().sendFrame126("", i);
 	}
-
+	
 	public void initialize() {
 		variables = new PlayerVariables();
 		outStream.createFrame(249);
@@ -946,7 +949,9 @@ public class Player {
 		getItems().addSpecialBar(playerEquipment[playerWeapon]);
 		saveTimer = 100;
 		saveCharacter = true;
-		Misc.println("[REGISTERED]: " + playerName + "");
+		
+		Misc.println("[REGISTERED]: " + getDisplayName() + "");
+		getLogging().logSession(true);
 
 		/**
 		 * If they don't have a display name, ensure their playerName is shown.

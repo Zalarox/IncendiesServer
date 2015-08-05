@@ -36,8 +36,7 @@ public class Administrator extends Commands {
 	 */
 
 	public static void handleCommands(Player c, String cmd) {
-		boolean success = false;
-
+		
 		/**
 		 * Check permission level. These commands are available for permission
 		 * levels of 2 and above.
@@ -186,7 +185,7 @@ public class Administrator extends Commands {
 
 				try {
 
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.getPlayer(i) != null) {
 							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToBan)) {
 								Player c2 = PlayerHandler.getPlayer(i);
@@ -208,7 +207,7 @@ public class Administrator extends Commands {
 
 				try {
 
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.getPlayer(i) != null) {
 							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToUnban)) {
 								Player c2 = PlayerHandler.getPlayer(i);

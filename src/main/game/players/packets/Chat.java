@@ -18,9 +18,11 @@ public class Chat implements PacketType {
 		c.setChatTextColor(c.getInStream().readUnsignedByteS());
 		c.setChatTextSize((byte) (c.packetSize - 2));
 		c.inStream.readBytes_reverseA(c.getChatText(), c.getChatTextSize(), 0);
+		
+		String text = Misc.textUnpack(c.getChatText(), c.getChatTextSize());
+		c.getLogging().logChat(text);
 
 		if (c.getVariables().isSearching) {
-			String text = Misc.textUnpack(c.getChatText(), c.getChatTextSize());
 			BankSearch.clearItems(c);
 			BankSearch.inputText(c, text);
 		}

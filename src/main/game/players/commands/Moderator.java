@@ -28,7 +28,6 @@ public class Moderator extends Commands {
 	 * @author Branon McClellan (KeepBotting)
 	 */
 	public static void handleCommands(Player c, String cmd) {
-		boolean success = false;
 		
 		/**
 		 * Check permission level. These commands are available for permission
@@ -92,13 +91,13 @@ public class Moderator extends Commands {
 			 */
 			if (cmd.startsWith("ipmute")) {
 				String ipToMute = cmd.substring(7);
+				
 				try {
 				
 					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(ipToMute)) {
-								
-								Player c2 = PlayerHandler.players[i];
+						if (PlayerHandler.getPlayer(i) != null) {
+							Player c2 = PlayerHandler.getPlayer(i);
+							if (c2.getDisplayName().equalsIgnoreCase(ipToMute)) {
 								Connection.addConnection(c2, ConnectionType.forName("IPMUTE"));
 								
 								c.sendMessage("You have IP-muted " + c2.getDisplayName() + ".");
@@ -117,16 +116,20 @@ public class Moderator extends Commands {
 			 * Remove an mute that was placed on an IP.
 			 */
 			if (cmd.startsWith("unipmute")) {
-				String IPToUnmute = cmd.substring(9);
+				String ipToUnmute = cmd.substring(9);
 				try {
 					
 					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(IPToUnmute)) {
-								Player c2 = PlayerHandler.players[i];
-								Connection.removeConnection(IPToUnmute, ConnectionType.forName("IPMUTE"));
+						if (PlayerHandler.getPlayer(i) != null) {
+							
+							Player c2 = PlayerHandler.getPlayer(i);
+							if (c2.getDisplayName().equalsIgnoreCase(ipToUnmute)) {
+								Connection.removeConnection(ipToUnmute, ConnectionType.forName("IPMUTE"));
 								c.sendMessage("You have un-IP-muted " + c2.getDisplayName() + ".");
 								break;
+								
+							} else {
+								c.sendMessage("No player by that display name.");
 							}
 						}
 					}
@@ -141,14 +144,14 @@ public class Moderator extends Commands {
 			 */
 			if (cmd.startsWith("demote")) {
 				String playerToDemote = cmd.substring(7);
-				
+
 				try {
-					
-					for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+
+					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.getPlayer(i) != null) {
 							Player c2 = PlayerHandler.getPlayer(i);
 							if (c2.getDisplayName().equalsIgnoreCase(playerToDemote)) {
-							
+
 								if ((c2.getRights() == c.getRights()) && (c.getRights() < Player.RIGHTS_DEVELOPER)) {
 									c.sendMessage("You may not demote a staff member with a rank equal to yourself.");
 									return;
@@ -156,25 +159,24 @@ public class Moderator extends Commands {
 									c.sendMessage("You may not demote a staff member with a higher rank than you.");
 									return;
 								}
-
+								
 								c2.setRights(Player.RIGHTS_PLAYER);
 								
 								if (c2.hasRights(Player.RIGHTS_PLAYER)) {
-									success = true;
+									c.sendMessage("You have demoted " + c2.getDisplayName() + ".");
+								} else {
+									c.sendMessage("Unable to demote " + c2.getDisplayName() + ".");
 								}
 								
 								c2.logout();
 								break;
-							}
-							
-							if (success) {
-								c.sendMessage("You have demoted " + c2.getDisplayName() + ".");
+								
 							} else {
-								c.sendMessage("Unable to demote " + c2.getDisplayName() + ".");
+								c.sendMessage("No player by that display name.");
 							}
 						}
 					}
-					
+
 				} catch (Exception e) {
 					c.sendMessage("Exception!");
 				}
@@ -185,8 +187,13 @@ public class Moderator extends Commands {
 			 */
 			if (cmd.startsWith("goto")) {
 				String name = cmd.substring(5);
+				
+				if (name.equalsIgnoreCase(c.getDisplayName())) {
+					c.sendMessage("Why would you want to teleport to yourself?");
+					return;
+				}
 
-				for (int i = 0; i < PlayerHandler.getPlayerCount(); i++) {
+				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 					if (PlayerHandler.getPlayer(i) != null) {
 						Player c2 = PlayerHandler.getPlayer(i);
 						if (c2.getDisplayName().equalsIgnoreCase(name)) {

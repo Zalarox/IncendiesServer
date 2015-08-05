@@ -10,7 +10,6 @@ import main.game.items.GameItem;
 import main.game.players.PacketType;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
-import main.game.players.actions.TradeHandler;
 import main.game.players.actions.combat.CombatPrayer;
 import main.game.players.content.ItemsKeptOnDeath;
 import main.game.players.content.QuickCurses;
