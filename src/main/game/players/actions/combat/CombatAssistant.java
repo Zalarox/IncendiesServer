@@ -144,45 +144,52 @@ public class CombatAssistant {
 
 			// Attacker is diagonal to the victim
 			if (distance == 0 && curX != victim.getX() && curY != victim.getY()) {
-				// Top Right
-				if (curX > victim.getX() && curY > victim.getY()) {
-					if (Region.getClipping(attacker.getX() - 1, attacker.getY(), attacker.heightLevel, -1, 0)) {
-						attacker.getPA().walkTo(-1, 0);
-					}
-					if (Region.getClipping(attacker.getX(), attacker.getY() - 1, attacker.heightLevel, 0, -1)) {
-						attacker.getPA().walkTo(0, -1);
-					}
-				}
+				
+				// The following code causes the server to overload.
+				
+//				// Top Right
+//				if (curX > victim.getX() && curY > victim.getY()) {
+//					if (Region.getClipping(attacker.getX() - 1, attacker.getY(), attacker.heightLevel, -1, 0)) {
+//						attacker.getPA().walkTo(-1, 0);
+//					}
+//					if (Region.getClipping(attacker.getX(), attacker.getY() - 1, attacker.heightLevel, 0, -1)) {
+//						attacker.getPA().walkTo(0, -1);
+//					}
+//				}
+//
+//				// Top Left
+//				if (curX < victim.getX() && curY > victim.getY()) {
+//					if (Region.getClipping(attacker.getX() + 1, attacker.getY(), attacker.heightLevel, 1, 0)) {
+//						attacker.getPA().walkTo(1, 0);
+//					}
+//					if (Region.getClipping(attacker.getX(), attacker.getY() - 1, attacker.heightLevel, 0, -1)) {
+//						attacker.getPA().walkTo(0, -1);
+//					}
+//				}
+//
+//				// Bottom Left
+//				if (curX < victim.getX() && curY < victim.getY()) {
+//					if (Region.getClipping(attacker.getX() + 1, attacker.getY(), attacker.heightLevel, 1, 0)) {
+//						attacker.getPA().walkTo(1, 0);
+//					}
+//					if (Region.getClipping(attacker.getX(), attacker.getY() + 1, attacker.heightLevel, 0, 1)) {
+//						attacker.getPA().walkTo(0, 1);
+//					}
+//				}
+//
+//				// Bottom Right
+//				if (curX > victim.getX() && curY < victim.getY()) {
+//					if (Region.getClipping(attacker.getX() - 1, attacker.getY(), attacker.heightLevel, -1, 0)) {
+//						attacker.getPA().walkTo(-1, 0);
+//					}
+//					if (Region.getClipping(attacker.getX(), attacker.getY() + 1, attacker.heightLevel, 0, 1)) {
+//						attacker.getPA().walkTo(0, 1);
+//					}
+//				}
+				
+				// Hack fix
+				Following.triggerFollowing(victim.getId(), 1, attacker);
 
-				// Top Left
-				if (curX < victim.getX() && curY > victim.getY()) {
-					if (Region.getClipping(attacker.getX() + 1, attacker.getY(), attacker.heightLevel, 1, 0)) {
-						attacker.getPA().walkTo(1, 0);
-					}
-					if (Region.getClipping(attacker.getX(), attacker.getY() - 1, attacker.heightLevel, 0, -1)) {
-						attacker.getPA().walkTo(0, -1);
-					}
-				}
-
-				// Bottom Left
-				if (curX < victim.getX() && curY < victim.getY()) {
-					if (Region.getClipping(attacker.getX() + 1, attacker.getY(), attacker.heightLevel, 1, 0)) {
-						attacker.getPA().walkTo(1, 0);
-					}
-					if (Region.getClipping(attacker.getX(), attacker.getY() + 1, attacker.heightLevel, 0, 1)) {
-						attacker.getPA().walkTo(0, 1);
-					}
-				}
-
-				// Bottom Right
-				if (curX > victim.getX() && curY < victim.getY()) {
-					if (Region.getClipping(attacker.getX() - 1, attacker.getY(), attacker.heightLevel, -1, 0)) {
-						attacker.getPA().walkTo(-1, 0);
-					}
-					if (Region.getClipping(attacker.getX(), attacker.getY() + 1, attacker.heightLevel, 0, 1)) {
-						attacker.getPA().walkTo(0, 1);
-					}
-				}
 			} 
 			// Attacker is not diagonal to the victim
 			else {
