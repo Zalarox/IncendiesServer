@@ -945,7 +945,7 @@ public class Player {
 		getCombat().getPlayerAnimIndex(getItems().getItemName(playerEquipment[playerWeapon]).toLowerCase());
 		getPA().logIntoPM();
 		getPA().updateEnergy();
-		Tiaras.handleTiara(this, getEquipment().getId(Constants.HAT));
+		Tiaras.handleTiara(this, getEquipment().getID(Constants.HAT));
 		getItems().addSpecialBar(playerEquipment[playerWeapon]);
 		saveTimer = 100;
 		saveCharacter = true;

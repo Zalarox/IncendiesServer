@@ -31,6 +31,20 @@ public class Developer extends Commands {
 		 * levels of 3.
 		 */
 		if (c.hasRights(Player.RIGHTS_DEVELOPER)) {
+			
+			if (cmd.equalsIgnoreCase("checkenums")) {
+				if (c.getEquipment().hasGuthan()) {
+					c.sendMessage("Have Dharok equipped!");
+				} else {
+					c.sendMessage("No Dharok :(");
+				}
+				
+				if (c.getEquipment().hasVoidKnightMelee()) {
+					c.sendMessage("Have Void Knight melee equipped!");
+				} else {
+					c.sendMessage("No Void Knight melee :(");
+				}
+			}
 
 			/**
 			 * Returns your position.

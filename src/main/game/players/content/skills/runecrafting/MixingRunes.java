@@ -90,12 +90,12 @@ public class MixingRunes {
 					"You need a runecrafting level of " + mixingRunesData.getLevelRequired() + " to do this.");
 			return true;
 		}
-		if (player.getEquipment().getId(Constants.WEAPON) == BindingNeck) {
+		if (player.getEquipment().getID(Constants.WEAPON) == BindingNeck) {
 			player.setBindingNeckCharge(player.getBindingNeckCharge() - 1);
 		}
 		if (player.getBindingNeckCharge() <= 0) {
 			player.setBindingNeckCharge(15);
-			player.getEquipment().replaceEquipment(BindingNeck, Constants.AMULET);
+			player.getEquipment().setEquipment(BindingNeck, Constants.AMULET);
 
 			player.getPA().sendMessage("Your binding necklace crumble into dust.");
 		}
@@ -106,7 +106,7 @@ public class MixingRunes {
 				&& player.getInventory().playerHasItem(Runecrafting.PureEss)) {
 			player.getInventory().removeItem(new Item(mixingRunesData.getElementalRuneId(), 1));
 			player.getInventory().removeItem(new Item(Runecrafting.PureEss, 1));
-			if (Misc.random(1) == 0 || player.getEquipment().getId(Constants.WEAPON) == BindingNeck) {
+			if (Misc.random(1) == 0 || player.getEquipment().getID(Constants.WEAPON) == BindingNeck) {
 				player.getInventory().addItem(new Item(mixingRunesData.getCombinedRune(), 1));
 				player.getSkill().addExp(Skill.RUNECRAFTING, mixingRunesData.getExperienceReceived());
 			}
