@@ -22,14 +22,14 @@ public class Chat implements PacketType {
 		String text = Misc.textUnpack(c.getChatText(), c.getChatTextSize());
 		c.getLogging().logChat(text);
 
-		if (c.getVariables().isSearching) {
+		if (c.getInstance().isSearching) {
 			BankSearch.clearItems(c);
 			BankSearch.inputText(c, text);
 		}
 
 		if (!Connection.containsConnection(c.playerName, ConnectionType.MUTE, false)
 				&& !Connection.containsConnection(c.connectedFrom, ConnectionType.IPMUTE, false)
-				&& !Connection.containsConnection(c.getVariables().identityPunishment,
+				&& !Connection.containsConnection(c.getInstance().identityPunishment,
 						ConnectionType.forName("IDENTITY_MUTE"), false)) {
 			c.setChatTextUpdateRequired(true);
 		}

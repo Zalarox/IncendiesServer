@@ -14,7 +14,7 @@ public class Fillables {
 	private static boolean fillingWater = false;
 
 	public static void fillTheItem(final Player c, final int itemId, final int objectId) {
-		c.getVariables().walkFromFilling = false;
+		c.getInstance().walkFromFilling = false;
 		if (fillingWater) {
 			return;
 		}
@@ -24,7 +24,7 @@ public class Fillables {
 			public void execute(CycleEventContainer container) {
 				if (!fillingWater)
 					container.stop();
-				if (c.getVariables().walkFromFilling) {
+				if (c.getInstance().walkFromFilling) {
 					container.stop();
 				}
 				if (Fillables.canFill(itemId, objectId) && c.getItems().playerHasItem(itemId)) {
@@ -48,10 +48,10 @@ public class Fillables {
 				if (!fillingWater) {
 					container.stop();
 				}
-				if (c.getVariables().walkFromFilling) {
+				if (c.getInstance().walkFromFilling) {
 					container.stop();
 				}
-				if (c.getVariables().walkFromFilling = false && Fillables.canFill(itemId, objectId)
+				if (c.getInstance().walkFromFilling = false && Fillables.canFill(itemId, objectId)
 						&& c.getItems().playerHasItem(itemId)) {
 					fillTheItem(c, itemId, objectId);
 					return;

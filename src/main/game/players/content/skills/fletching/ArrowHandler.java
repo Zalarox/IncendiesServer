@@ -84,12 +84,12 @@ public class ArrowHandler {
 
 	public static void fletchArrow(final Player c, final int amount) {
 		int time = 0;
-		final Arrow a = Arrow.getID(c.getVariables().currentArrow);
-		if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+		final Arrow a = Arrow.getID(c.getInstance().currentArrow);
+		if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 			c.getPA().closeAllWindows();
 			return;
 		}
-		if (c.getVariables().playerLevel[c.getVariables().playerFletching] < a.getReq()) {
+		if (c.getInstance().playerLevel[c.getInstance().playerFletching] < a.getReq()) {
 			c.sendMessage("You must have a fletching level of at least " + a.getReq() + " to do this.");
 			c.getPA().closeAllWindows();
 			return;
@@ -111,17 +111,17 @@ public class ArrowHandler {
 			time = 2;
 		}
 		c.getPA().closeAllWindows();
-		c.getVariables().playerSkilling[c.getVariables().playerFletching] = true;
-		c.getVariables().doAmount = amount;
-		c.getVariables().isArrowing = true;
+		c.getInstance().playerSkilling[c.getInstance().playerFletching] = true;
+		c.getInstance().doAmount = amount;
+		c.getInstance().isArrowing = true;
 		CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (c.getVariables().doAmount == 0) {
+				if (c.getInstance().doAmount == 0) {
 					container.stop();
 					return;
 				}
-				if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == false) {
+				if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == false) {
 					container.stop();
 					return;
 				}
@@ -149,18 +149,18 @@ public class ArrowHandler {
 					c.getItems().addItem(a.getArrow(), 15);
 				}
 				c.getPA().addSkillXP(a.getXP() * SkillHandler.XPRates.FLETCHING.getXPRate(),
-						c.getVariables().playerFletching);
-				c.getVariables().doAmount--;
+						c.getInstance().playerFletching);
+				c.getInstance().doAmount--;
 			}
 
 			@Override
 			public void stop() {
 				c.getPA().closeAllWindows();
-				c.startAnimation(c.getVariables().playerStandIndex);
-				c.getVariables().doAmount = 0;
-				c.getVariables().isArrowing = false;
-				c.getVariables().isOnInterface = false;
-				c.getVariables().playerSkilling[c.getVariables().playerFletching] = false;
+				c.startAnimation(c.getInstance().playerStandIndex);
+				c.getInstance().doAmount = 0;
+				c.getInstance().isArrowing = false;
+				c.getInstance().isOnInterface = false;
+				c.getInstance().playerSkilling[c.getInstance().playerFletching] = false;
 			}
 		}, time);
 	}
@@ -175,14 +175,14 @@ public class ArrowHandler {
 
 	protected static void handleInterface1(final Player c, final int arrow) {
 		final Arrow a = Arrow.getID(arrow);
-		if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+		if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 			return;
 		}
-		c.getVariables().currentArrow = arrow;
+		c.getInstance().currentArrow = arrow;
 		c.getPA().sendFrame164(4429);
-		c.getVariables().isOnInterface = true;
-		c.getVariables().isArrowing = true;
-		c.getVariables().stringu = a.getFirstItem();
+		c.getInstance().isOnInterface = true;
+		c.getInstance().isArrowing = true;
+		c.getInstance().stringu = a.getFirstItem();
 		boolean view190 = true;
 		c.getPA().sendFrame246(1746, view190 ? 140 : 140, a.getArrow());
 		c.getPA().sendFrame126(StringingHandler.getLine(c) + "" + c.getItems().getItemName(a.getArrow()) + "", 2799);

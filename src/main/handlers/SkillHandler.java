@@ -54,7 +54,7 @@ public class SkillHandler {
 	}
 
 	public static boolean hasRequiredLevel(final Player c, int skillId, int lvlReq, String event) {
-		if (c.getVariables().playerLevel[skillId] < lvlReq) {
+		if (c.getInstance().playerLevel[skillId] < lvlReq) {
 			c.sendMessage("You need at least " + lvlReq + " " + skillNames[skillId] + " to " + event + ".");
 			c.getPA().resetPlayerSkillVariables();
 			return false;
@@ -63,7 +63,7 @@ public class SkillHandler {
 	}
 
 	public static boolean hasRequiredLevel(final Player c, int id, int lvlReq, String skill, String event) {
-		if (c.getVariables().playerLevel[id] < lvlReq) {
+		if (c.getInstance().playerLevel[id] < lvlReq) {
 			c.sendMessage("You haven't got high enough " + skill + " level to " + event + "");
 			c.sendMessage("You at least need the " + skill + " level of " + lvlReq + ".");
 			return false;

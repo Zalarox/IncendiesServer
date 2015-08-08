@@ -225,54 +225,54 @@ public class BowHandler {
 	}
 
 	public static void fletchCrossbow(final Player c, final int button) {
-		final Crossbow l = Crossbow.itemID(c.getVariables().logID);
+		final Crossbow l = Crossbow.itemID(c.getInstance().logID);
 		if (l == null) {
 			return;
 		}
 		if (button == l.getButton12() || button == l.getButton52() || button == l.getButton102()
 				|| button == l.getButtonAll2()) {
-			if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+			if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 				return;
 			}
-			if (c.getVariables().playerLevel[c.getVariables().playerFletching] < l.getReq2()) {
+			if (c.getInstance().playerLevel[c.getInstance().playerFletching] < l.getReq2()) {
 				c.sendMessage("You must have a fletching level of at least " + l.getReq2() + " to do this.");
 				return;
 			}
 			c.startAnimation(ANIMATION);
 			c.getPA().closeAllWindows();
-			c.getVariables().playerSkilling[c.getVariables().playerFletching] = true;
-			c.getVariables().doAmount = c.getVariables().fletchAmount(button);
+			c.getInstance().playerSkilling[c.getInstance().playerFletching] = true;
+			c.getInstance().doAmount = c.getInstance().fletchAmount(button);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (c.getVariables().doAmount == 0) {
+					if (c.getInstance().doAmount == 0) {
 						container.stop();
 						return;
 					}
-					if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == false) {
+					if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == false) {
 						container.stop();
 						return;
 					}
-					if (!c.getItems().playerHasItem(KNIFE) || !c.getItems().playerHasItem(c.getVariables().logID)) {
+					if (!c.getItems().playerHasItem(KNIFE) || !c.getItems().playerHasItem(c.getInstance().logID)) {
 						c.sendMessage("You do not have the correct supplies to fletch this.");
 						container.stop();
 						return;
 					}
 					c.startAnimation(ANIMATION);
-					c.getItems().deleteItem(c.getVariables().logID, 1);
+					c.getItems().deleteItem(c.getInstance().logID, 1);
 					c.getItems().addItem(l.getBow2(), 1);
 					c.getPA().addSkillXP(l.getXP2() * SkillHandler.XPRates.FLETCHING.getXPRate(),
-							c.getVariables().playerFletching);
-					c.getVariables().doAmount--;
+							c.getInstance().playerFletching);
+					c.getInstance().doAmount--;
 				}
 
 				@Override
 				public void stop() {
 					c.getPA().closeAllWindows();
-					c.getVariables().logID = -1;
-					c.startAnimation(c.getVariables().playerStandIndex);
-					c.getVariables().doAmount = 0;
-					c.getVariables().playerSkilling[c.getVariables().playerFletching] = false;
+					c.getInstance().logID = -1;
+					c.startAnimation(c.getInstance().playerStandIndex);
+					c.getInstance().doAmount = 0;
+					c.getInstance().playerSkilling[c.getInstance().playerFletching] = false;
 				}
 			}, 4);
 		} else {
@@ -281,54 +281,54 @@ public class BowHandler {
 	}
 
 	public static void fletchUnstrungLongbow(final Player c, final int button) {
-		final Longbow l = Longbow.itemID1(c.getVariables().logID);
+		final Longbow l = Longbow.itemID1(c.getInstance().logID);
 		if (l == null) {
 			return;
 		}
 		if (button == l.getButton11() || button == l.getButton51() || button == l.getButton101()
 				|| button == l.getButtonAll1()) {
-			if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+			if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 				return;
 			}
-			if (c.getVariables().playerLevel[c.getVariables().playerFletching] < l.getReq1()) {
+			if (c.getInstance().playerLevel[c.getInstance().playerFletching] < l.getReq1()) {
 				c.sendMessage("You must have a fletching level of at least " + l.getReq1() + " to do this.");
 				return;
 			}
 			c.startAnimation(ANIMATION);
 			c.getPA().closeAllWindows();
-			c.getVariables().playerSkilling[c.getVariables().playerFletching] = true;
-			c.getVariables().doAmount = c.getVariables().fletchAmount(button);
+			c.getInstance().playerSkilling[c.getInstance().playerFletching] = true;
+			c.getInstance().doAmount = c.getInstance().fletchAmount(button);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (c.getVariables().doAmount == 0) {
+					if (c.getInstance().doAmount == 0) {
 						container.stop();
 						return;
 					}
-					if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == false) {
+					if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == false) {
 						container.stop();
 						return;
 					}
-					if (!c.getItems().playerHasItem(KNIFE) || !c.getItems().playerHasItem(c.getVariables().logID)) {
+					if (!c.getItems().playerHasItem(KNIFE) || !c.getItems().playerHasItem(c.getInstance().logID)) {
 						c.sendMessage("You do not have the correct supplies to fletch this.");
 						container.stop();
 						return;
 					}
 					c.startAnimation(ANIMATION);
-					c.getItems().deleteItem(c.getVariables().logID, 1);
+					c.getItems().deleteItem(c.getInstance().logID, 1);
 					c.getItems().addItem(l.getBow1(), 1);
 					c.getPA().addSkillXP(l.getXP1() * SkillHandler.XPRates.FLETCHING.getXPRate(),
-							c.getVariables().playerFletching);
-					c.getVariables().doAmount--;
+							c.getInstance().playerFletching);
+					c.getInstance().doAmount--;
 				}
 
 				@Override
 				public void stop() {
 					c.getPA().closeAllWindows();
-					c.getVariables().logID = -1;
-					c.startAnimation(c.getVariables().playerStandIndex);
-					c.getVariables().doAmount = 0;
-					c.getVariables().playerSkilling[c.getVariables().playerFletching] = false;
+					c.getInstance().logID = -1;
+					c.startAnimation(c.getInstance().playerStandIndex);
+					c.getInstance().doAmount = 0;
+					c.getInstance().playerSkilling[c.getInstance().playerFletching] = false;
 				}
 			}, 4);
 		} else {
@@ -337,59 +337,59 @@ public class BowHandler {
 	}
 
 	public static void fletchUnstrungBow(final Player c, final int button) {
-		final Bow b = Bow.itemID(c.getVariables().logID);
+		final Bow b = Bow.itemID(c.getInstance().logID);
 		if (b == null) {
 			return;
 		}
 		if (button == b.getButton1() || button == b.getButton5() || button == b.getButton10()
 				|| button == b.getButtonAll()) {
-			if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+			if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 				return;
 			}
-			if (c.getVariables().playerLevel[c.getVariables().playerFletching] < b.getReq()) {
+			if (c.getInstance().playerLevel[c.getInstance().playerFletching] < b.getReq()) {
 				c.sendMessage("You must have a fletching level of at least " + b.getReq() + " to do this.");
 				return;
 			}
-			final int is = c.getVariables().logID;
+			final int is = c.getInstance().logID;
 			c.startAnimation(ANIMATION);
 			c.getPA().closeAllWindows();
-			c.getVariables().playerSkilling[c.getVariables().playerFletching] = true;
-			c.getVariables().doAmount = c.getVariables().fletchAmount(button);
+			c.getInstance().playerSkilling[c.getInstance().playerFletching] = true;
+			c.getInstance().doAmount = c.getInstance().fletchAmount(button);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (c.getVariables().doAmount == 0) {
+					if (c.getInstance().doAmount == 0) {
 						container.stop();
 						return;
 					}
-					if (is != c.getVariables().logID) {
+					if (is != c.getInstance().logID) {
 						container.stop();
 						return;
 					}
-					if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == false) {
+					if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == false) {
 						container.stop();
 						return;
 					}
-					if (!c.getItems().playerHasItem(KNIFE) || !c.getItems().playerHasItem(c.getVariables().logID)) {
+					if (!c.getItems().playerHasItem(KNIFE) || !c.getItems().playerHasItem(c.getInstance().logID)) {
 						c.sendMessage("You do not have the correct supplies to fletch this.");
 						container.stop();
 						return;
 					}
 					c.startAnimation(ANIMATION);
-					c.getItems().deleteItem(c.getVariables().logID, 1);
+					c.getItems().deleteItem(c.getInstance().logID, 1);
 					c.getItems().addItem(b.getBow(), 1);
 					c.getPA().addSkillXP(b.getXP() * SkillHandler.XPRates.FLETCHING.getXPRate(),
-							c.getVariables().playerFletching);
-					c.getVariables().doAmount--;
+							c.getInstance().playerFletching);
+					c.getInstance().doAmount--;
 				}
 
 				@Override
 				public void stop() {
 					c.getPA().closeAllWindows();
-					c.getVariables().logID = -1;
-					c.startAnimation(c.getVariables().playerStandIndex);
-					c.getVariables().doAmount = 0;
-					c.getVariables().playerSkilling[c.getVariables().playerFletching] = false;
+					c.getInstance().logID = -1;
+					c.startAnimation(c.getInstance().playerStandIndex);
+					c.getInstance().doAmount = 0;
+					c.getInstance().playerSkilling[c.getInstance().playerFletching] = false;
 				}
 			}, 4);
 		} else {
@@ -411,27 +411,27 @@ public class BowHandler {
 	public static void handleInterface(final Player c, final int useWith, final int itemUsed) {
 		if (useWith == KNIFE && itemUsed == 1511 || useWith == 1511 && itemUsed == KNIFE) {
 			openFletching(c, 1511);
-			c.getVariables().logID = 1511;
+			c.getInstance().logID = 1511;
 			return;
 		} else if (useWith == KNIFE && itemUsed == 1521 || useWith == 1521 && itemUsed == KNIFE) {
 			openFletching1(c, 1521);
-			c.getVariables().logID = 1521;
+			c.getInstance().logID = 1521;
 			return;
 		} else if (useWith == KNIFE && itemUsed == 1519 || useWith == 1519 && itemUsed == KNIFE) {
 			openFletching3(c, 1519);
-			c.getVariables().logID = 1519;
+			c.getInstance().logID = 1519;
 			return;
 		} else if (useWith == KNIFE && itemUsed == 1517 || useWith == 1517 && itemUsed == KNIFE) {
 			openFletching4(c, 1517);
-			c.getVariables().logID = 1517;
+			c.getInstance().logID = 1517;
 			return;
 		} else if (useWith == KNIFE && itemUsed == 1515 || useWith == 1515 && itemUsed == KNIFE) {
 			openFletching2(c, 1515);
-			c.getVariables().logID = 1515;
+			c.getInstance().logID = 1515;
 			return;
 		} else if (useWith == KNIFE && itemUsed == 1513 || useWith == 1513 && itemUsed == KNIFE) {
 			openFletching5(c, 1513);
-			c.getVariables().logID = 1513;
+			c.getInstance().logID = 1513;
 			return;
 		}
 	}
@@ -446,10 +446,10 @@ public class BowHandler {
 	 */
 
 	public static void handleFletchingButtons(final Player c, final int button) {
-		if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+		if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 			return;
 		}
-		if (!c.getItems().playerHasItem(KNIFE) && !c.getItems().playerHasItem(c.getVariables().logID)) {
+		if (!c.getItems().playerHasItem(KNIFE) && !c.getItems().playerHasItem(c.getInstance().logID)) {
 			return;
 		}
 		if (button >= 34214 && button <= 34217) {
@@ -485,21 +485,21 @@ public class BowHandler {
 		int item = -1;
 		switch (button) {
 		case 34217:
-			if (System.currentTimeMillis() - c.getVariables().lastThieve < 750) {
+			if (System.currentTimeMillis() - c.getInstance().lastThieve < 750) {
 				return;
 			}
-			c.getVariables().lastThieve = System.currentTimeMillis();
-			if (c.getItems().playerHasItem(c.getVariables().logID)) {
-				item = c.getVariables().logID;
+			c.getInstance().lastThieve = System.currentTimeMillis();
+			if (c.getItems().playerHasItem(c.getInstance().logID)) {
+				item = c.getInstance().logID;
 			}
 			if (c.getItems().playerHasItem(KNIFE) && c.getItems().playerHasItem(item)) {
 				c.startAnimation(ANIMATION);
 				c.getItems().deleteItem(item, 1);
 				c.getItems().addItem(52, AMOUNT);
 				c.getPA().addSkillXP(100 * SkillHandler.XPRates.FLETCHING.getXPRate(),
-						c.getVariables().playerFletching);
+						c.getInstance().playerFletching);
 				c.getPA().closeAllWindows();
-				c.getVariables().logID = -1;
+				c.getInstance().logID = -1;
 			} else {
 				c.sendMessage("You do not have the correct supplies to fletch this.");
 				return;
@@ -508,44 +508,44 @@ public class BowHandler {
 		case 34216:
 		case 34215:
 		case 34214:
-			if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+			if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 				return;
 			}
 			c.startAnimation(ANIMATION);
 			c.getPA().closeAllWindows();
-			c.getVariables().playerSkilling[c.getVariables().playerFletching] = true;
-			c.getVariables().doAmount = c.getVariables().fletchAmount(button);
+			c.getInstance().playerSkilling[c.getInstance().playerFletching] = true;
+			c.getInstance().doAmount = c.getInstance().fletchAmount(button);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (c.getVariables().doAmount == 0) {
+					if (c.getInstance().doAmount == 0) {
 						container.stop();
 						return;
 					}
-					if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == false) {
+					if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == false) {
 						container.stop();
 						return;
 					}
-					if (!c.getItems().playerHasItem(KNIFE) || !c.getItems().playerHasItem(c.getVariables().logID)) {
+					if (!c.getItems().playerHasItem(KNIFE) || !c.getItems().playerHasItem(c.getInstance().logID)) {
 						c.sendMessage("You do not have the correct supplies to fletch this.");
 						container.stop();
 						return;
 					}
 					c.startAnimation(ANIMATION);
-					c.getItems().deleteItem(c.getVariables().logID, 1);
+					c.getItems().deleteItem(c.getInstance().logID, 1);
 					c.getItems().addItem(52, AMOUNT);
 					c.getPA().addSkillXP(100 * SkillHandler.XPRates.FLETCHING.getXPRate(),
-							c.getVariables().playerFletching);
-					c.getVariables().doAmount--;
+							c.getInstance().playerFletching);
+					c.getInstance().doAmount--;
 				}
 
 				@Override
 				public void stop() {
 					c.getPA().closeAllWindows();
-					c.getVariables().logID = -1;
-					c.startAnimation(c.getVariables().playerStandIndex);
-					c.getVariables().doAmount = 0;
-					c.getVariables().playerSkilling[c.getVariables().playerFletching] = false;
+					c.getInstance().logID = -1;
+					c.startAnimation(c.getInstance().playerStandIndex);
+					c.getInstance().doAmount = 0;
+					c.getInstance().playerSkilling[c.getInstance().playerFletching] = false;
 				}
 			}, 4);
 			break;
@@ -573,7 +573,7 @@ public class BowHandler {
 			c.getPA().sendFrame126("Longbow", 8910);
 			c.getPA().sendFrame126("Wooden Stock", 8914);
 			c.getPA().sendFrame126("Arrow Shafts", 8918);
-			c.getVariables().logID = item;
+			c.getInstance().logID = item;
 		} else {
 			return;
 		}
@@ -589,7 +589,7 @@ public class BowHandler {
 			c.getPA().sendFrame126("Shortbow", 8889);
 			c.getPA().sendFrame126("Longbow", 8893);
 			c.getPA().sendFrame126("Crossbow Stock", 8897);
-			c.getVariables().logID = item;
+			c.getInstance().logID = item;
 		} else {
 			return;
 		}
@@ -605,7 +605,7 @@ public class BowHandler {
 			c.getPA().sendFrame126("Shortbow", 8889);
 			c.getPA().sendFrame126("Longbow", 8893);
 			c.getPA().sendFrame126("Crossbow Stock", 8897);
-			c.getVariables().logID = item;
+			c.getInstance().logID = item;
 		} else {
 			return;
 		}
@@ -621,7 +621,7 @@ public class BowHandler {
 			c.getPA().sendFrame126("Shortbow", 8889);
 			c.getPA().sendFrame126("Longbow", 8893);
 			c.getPA().sendFrame126("Crossbow Stock", 8897);
-			c.getVariables().logID = item;
+			c.getInstance().logID = item;
 		} else {
 			return;
 		}
@@ -637,7 +637,7 @@ public class BowHandler {
 			c.getPA().sendFrame126("Shortbow", 8889);
 			c.getPA().sendFrame126("Longbow", 8893);
 			c.getPA().sendFrame126("Crossbow Stock", 8897);
-			c.getVariables().logID = item;
+			c.getInstance().logID = item;
 		} else {
 			return;
 		}
@@ -651,7 +651,7 @@ public class BowHandler {
 			c.getPA().sendFrame246(8869, 250, 861);
 			c.getPA().sendFrame126("Shortbow", 8874);
 			c.getPA().sendFrame126("Longbow", 8878);
-			c.getVariables().logID = item;
+			c.getInstance().logID = item;
 		} else {
 			return;
 		}

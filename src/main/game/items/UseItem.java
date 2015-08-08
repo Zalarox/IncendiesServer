@@ -173,7 +173,7 @@ public class UseItem {
 			Prayer.sendPrayerInterface(c, itemId, objectX, objectY);
 			break;
 		default:
-			if (c.getVariables().playerRights == 3) {
+			if (c.getInstance().playerRights == 3) {
 				Misc.println("Player At Object id: " + objectID + " with Item id: " + itemId);
 			}
 			break;
@@ -344,12 +344,12 @@ public class UseItem {
 			}
 		}
 		if ((itemUsed == 1540 && useWith == 11286) || (itemUsed == 11286 && useWith == 1540)) {
-			if (c.getVariables().playerLevel[c.getVariables().playerSmithing] >= 95) {
+			if (c.getInstance().playerLevel[c.getInstance().playerSmithing] >= 95) {
 				c.getItems().deleteItem(1540, c.getItems().getItemSlot(1540), 1);
 				c.getItems().deleteItem(11286, c.getItems().getItemSlot(11286), 1);
 				c.getItems().addItem(11284, 1);
 				c.sendMessage("You combine the two materials to create a dragonfire shield.");
-				c.getPA().addSkillXP(500 * SkillHandler.XPRates.SMITHING.getXPRate(), c.getVariables().playerSmithing);
+				c.getPA().addSkillXP(500 * SkillHandler.XPRates.SMITHING.getXPRate(), c.getInstance().playerSmithing);
 			} else {
 				c.sendMessage("You need a smithing level of 95 to create a dragonfire shield.");
 			}
@@ -365,7 +365,7 @@ public class UseItem {
 		case 1755:
 			switch (useWith) {
 			case 1603:
-				if (c.getVariables().playerLevel[9] < 63) {
+				if (c.getInstance().playerLevel[9] < 63) {
 					c.sendMessage("You need a fletching level of 63 to cut this.");
 					return;
 				}
@@ -376,7 +376,7 @@ public class UseItem {
 				c.getPA().refreshSkill(9);
 				break;
 			case 1601:
-				if (c.getVariables().playerLevel[9] < 65) {
+				if (c.getInstance().playerLevel[9] < 65) {
 					c.sendMessage("You need a fletching level of 65 to cut this.");
 					return;
 				}
@@ -387,7 +387,7 @@ public class UseItem {
 				c.getPA().refreshSkill(9);
 				break;
 			case 1615:
-				if (c.getVariables().playerLevel[9] < 71) {
+				if (c.getInstance().playerLevel[9] < 71) {
 					c.sendMessage("You need a fletching level of 71 to cut this.");
 					return;
 				}
@@ -398,7 +398,7 @@ public class UseItem {
 				c.getPA().refreshSkill(9);
 				break;
 			case 6573:
-				if (c.getVariables().playerLevel[9] < 73) {
+				if (c.getInstance().playerLevel[9] < 73) {
 					c.sendMessage("You need a fletching level of 73 to cut this.");
 					return;
 				}
@@ -414,7 +414,7 @@ public class UseItem {
 		case 9143:
 			switch (useWith) {
 			case 9191:
-				if (c.getVariables().playerLevel[9] < 63) {
+				if (c.getInstance().playerLevel[9] < 63) {
 					c.sendMessage("You need a fletching level of 63 to attach these.");
 					return;
 				}
@@ -429,7 +429,7 @@ public class UseItem {
 				c.getPA().refreshSkill(9);
 				break;
 			case 9192:
-				if (c.getVariables().playerLevel[9] < 65) {
+				if (c.getInstance().playerLevel[9] < 65) {
 					c.sendMessage("You need a fletching level of 65 to attach these.");
 					return;
 				}
@@ -449,7 +449,7 @@ public class UseItem {
 		case 9144:
 			switch (useWith) {
 			case 9193:
-				if (c.getVariables().playerLevel[9] < 71) {
+				if (c.getInstance().playerLevel[9] < 71) {
 					c.sendMessage("You need a fletching level of 71 to attach these.");
 					return;
 				}
@@ -464,7 +464,7 @@ public class UseItem {
 				c.getPA().refreshSkill(9);
 				break;
 			case 9194:
-				if (c.getVariables().playerLevel[9] < 73) {
+				if (c.getInstance().playerLevel[9] < 73) {
 					c.sendMessage("You need a fletching level of 73 to attach these.");
 					return;
 				}
@@ -482,7 +482,7 @@ public class UseItem {
 			break;
 
 		default:
-			if (c.getVariables().playerRights == 3) {
+			if (c.getInstance().playerRights == 3) {
 				Misc.println("Player used Item id: " + itemUsed + " with Item id: " + useWith);
 			}
 			break;
@@ -493,7 +493,7 @@ public class UseItem {
 		switch (itemId) {
 
 		default:
-			if (c.getVariables().playerRights == 3) {
+			if (c.getInstance().playerRights == 3) {
 				Misc.println("Player used Item id: " + itemId + " with Npc id: " + npcId + " With Slot : " + slot);
 			}
 			break;

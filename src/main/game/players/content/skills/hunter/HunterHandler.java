@@ -232,11 +232,11 @@ public class HunterHandler {
 			if ((o != null && !n.isDead && distSquare(n.getX(), n.getY(), o.objectX, o.objectY) > 0)
 					&& (((int) (Math.random() * (getData(trapData, n.npcType, NPCID, REQ) * (o.bait ? 10 : 20)
 							+ 50)) < (PlayerHandler.players[o.owner] == null ? 0
-									: PlayerHandler.players[o.owner].getVariables().playerLevel[22])
+									: PlayerHandler.players[o.owner].getInstance().playerLevel[22])
 							&& o.delay < System.currentTimeMillis() && n.delay < System.currentTimeMillis())
 							|| n.npcId == o.target)) {
 				if (PlayerHandler.players[o.owner] != null
-						&& PlayerHandler.players[o.owner].getVariables().playerLevel[22] < getData(trapData, n.npcType,
+						&& PlayerHandler.players[o.owner].getInstance().playerLevel[22] < getData(trapData, n.npcType,
 								NPCID, REQ)) {
 					return;
 				}
@@ -251,7 +251,7 @@ public class HunterHandler {
 			} else if (o != null && distSquare(n.getX(), n.getY(), o.objectX, o.objectY) <= 0
 					&& o.oDelay < System.currentTimeMillis() && !n.isDead) {
 				if (PlayerHandler.players[o.owner] != null
-						&& PlayerHandler.players[o.owner].getVariables().playerLevel[22] < getData(trapData, n.npcType,
+						&& PlayerHandler.players[o.owner].getInstance().playerLevel[22] < getData(trapData, n.npcType,
 								NPCID, REQ)) {
 					return;
 				}
@@ -456,12 +456,12 @@ public class HunterHandler {
 					objects[amt++] = o;
 
 			}
-			if (o.objectId == c.getVariables().objectId && o.getObjectX() == c.getX() && o.getObjectY() == c.getY()) {
+			if (o.objectId == c.getInstance().objectId && o.getObjectX() == c.getX() && o.getObjectY() == c.getY()) {
 				c.sendMessage("You cannot lay a trap on another trap.");
 				return false;
 			}
 		}
-		if (amt > maxTraps(c.getPA().getLevelForXP(c.getVariables().playerXP[22]))) {
+		if (amt > maxTraps(c.getPA().getLevelForXP(c.getInstance().playerXP[22]))) {
 			c.sendMessage("You cannot lay that many traps at your level.");
 			return false;
 		}

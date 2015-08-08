@@ -15,16 +15,16 @@ public class BankX1 implements PacketType {
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
 		if (packetType == 135) {
-			c.getVariables().xRemoveSlot = c.getInStream().readSignedWordBigEndian();
-			c.getVariables().xInterfaceId = c.getInStream().readUnsignedWordA();
-			c.getVariables().xRemoveId = c.getInStream().readSignedWordBigEndian();
+			c.getInstance().xRemoveSlot = c.getInStream().readSignedWordBigEndian();
+			c.getInstance().xInterfaceId = c.getInStream().readUnsignedWordA();
+			c.getInstance().xRemoveId = c.getInStream().readSignedWordBigEndian();
 		}
-		if (c.getVariables().xInterfaceId == 3900) {
-			c.getShops().buyItem(c.getVariables().xRemoveId, c.getVariables().xRemoveSlot, 100);// buy
+		if (c.getInstance().xInterfaceId == 3900) {
+			c.getShops().buyItem(c.getInstance().xRemoveId, c.getInstance().xRemoveSlot, 100);// buy
 																								// 100
-			c.getVariables().xRemoveSlot = 0;
-			c.getVariables().xInterfaceId = 0;
-			c.getVariables().xRemoveId = 0;
+			c.getInstance().xRemoveSlot = 0;
+			c.getInstance().xInterfaceId = 0;
+			c.getInstance().xRemoveId = 0;
 			return;
 		}
 

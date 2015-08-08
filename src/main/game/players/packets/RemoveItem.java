@@ -20,7 +20,7 @@ public class RemoveItem implements PacketType {
 		int shop = 0;
 		int value = 0;
 		String name = "null";
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		switch (interfaceId) {
 		case 24006:
@@ -60,7 +60,7 @@ public class RemoveItem implements PacketType {
 
 		case 3322:
 			if (!DuelArena.isDueling(c) && !DuelArena.isInFirstInterface(c) && !DuelArena.isInSecondInterface(c)) {
-				if (!c.getVariables().inTrade) {
+				if (!c.getInstance().inTrade) {
 					return;
 				}
 				c.getTradeHandler().tradeItem(removeId, slot, 1);
@@ -71,7 +71,7 @@ public class RemoveItem implements PacketType {
 
 		case 3415:
 			if (!DuelArena.isDueling(c) && !DuelArena.isInFirstInterface(c) && !DuelArena.isInSecondInterface(c)) {
-				if (!c.getVariables().inTrade) {
+				if (!c.getInstance().inTrade) {
 					return;
 				}
 				c.getTradeHandler().fromTrade(removeId, slot, 1);
@@ -87,7 +87,7 @@ public class RemoveItem implements PacketType {
 		case 1121:
 		case 1122:
 		case 1123:
-			c.getSmithing().readInput(c.getVariables().playerLevel[c.getVariables().playerSmithing],
+			c.getSmithing().readInput(c.getInstance().playerLevel[c.getInstance().playerSmithing],
 					Integer.toString(removeId), c, 1);
 			break;
 		}

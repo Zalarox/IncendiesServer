@@ -16,7 +16,7 @@ public class ChangeRegions implements PacketType {
 		ItemHandler.reloadItems(c);
 		GameEngine.objectManager.loadObjects(c);
 		c.getPA().castleWarsObjects();
-		c.getVariables().rockCrabKills = 0;
+		c.getInstance().rockCrabKills = 0;
 		/*
 		 * if (c.inCwGame()) CastleWars.updateCwObects(c);/*
 		 * 
@@ -26,11 +26,11 @@ public class ChangeRegions implements PacketType {
 		 * if (r != null) r.addPlayer(c); }
 		 */
 
-		c.getVariables().saveFile = true;
+		c.getInstance().saveFile = true;
 
-		if (c.getVariables().skullTimer > 0) {
-			c.getVariables().isSkulled = true;
-			c.getVariables().headIconPk = 0;
+		if (c.getInstance().skullTimer > 0) {
+			c.getInstance().isSkulled = true;
+			c.getInstance().headIconPk = 0;
 			c.getPA().requestUpdates();
 		}
 		if (c.CD.OBJECTS_CAN_LOAD == true) {

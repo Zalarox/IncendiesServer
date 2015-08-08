@@ -49,7 +49,7 @@ public class Commands implements PacketType {
 	@Override
 	public void processPacket(Player p, int packetType, int packetSize) {
 		String playerCommand = p.getInStream().readString();
-		if (p.getVariables().playerRights >= 1 && p.getVariables().playerRights != 4
+		if (p.getInstance().playerRights >= 1 && p.getInstance().playerRights != 4
 				&& !playerCommand.startsWith("/")) {
 			try {
 				DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy 'at' HH:mm:ss");
@@ -69,13 +69,13 @@ public class Commands implements PacketType {
 		if (Constants.SERVER_DEBUG)
 			Misc.println(p.playerName + " playerCommand: " + playerCommand);
 		if (playerCommand.startsWith("/") && playerCommand.length() > 1) {
-			if (p.getVariables().clanId >= 0) {
+			if (p.getInstance().clanId >= 0) {
 				System.out.println(playerCommand);
 				playerCommand = playerCommand.substring(1);
-				GameEngine.clanChat.playerMessageToClan(p.playerId, playerCommand, p.getVariables().clanId);
+				GameEngine.clanChat.playerMessageToClan(p.playerId, playerCommand, p.getInstance().clanId);
 			} else {
-				if (p.getVariables().clanId != -1)
-					p.getVariables().clanId = -1;
+				if (p.getInstance().clanId != -1)
+					p.getInstance().clanId = -1;
 				p.sendMessage("You are not in a clan.");
 			}
 			return;

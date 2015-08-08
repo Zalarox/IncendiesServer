@@ -48,7 +48,7 @@ public class Enchanting {
 			c.sendMessage("You cannot enchant this item.");
 			return;
 		}
-		if (c.getVariables().playerLevel[c.getVariables().playerMagic] >= ENCHANT[index][10]) {
+		if (c.getInstance().playerLevel[c.getInstance().playerMagic] >= ENCHANT[index][10]) {
 			if (c.getItems().playerHasItem(ENCHANT[index][6], ENCHANT[index][7])
 					&& c.getItems().playerHasItem(ENCHANT[index][8], ENCHANT[index][9])
 					&& c.getItems().playerHasItem(564, 1)) {
@@ -69,8 +69,8 @@ public class Enchanting {
 					c.getItems().deleteItem(ENCHANT[index][2], 1);
 					c.getItems().addItem(ENCHANT[index][5], 1);
 				}
-				c.getPA().addSkillXP(ENCHANT[index][11], c.getVariables().playerMagic);
-				c.getPA().refreshSkill(c.getVariables().playerMagic);
+				c.getPA().addSkillXP(ENCHANT[index][11], c.getInstance().playerMagic);
+				c.getPA().refreshSkill(c.getInstance().playerMagic);
 				c.sendMessage("You enchant the " + gems[index] + " jewellery.");
 			} else {
 				c.sendMessage("You don't have the required runes to cast this spell.");

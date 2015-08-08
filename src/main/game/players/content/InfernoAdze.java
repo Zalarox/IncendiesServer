@@ -25,9 +25,9 @@ public class InfernoAdze {
 	 * @return
 	 */
 	public final boolean getRequirements(Player p) {
-		if (!(p.getVariables().playerLevel[p.playerWoodcutting] >= 61
-				&& p.getVariables().playerLevel[p.playerFiremaking] >= 92
-				&& p.getVariables().playerLevel[p.playerMining] >= 41)) {
+		if (!(p.getInstance().playerLevel[p.playerWoodcutting] >= 61
+				&& p.getInstance().playerLevel[p.playerFiremaking] >= 92
+				&& p.getInstance().playerLevel[p.playerMining] >= 41)) {
 			p.sendMessage("You need at least 92 Firemaking, 61 woodcutting and 41 mining to use this axe.");
 			return false;
 		}

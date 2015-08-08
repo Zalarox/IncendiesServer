@@ -128,7 +128,7 @@ public class TwoIngredients {
 			return false;
 		player.getPA().closeAllWindows();
 
-		if (player.getVariables().playerLevel[player.getVariables().playerCooking] < rightData.getLevel()) {
+		if (player.getInstance().playerLevel[player.getInstance().playerCooking] < rightData.getLevel()) {
 			player.sendMessage("You need a cooking level of " + rightData.getLevel() + " to do this.");
 			return true;
 		}
@@ -149,7 +149,7 @@ public class TwoIngredients {
 		player.getItems().deleteItem(withItem, 1);
 		player.getItems().addItem(result, 1);
 		player.getPA().addSkillXP((int) Math.ceil(rightData.getExperience() * SkillHandler.XPRates.COOKING.getXPRate()),
-				player.getVariables().playerCooking);
+				player.getInstance().playerCooking);
 		/* empty recipients */
 		if (rightData.getEmptyOne() != 0 && rightData == firstIngredient)
 			player.getItems().addItem(rightData.getEmptyOne(), 1);

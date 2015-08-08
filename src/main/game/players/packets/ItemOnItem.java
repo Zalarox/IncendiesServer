@@ -27,15 +27,15 @@ public class ItemOnItem implements PacketType {
 	public void processPacket(Player player, int packetType, int packetSize) {
 		int itemFirstClickSlot = player.getInStream().readUnsignedWord();
 		int itemSecondClickSlot = player.getInStream().readUnsignedWordA();
-		int firstItem = player.getVariables().playerItems[itemFirstClickSlot] - 1;
-		int secondItem = player.getVariables().playerItems[itemSecondClickSlot] - 1;
-		final int useWith = player.getVariables().playerItems[itemFirstClickSlot] - 1;
-		final int itemUsed = player.getVariables().playerItems[itemSecondClickSlot] - 1;
-		Item firstClickItem = new Item(firstItem, player.getVariables().playerItemsN[itemFirstClickSlot]);
-		Item secondClickItem = new Item(secondItem, player.getVariables().playerItemsN[itemSecondClickSlot]);
-		if (player.getVariables().teleTimer > 0)
+		int firstItem = player.getInstance().playerItems[itemFirstClickSlot] - 1;
+		int secondItem = player.getInstance().playerItems[itemSecondClickSlot] - 1;
+		final int useWith = player.getInstance().playerItems[itemFirstClickSlot] - 1;
+		final int itemUsed = player.getInstance().playerItems[itemSecondClickSlot] - 1;
+		Item firstClickItem = new Item(firstItem, player.getInstance().playerItemsN[itemFirstClickSlot]);
+		Item secondClickItem = new Item(secondItem, player.getInstance().playerItemsN[itemSecondClickSlot]);
+		if (player.getInstance().teleTimer > 0)
 			return;
-		if (player.getVariables().resting) {
+		if (player.getInstance().resting) {
 			player.getPA().resetRest();
 		}
 		if (Herblore.mixPotion(itemUsed, useWith)) {

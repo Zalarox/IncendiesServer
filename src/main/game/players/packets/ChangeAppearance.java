@@ -33,7 +33,7 @@ public class ChangeAppearance implements PacketType {
 	@Override
 	public void processPacket(final Player client, final int packetType, final int packetSize) {
 		final int gender = client.getInStream().readSignedByte();
-		if (client.getVariables().teleTimer > 0) {
+		if (client.getInstance().teleTimer > 0) {
 			return;
 		}
 		if (gender != 0 && gender != 1)
@@ -59,29 +59,29 @@ public class ChangeAppearance implements PacketType {
 			colors[i] = value;
 		}
 
-		if (client.getVariables().canChangeAppearance) {
-			client.getVariables().playerAppearance[0] = gender; // gender
-			client.getVariables().playerAppearance[1] = apperances[0]; // head
-			client.getVariables().playerAppearance[2] = apperances[2]; // torso
-			client.getVariables().playerAppearance[3] = apperances[3]; // arms
-			client.getVariables().playerAppearance[4] = apperances[4]; // hands
-			client.getVariables().playerAppearance[5] = apperances[5]; // legs
-			client.getVariables().playerAppearance[6] = apperances[6]; // feet
-			client.getVariables().playerAppearance[7] = apperances[1]; // beard
-			client.getVariables().playerAppearance[8] = colors[0]; // hair
+		if (client.getInstance().canChangeAppearance) {
+			client.getInstance().playerAppearance[0] = gender; // gender
+			client.getInstance().playerAppearance[1] = apperances[0]; // head
+			client.getInstance().playerAppearance[2] = apperances[2]; // torso
+			client.getInstance().playerAppearance[3] = apperances[3]; // arms
+			client.getInstance().playerAppearance[4] = apperances[4]; // hands
+			client.getInstance().playerAppearance[5] = apperances[5]; // legs
+			client.getInstance().playerAppearance[6] = apperances[6]; // feet
+			client.getInstance().playerAppearance[7] = apperances[1]; // beard
+			client.getInstance().playerAppearance[8] = colors[0]; // hair
 																	// colour
-			client.getVariables().playerAppearance[9] = colors[1]; // torso
+			client.getInstance().playerAppearance[9] = colors[1]; // torso
 																	// colour
-			client.getVariables().playerAppearance[10] = colors[2]; // legs
+			client.getInstance().playerAppearance[10] = colors[2]; // legs
 																	// colour
-			client.getVariables().playerAppearance[11] = colors[3]; // feet
+			client.getInstance().playerAppearance[11] = colors[3]; // feet
 																	// colour
-			client.getVariables().playerAppearance[12] = colors[4]; // skin
+			client.getInstance().playerAppearance[12] = colors[4]; // skin
 																	// colour
 
 			client.getPA().removeAllWindows();
 			client.getPA().requestUpdates();
-			client.getVariables().canChangeAppearance = false;
+			client.getInstance().canChangeAppearance = false;
 		}
 	}
 

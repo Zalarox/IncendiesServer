@@ -21,13 +21,13 @@ public class MagicOnFloorItems implements PacketType {
 		int itemId = c.getInStream().readUnsignedWord();
 		final int itemX = c.getInStream().readSignedWordBigEndian();
 		int spellId = c.getInStream().readUnsignedWordA();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		if (!ItemHandler.itemExists(itemId, itemX, itemY)) {
 			c.stopMovement();
 			return;
 		}
-		c.getVariables().usingMagic = true;
+		c.getInstance().usingMagic = true;
 		if (!c.getCombat().checkMagicReqs(51)) {
 			c.stopMovement();
 			return;
@@ -36,20 +36,20 @@ public class MagicOnFloorItems implements PacketType {
 		if (c.goodDistance(c.getX(), c.getY(), itemX, itemY, 12)) {
 			int offY = (c.getX() - itemX) * -1;
 			int offX = (c.getY() - itemY) * -1;
-			c.getVariables().teleGrabX = itemX;
-			c.getVariables().teleGrabY = itemY;
-			c.getVariables().teleGrabItem = itemId;
+			c.getInstance().teleGrabX = itemX;
+			c.getInstance().teleGrabY = itemY;
+			c.getInstance().teleGrabItem = itemId;
 			c.turnPlayerTo(itemX, itemY);
-			c.getVariables().teleGrabDelay = System.currentTimeMillis();
-			c.getVariables();
+			c.getInstance().teleGrabDelay = System.currentTimeMillis();
+			c.getInstance();
 			c.startAnimation(Player.MAGIC_SPELLS[51][2]);
-			c.getVariables();
+			c.getInstance();
 			c.gfx100(Player.MAGIC_SPELLS[51][3]);
 			c.getPA().createPlayersStillGfx(144, itemX, itemY, 0, 72);
-			c.getVariables();
+			c.getInstance();
 			c.getPA().createPlayersProjectile(c.getX(), c.getY(), offX, offY, 50, 70, Player.MAGIC_SPELLS[51][4], 50, 10, 0,
 					50);
-			c.getVariables();
+			c.getInstance();
 			c.getPA().addSkillXP(Player.MAGIC_SPELLS[51][7], 6);
 			c.getPA().refreshSkill(6);
 			c.stopMovement();
@@ -62,40 +62,40 @@ public class MagicOnFloorItems implements PacketType {
 				&& ItemLoader.isStackable(itemId))
 				|| ((c.getItems().freeSlots() > 0) && !ItemLoader.isStackable(itemId))) {
 			if (c.goodDistance(c.getX(), c.getY(), itemX, itemY, 12)) {
-				c.getVariables().walkingToItem = true;
+				c.getInstance().walkingToItem = true;
 				int offY = (c.getX() - itemX) * -1;
 				int offX = (c.getY() - itemY) * -1;
-				c.getVariables().teleGrabX = itemX;
-				c.getVariables().teleGrabY = itemY;
-				c.getVariables().teleGrabItem = itemId;
+				c.getInstance().teleGrabX = itemX;
+				c.getInstance().teleGrabY = itemY;
+				c.getInstance().teleGrabItem = itemId;
 				c.turnPlayerTo(itemX, itemY);
-				c.getVariables().teleGrabDelay = System.currentTimeMillis();
-				c.getVariables();
+				c.getInstance().teleGrabDelay = System.currentTimeMillis();
+				c.getInstance();
 				c.startAnimation(Player.MAGIC_SPELLS[51][2]);
-				c.getVariables();
+				c.getInstance();
 				c.gfx100(Player.MAGIC_SPELLS[51][3]);
 				c.getPA().createPlayersStillGfx(144, itemX, itemY, 0, 72);
-				c.getVariables();
+				c.getInstance();
 				c.getPA().createPlayersProjectile(c.getX(), c.getY(), offX, offY, 50, 70, Player.MAGIC_SPELLS[51][4], 50, 10,
 						0, 50);
-				c.getVariables();
+				c.getInstance();
 				c.getPA().addSkillXP(Player.MAGIC_SPELLS[51][7], 6);
 				c.getPA().refreshSkill(6);
 				c.stopMovement();
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if (!c.getVariables().walkingToItem)
+						if (!c.getInstance().walkingToItem)
 							container.stop();
-						if (System.currentTimeMillis() - c.getVariables().teleGrabDelay > 1550
-								&& c.getVariables().usingMagic) {
-							if (ItemHandler.itemExists(c.getVariables().teleGrabItem, c.getVariables().teleGrabX,
-									c.getVariables().teleGrabY)
+						if (System.currentTimeMillis() - c.getInstance().teleGrabDelay > 1550
+								&& c.getInstance().usingMagic) {
+							if (ItemHandler.itemExists(c.getInstance().teleGrabItem, c.getInstance().teleGrabX,
+									c.getInstance().teleGrabY)
 									&& c.goodDistance(c.getX(), c.getY(), itemX, itemY, 12)) {
-								ItemHandler.removeGroundItem(c, c.getVariables().teleGrabItem,
-										c.getVariables().teleGrabX, c.getVariables().teleGrabY, true,
-										Region.getRegion(c.getVariables().teleGrabX, c.getVariables().teleGrabY));
-								c.getVariables().usingMagic = false;
+								ItemHandler.removeGroundItem(c, c.getInstance().teleGrabItem,
+										c.getInstance().teleGrabX, c.getInstance().teleGrabY, true,
+										Region.getRegion(c.getInstance().teleGrabX, c.getInstance().teleGrabY));
+								c.getInstance().usingMagic = false;
 								container.stop();
 							}
 						}
@@ -103,7 +103,7 @@ public class MagicOnFloorItems implements PacketType {
 
 					@Override
 					public void stop() {
-						c.getVariables().walkingToItem = false;
+						c.getInstance().walkingToItem = false;
 					}
 				}, 1);
 			}

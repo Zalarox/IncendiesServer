@@ -28,11 +28,11 @@ public class Herblore {
 			{ 139, 9594, 15329, 94, 270 }, };
 
 	public static void setUpUnfinished(Player c, int useItem, int otherItem) {
-		c.getVariables().secondHerb = false;
+		c.getInstance().secondHerb = false;
 		for (int i = 0; i < ITEM_ON_VIAL.length; i++) {
 			if ((useItem == 227 && otherItem == ITEM_ON_VIAL[i][0])
 					|| (useItem == ITEM_ON_VIAL[i][0] && otherItem == 227)) {
-				if (c.getVariables().playerLevel[c.playerHerblore] < ITEM_ON_VIAL[i][2]) {
+				if (c.getInstance().playerLevel[c.playerHerblore] < ITEM_ON_VIAL[i][2]) {
 					c.sendMessage("You haven't got high enough Herblore level to make this potion!");
 					c.sendMessage("You need the Herblore level of " + ITEM_ON_VIAL[i][2] + " to make this potion.");
 					c.getDH().sendStatement(
@@ -44,19 +44,19 @@ public class Herblore {
 				c.getPA().sendFrame246(1746, 190, ITEM_ON_VIAL[i][1]);
 				c.getPA().sendFrame126(SkillHandler.getLine() + "" + c.getItems().getItemName(ITEM_ON_VIAL[i][1]) + "",
 						2799);
-				c.getVariables().doingHerb = ITEM_ON_VIAL[i][0];
-				c.getVariables().newHerb = ITEM_ON_VIAL[i][1];
-				c.getVariables().newXp = 0;
+				c.getInstance().doingHerb = ITEM_ON_VIAL[i][0];
+				c.getInstance().newHerb = ITEM_ON_VIAL[i][1];
+				c.getInstance().newXp = 0;
 			}
 		}
 	}
 
 	public static void setUpPotion(Player c, int useItem, int otherItem) {
-		c.getVariables().secondHerb = true;
+		c.getInstance().secondHerb = true;
 		for (int i = 0; i < ITEM_ON_ITEM.length; i++) {
 			if ((useItem == ITEM_ON_ITEM[i][1] && otherItem == ITEM_ON_ITEM[i][0])
 					|| (useItem == ITEM_ON_ITEM[i][0] && otherItem == ITEM_ON_ITEM[i][1])) {
-				if (c.getVariables().playerLevel[c.playerHerblore] < ITEM_ON_ITEM[i][3]) {
+				if (c.getInstance().playerLevel[c.playerHerblore] < ITEM_ON_ITEM[i][3]) {
 					c.sendMessage("You haven't got high enough Herblore level to make this potion!");
 					c.sendMessage("You need the Herblore level of " + ITEM_ON_ITEM[i][3] + " to make this potion.");
 					c.getDH().sendStatement(
@@ -68,10 +68,10 @@ public class Herblore {
 				c.getPA().sendFrame246(1746, 190, ITEM_ON_ITEM[i][2]);
 				c.getPA().sendFrame126(SkillHandler.getLine() + "" + c.getItems().getItemName(ITEM_ON_ITEM[i][2]) + "",
 						2799);
-				c.getVariables().doingHerb = ITEM_ON_ITEM[i][0];
-				c.getVariables().newHerb = ITEM_ON_ITEM[i][2];
-				c.getVariables().newItem = ITEM_ON_ITEM[i][1];
-				c.getVariables().newXp = ITEM_ON_ITEM[i][4];
+				c.getInstance().doingHerb = ITEM_ON_ITEM[i][0];
+				c.getInstance().newHerb = ITEM_ON_ITEM[i][2];
+				c.getInstance().newItem = ITEM_ON_ITEM[i][1];
+				c.getInstance().newXp = ITEM_ON_ITEM[i][4];
 			}
 		}
 	}
@@ -83,7 +83,7 @@ public class Herblore {
 			return;
 		for (int i = 0; i < CLEANING_HERB.length; i++) {
 			if (itemId == CLEANING_HERB[i][0]) {
-				if (c.getVariables().playerLevel[c.playerHerblore] < CLEANING_HERB[i][2]) {
+				if (c.getInstance().playerLevel[c.playerHerblore] < CLEANING_HERB[i][2]) {
 					c.sendMessage("You haven't got high enough Herblore level to clean this herb!");
 					c.sendMessage("You need the Herblore level of " + CLEANING_HERB[i][2] + " to clean this herb.");
 					c.getDH().sendStatement(

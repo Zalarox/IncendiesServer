@@ -21,13 +21,13 @@ public class ClickNPC implements PacketType {
 	@SuppressWarnings("static-access")
 	@Override
 	public void processPacket(final Player c, int packetType, int packetSize) {
-		c.getVariables().npcIndex = 0;
-		c.getVariables().npcClickIndex = 0;
-		c.getVariables().playerIndex = 0;
-		c.getVariables().clickNpcType = 0;
-		if (c.getVariables().teleTimer > 0)
+		c.getInstance().npcIndex = 0;
+		c.getInstance().npcClickIndex = 0;
+		c.getInstance().playerIndex = 0;
+		c.getInstance().clickNpcType = 0;
+		if (c.getInstance().teleTimer > 0)
 			return;
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
 		c.getPA().resetSkills();
@@ -37,81 +37,81 @@ public class ClickNPC implements PacketType {
 		 * Attack npc melee or range
 		 **/
 		case ATTACK_NPC:
-			if (!c.getVariables().mageAllowed) {
-				c.getVariables().mageAllowed = true;
+			if (!c.getInstance().mageAllowed) {
+				c.getInstance().mageAllowed = true;
 				c.sendMessage("I can't reach that.");
 				break;
 			}
-			c.getVariables().npcIndex = c.getInStream().readUnsignedWordA();
-			if (c.getVariables().npcIndex > NPCHandler.npcs.length) {
-				c.getVariables().npcIndex = -1;
+			c.getInstance().npcIndex = c.getInStream().readUnsignedWordA();
+			if (c.getInstance().npcIndex > NPCHandler.npcs.length) {
+				c.getInstance().npcIndex = -1;
 				return;
 			}
-			if (NPCHandler.npcs[c.getVariables().npcIndex] == null) {
-				c.getVariables().npcIndex = 0;
+			if (NPCHandler.npcs[c.getInstance().npcIndex] == null) {
+				c.getInstance().npcIndex = 0;
 				break;
 			}
-			if (NPCHandler.npcs[c.getVariables().npcIndex].MaxHP == 0) {
-				c.getVariables().npcIndex = 0;
+			if (NPCHandler.npcs[c.getInstance().npcIndex].MaxHP == 0) {
+				c.getInstance().npcIndex = 0;
 				break;
 			}
-			if (NPCHandler.npcs[c.getVariables().npcIndex] == null) {
+			if (NPCHandler.npcs[c.getInstance().npcIndex] == null) {
 				break;
 			}
-			if (c.getVariables().autocastId > 0)
-				c.getVariables().autocasting = true;
-			if (!c.getVariables().autocasting && c.getVariables().spellId > 0) {
-				c.getVariables().spellId = 0;
+			if (c.getInstance().autocastId > 0)
+				c.getInstance().autocasting = true;
+			if (!c.getInstance().autocasting && c.getInstance().spellId > 0) {
+				c.getInstance().spellId = 0;
 			}
-			c.faceUpdate(c.getVariables().npcIndex);
-			c.getVariables().usingMagic = false;
+			c.faceUpdate(c.getInstance().npcIndex);
+			c.getInstance().usingMagic = false;
 			boolean usingBow = false;
 			boolean usingOtherRangeWeapons = false;
 			boolean usingArrows = false;
-			boolean usingCross = c.getVariables().playerEquipment[c.getVariables().playerWeapon] == 9185
-					|| c.getVariables().playerEquipment[c.getVariables().playerWeapon] == 18357;
-			if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] >= 4214
-					&& c.getVariables().playerEquipment[c.getVariables().playerWeapon] <= 4223)
+			boolean usingCross = c.getInstance().playerEquipment[c.getInstance().playerWeapon] == 9185
+					|| c.getInstance().playerEquipment[c.getInstance().playerWeapon] == 18357;
+			if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] >= 4214
+					&& c.getInstance().playerEquipment[c.getInstance().playerWeapon] <= 4223)
 				usingBow = true;
-			for (int bowId : c.getVariables().BOWS) {
-				if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == bowId) {
+			for (int bowId : c.getInstance().BOWS) {
+				if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == bowId) {
 					usingBow = true;
-					for (int arrowId : c.getVariables().ARROWS) {
-						if (c.getVariables().playerEquipment[c.getVariables().playerArrows] == arrowId) {
+					for (int arrowId : c.getInstance().ARROWS) {
+						if (c.getInstance().playerEquipment[c.getInstance().playerArrows] == arrowId) {
 							usingArrows = true;
 						}
 					}
 				}
 			}
-			for (int otherRangeId : c.getVariables().OTHER_RANGE_WEAPONS) {
-				if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == otherRangeId) {
+			for (int otherRangeId : c.getInstance().OTHER_RANGE_WEAPONS) {
+				if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == otherRangeId) {
 					usingOtherRangeWeapons = true;
 				}
 			}
-			if ((usingBow || c.getVariables().autocasting)
-					&& c.goodDistance(c.getX(), c.getY(), NPCHandler.npcs[c.getVariables().npcIndex].getX(),
-							NPCHandler.npcs[c.getVariables().npcIndex].getY(), 7)) {
+			if ((usingBow || c.getInstance().autocasting)
+					&& c.goodDistance(c.getX(), c.getY(), NPCHandler.npcs[c.getInstance().npcIndex].getX(),
+							NPCHandler.npcs[c.getInstance().npcIndex].getY(), 7)) {
 				c.stopMovement();
 			}
 
 			if (usingOtherRangeWeapons
-					&& c.goodDistance(c.getX(), c.getY(), NPCHandler.npcs[c.getVariables().npcIndex].getX(),
-							NPCHandler.npcs[c.getVariables().npcIndex].getY(), 4)) {
+					&& c.goodDistance(c.getX(), c.getY(), NPCHandler.npcs[c.getInstance().npcIndex].getX(),
+							NPCHandler.npcs[c.getInstance().npcIndex].getY(), 4)) {
 				c.stopMovement();
 			}
 			if (!usingCross && !usingArrows && usingBow
-					&& c.getVariables().playerEquipment[c.getVariables().playerWeapon] < 4212
-					&& c.getVariables().playerEquipment[c.getVariables().playerWeapon] > 4223 && !usingCross) {
+					&& c.getInstance().playerEquipment[c.getInstance().playerWeapon] < 4212
+					&& c.getInstance().playerEquipment[c.getInstance().playerWeapon] > 4223 && !usingCross) {
 				c.sendMessage("You have run out of arrows!");
 				break;
 			}
-			if (c.getCombat().correctBowAndArrows() < c.getVariables().playerEquipment[c.getVariables().playerArrows]
+			if (c.getCombat().correctBowAndArrows() < c.getInstance().playerEquipment[c.getInstance().playerArrows]
 					&& Constants.CORRECT_ARROWS && usingBow && !c.getCombat().usingCrystalBow() && !usingCross) {
 				c.sendMessage("You can't use "
-						+ c.getItems().getItemName(c.getVariables().playerEquipment[c.getVariables().playerArrows])
+						+ c.getItems().getItemName(c.getInstance().playerEquipment[c.getInstance().playerArrows])
 								.toLowerCase()
 						+ " with a "
-						+ c.getItems().getItemName(c.getVariables().playerEquipment[c.getVariables().playerWeapon])
+						+ c.getItems().getItemName(c.getInstance().playerEquipment[c.getInstance().playerWeapon])
 								.toLowerCase()
 						+ ".");
 				c.stopMovement();
@@ -125,12 +125,12 @@ public class ClickNPC implements PacketType {
 				return;
 			}
 
-			if (c.getVariables().followId > 0) {
+			if (c.getInstance().followId > 0) {
 				Following.resetFollow(c);
 			}
-			if (c.getVariables().attackTimer <= 0) {
-				c.getCombat().attackNpc(c.getVariables().npcIndex);
-				c.getVariables().attackTimer++;
+			if (c.getInstance().attackTimer <= 0) {
+				c.getCombat().attackNpc(c.getInstance().npcIndex);
+				c.getInstance().attackTimer++;
 			}
 
 			break;
@@ -139,44 +139,44 @@ public class ClickNPC implements PacketType {
 		 * Attack npc with magic
 		 **/
 		case MAGE_NPC:
-			if (!c.getVariables().mageAllowed) {
-				c.getVariables().mageAllowed = true;
+			if (!c.getInstance().mageAllowed) {
+				c.getInstance().mageAllowed = true;
 				c.sendMessage("I can't reach that.");
 				break;
 			}
 			// c.usingSpecial = false;
 			// c.getItems().updateSpecialBar();
 
-			c.getVariables().npcIndex = c.getInStream().readSignedWordBigEndianA();
+			c.getInstance().npcIndex = c.getInStream().readSignedWordBigEndianA();
 			int castingSpellId = c.getInStream().readSignedWordA();
-			c.getVariables().usingMagic = false;
-			if (c.getVariables().npcIndex > NPCHandler.npcs.length) {
-				c.getVariables().npcIndex = -1;
+			c.getInstance().usingMagic = false;
+			if (c.getInstance().npcIndex > NPCHandler.npcs.length) {
+				c.getInstance().npcIndex = -1;
 				return;
 			}
-			if (NPCHandler.npcs[c.getVariables().npcIndex] == null) {
+			if (NPCHandler.npcs[c.getInstance().npcIndex] == null) {
 				break;
 			}
 
-			if (NPCHandler.npcs[c.getVariables().npcIndex].MaxHP == 0
-					|| NPCHandler.npcs[c.getVariables().npcIndex].npcType == 944
-					|| NPCHandler.npcs[c.getVariables().npcIndex].npcType == 1266) {
+			if (NPCHandler.npcs[c.getInstance().npcIndex].MaxHP == 0
+					|| NPCHandler.npcs[c.getInstance().npcIndex].npcType == 944
+					|| NPCHandler.npcs[c.getInstance().npcIndex].npcType == 1266) {
 				c.sendMessage("You can't attack this npc.");
 				break;
 			}
 
-			for (int i = 0; i < c.getVariables().MAGIC_SPELLS.length; i++) {
-				if (castingSpellId == c.getVariables().MAGIC_SPELLS[i][0]) {
-					c.getVariables().spellId = i;
-					c.getVariables().usingMagic = true;
+			for (int i = 0; i < c.getInstance().MAGIC_SPELLS.length; i++) {
+				if (castingSpellId == c.getInstance().MAGIC_SPELLS[i][0]) {
+					c.getInstance().spellId = i;
+					c.getInstance().usingMagic = true;
 					break;
 				}
 			}
 			if (castingSpellId == 1171) { // crumble undead
 				for (int npc : Constants.UNDEAD_NPCS) {
-					if (NPCHandler.npcs[c.getVariables().npcIndex].npcType != npc) {
+					if (NPCHandler.npcs[c.getInstance().npcIndex].npcType != npc) {
 						c.sendMessage("You can only attack undead monsters with this spell.");
-						c.getVariables().usingMagic = false;
+						c.getInstance().usingMagic = false;
 						c.stopMovement();
 						break;
 					}
@@ -187,39 +187,39 @@ public class ClickNPC implements PacketType {
 			 * break; }
 			 */
 
-			if (c.getVariables().autocasting)
-				c.getVariables().autocasting = false;
+			if (c.getInstance().autocasting)
+				c.getInstance().autocasting = false;
 
-			if (c.getVariables().usingMagic) {
-				if (c.goodDistance(c.getX(), c.getY(), NPCHandler.npcs[c.getVariables().npcIndex].getX(),
-						NPCHandler.npcs[c.getVariables().npcIndex].getY(), 6)) {
+			if (c.getInstance().usingMagic) {
+				if (c.goodDistance(c.getX(), c.getY(), NPCHandler.npcs[c.getInstance().npcIndex].getX(),
+						NPCHandler.npcs[c.getInstance().npcIndex].getY(), 6)) {
 					c.stopMovement();
 				}
-				if (c.getVariables().attackTimer <= 0) {
-					c.getCombat().attackNpc(c.getVariables().npcIndex);
-					c.getVariables().attackTimer++;
+				if (c.getInstance().attackTimer <= 0) {
+					c.getCombat().attackNpc(c.getInstance().npcIndex);
+					c.getInstance().attackTimer++;
 				}
 			}
 
 			break;
 
 		case FIRST_CLICK:
-			c.getVariables().npcClickIndex = c.inStream.readSignedWordBigEndian();
-			if (c.getVariables().npcIndex > NPCHandler.npcs.length) {
-				c.getVariables().npcIndex = -1;
+			c.getInstance().npcClickIndex = c.inStream.readSignedWordBigEndian();
+			if (c.getInstance().npcIndex > NPCHandler.npcs.length) {
+				c.getInstance().npcIndex = -1;
 				return;
 			}
-			c.getVariables().npcType = NPCHandler.npcs[c.getVariables().npcClickIndex].npcType;
-			if (HunterHandler.tryCatch(c, c.getVariables().npcClickIndex)) {
+			c.getInstance().npcType = NPCHandler.npcs[c.getInstance().npcClickIndex].npcType;
+			if (HunterHandler.tryCatch(c, c.getInstance().npcClickIndex)) {
 				return;
 			}
-			if (c.goodDistance(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-					NPCHandler.npcs[c.getVariables().npcClickIndex].getY(), c.getX(), c.getY(), 2)) {
-				c.turnPlayerTo(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-						NPCHandler.npcs[c.getVariables().npcClickIndex].getY());
-				NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
-				if (NPCHandler.npcs[c.getVariables().npcClickIndex].summonedFor > 0) {
-					if (NPCHandler.npcs[c.getVariables().npcClickIndex].summonedFor == c.getId()) {
+			if (c.goodDistance(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+					NPCHandler.npcs[c.getInstance().npcClickIndex].getY(), c.getX(), c.getY(), 2)) {
+				c.turnPlayerTo(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+						NPCHandler.npcs[c.getInstance().npcClickIndex].getY());
+				NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
+				if (NPCHandler.npcs[c.getInstance().npcClickIndex].summonedFor > 0) {
+					if (NPCHandler.npcs[c.getInstance().npcClickIndex].summonedFor == c.getId()) {
 						FamiliarInteraction.interactWithFamiliar(c);
 						c.resetWalkingQueue();
 						return;
@@ -229,198 +229,198 @@ public class ClickNPC implements PacketType {
 						return;
 					}
 				} else {
-					int npcId = NPCHandler.npcs[c.getVariables().npcClickIndex].npcType;
+					int npcId = NPCHandler.npcs[c.getInstance().npcClickIndex].npcType;
 					if (npcId != 316 || npcId != 326 || npcId != 334) {
-						NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
+						NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
 					}
-					c.getActions().firstClickNpc(c.getVariables().npcType);
+					c.getActions().firstClickNpc(c.getInstance().npcType);
 				}
 			} else {
-				c.getVariables().clickNpcType = 1;
+				c.getInstance().clickNpcType = 1;
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if ((c.getVariables().clickNpcType == 1)
-								&& NPCHandler.npcs[c.getVariables().npcClickIndex] != null) {
+						if ((c.getInstance().clickNpcType == 1)
+								&& NPCHandler.npcs[c.getInstance().npcClickIndex] != null) {
 							if (c.goodDistance(c.getX(), c.getY(),
-									NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-									NPCHandler.npcs[c.getVariables().npcClickIndex].getY(), 1)) {
-								c.turnPlayerTo(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-										NPCHandler.npcs[c.getVariables().npcClickIndex].getY());
-								NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
-								c.getActions().firstClickNpc(c.getVariables().npcType);
+									NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+									NPCHandler.npcs[c.getInstance().npcClickIndex].getY(), 1)) {
+								c.turnPlayerTo(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+										NPCHandler.npcs[c.getInstance().npcClickIndex].getY());
+								NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
+								c.getActions().firstClickNpc(c.getInstance().npcType);
 								container.stop();
 							}
 						}
-						if (c.getVariables().clickNpcType == 0 || c.getVariables().clickNpcType > 1)
+						if (c.getInstance().clickNpcType == 0 || c.getInstance().clickNpcType > 1)
 							container.stop();
 					}
 
 					@Override
 					public void stop() {
-						c.getVariables().clickNpcType = 0;
+						c.getInstance().clickNpcType = 0;
 					}
 				}, 1);
 			}
 			break;
 
 		case SECOND_CLICK:
-			c.getVariables().npcClickIndex = c.inStream.readUnsignedWordBigEndianA();
-			if (c.getVariables().npcIndex > NPCHandler.npcs.length) {
-				c.getVariables().npcIndex = -1;
+			c.getInstance().npcClickIndex = c.inStream.readUnsignedWordBigEndianA();
+			if (c.getInstance().npcIndex > NPCHandler.npcs.length) {
+				c.getInstance().npcIndex = -1;
 				return;
 			}
-			c.getVariables().npcType = NPCHandler.npcs[c.getVariables().npcClickIndex].npcType;
-			if (c.goodDistance(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-					NPCHandler.npcs[c.getVariables().npcClickIndex].getY(), c.getX(), c.getY(), 2)) {
-				c.turnPlayerTo(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-						NPCHandler.npcs[c.getVariables().npcClickIndex].getY());
-				NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
-				if (NPCHandler.npcs[c.getVariables().npcClickIndex].summonedFor > 0) {
-					if (NPCHandler.npcs[c.getVariables().npcClickIndex].summonedFor == c.getId()) {
+			c.getInstance().npcType = NPCHandler.npcs[c.getInstance().npcClickIndex].npcType;
+			if (c.goodDistance(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+					NPCHandler.npcs[c.getInstance().npcClickIndex].getY(), c.getX(), c.getY(), 2)) {
+				c.turnPlayerTo(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+						NPCHandler.npcs[c.getInstance().npcClickIndex].getY());
+				NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
+				if (NPCHandler.npcs[c.getInstance().npcClickIndex].summonedFor > 0) {
+					if (NPCHandler.npcs[c.getInstance().npcClickIndex].summonedFor == c.getId()) {
 						c.getSummoning().openBoB();
 						c.resetWalkingQueue();
 						return;
-					} else if (NPCHandler.npcs[c.getVariables().npcClickIndex].summonedFor != -1) {
+					} else if (NPCHandler.npcs[c.getInstance().npcClickIndex].summonedFor != -1) {
 						c.sendMessage("This is not your familiar!");
 						c.resetWalkingQueue();
 						return;
 					}
 				} else {
-					int npcId = NPCHandler.npcs[c.getVariables().npcClickIndex].npcType;
+					int npcId = NPCHandler.npcs[c.getInstance().npcClickIndex].npcType;
 					if (npcId != 316 || npcId != 326 || npcId != 334) {
-						NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
+						NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
 					}
-					c.getActions().secondClickNpc(c.getVariables().npcType);
+					c.getActions().secondClickNpc(c.getInstance().npcType);
 				}
 			} else {
-				c.getVariables().clickNpcType = 2;
+				c.getInstance().clickNpcType = 2;
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if ((c.getVariables().clickNpcType == 2)
-								&& NPCHandler.npcs[c.getVariables().npcClickIndex] != null) {
+						if ((c.getInstance().clickNpcType == 2)
+								&& NPCHandler.npcs[c.getInstance().npcClickIndex] != null) {
 							if (c.goodDistance(c.getX(), c.getY(),
-									NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-									NPCHandler.npcs[c.getVariables().npcClickIndex].getY(), 1)) {
-								c.turnPlayerTo(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-										NPCHandler.npcs[c.getVariables().npcClickIndex].getY());
-								NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
-								c.getActions().secondClickNpc(c.getVariables().npcType);
+									NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+									NPCHandler.npcs[c.getInstance().npcClickIndex].getY(), 1)) {
+								c.turnPlayerTo(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+										NPCHandler.npcs[c.getInstance().npcClickIndex].getY());
+								NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
+								c.getActions().secondClickNpc(c.getInstance().npcType);
 								container.stop();
 							}
 						}
-						if (c.getVariables().clickNpcType < 2 || c.getVariables().clickNpcType > 2)
+						if (c.getInstance().clickNpcType < 2 || c.getInstance().clickNpcType > 2)
 							container.stop();
 					}
 
 					@Override
 					public void stop() {
-						c.getVariables().clickNpcType = 0;
+						c.getInstance().clickNpcType = 0;
 					}
 				}, 1);
 			}
 			break;
 
 		case THIRD_CLICK:
-			c.getVariables().npcClickIndex = c.inStream.readSignedWord();
-			if (c.getVariables().npcIndex > NPCHandler.npcs.length) {
-				c.getVariables().npcIndex = -1;
+			c.getInstance().npcClickIndex = c.inStream.readSignedWord();
+			if (c.getInstance().npcIndex > NPCHandler.npcs.length) {
+				c.getInstance().npcIndex = -1;
 				return;
 			}
-			c.getVariables().npcType = NPCHandler.npcs[c.getVariables().npcClickIndex].npcType;
-			if (c.goodDistance(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-					NPCHandler.npcs[c.getVariables().npcClickIndex].getY(), c.getX(), c.getY(), 2)) {
-				c.turnPlayerTo(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-						NPCHandler.npcs[c.getVariables().npcClickIndex].getY());
-				NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
-				if (NPCHandler.npcs[c.getVariables().npcClickIndex].summonedFor > 0) {
-					if (NPCHandler.npcs[c.getVariables().npcClickIndex].summonedFor == c.getId()) {
+			c.getInstance().npcType = NPCHandler.npcs[c.getInstance().npcClickIndex].npcType;
+			if (c.goodDistance(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+					NPCHandler.npcs[c.getInstance().npcClickIndex].getY(), c.getX(), c.getY(), 2)) {
+				c.turnPlayerTo(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+						NPCHandler.npcs[c.getInstance().npcClickIndex].getY());
+				NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
+				if (NPCHandler.npcs[c.getInstance().npcClickIndex].summonedFor > 0) {
+					if (NPCHandler.npcs[c.getInstance().npcClickIndex].summonedFor == c.getId()) {
 						c.getSummoning().openBoB();
 						c.resetWalkingQueue();
 						return;
-					} else if (NPCHandler.npcs[c.getVariables().npcClickIndex].summonedFor != -1) {
+					} else if (NPCHandler.npcs[c.getInstance().npcClickIndex].summonedFor != -1) {
 						c.sendMessage("This is not your familiar!");
 						c.resetWalkingQueue();
 						return;
 					}
 				} else {
-					int npcId = NPCHandler.npcs[c.getVariables().npcClickIndex].npcType;
+					int npcId = NPCHandler.npcs[c.getInstance().npcClickIndex].npcType;
 					if (npcId != 316 || npcId != 326 || npcId != 334) {
-						NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
+						NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
 					}
-					c.getActions().thirdClickNpc(c.getVariables().npcType);
+					c.getActions().thirdClickNpc(c.getInstance().npcType);
 				}
 			} else {
-				c.getVariables().clickNpcType = 3;
+				c.getInstance().clickNpcType = 3;
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if ((c.getVariables().clickNpcType == 3)
-								&& NPCHandler.npcs[c.getVariables().npcClickIndex] != null) {
+						if ((c.getInstance().clickNpcType == 3)
+								&& NPCHandler.npcs[c.getInstance().npcClickIndex] != null) {
 							if (c.goodDistance(c.getX(), c.getY(),
-									NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-									NPCHandler.npcs[c.getVariables().npcClickIndex].getY(), 1)) {
-								c.turnPlayerTo(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-										NPCHandler.npcs[c.getVariables().npcClickIndex].getY());
-								NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
-								c.getActions().thirdClickNpc(c.getVariables().npcType);
+									NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+									NPCHandler.npcs[c.getInstance().npcClickIndex].getY(), 1)) {
+								c.turnPlayerTo(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+										NPCHandler.npcs[c.getInstance().npcClickIndex].getY());
+								NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
+								c.getActions().thirdClickNpc(c.getInstance().npcType);
 								container.stop();
 							}
 						}
-						if (c.getVariables().clickNpcType < 3 || c.getVariables().clickNpcType > 3)
+						if (c.getInstance().clickNpcType < 3 || c.getInstance().clickNpcType > 3)
 							container.stop();
 					}
 
 					@Override
 					public void stop() {
-						c.getVariables().clickNpcType = 0;
+						c.getInstance().clickNpcType = 0;
 					}
 				}, 1);
 			}
 			break;
 
 		case FOURTH_CLICK:
-			c.getVariables().npcClickIndex = c.inStream.readSignedWordBigEndian();
-			if (c.getVariables().npcIndex > NPCHandler.npcs.length) {
-				c.getVariables().npcIndex = -1;
+			c.getInstance().npcClickIndex = c.inStream.readSignedWordBigEndian();
+			if (c.getInstance().npcIndex > NPCHandler.npcs.length) {
+				c.getInstance().npcIndex = -1;
 				return;
 			}
-			c.getVariables().npcType = NPCHandler.npcs[c.getVariables().npcClickIndex].npcType;
-			if (c.goodDistance(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-					NPCHandler.npcs[c.getVariables().npcClickIndex].getY(), c.getX(), c.getY(), 2)) {
-				c.turnPlayerTo(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-						NPCHandler.npcs[c.getVariables().npcClickIndex].getY());
-				NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
-				int npcId = NPCHandler.npcs[c.getVariables().npcClickIndex].npcType;
+			c.getInstance().npcType = NPCHandler.npcs[c.getInstance().npcClickIndex].npcType;
+			if (c.goodDistance(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+					NPCHandler.npcs[c.getInstance().npcClickIndex].getY(), c.getX(), c.getY(), 2)) {
+				c.turnPlayerTo(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+						NPCHandler.npcs[c.getInstance().npcClickIndex].getY());
+				NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
+				int npcId = NPCHandler.npcs[c.getInstance().npcClickIndex].npcType;
 				if (npcId != 316 || npcId != 326 || npcId != 334) {
-					NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
+					NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
 				}
-				c.getActions().fourthClickNpc(c.getVariables().npcType);
+				c.getActions().fourthClickNpc(c.getInstance().npcType);
 			} else {
-				c.getVariables().clickNpcType = 4;
+				c.getInstance().clickNpcType = 4;
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if ((c.getVariables().clickNpcType == 4)
-								&& NPCHandler.npcs[c.getVariables().npcClickIndex] != null) {
+						if ((c.getInstance().clickNpcType == 4)
+								&& NPCHandler.npcs[c.getInstance().npcClickIndex] != null) {
 							if (c.goodDistance(c.getX(), c.getY(),
-									NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-									NPCHandler.npcs[c.getVariables().npcClickIndex].getY(), 1)) {
-								c.turnPlayerTo(NPCHandler.npcs[c.getVariables().npcClickIndex].getX(),
-										NPCHandler.npcs[c.getVariables().npcClickIndex].getY());
-								NPCHandler.npcs[c.getVariables().npcClickIndex].facePlayer(c.playerId);
-								c.getActions().fourthClickNpc(c.getVariables().npcType);
+									NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+									NPCHandler.npcs[c.getInstance().npcClickIndex].getY(), 1)) {
+								c.turnPlayerTo(NPCHandler.npcs[c.getInstance().npcClickIndex].getX(),
+										NPCHandler.npcs[c.getInstance().npcClickIndex].getY());
+								NPCHandler.npcs[c.getInstance().npcClickIndex].facePlayer(c.playerId);
+								c.getActions().fourthClickNpc(c.getInstance().npcType);
 								container.stop();
 							}
 						}
-						if (c.getVariables().clickNpcType < 4)
+						if (c.getInstance().clickNpcType < 4)
 							container.stop();
 					}
 
 					@Override
 					public void stop() {
-						c.getVariables().clickNpcType = 0;
+						c.getInstance().clickNpcType = 0;
 					}
 				}, 1);
 			}

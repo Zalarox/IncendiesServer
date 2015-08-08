@@ -17,7 +17,7 @@ public class ChallengePlayer implements PacketType {
 		switch (packetType) {
 		case 128:
 			int answerPlayer = c.getInStream().readUnsignedWord();
-			if (c.getVariables().teleTimer > 0) {
+			if (c.getInstance().teleTimer > 0) {
 				return;
 			}
 			if (answerPlayer > PlayerHandler.players.length) {

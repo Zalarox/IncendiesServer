@@ -33,7 +33,7 @@ public class NormalPlayer extends Commands {
 	 * @author Branon McClellan (KeepBotting)
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
-		if (c.getVariables().playerRights >= 0) {
+		if (c.getInstance().playerRights >= 0) {
 			// Clan chat commands
 			if (playerCommand.startsWith("[NOT]")) {
 				playerCommand = playerCommand.substring(5);
@@ -113,8 +113,8 @@ public class NormalPlayer extends Commands {
 			 * Reset their kill/death ratio.
 			 */
 			if (playerCommand.equalsIgnoreCase("resetkdr")) {
-				c.getVariables().KC = 0;
-				c.getVariables().DC = 0;
+				c.getInstance().KC = 0;
+				c.getInstance().DC = 0;
 			}
 
 			/**

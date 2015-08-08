@@ -19,11 +19,11 @@ public class ItemClick2 implements PacketType {
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
 		int itemId = c.getInStream().readSignedWordA();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		if (!c.getItems().playerHasItem(itemId, 1))
 			return;
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
 		if (HunterLooting.giveLoot(c, itemId, false)) {
@@ -60,7 +60,7 @@ public class ItemClick2 implements PacketType {
 			main.game.players.content.skills.dungeoneering.Items.teleport(c, false);
 			break;
 		default:
-			if (c.getVariables().playerRights == 3)
+			if (c.getInstance().playerRights == 3)
 				Misc.println(c.playerName + " - Item2ndOption: " + itemId);
 			break;
 		}

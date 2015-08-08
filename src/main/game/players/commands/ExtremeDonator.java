@@ -12,9 +12,9 @@ public class ExtremeDonator extends Commands {
 	 * @param playerCommand
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
-		if (c.getVariables().playerRights >= 2
-				&& !(c.getVariables().playerRights == 4 || c.getVariables().playerRights == 5)
-				&& c.getVariables().playerRights <= 6) {
+		if (c.getInstance().playerRights >= 2
+				&& !(c.getInstance().playerRights == 4 || c.getInstance().playerRights == 5)
+				&& c.getInstance().playerRights <= 6) {
 
 		}
 	}

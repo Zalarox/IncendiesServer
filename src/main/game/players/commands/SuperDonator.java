@@ -11,8 +11,8 @@ public class SuperDonator {
 	 * @param playerCommand
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
-		if (c.getVariables().playerRights >= 2 && c.getVariables().playerRights != 4
-				&& c.getVariables().playerRights <= 6) {
+		if (c.getInstance().playerRights >= 2 && c.getInstance().playerRights != 4
+				&& c.getInstance().playerRights <= 6) {
 
 		}
 	}

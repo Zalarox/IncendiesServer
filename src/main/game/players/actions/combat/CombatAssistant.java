@@ -207,7 +207,7 @@ public class CombatAssistant {
 				c.sendMessage("This monster is already in combat.");
 				return;
 			}
-			if ((c.underAttackBy > 0 || c.underAttackBy2 > 0) && c.underAttackBy2 != i && !c.getVariables().inMulti()) {
+			if ((c.underAttackBy > 0 || c.underAttackBy2 > 0) && c.underAttackBy2 != i && !c.getInstance().inMulti()) {
 				resetPlayerAttack();
 				c.sendMessage("I am already under attack.");
 				return;
@@ -224,7 +224,7 @@ public class CombatAssistant {
 
 			if (SummoningData.isSummonNpc(NPCHandler.npcs[i].npcType)) {
 				Player OtherPlayer = PlayerHandler.players[NPCHandler.npcs[i].spawnedBy];
-				if (!c.getVariables().inWild() || !OtherPlayer.getVariables().inWild()) {
+				if (!c.getInstance().inWild() || !OtherPlayer.getInstance().inWild()) {
 					resetPlayerAttack();
 					c.sendMessage("This monster is not in the wilderness.");
 					return;
@@ -233,7 +233,7 @@ public class CombatAssistant {
 
 			if (SummoningData.isSummonNpc(NPCHandler.npcs[i].npcType)) {
 				Player OtherPlayer2 = PlayerHandler.players[NPCHandler.npcs[i].spawnedBy];
-				if (!c.getVariables().inMulti() || !OtherPlayer2.getVariables().inMulti()) {
+				if (!c.getInstance().inMulti() || !OtherPlayer2.getInstance().inMulti()) {
 					resetPlayerAttack();
 					c.sendMessage("This monster is not in multi.");
 					return;
@@ -734,10 +734,10 @@ public class CombatAssistant {
 					case 12911:
 					case 12929:
 						int heal = Misc.random(damage / 2);
-						if (c.constitution + heal >= c.maxConstitution) {
-							c.constitution = c.maxConstitution;
+						if (c.lifePoints + heal >= c.maxLifePoints) {
+							c.lifePoints = c.maxLifePoints;
 						} else {
-							c.constitution += heal;
+							c.lifePoints += heal;
 						}
 						c.getPA().refreshSkill(3);
 						break;
@@ -820,9 +820,9 @@ public class CombatAssistant {
 			}
 		}
 		if (damage > 0 && guthansEffect) {
-			c.constitution += damage;
-			if (c.constitution > c.maxConstitution)
-				c.constitution = c.maxConstitution;
+			c.lifePoints += damage;
+			if (c.lifePoints > c.maxLifePoints)
+				c.lifePoints = c.maxLifePoints;
 			c.getPA().refreshSkill(3);
 			NPCHandler.npcs[i].gfx0(398);
 		}
@@ -832,13 +832,13 @@ public class CombatAssistant {
 		switch (c.specEffect) {
 		case 4:
 			if (damage > 0) {
-				if (c.constitution + damage > c.maxConstitution)
-					if (c.constitution > c.maxConstitution)
+				if (c.lifePoints + damage > c.maxLifePoints)
+					if (c.lifePoints > c.maxLifePoints)
 						;
 					else
-						c.constitution = c.maxConstitution;
+						c.lifePoints = c.maxLifePoints;
 				else
-					c.constitution += damage;
+					c.lifePoints += damage;
 			}
 			break;
 		case 9:
@@ -1317,9 +1317,9 @@ public class CombatAssistant {
 	public void appendHit(Player c2, int damage, int mask, int icon, boolean playerHitting) {
 		int soak = 0;
 		boolean maxHit = false;
-		if (c2.getVariables().teleTimer > 0)
+		if (c2.getInstance().teleTimer > 0)
 			return;
-		if (c2.getVariables().CANNOT_BE_ATTACKED) {
+		if (c2.getInstance().CANNOT_BE_ATTACKED) {
 			return;
 		}
 		if (DuelArena.isDueling(c2) && c2.killedDuelOpponent) {
@@ -1342,8 +1342,8 @@ public class CombatAssistant {
 			}
 		}
 		damage -= soak;
-		if (damage > c2.constitution)
-			damage = c2.constitution;
+		if (damage > c2.lifePoints)
+			damage = c2.lifePoints;
 		c2.handleHitMask(damage, mask, icon, soak, maxHit);
 		c2.dealDamage(damage);
 		c2.getPA().refreshSkill(3);
@@ -1352,7 +1352,7 @@ public class CombatAssistant {
 	public void appendHit(NPC n, int damage, int mask, int icon, int damageMask) {
 		n.HP -= damage;
 		boolean maxHit = false;
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		switch (icon) {
 		case 0:
@@ -1388,9 +1388,9 @@ public class CombatAssistant {
 
 	public void appendHit(Player c2, int damage, int mask, int icon, boolean playerHitting, int soak) {
 		boolean maxHit = false;
-		if (c2.getVariables().teleTimer > 0)
+		if (c2.getInstance().teleTimer > 0)
 			return;
-		if (c2.getVariables().CANNOT_BE_ATTACKED) {
+		if (c2.getInstance().CANNOT_BE_ATTACKED) {
 			return;
 		}
 		if (DuelArena.isDueling(c2) && c2.killedDuelOpponent) {
@@ -1409,8 +1409,8 @@ public class CombatAssistant {
 				break;
 			}
 		}
-		if (damage > c2.constitution)
-			damage = c2.constitution;
+		if (damage > c2.lifePoints)
+			damage = c2.lifePoints;
 		if (c.korasiSpec)
 			maxHit = true;
 		c2.handleHitMask(damage, mask, icon, soak, maxHit);
@@ -1428,14 +1428,14 @@ public class CombatAssistant {
 		o.forcedChatUpdateRequired = true;
 		o.updateRequired = true;
 		o.vengOn = false;
-		if ((o.constitution - damage) > 0) {
+		if ((o.lifePoints - damage) > 0) {
 			damage = (int) (damage * 0.75);
-			if (damage > c.constitution)
-				damage = c.constitution;
+			if (damage > c.lifePoints)
+				damage = c.lifePoints;
 			appendHit(c, damage, 0, -1, true);
 			o.setHitUpdateRequired(true);
 			c.setHitUpdateRequired2(true);
-			c.constitution -= damage;
+			c.lifePoints -= damage;
 		}
 		c.updateRequired = true;
 	}
@@ -1467,7 +1467,7 @@ public class CombatAssistant {
 
 	public void playerDelayedHit(int i) {
 		if (PlayerHandler.players[i] != null) {
-			if (PlayerHandler.players[i].isDead || c.isDead || c.constitution <= 0) {
+			if (PlayerHandler.players[i].isDead || c.isDead || c.lifePoints <= 0) {
 				c.playerIndex = 0;
 				return;
 			}
@@ -1550,11 +1550,11 @@ public class CombatAssistant {
 					if (c.lastWeaponUsed == 11235 || c.bowSpecShot == 1)
 						damage2 = damage2 * 60 / 100;
 				}
-				if (PlayerHandler.players[i].constitution - damage < 0) {
-					damage = PlayerHandler.players[i].constitution;
+				if (PlayerHandler.players[i].lifePoints - damage < 0) {
+					damage = PlayerHandler.players[i].lifePoints;
 				}
-				if (PlayerHandler.players[i].constitution - damage - damage2 < 0) {
-					damage2 = PlayerHandler.players[i].constitution - damage;
+				if (PlayerHandler.players[i].lifePoints - damage - damage2 < 0) {
+					damage2 = PlayerHandler.players[i].lifePoints - damage;
 				}
 				if (damage < 0)
 					damage = 0;
@@ -1625,8 +1625,8 @@ public class CombatAssistant {
 					// half
 					damage = damage * 60 / 100;
 				}
-				if (PlayerHandler.players[i].constitution - damage < 0) {
-					damage = PlayerHandler.players[i].constitution;
+				if (PlayerHandler.players[i].lifePoints - damage < 0) {
+					damage = PlayerHandler.players[i].lifePoints;
 				}
 				if (o.vengOn)
 					appendVengeance(i, damage);
@@ -1684,10 +1684,10 @@ public class CombatAssistant {
 					case 12911:
 					case 12929:
 						int heal = damage / 4;
-						if (c.constitution + heal > c.maxConstitution) {
-							c.constitution = c.maxConstitution;
+						if (c.lifePoints + heal > c.maxLifePoints) {
+							c.lifePoints = c.maxLifePoints;
 						} else {
-							c.constitution += heal;
+							c.lifePoints += heal;
 						}
 						break;
 
@@ -1762,7 +1762,7 @@ public class CombatAssistant {
 				PlayerHandler.players[i].updateRequired = true;
 				c.usingMagic = false;
 				c.castingMagic = false;
-				if (o.getVariables().inMulti() && multis()) {
+				if (o.getInstance().inMulti() && multis()) {
 					c.barrageCount = 0;
 					for (int j = 0; j < PlayerHandler.players.length; j++) {
 						if (PlayerHandler.players[j] != null) {
@@ -1835,8 +1835,8 @@ public class CombatAssistant {
 					if (c2.prayerActive[12]) {
 						damage *= (int) (.60);
 					}
-					if (c2.constitution - damage < 0) {
-						damage = c2.constitution;
+					if (c2.lifePoints - damage < 0) {
+						damage = c2.lifePoints;
 					}
 					int soak = c2.getCombat().damageSoaked(damage, "Melee");
 					damage -= soak;
@@ -1895,10 +1895,10 @@ public class CombatAssistant {
 		case 12919: // blood spells
 		case 12929:
 			int heal = damage / 4;
-			if (c.constitution + heal >= c.maxConstitution) {
-				c.constitution = c.maxConstitution;
+			if (c.lifePoints + heal >= c.maxLifePoints) {
+				c.lifePoints = c.maxLifePoints;
 			} else {
-				c.constitution += heal;
+				c.lifePoints += heal;
 			}
 			break;
 		case 12891:
@@ -1916,10 +1916,10 @@ public class CombatAssistant {
 		case 12919: // blood spells
 		case 12929:
 			int heal = damage / 4;
-			if (c.constitution + heal >= c.maxConstitution)
-				c.constitution = c.maxConstitution;
+			if (c.lifePoints + heal >= c.maxLifePoints)
+				c.lifePoints = c.maxLifePoints;
 			else
-				c.constitution += heal;
+				c.lifePoints += heal;
 			break;
 		case 12891:
 		case 12881:
@@ -1971,17 +1971,17 @@ public class CombatAssistant {
 			damage = damage * 60 / 100;
 		}
 		if (damage > 0 && guthansEffect) {
-			c.constitution += damage;
-			if (c.constitution > c.maxConstitution)
-				c.constitution = c.maxConstitution;
+			c.lifePoints += damage;
+			if (c.lifePoints > c.maxLifePoints)
+				c.lifePoints = c.maxLifePoints;
 			o.gfx0(398);
 		}
 		if (c.ssSpec && damageMask == 2) {
 			damage = 5 + Misc.random(11);
 			c.ssSpec = false;
 		}
-		if (PlayerHandler.players[i].constitution - damage < 0) {
-			damage = PlayerHandler.players[i].constitution;
+		if (PlayerHandler.players[i].lifePoints - damage < 0) {
+			damage = PlayerHandler.players[i].lifePoints;
 		}
 		if (o.vengOn && damage > 0)
 			appendVengeance(i, damage);
@@ -2033,20 +2033,20 @@ public class CombatAssistant {
 			break;
 		case 4:
 			if (damage > 0) {
-				if (c.constitution + damage > c.maxConstitution)
-					if (c.constitution > c.maxConstitution)
+				if (c.lifePoints + damage > c.maxLifePoints)
+					if (c.lifePoints > c.maxLifePoints)
 						;
 					else
-						c.constitution = c.maxConstitution;
+						c.lifePoints = c.maxLifePoints;
 				else
-					c.constitution += damage;
+					c.lifePoints += damage;
 				c.getPA().refreshSkill(3);
 			}
 			break;
 		case 9:
 			damage = korasiDamage(o);
-			if (PlayerHandler.players[i].constitution - damage < 0) {
-				damage = PlayerHandler.players[i].constitution;
+			if (PlayerHandler.players[i].lifePoints - damage < 0) {
+				damage = PlayerHandler.players[i].lifePoints;
 			}
 			o.gfx0(1730);
 			break;
@@ -3277,7 +3277,7 @@ public class CombatAssistant {
 		 * if (c.inCwSafe() || PlayerHandler.players[c.playerIndex].inCwSafe())
 		 * { return false; }
 		 */
-		if (PlayerHandler.players[c.playerIndex].getVariables().inDuelArena() && !DuelArena.isDueling(c)
+		if (PlayerHandler.players[c.playerIndex].getInstance().inDuelArena() && !DuelArena.isDueling(c)
 				&& !c.usingMagic) {
 			if (Boundaries.checkBoundaries(Area.ARENAS, c.getX(), c.getY()) || DuelArena.isDueling(c)) {
 				c.sendMessage("You can't challenge inside the arena!");
@@ -3296,13 +3296,13 @@ public class CombatAssistant {
 				return false;
 			}
 		}
-		if (!PlayerHandler.players[c.playerIndex].getVariables().inWild()) {
+		if (!PlayerHandler.players[c.playerIndex].getInstance().inWild()) {
 			c.sendMessage("That player is not in the wilderness.");
 			c.stopMovement();
 			c.getCombat().resetPlayerAttack();
 			return false;
 		}
-		if (!c.getVariables().inWild()) {
+		if (!c.getInstance().inWild()) {
 			c.sendMessage("You are not in the wilderness.");
 			c.stopMovement();
 			c.getCombat().resetPlayerAttack();
@@ -3320,7 +3320,7 @@ public class CombatAssistant {
 		}
 
 		if (Constants.SINGLE_AND_MULTI_ZONES) {
-			if (!PlayerHandler.players[c.playerIndex].getVariables().inMulti()) { // single
+			if (!PlayerHandler.players[c.playerIndex].getInstance().inMulti()) { // single
 				// combat
 				// zones
 				if (PlayerHandler.players[c.playerIndex].underAttackBy != c.playerId
@@ -3350,7 +3350,7 @@ public class CombatAssistant {
 			return false;
 		if (c.inPits && PlayerHandler.players[i].inPits)
 			return true;
-		if (!PlayerHandler.players[i].getVariables().inWild()) {
+		if (!PlayerHandler.players[i].getInstance().inWild()) {
 			return false;
 		}
 		/*
@@ -3366,7 +3366,7 @@ public class CombatAssistant {
 		}
 
 		if (Constants.SINGLE_AND_MULTI_ZONES) {
-			if (!PlayerHandler.players[i].getVariables().inMulti()) { // single
+			if (!PlayerHandler.players[i].getInstance().inMulti()) { // single
 																		// combat
 																		// zones
 				if (PlayerHandler.players[i].underAttackBy != c.playerId
@@ -4570,7 +4570,7 @@ public class CombatAssistant {
 		maxHit += strength * 0.11D;
 		if (c.playerEquipment[c.playerWeapon] == 4718 && c.playerEquipment[c.playerHat] == 4716
 				&& c.playerEquipment[c.playerChest] == 4720 && c.playerEquipment[c.playerLegs] == 4722) {
-			maxHit += (c.maxConstitution - c.constitution) / 20;// multiplied by
+			maxHit += (c.maxLifePoints - c.lifePoints) / 20;// multiplied by
 			// 10 due to
 			// constitution
 		}

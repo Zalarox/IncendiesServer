@@ -30,16 +30,16 @@ public class ClickItem implements PacketType {
 															// readUnsignedWordA();
 		int itemId = c.getInStream().readSignedWordBigEndian(); // us to be
 																// unsigned.
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
 		Following.resetFollow(c);
-		if (itemSlot > c.getVariables().playerItems.length) {
+		if (itemSlot > c.getInstance().playerItems.length) {
 			return;
 		}
-		if (itemId != c.getVariables().playerItems[itemSlot] - 1 || HunterHandler.layTrap(c, itemId)) {
+		if (itemId != c.getInstance().playerItems[itemSlot] - 1 || HunterHandler.layTrap(c, itemId)) {
 			return;
 		}
 		if (HunterLooting.giveLoot(c, itemId, false)) {
@@ -136,8 +136,8 @@ public class ClickItem implements PacketType {
 
 		case 15098:
 		case 15088:
-			if (c.getVariables().diceTimer < 1) {
-				if (c.getVariables().clanId < 0) {
+			if (c.getInstance().diceTimer < 1) {
+				if (c.getInstance().clanId < 0) {
 					c.sendMessage("@red@You must be in a clan chat to use a dice.");
 					return;
 				} else {
@@ -146,10 +146,10 @@ public class ClickItem implements PacketType {
 							.messageClan(
 									"<col=255>" + c.playerName + "</col> <col=255>has rolled a</col> <col=16711680>"
 											+ random + "</col> <col=255>using the percentile dice.</col>",
-									c.getVariables().clanId);
+									c.getInstance().clanId);
 					c.startAnimation(11900);
 					c.gfx0(2075);
-					c.getVariables().diceTimer = 10;
+					c.getInstance().diceTimer = 10;
 				}
 			}
 			break;

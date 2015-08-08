@@ -1336,8 +1336,8 @@ public class Summoning {
 							public void execute(Object... arguments) {
 								if (((Player) arguments[0]).getSummoning().familiarSpecialEnergy >= 15) {
 									GameEngine.npcHandler.startAnimation(8305,
-											((Player) arguments[0]).getVariables().summoningMonsterId);
-									((Player) arguments[0]).getVariables().summoned.gfx0(1410);// rett
+											((Player) arguments[0]).getInstance().summoningMonsterId);
+									((Player) arguments[0]).getInstance().summoned.gfx0(1410);// rett
 																								// gfx
 																								// wolpertinger
 																								// en
@@ -1364,12 +1364,12 @@ public class Summoning {
 									public void execute(Object... arguments) {
 										if (((Player) arguments[0]).getSummoning().familiarSpecialEnergy >= 20) {
 											int heal = 0;
-											heal = ((Player) arguments[0]).getVariables().maxConstitution;
+											heal = ((Player) arguments[0]).getInstance().maxLifePoints;
 											heal *= 0.15;
 											((Player) arguments[0]).addHp(heal);
 											GameEngine.npcHandler.startAnimation(6375,
-													((Player) arguments[0]).getVariables().summoningMonsterId);
-											((Player) arguments[0]).getVariables().summoned.gfx0(1356);// vantar
+													((Player) arguments[0]).getInstance().summoningMonsterId);
+											((Player) arguments[0]).getInstance().summoned.gfx0(1356);// vantar
 																										// retta
 																										// anim
 											((Player) arguments[0]).startAnimation(7660);
@@ -1396,8 +1396,8 @@ public class Summoning {
 												if (((Player) arguments[0])
 														.getSummoning().familiarSpecialEnergy >= 15) {
 													GameEngine.npcHandler.startAnimation(8288,
-															((Player) arguments[0]).getVariables().summoningMonsterId);
-													((Player) arguments[0]).getVariables().summoned.gfx0(1414);// unknown
+															((Player) arguments[0]).getInstance().summoningMonsterId);
+													((Player) arguments[0]).getInstance().summoned.gfx0(1414);// unknown
 																												// wartoise
 																												// gfx
 																												// ulti
@@ -1428,10 +1428,10 @@ public class Summoning {
 																.getSummoning().familiarSpecialEnergy >= 15) {
 															GameEngine.npcHandler.startAnimation(8190,
 																	((Player) arguments[0])
-																			.getVariables().summoningMonsterId);
-															((Player) arguments[0]).getVariables().summoned.gfx0(1449);
+																			.getInstance().summoningMonsterId);
+															((Player) arguments[0]).getInstance().summoned.gfx0(1449);
 															((Player) arguments[0])
-																	.getVariables().usingSummoningSpecial = true;
+																	.getInstance().usingSummoningSpecial = true;
 															((Player) arguments[0]).getSummoning().specialTimer = 5;
 															((Player) arguments[0])
 																	.getSummoning().familiarSpecialEnergy -= 15;
@@ -1454,17 +1454,17 @@ public class Summoning {
 																		.getSummoning().familiarSpecialEnergy >= 15) {
 																	GameEngine.npcHandler.startAnimation(7883,
 																			((Player) arguments[0])
-																					.getVariables().summoningMonsterId);
-																	((Player) arguments[0]).getVariables().summoned
+																					.getInstance().summoningMonsterId);
+																	((Player) arguments[0]).getInstance().summoned
 																			.gfx0(1373);
 																	((Player) arguments[0])
-																			.getVariables().usingSummoningSpecial = true;
+																			.getInstance().usingSummoningSpecial = true;
 																	((Player) arguments[0])
 																			.getSummoning().specialTimer = 5;
 																	((Player) arguments[0])
 																			.getSummoning().familiarSpecialEnergy -= 15;
 																	((Player) arguments[0])
-																			.getVariables().summoned.projectileId = 1376;
+																			.getInstance().summoned.projectileId = 1376;
 																	((Player) arguments[0]).getItems().deleteItem2(
 																			((Player) arguments[0])
 																					.getSummoning().summonedFamiliar.scrollId,
@@ -1486,16 +1486,16 @@ public class Summoning {
 																				.getSummoning().familiarSpecialEnergy >= 20) {
 																			GameEngine.npcHandler.startAnimation(8190,
 																					((Player) arguments[0])
-																							.getVariables().summoningMonsterId);
+																							.getInstance().summoningMonsterId);
 																			((Player) arguments[0])
-																					.getVariables().constitution += 80;
+																					.getInstance().lifePoints += 80;
 																			if (((Player) arguments[0])
-																					.getVariables().maxConstitution
+																					.getInstance().maxLifePoints
 																					+ 80 <= ((Player) arguments[0])
-																							.getVariables().constitution) {
+																							.getInstance().lifePoints) {
 																				((Player) arguments[0])
-																						.getVariables().constitution = ((Player) arguments[0])
-																								.getVariables().maxConstitution
+																						.getInstance().lifePoints = ((Player) arguments[0])
+																								.getInstance().maxLifePoints
 																								+ 80;
 																			}
 																			((Player) arguments[0])
@@ -1533,16 +1533,16 @@ public class Summoning {
 																					GameEngine.npcHandler
 																							.startAnimation(8190,
 																									((Player) arguments[0])
-																											.getVariables().summoningMonsterId);
+																											.getInstance().summoningMonsterId);
 																					((Player) arguments[0])
-																							.getVariables().constitution += 80;
+																							.getInstance().lifePoints += 80;
 																					if (((Player) arguments[0])
-																							.getVariables().maxConstitution
+																							.getInstance().maxLifePoints
 																							+ 80 <= ((Player) arguments[0])
-																									.getVariables().constitution) {
+																									.getInstance().lifePoints) {
 																						((Player) arguments[0])
-																								.getVariables().constitution = ((Player) arguments[0])
-																										.getVariables().maxConstitution
+																								.getInstance().lifePoints = ((Player) arguments[0])
+																										.getInstance().maxLifePoints
 																										+ 80;
 																					}
 																					((Player) arguments[0])
@@ -1583,16 +1583,16 @@ public class Summoning {
 																									.startAnimation(
 																											8190,
 																											((Player) arguments[0])
-																													.getVariables().summoningMonsterId);
+																													.getInstance().summoningMonsterId);
 																							((Player) arguments[0])
-																									.getVariables().constitution += 80;
+																									.getInstance().lifePoints += 80;
 																							if (((Player) arguments[0])
-																									.getVariables().maxConstitution
+																									.getInstance().maxLifePoints
 																									+ 80 <= ((Player) arguments[0])
-																											.getVariables().constitution) {
+																											.getInstance().lifePoints) {
 																								((Player) arguments[0])
-																										.getVariables().constitution = ((Player) arguments[0])
-																												.getVariables().maxConstitution
+																										.getInstance().lifePoints = ((Player) arguments[0])
+																												.getInstance().maxLifePoints
 																												+ 80;
 																							}
 																							((Player) arguments[0])
@@ -1716,7 +1716,7 @@ public class Summoning {
 		 * c.sendMessage("You need to have atleast "+summonMPoints+
 		 * " summoning points!"); return; }
 		 */
-		c.getVariables().summonedCanTeleport = true;
+		c.getInstance().summonedCanTeleport = true;
 		Familiar summonedFamiliar = Familiar.forPouchId(itemId);
 		if (summonedFamiliar != null && this.summonedFamiliar == null) {
 			this.summonedFamiliar = summonedFamiliar;
@@ -1726,24 +1726,24 @@ public class Summoning {
 			c.getPA().sendSummOrbDetails(true, summonedFamiliar.clientTooltip);
 			String familiarName = "" + summonedFamiliar.toString() + "";
 			familiarName = familiarName.replace('_', ' ');
-			c.getVariables().familiarName = familiarName;
+			c.getInstance().familiarName = familiarName;
 			if (!login) {
-				c.getVariables().specRestoreTimer = (((summonedFamiliar.timeLimit * 60) * 1000) / 600);
-				c.getVariables().summoned = GameEngine.npcHandler.summonNPC(c, summonedFamiliar.npcId, c.getX(),
+				c.getInstance().specRestoreTimer = (((summonedFamiliar.timeLimit * 60) * 1000) / 600);
+				c.getInstance().summoned = GameEngine.npcHandler.summonNPC(c, summonedFamiliar.npcId, c.getX(),
 						c.getY() + (summonedFamiliar.large ? 2 : 1), c.heightLevel, 0,
 						SummoningData.getSummonHealth(summonedFamiliar.npcId), 1, 1, 1);
 				if (!canWalk()) {
 					c.sendMessage("Your monster needs more space to be summoned!");
-					c.getVariables().specRestoreTimer = 0;
-					c.getVariables().summoned.isDead = true;
-					c.getVariables().summoned.applyDead = true;
-					c.getVariables().summoned.actionTimer = 0;
-					c.getVariables().summoned.npcType = -1;
-					c.getVariables().summoned.updateRequired = true;
-					c.getVariables().usingSummoningSpecial = false;
+					c.getInstance().specRestoreTimer = 0;
+					c.getInstance().summoned.isDead = true;
+					c.getInstance().summoned.applyDead = true;
+					c.getInstance().summoned.actionTimer = 0;
+					c.getInstance().summoned.npcType = -1;
+					c.getInstance().summoned.updateRequired = true;
+					c.getInstance().usingSummoningSpecial = false;
 					burdenedItems = null;
 					summonedFamiliar = null;
-					c.getVariables().summoned = null;
+					c.getInstance().summoned = null;
 					c.getPA().sendSummOrbDetails(false, "");
 					return;
 				}
@@ -1758,7 +1758,7 @@ public class Summoning {
 			} else {
 				loginCycle = 4;
 			}
-		} else if (this.summonedFamiliar != null && c.getVariables().summoned != null) {
+		} else if (this.summonedFamiliar != null && c.getInstance().summoned != null) {
 			c.sendMessage("You already have a familiar!");
 		}
 	}
@@ -1768,9 +1768,9 @@ public class Summoning {
 	 */
 	public void renewFamiliar() {
 		if (summonedFamiliar != null && this.summonedFamiliar != null) {
-			if (c.getVariables().specRestoreTimer < 300) {
+			if (c.getInstance().specRestoreTimer < 300) {
 				if (c.getItems().playerHasItem(summonedFamiliar.pouchId, 1)) {
-					c.getVariables().specRestoreTimer = (((summonedFamiliar.timeLimit * 60) * 1000) / 600);
+					c.getInstance().specRestoreTimer = (((summonedFamiliar.timeLimit * 60) * 1000) / 600);
 					c.sendMessage("You sacrifice a pouch to renew your familiar's strength.");
 					c.getItems().deleteItem(summonedFamiliar.pouchId, 1);
 				} else {
@@ -1786,42 +1786,42 @@ public class Summoning {
 	 * Dismisses/Destroy's the familiar.
 	 */
 	public void dismissFamiliar(boolean logout) {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
-			c.getVariables().summoned.isDead = true;
-			c.getVariables().summoned.applyDead = true;
-			c.getVariables().summoned.actionTimer = 0;
-			c.getVariables().summoned.npcType = -1;
-			c.getVariables().summoned.updateRequired = true;
-			c.getVariables().usingSummoningSpecial = false;
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
+			c.getInstance().summoned.isDead = true;
+			c.getInstance().summoned.applyDead = true;
+			c.getInstance().summoned.actionTimer = 0;
+			c.getInstance().summoned.npcType = -1;
+			c.getInstance().summoned.updateRequired = true;
+			c.getInstance().usingSummoningSpecial = false;
 			c.setSidebarInterface(15, -1);
 			c.getPA().sendSummOrbDetails(false, "");
 			if (!logout) {
 				for (int i = 0; i < burdenedItems.length; i++) {
-					ItemHandler.createGroundItem(c, burdenedItems[i] - 1, c.getVariables().summoned.absX,
-							c.getVariables().summoned.absY, c.summoned.heightLevel, 1,
-							c.getVariables().summoned.summonedFor);
+					ItemHandler.createGroundItem(c, burdenedItems[i] - 1, c.getInstance().summoned.absX,
+							c.getInstance().summoned.absY, c.summoned.heightLevel, 1,
+							c.getInstance().summoned.summonedFor);
 				}
 				burdenedItems = null;
 				summonedFamiliar = null;
 			}
-			c.getVariables().summoned = null;
+			c.getInstance().summoned = null;
 		}
 	}
 	// 2 dissmiss?
 
 	public void dismissFamiliar() {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
-			c.getVariables().summoned.isDead = true;
-			c.getVariables().summoned.applyDead = true;
-			c.getVariables().summoned.actionTimer = 0;
-			c.getVariables().summoned.npcType = -1;
-			c.getVariables().summoned.updateRequired = true;
-			c.getVariables().usingSummoningSpecial = false;
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
+			c.getInstance().summoned.isDead = true;
+			c.getInstance().summoned.applyDead = true;
+			c.getInstance().summoned.actionTimer = 0;
+			c.getInstance().summoned.npcType = -1;
+			c.getInstance().summoned.updateRequired = true;
+			c.getInstance().usingSummoningSpecial = false;
 			c.setSidebarInterface(15, -1);
 			c.getPA().sendSummOrbDetails(false, "");
 			burdenedItems = null;
 			summonedFamiliar = null;
-			c.getVariables().summoned = null;
+			c.getInstance().summoned = null;
 		}
 	}
 
@@ -1829,9 +1829,9 @@ public class Summoning {
 	 * If player dies, the summoning will dismiss
 	 */
 	public void dismissOnDeath() {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
 			dismissFamiliar();
-			c.getVariables().summoned.npcType = -1;
+			c.getInstance().summoned.npcType = -1;
 		}
 	}
 
@@ -1840,13 +1840,13 @@ public class Summoning {
 	 * them
 	 */
 	public void callOnTeleport() {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
-			c.getVariables().summoned.killerId = 0;
-			c.getVariables().summoned.underAttackBy = 0;
-			c.getVariables().summoned.npcTeleport(0, 0, 0);
-			c.getVariables().summoned.updateRequired = true;
-			c.getVariables().summoned = GameEngine.npcHandler.summonNPC(c, summonedFamiliar.npcId, c.getX(),
-					c.getY() + (summonedFamiliar.large ? 2 : 1), c.heightLevel, 0, c.getVariables().summoned.HP, 1, 1,
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
+			c.getInstance().summoned.killerId = 0;
+			c.getInstance().summoned.underAttackBy = 0;
+			c.getInstance().summoned.npcTeleport(0, 0, 0);
+			c.getInstance().summoned.updateRequired = true;
+			c.getInstance().summoned = GameEngine.npcHandler.summonNPC(c, summonedFamiliar.npcId, c.getX(),
+					c.getY() + (summonedFamiliar.large ? 2 : 1), c.heightLevel, 0, c.getInstance().summoned.HP, 1, 1,
 					1);
 			callFamiliar();
 		} else {
@@ -1855,7 +1855,7 @@ public class Summoning {
 	}
 
 	public boolean canWalk() {
-		int squares = c.getVariables().summoned.getNpcSize() * c.getVariables().summoned.getNpcSize();
+		int squares = c.getInstance().summoned.getNpcSize() * c.getInstance().summoned.getNpcSize();
 		int x = 0;
 		int y = 0;
 		for (int i = 0; i < squares; i++) {
@@ -1867,8 +1867,8 @@ public class Summoning {
 				x++;
 			if (!((Region.getClipping(c.absX + x, c.absY + (summonedFamiliar.large ? 2 : 1) + y, c.heightLevel)
 					& 0x1280180) == 0)) {
-				c.getVariables().summoned.killerId = 0;
-				c.getVariables().summoned.underAttackBy = 0;
+				c.getInstance().summoned.killerId = 0;
+				c.getInstance().summoned.underAttackBy = 0;
 				return false;
 			}
 		}
@@ -1887,28 +1887,28 @@ public class Summoning {
 	 * Calls the familiar to the owner.
 	 */
 	public void callFamiliar() {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
 		} else {
 			c.getPA().sendSummOrbDetails(false, "");
 		}
 
 		if (!canWalk()) {
-			if (!c.getVariables().summoned.canTeleport) {
-				c.getVariables().summoned.isDead = true;
-				c.getVariables().summoned.applyDead = true;
-				c.getVariables().summoned.actionTimer = 0;
-				c.getVariables().summoned.updateRequired = true;
+			if (!c.getInstance().summoned.canTeleport) {
+				c.getInstance().summoned.isDead = true;
+				c.getInstance().summoned.applyDead = true;
+				c.getInstance().summoned.actionTimer = 0;
+				c.getInstance().summoned.updateRequired = true;
 				c.sendMessage("Your monster needs more space to teleport.");
-				c.getVariables().summoned.canTeleport = true;
+				c.getInstance().summoned.canTeleport = true;
 			}
 			return;
 		}
-		c.getVariables().summonedCanTeleport = false;
-		c.getVariables().summoned.killerId = 0;
-		c.getVariables().summoned.underAttackBy = 0;
-		c.getVariables().summoned.npcTeleport(0, 0, 0);
-		c.getVariables().summoned.npcTeleport(c.absX, c.absY + (summonedFamiliar.large ? 2 : 1), c.heightLevel);
-		c.getVariables().summoned.updateRequired = true;
+		c.getInstance().summonedCanTeleport = false;
+		c.getInstance().summoned.killerId = 0;
+		c.getInstance().summoned.underAttackBy = 0;
+		c.getInstance().summoned.npcTeleport(0, 0, 0);
+		c.getInstance().summoned.npcTeleport(c.absX, c.absY + (summonedFamiliar.large ? 2 : 1), c.heightLevel);
+		c.getInstance().summoned.updateRequired = true;
 	}
 
 	/**
@@ -1993,7 +1993,7 @@ public class Summoning {
 	 *            - Item amount
 	 */
 	public void withdrawItem(int id, int amount) {
-		if (c.getVariables().inWild() && c.getVariables().wildLevel <= 30) {
+		if (c.getInstance().inWild() && c.getInstance().wildLevel <= 30) {
 			c.sendMessage("You can't use This option if your below 30 wilderness.");// this
 																					// sends
 																					// a
@@ -2006,7 +2006,7 @@ public class Summoning {
 																					// fix
 			return;
 		}
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
 			if (summonedFamiliar.familiarType == FamiliarType.BOB) {
 				if (amount > 0 && id > 0) {
 					int slot = getSlotForId(id + 2);
@@ -2039,15 +2039,15 @@ public class Summoning {
 	 *            - Item amount
 	 */
 	public void depositItem(int id, int slot, int amount) {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
 			if (summonedFamiliar.familiarType == FamiliarType.BOB) {
-				if (amount > 0 && c.getVariables().playerItems[slot] > 0 && slot >= 0 && slot < 28) {
-					if (!c.getItems().isStackable(c.getVariables().playerItems[slot] - 1)) {
-						if (itemIsAllowed(c.getVariables().playerItems[slot] - 1)) {
+				if (amount > 0 && c.getInstance().playerItems[slot] > 0 && slot >= 0 && slot < 28) {
+					if (!c.getItems().isStackable(c.getInstance().playerItems[slot] - 1)) {
+						if (itemIsAllowed(c.getInstance().playerItems[slot] - 1)) {
 							while (amount > 0 && slot != -1) {
-								if (addItem(c.getVariables().playerItems[slot])) {
-									int tempVar = c.getVariables().playerItems[slot] - 1;
-									c.getItems().deleteItem(c.getVariables().playerItems[slot] - 1, slot, 1);
+								if (addItem(c.getInstance().playerItems[slot])) {
+									int tempVar = c.getInstance().playerItems[slot] - 1;
+									c.getItems().deleteItem(c.getInstance().playerItems[slot] - 1, slot, 1);
 									slot = c.getItems().getItemSlot(tempVar);
 									amount--;
 									c.startAnimation(827);
@@ -2110,7 +2110,7 @@ public class Summoning {
 	 * Opens the beast of burden.
 	 */
 	public void openBoB() {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
 			if (summonedFamiliar.familiarType == FamiliarType.BOB) {
 				shift();
 				if (c.getOutStream() != null && c != null) {
@@ -2130,7 +2130,7 @@ public class Summoning {
 	 * Handles the left click option.
 	 */
 	public void handleLeftClick() {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
 			if (summonedFamiliar.familiarType == FamiliarType.BOB) {
 				for (int i = 0; i < burdenedItems.length; i++) {
 					if (c.getItems().freeSlots() > 0)
@@ -2152,7 +2152,7 @@ public class Summoning {
 	 *            - The correct arguments.
 	 */
 	public void useSpecial(Object... arguments) {
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
 			if (summonedFamiliar.familiarSpecial != null && specialTimer < 1) {
 				if (c.getItems().playerHasItem(summonedFamiliar.scrollId)) {
 					summonedFamiliar.familiarSpecial.execute(arguments);
@@ -2231,58 +2231,58 @@ public class Summoning {
 	 */
 	public void familiarTick() {
 		attacked = false;
-		if (summonedFamiliar != null && c.getVariables().summoned != null) {
-			if (!c.goodDistance(c.getX(), c.getY(), c.getVariables().summoned.getX(), c.getVariables().summoned.getY(),
+		if (summonedFamiliar != null && c.getInstance().summoned != null) {
+			if (!c.goodDistance(c.getX(), c.getY(), c.getInstance().summoned.getX(), c.getInstance().summoned.getY(),
 					8)) {
 				callOnTeleport();
 			}
-			if (!c.goodDistance(c.getX(), c.getY(), c.getVariables().summoned.getX(), c.getVariables().summoned.getY(),
+			if (!c.goodDistance(c.getX(), c.getY(), c.getInstance().summoned.getX(), c.getInstance().summoned.getY(),
 					8)) {
 				c.getSummoning().callFamiliar();
 				return;
 			}
-			if (c.getVariables().playerIndex != 0
-					&& NPCHandler.npcs[c.getVariables().summoningMonsterId].spawnedBy == c.getId()) {
-				NPCHandler.npcs[c.getVariables().summoningMonsterId].isAttackingAPerson = true;
-			} else if (c.getVariables().playerIndex == 0
-					&& NPCHandler.npcs[c.getVariables().summoningMonsterId].spawnedBy == c.getId()) {
-				NPCHandler.npcs[c.getVariables().summoningMonsterId].isAttackingAPerson = false;
+			if (c.getInstance().playerIndex != 0
+					&& NPCHandler.npcs[c.getInstance().summoningMonsterId].spawnedBy == c.getId()) {
+				NPCHandler.npcs[c.getInstance().summoningMonsterId].isAttackingAPerson = true;
+			} else if (c.getInstance().playerIndex == 0
+					&& NPCHandler.npcs[c.getInstance().summoningMonsterId].spawnedBy == c.getId()) {
+				NPCHandler.npcs[c.getInstance().summoningMonsterId].isAttackingAPerson = false;
 			}
-			if (c.getVariables().underAttackBy != 0
-					&& NPCHandler.npcs[c.getVariables().summoningMonsterId].spawnedBy == c.getId()) {
-				NPCHandler.npcs[c.getVariables().summoningMonsterId].isAttackedByPerson = true;
-			} else if (c.getVariables().underAttackBy == 0
-					&& NPCHandler.npcs[c.getVariables().summoningMonsterId].spawnedBy == c.getId()) {
-				NPCHandler.npcs[c.getVariables().summoningMonsterId].isAttackedByPerson = false;
+			if (c.getInstance().underAttackBy != 0
+					&& NPCHandler.npcs[c.getInstance().summoningMonsterId].spawnedBy == c.getId()) {
+				NPCHandler.npcs[c.getInstance().summoningMonsterId].isAttackedByPerson = true;
+			} else if (c.getInstance().underAttackBy == 0
+					&& NPCHandler.npcs[c.getInstance().summoningMonsterId].spawnedBy == c.getId()) {
+				NPCHandler.npcs[c.getInstance().summoningMonsterId].isAttackedByPerson = false;
 			}
-			if (c.getVariables().npcIndex != 0
-					&& !NPCHandler.npcs[c.getVariables().summoningMonsterId].isAttackingAPerson
-					&& NPCHandler.npcs[c.getVariables().summoningMonsterId].spawnedBy == c.getId()) {
-				NPCHandler.npcs[c.getVariables().summoningMonsterId].IsAttackingNPC = true;
-				NPCHandler.npcs[c.getVariables().summoningMonsterId].facePlayer(0);
-			} else if (NPCHandler.npcs[c.getVariables().summoningMonsterId].spawnedBy == c.getId()) {
-				if (NPCHandler.npcs[c.getVariables().summoningMonsterId].IsAttackingNPC == true)
+			if (c.getInstance().npcIndex != 0
+					&& !NPCHandler.npcs[c.getInstance().summoningMonsterId].isAttackingAPerson
+					&& NPCHandler.npcs[c.getInstance().summoningMonsterId].spawnedBy == c.getId()) {
+				NPCHandler.npcs[c.getInstance().summoningMonsterId].IsAttackingNPC = true;
+				NPCHandler.npcs[c.getInstance().summoningMonsterId].facePlayer(0);
+			} else if (NPCHandler.npcs[c.getInstance().summoningMonsterId].spawnedBy == c.getId()) {
+				if (NPCHandler.npcs[c.getInstance().summoningMonsterId].IsAttackingNPC == true)
 					callFamiliar();
-				NPCHandler.npcs[c.getVariables().summoningMonsterId].IsAttackingNPC = false;
+				NPCHandler.npcs[c.getInstance().summoningMonsterId].IsAttackingNPC = false;
 			}
-			if (c.getVariables().summoned.killerId != 0 && c.getVariables().summoned.underAttackBy == 0) {
-				c.getVariables().summoned.killerId = 0;
-				c.getVariables().summoned.underAttackBy = 0;
+			if (c.getInstance().summoned.killerId != 0 && c.getInstance().summoned.underAttackBy == 0) {
+				c.getInstance().summoned.killerId = 0;
+				c.getInstance().summoned.underAttackBy = 0;
 				c.getSummoning().callFamiliar();
 			}
 			if (attacked != true) {
-				if (NPCHandler.npcs[c.getVariables().summoningMonsterId].isAttackedByPerson == true) {
+				if (NPCHandler.npcs[c.getInstance().summoningMonsterId].isAttackedByPerson == true) {
 					attacked = true;
-					Player o = PlayerHandler.players[c.getVariables().underAttackBy];
+					Player o = PlayerHandler.players[c.getInstance().underAttackBy];
 					if (o != null) {
-						if (o.getVariables().inMulti()) {
+						if (o.getInstance().inMulti()) {
 							if (actionTimer == 0) {
-								GameEngine.npcHandler.followPlayer(c.getVariables().summoningMonsterId, o.playerId,
+								GameEngine.npcHandler.followPlayer(c.getInstance().summoningMonsterId, o.playerId,
 										c.playerId);
-								NPCHandler.npcs[c.getVariables().summoningMonsterId].facePlayer(o.playerId);
-								GameEngine.npcHandler.attackPlayer(o, c.getVariables().summoningMonsterId);
-								c.getVariables().summoned.updateRequired = true;
-								NPCHandler.npcs[c.getVariables().summoningMonsterId].index = o.playerId;
+								NPCHandler.npcs[c.getInstance().summoningMonsterId].facePlayer(o.playerId);
+								GameEngine.npcHandler.attackPlayer(o, c.getInstance().summoningMonsterId);
+								c.getInstance().summoned.updateRequired = true;
+								NPCHandler.npcs[c.getInstance().summoningMonsterId].index = o.playerId;
 								actionTimer = 7;
 							} else {
 								actionTimer--;
@@ -2294,18 +2294,18 @@ public class Summoning {
 			}
 
 			if (attacked != true) {
-				if (NPCHandler.npcs[c.getVariables().summoningMonsterId].isAttackingAPerson == true) {
+				if (NPCHandler.npcs[c.getInstance().summoningMonsterId].isAttackingAPerson == true) {
 					attacked = true;
-					Player o = PlayerHandler.players[c.getVariables().playerIndex];
+					Player o = PlayerHandler.players[c.getInstance().playerIndex];
 					if (o != null) {
-						if (o.getVariables().inMulti()) {
+						if (o.getInstance().inMulti()) {
 							if (actionTimer == 0) {
-								GameEngine.npcHandler.followPlayer(c.getVariables().summoningMonsterId, o.playerId,
+								GameEngine.npcHandler.followPlayer(c.getInstance().summoningMonsterId, o.playerId,
 										c.playerId);
-								NPCHandler.npcs[c.getVariables().summoningMonsterId].facePlayer(o.playerId);
-								GameEngine.npcHandler.attackPlayer(o, c.getVariables().summoningMonsterId);
-								c.getVariables().summoned.updateRequired = true;
-								NPCHandler.npcs[c.getVariables().summoningMonsterId].index = o.playerId;
+								NPCHandler.npcs[c.getInstance().summoningMonsterId].facePlayer(o.playerId);
+								GameEngine.npcHandler.attackPlayer(o, c.getInstance().summoningMonsterId);
+								c.getInstance().summoned.updateRequired = true;
+								NPCHandler.npcs[c.getInstance().summoningMonsterId].index = o.playerId;
 								actionTimer = 7;
 							} else {
 								actionTimer--;
@@ -2317,18 +2317,18 @@ public class Summoning {
 			}
 
 			if (attacked != true) {
-				if (NPCHandler.npcs[c.getVariables().summoningMonsterId].IsAttackingNPC == true) {
+				if (NPCHandler.npcs[c.getInstance().summoningMonsterId].IsAttackingNPC == true) {
 					attacked = true;
-					NPC n = NPCHandler.npcs[c.getVariables().npcIndex];
+					NPC n = NPCHandler.npcs[c.getInstance().npcIndex];
 					if (n != null) {
 						// if(n.inMulti()) {
-						NPCHandler.npcs[c.getVariables().summoningMonsterId].IsAttackingNPC = true;
-						NPCHandler.npcs[c.getVariables().npcIndex].IsUnderAttackNpc = true;
-						NPCHandler.npcs[c.getVariables().npcIndex].randomWalk = false;
+						NPCHandler.npcs[c.getInstance().summoningMonsterId].IsAttackingNPC = true;
+						NPCHandler.npcs[c.getInstance().npcIndex].IsUnderAttackNpc = true;
+						NPCHandler.npcs[c.getInstance().npcIndex].randomWalk = false;
 						// GameEngine.npcHandler.attackNPC(c.npcIndex,
 						// c.getVariables().summoningMonsterId, c);
-						GameEngine.npcHandler.NpcVersusNpc(c.getVariables().summoningMonsterId,
-								c.getVariables().npcIndex, c);
+						GameEngine.npcHandler.NpcVersusNpc(c.getInstance().summoningMonsterId,
+								c.getInstance().npcIndex, c);
 						// }
 					} else {
 					}
@@ -2336,27 +2336,27 @@ public class Summoning {
 			}
 			speakTimer++;
 			if (speakTimer == 100) {
-				c.getVariables().summoned.forceChat(summonedFamiliar.speakText);
+				c.getInstance().summoned.forceChat(summonedFamiliar.speakText);
 				speakTimer = 0;
 			}
-			c.getVariables().specRestoreTimer -= 1;
-			int hours = (c.getVariables().specRestoreTimer / 2) / 3600;
-			int minutes = ((c.getVariables().specRestoreTimer / 2) - hours * 3600) / 60;
-			int seconds = ((c.getVariables().specRestoreTimer / 2) - (hours * 3600 + minutes * 60));
+			c.getInstance().specRestoreTimer -= 1;
+			int hours = (c.getInstance().specRestoreTimer / 2) / 3600;
+			int minutes = ((c.getInstance().specRestoreTimer / 2) - hours * 3600) / 60;
+			int seconds = ((c.getInstance().specRestoreTimer / 2) - (hours * 3600 + minutes * 60));
 
 			String timer = String.format("%02d:%02d", minutes, seconds);
 			c.getPA().sendString(timer, 17021);
-			if (c.getVariables().specRestoreTimer == 100) {
+			if (c.getInstance().specRestoreTimer == 100) {
 				c.sendMessage("@red@Your familiar will run out in approximately 1 minute.");
 				c.sendMessage("@red@Warning! Item's stored in familiar will be dropped upon death!");
-			} else if (c.getVariables().specRestoreTimer == 50) {
+			} else if (c.getInstance().specRestoreTimer == 50) {
 				c.sendMessage("@red@Your familiar will run out in approximately 30 seconds.");
 				c.sendMessage("@red@Warning! Item's stored in familiar will be dropped upon death!");
-			} else if (c.getVariables().specRestoreTimer == 25) {
+			} else if (c.getInstance().specRestoreTimer == 25) {
 				c.sendMessage("@red@Your familiar will run out in approximately 15 seconds.");
 				c.sendMessage("@blu@ You can renew your familiar with a new pouch by clicking @red@ Renew pouch");
 				c.sendMessage("@red@Warning! Item's stored in familiar will be dropped upon death!");
-			} else if (c.getVariables().specRestoreTimer <= 0) {
+			} else if (c.getInstance().specRestoreTimer <= 0) {
 				dismissFamiliar(false);
 			}
 			if (familiarSpecialEnergy != 60) {
@@ -2375,8 +2375,8 @@ public class Summoning {
 		}
 		if (renewTimer > 0) {
 			renewTimer--;
-			if (renewTimer == 0 && c.getVariables().summoned == null && summonedFamiliar != null) {
-				c.getVariables().summoned = GameEngine.npcHandler.summonNPC(c, summonedFamiliar.npcId, c.getX(),
+			if (renewTimer == 0 && c.getInstance().summoned == null && summonedFamiliar != null) {
+				c.getInstance().summoned = GameEngine.npcHandler.summonNPC(c, summonedFamiliar.npcId, c.getX(),
 						c.getY() + (summonedFamiliar.large ? 2 : 1), c.heightLevel, 0,
 						SummoningData.getSummonHealth(summonedFamiliar.npcId), 1, 1, 1);
 				callFamiliar();
@@ -2384,8 +2384,8 @@ public class Summoning {
 		}
 		if (loginCycle > 0) {
 			loginCycle--;
-			if (loginCycle == 0 && c.getVariables().summoned == null && summonedFamiliar != null) {
-				c.getVariables().summoned = GameEngine.npcHandler.summonNPC(c, summonedFamiliar.npcId, c.getX(),
+			if (loginCycle == 0 && c.getInstance().summoned == null && summonedFamiliar != null) {
+				c.getInstance().summoned = GameEngine.npcHandler.summonNPC(c, summonedFamiliar.npcId, c.getX(),
 						c.getY() + (summonedFamiliar.large ? 2 : 1), c.heightLevel, 0,
 						SummoningData.getSummonHealth(summonedFamiliar.npcId), 1, 1, 1);
 				callFamiliar();

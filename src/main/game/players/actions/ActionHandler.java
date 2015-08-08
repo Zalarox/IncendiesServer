@@ -41,15 +41,15 @@ public class ActionHandler {
 	}
 
 	public void firstClickObject(int objectType, int obX, int obY) {
-		if (c.getVariables().inEvent) {
+		if (c.getInstance().inEvent) {
 			return;
 		}
-		if (c.getVariables().agilityEmote)
+		if (c.getInstance().agilityEmote)
 			return;
 		// CastleWarObjects.handleObject(c, objectType, obX, obY);
-		c.getVariables().clickObjectType = 0;
+		c.getInstance().clickObjectType = 0;
 
-		if (c.getVariables().playerRights == 3) {
+		if (c.getInstance().playerRights == 3) {
 			c.sendMessage("@blu@Object type: " + objectType);
 		}
 		Godwars.doors(c, objectType);
@@ -59,7 +59,7 @@ public class ActionHandler {
 		}
 		c.turnPlayerTo(obX, obY);
 		if (Agility.agilityObstacle(c, objectType)) {
-			c.getVariables().objectDistance = 5;
+			c.getInstance().objectDistance = 5;
 			Agility.agilityCourse(c, objectType);
 		}
 		if (Mining.mineOre(c, objectType, obX, obY))
@@ -210,7 +210,7 @@ public class ActionHandler {
 		/* End of Dungeon natigation */
 
 		case 6442: // Donator frost dragons area
-			if (c.getVariables().isDonator == 0) {
+			if (c.getInstance().isDonator == 0) {
 				c.sendMessage("@red@You must be a Donator to enter this cave!");
 				c.sendMessage("@blu@For more information type ::Donate.");
 				return;
@@ -220,15 +220,15 @@ public class ActionHandler {
 			break;
 
 		case 411:
-			if (c.getVariables().playerPrayerBook) {
-				c.getVariables().playerPrayerBook = false;
+			if (c.getInstance().playerPrayerBook) {
+				c.getInstance().playerPrayerBook = false;
 				c.startAnimation(645);
 				c.sendMessage("You sense a surge of purity flow through your body.");
 				c.setSidebarInterface(5, 5608);
 				CombatPrayer.resetPrayers(c);
 				c.getPA().sendString(":prayer:prayers", -1);
 			} else {
-				c.getVariables().playerPrayerBook = true;
+				c.getInstance().playerPrayerBook = true;
 				c.startAnimation(645);
 				c.sendMessage("You sense a surge of power flow through your body!");
 				c.setSidebarInterface(5, 22500);
@@ -240,7 +240,7 @@ public class ActionHandler {
 			Fishing.fishingNPC(c, 1, 10091);
 			break;
 		case 6282:
-			if (c.getVariables().isDonator == 0) {
+			if (c.getInstance().isDonator == 0) {
 				c.sendMessage("@red@You must be a Donator to use this portal!");
 				c.sendMessage("@blu@Type ::Donate for more information.");
 			} else {
@@ -250,14 +250,14 @@ public class ActionHandler {
 			}
 			break;
 		case 4008:
-			if (c.getVariables().specAltarTimer == 0) {
-				if (c.getVariables().isDonator != 0) {
+			if (c.getInstance().specAltarTimer == 0) {
+				if (c.getInstance().isDonator != 0) {
 					c.startAnimation(645);
-					c.getVariables().specAmount = 10;
-					c.getVariables();
-					c.getItems().addSpecialBar(c.getVariables().playerEquipment[c.playerWeapon]);
+					c.getInstance().specAmount = 10;
+					c.getInstance();
+					c.getItems().addSpecialBar(c.getInstance().playerEquipment[c.playerWeapon]);
 					c.sendMessage("@red@Your Special Attack Has Been Fully Restored!");
-					c.getVariables().specAltarTimer = 300;
+					c.getInstance().specAltarTimer = 300;
 				} else {
 					c.sendMessage("@red@You must be a donator to use this altar!");
 				}
@@ -267,9 +267,9 @@ public class ActionHandler {
 			break;
 		case 4859:
 		case 409:
-			if (c.getVariables().playerLevel[5] < c.getPA().getLevelForXP(c.getVariables().playerXP[5])) {
+			if (c.getInstance().playerLevel[5] < c.getPA().getLevelForXP(c.getInstance().playerXP[5])) {
 				c.startAnimation(645);
-				c.getVariables().playerLevel[5] = c.getPA().getLevelForXP(c.getVariables().playerXP[5]);
+				c.getInstance().playerLevel[5] = c.getPA().getLevelForXP(c.getInstance().playerXP[5]);
 				c.sendMessage("You recharge your prayer points.");
 				c.getPA().refreshSkill(5);
 			} else {
@@ -294,8 +294,8 @@ public class ActionHandler {
 			break;
 		case 2882:
 		case 2883:
-			if (c.getVariables().objectX == 3268) {
-				if (c.absX < c.getVariables().objectX) {
+			if (c.getInstance().objectX == 3268) {
+				if (c.absX < c.getInstance().objectX) {
 					c.getPA().walkTo(1, 0);
 				} else {
 					c.getPA().walkTo(-1, 0);
@@ -352,14 +352,14 @@ public class ActionHandler {
 		case 8959:
 			if (c.getX() == 2490 && (c.getY() == 10146 || c.getY() == 10148)) {
 				if (c.getPA().checkForPlayer(2490, c.getY() == 10146 ? 10148 : 10146)) {
-					new Object(6951, c.getVariables().objectX, c.getVariables().objectY, c.heightLevel, 1, 10, 8959,
+					new Object(6951, c.getInstance().objectX, c.getInstance().objectY, c.heightLevel, 1, 10, 8959,
 							15);
 				}
 			}
 			break;
 
 		case 2112:
-			if (c.getVariables().playerLevel[14] <= 84) {
+			if (c.getInstance().playerLevel[14] <= 84) {
 				c.sendMessage("<col=13500416>You need a Mining level of 85+ to enter the Mining Guild.");
 				return;
 			} else {
@@ -406,14 +406,14 @@ public class ActionHandler {
 
 		case 14235:
 		case 14233:
-			if (c.getVariables().objectX == 2670) {
+			if (c.getInstance().objectX == 2670) {
 				if (c.absX <= 2670) {
 					c.absX = 2671;
 				} else {
 					c.absX = 2670;
 				}
 			}
-			if (c.getVariables().objectX == 2643) {
+			if (c.getInstance().objectX == 2643) {
 				if (c.absX >= 2643) {
 					c.absX = 2642;
 				} else {
@@ -552,8 +552,8 @@ public class ActionHandler {
 		// DOORS
 		case 1516:
 		case 1519:
-			if (c.getVariables().objectY == 9698) {
-				if (c.absY >= c.getVariables().objectY) {
+			if (c.getInstance().objectY == 9698) {
+				if (c.absY >= c.getInstance().objectY) {
 					c.getPA().walkTo(0, -1);
 				} else {
 					c.getPA().walkTo(0, 1);
@@ -609,12 +609,12 @@ public class ActionHandler {
 			break;
 
 		case 1755:
-			if (c.getVariables().objectX == 2884 && c.getVariables().objectY == 9797) {
+			if (c.getInstance().objectX == 2884 && c.getInstance().objectY == 9797) {
 				c.getPA().movePlayer(c.absX, c.absY - 6400, 0);
 			}
 			break;
 		case 1759:
-			if (c.getVariables().objectX == 2884 && c.getVariables().objectY == 3397) {
+			if (c.getInstance().objectX == 2884 && c.getInstance().objectY == 3397) {
 				c.getPA().movePlayer(c.absX, c.absY + 6400, 0);
 			}
 			break;
@@ -645,9 +645,9 @@ public class ActionHandler {
 		 */
 
 		case 2640:
-			if (c.getVariables().playerLevel[5] < c.getPA().getLevelForXP(c.getVariables().playerXP[5])) {
+			if (c.getInstance().playerLevel[5] < c.getPA().getLevelForXP(c.getInstance().playerXP[5])) {
 				c.startAnimation(645);
-				c.getVariables().playerLevel[5] = c.getPA().getLevelForXP(c.getVariables().playerXP[5]);
+				c.getInstance().playerLevel[5] = c.getPA().getLevelForXP(c.getInstance().playerXP[5]);
 				c.sendMessage("You recharge your prayer points.");
 				c.getPA().refreshSkill(5);
 			} else {
@@ -707,15 +707,15 @@ public class ActionHandler {
 			break;
 
 		case 9294:
-			if (c.absX < c.getVariables().objectX) {
-				c.getPA().movePlayer(c.getVariables().objectX + 1, c.absY, 0);
-			} else if (c.absX > c.getVariables().objectX) {
-				c.getPA().movePlayer(c.getVariables().objectX - 1, c.absY, 0);
+			if (c.absX < c.getInstance().objectX) {
+				c.getPA().movePlayer(c.getInstance().objectX + 1, c.absY, 0);
+			} else if (c.absX > c.getInstance().objectX) {
+				c.getPA().movePlayer(c.getInstance().objectX - 1, c.absY, 0);
 			}
 			break;
 
 		case 9293:
-			if (c.absX < c.getVariables().objectX) {
+			if (c.absX < c.getInstance().objectX) {
 				c.getPA().movePlayer(2892, 9799, 0);
 			} else {
 				c.getPA().movePlayer(2886, 9799, 0);
@@ -738,7 +738,7 @@ public class ActionHandler {
 			break;
 
 		default:
-			if (c.getVariables().playerRights == 3 || c.getVariables().playerRights == 8)
+			if (c.getInstance().playerRights == 3 || c.getInstance().playerRights == 8)
 				System.out.println("objectClick1_" + objectType + "_" + obX + "_" + obY);
 			break;
 
@@ -746,7 +746,7 @@ public class ActionHandler {
 	}
 
 	private boolean obj(int obX, int obY) {
-		return c.getVariables().objectX == obX && c.getVariables().objectY == obY;
+		return c.getInstance().objectX == obX && c.getInstance().objectY == obY;
 	}
 
 	public final int getObjectDistanceRequired(int objectID) {
@@ -767,7 +767,7 @@ public class ActionHandler {
 	}
 
 	public void secondClickObject(int objectType, int obX, int obY) {
-		c.getVariables().clickObjectType = 0;
+		c.getInstance().clickObjectType = 0;
 		// c.sendMessage("Object type: " + objectType);
 		/*
 		 * if (!Region.objectExists(objectType, obX, obY, c.heightLevel)) {
@@ -836,7 +836,7 @@ public class ActionHandler {
 			c.getThieving().stealFromStall(1897, 50, 1, objectType, obX, obY);
 			break;
 		case 2562: // Donator topaz stall
-			if (c.getVariables().isDonator == 0) {
+			if (c.getInstance().isDonator == 0) {
 				c.sendMessage("@red@You must be a Donator to thieve from this stall!");
 				c.sendMessage("@blu@Please type ::Donate for more information.");
 				return;
@@ -854,32 +854,32 @@ public class ActionHandler {
 			break;
 		case 599:
 			c.getPA().showInterface(3559);
-			c.getVariables().canChangeAppearance = true;
+			c.getInstance().canChangeAppearance = true;
 			break;
 		case 2558:
-			if (System.currentTimeMillis() - c.getVariables().lastLockPick < 3000 || c.getVariables().freezeTimer > 0) {
+			if (System.currentTimeMillis() - c.getInstance().lastLockPick < 3000 || c.getInstance().freezeTimer > 0) {
 				break;
 			}
 			if (c.getItems().playerHasItem(1523, 1)) {
-				c.getVariables().lastLockPick = System.currentTimeMillis();
+				c.getInstance().lastLockPick = System.currentTimeMillis();
 				if (Misc.random(10) <= 3) {
 					c.sendMessage("You fail to pick the lock.");
 					break;
 				}
-				if (c.getVariables().objectX == 3044 && c.getVariables().objectY == 3956) {
+				if (c.getInstance().objectX == 3044 && c.getInstance().objectY == 3956) {
 					if (c.absX == 3045) {
 						c.getPA().walkTo2(-1, 0);
 					} else if (c.absX == 3044) {
 						c.getPA().walkTo2(1, 0);
 					}
 
-				} else if (c.getVariables().objectX == 3038 && c.getVariables().objectY == 3956) {
+				} else if (c.getInstance().objectX == 3038 && c.getInstance().objectY == 3956) {
 					if (c.absX == 3037) {
 						c.getPA().walkTo2(1, 0);
 					} else if (c.absX == 3038) {
 						c.getPA().walkTo2(-1, 0);
 					}
-				} else if (c.getVariables().objectX == 3041 && c.getVariables().objectY == 3959) {
+				} else if (c.getInstance().objectX == 3041 && c.getInstance().objectY == 3959) {
 					if (c.absY == 3960) {
 						c.getPA().walkTo2(0, -1);
 					} else if (c.absY == 3959) {
@@ -891,21 +891,21 @@ public class ActionHandler {
 			}
 			break;
 		default:
-			if (c.getVariables().playerRights == 3 || c.getVariables().playerRights == 8)
+			if (c.getInstance().playerRights == 3 || c.getInstance().playerRights == 8)
 				System.out.println("objectClick2_" + objectType + "_" + obX + "_" + obY);
 			break;
 		}
 	}
 
 	public void thirdClickObject(int objectType, int obX, int obY) {
-		c.getVariables().clickObjectType = 0;
+		c.getInstance().clickObjectType = 0;
 		c.sendMessage("Object type: " + objectType);
 		switch (objectType) {
 		case 10177: // Dagganoth ladder 1st level
 			c.getPA().movePlayer(1798, 4407, 3);
 			break;
 		default:
-			if (c.getVariables().playerRights == 3 || c.getVariables().playerRights == 8)
+			if (c.getInstance().playerRights == 3 || c.getInstance().playerRights == 8)
 				System.out.println("objectClick3_" + objectType + "_" + obX + "_" + obY);
 			break;
 		}
@@ -913,12 +913,12 @@ public class ActionHandler {
 
 	public void firstClickNpc(int npcType) {
 		if (TransformHandler.Strykewyrm(c)) {
-			c.getVariables().clickNpcType = 0;
-			c.getVariables().npcClickIndex = 0;
+			c.getInstance().clickNpcType = 0;
+			c.getInstance().npcClickIndex = 0;
 			return;
 		}
 		Fishing.fishingNPC(c, 1, npcType);
-		if (c.getVariables().teleTimer > 0) {
+		if (c.getInstance().teleTimer > 0) {
 			return;
 		}
 		// if (c.getVariables().getHunter().hasReqs(npcType)) {
@@ -1064,7 +1064,7 @@ public class ActionHandler {
 			break;
 		case 599:
 			c.getPA().showInterface(3559);
-			c.getVariables().canChangeAppearance = true;
+			c.getInstance().canChangeAppearance = true;
 			break;
 
 		case 541:
@@ -1096,12 +1096,12 @@ public class ActionHandler {
 			c.getShops().openShop(30);
 			break;
 		case 904:
-			c.sendMessage("You have " + c.getVariables().magePoints + " points.");
+			c.sendMessage("You have " + c.getInstance().magePoints + " points.");
 			break;
 		default:
-			if (c.getVariables().playerRights == 3 || c.getVariables().playerRights == 8)
+			if (c.getInstance().playerRights == 3 || c.getInstance().playerRights == 8)
 				System.out.println("npcClick1_" + npcType);
-			if (c.getVariables().playerRights == 3) {
+			if (c.getInstance().playerRights == 3) {
 				Misc.println("First Click Npc : " + npcType);
 			}
 			break;
@@ -1109,8 +1109,8 @@ public class ActionHandler {
 	}
 
 	public void secondClickNpc(int npcType) {
-		c.getVariables().clickNpcType = 0;
-		c.getVariables().npcClickIndex = 0;
+		c.getInstance().clickNpcType = 0;
+		c.getInstance().npcClickIndex = 0;
 		Fishing.fishingNPC(c, 2, npcType);
 		switch (npcType) {
 		case 11226:
@@ -1120,7 +1120,7 @@ public class ActionHandler {
 			c.getShops().openShop(77);
 			break;
 		case 5030:
-			c.getDH().sendDialogues(1164, c.getVariables().npcType);
+			c.getDH().sendDialogues(1164, c.getInstance().npcType);
 			break;
 		case 9713:
 			c.getDH().sendDialogues(204, npcType);
@@ -1133,10 +1133,10 @@ public class ActionHandler {
 			break;
 		case 3788:
 			c.getShops().openShop(72);
-			c.sendMessage("You currently have " + c.getVariables().pcPoints + " pest control points.");
+			c.sendMessage("You currently have " + c.getInstance().pcPoints + " pest control points.");
 			break;
 		case 9085:
-			c.getDH().sendDialogues(112, c.getVariables().npcType);
+			c.getDH().sendDialogues(112, c.getInstance().npcType);
 			break;
 		case 6528:
 		case 6529:
@@ -1147,7 +1147,7 @@ public class ActionHandler {
 			break;
 		case 556:
 			c.getShops().openShop(13);
-			c.sendMessage("@red@You currently have " + c.getVariables().votingPoints + " Voting Points.");
+			c.sendMessage("@red@You currently have " + c.getInstance().votingPoints + " Voting Points.");
 			c.sendMessage("@red@To obtain more Voting Points, type ::Vote and follow the simple steps.");
 			break;
 		case 2305:
@@ -1159,7 +1159,7 @@ public class ActionHandler {
 		case 300:
 		case 844:
 		case 462:
-			NPC n = NPCHandler.npcs[c.getVariables().npcClickIndex];
+			NPC n = NPCHandler.npcs[c.getInstance().npcClickIndex];
 			if (n == null) {
 				return;
 			}
@@ -1172,7 +1172,7 @@ public class ActionHandler {
 			c.getShops().openShop(72);
 			break;
 		case 568:
-			c.getDH().sendDialogues(350, c.getVariables().npcType);
+			c.getDH().sendDialogues(350, c.getInstance().npcType);
 			break;
 		case 594:
 			c.getShops().openShop(16);
@@ -1243,9 +1243,9 @@ public class ActionHandler {
 			c.getThieving().stealFromNPC(npcType);
 			break;
 		default:
-			if (c.getVariables().playerRights == 3 || c.getVariables().playerRights == 8)
+			if (c.getInstance().playerRights == 3 || c.getInstance().playerRights == 8)
 				System.out.println("npcClick2_" + npcType);
-			if (c.getVariables().playerRights == 3) {
+			if (c.getInstance().playerRights == 3) {
 				Misc.println("Second Click Npc : " + npcType);
 			}
 			break;
@@ -1254,17 +1254,17 @@ public class ActionHandler {
 	}
 
 	public void thirdClickNpc(int npcType) {
-		c.getVariables().clickNpcType = 0;
-		c.getVariables().npcClickIndex = 0;
+		c.getInstance().clickNpcType = 0;
+		c.getInstance().npcClickIndex = 0;
 		switch (npcType) {
 		case 9085:
 			c.getShops().openShop(74);
 			break;
 		case 5029:
-			c.getDH().sendDialogues(1164, c.getVariables().npcType);
+			c.getDH().sendDialogues(1164, c.getInstance().npcType);
 			break;
 		case 553:
-			NPC n = NPCHandler.npcs[c.getVariables().npcClickIndex];
+			NPC n = NPCHandler.npcs[c.getInstance().npcClickIndex];
 			if (n == null) {
 				return;
 			}
@@ -1274,9 +1274,9 @@ public class ActionHandler {
 		 * case 5029: c.getShops().openShop(71); break;
 		 */
 		default:
-			if (c.getVariables().playerRights == 3 || c.getVariables().playerRights == 8)
+			if (c.getInstance().playerRights == 3 || c.getInstance().playerRights == 8)
 				System.out.println("npcClick3_" + npcType);
-			if (c.getVariables().playerRights == 3) {
+			if (c.getInstance().playerRights == 3) {
 				Misc.println("Third Click NPC : " + npcType);
 			}
 			break;
@@ -1285,19 +1285,19 @@ public class ActionHandler {
 	}
 
 	public void fourthClickNpc(int npcType) {
-		c.getVariables().clickNpcType = 0;
-		c.getVariables().npcClickIndex = 0;
+		c.getInstance().clickNpcType = 0;
+		c.getInstance().npcClickIndex = 0;
 		switch (npcType) {
 
 		case 9085:
 			c.getShops().openShop(71);
-			c.sendMessage("@blu@You currently have " + c.getVariables().SlayerPoints + " Slayer points.");
+			c.sendMessage("@blu@You currently have " + c.getInstance().SlayerPoints + " Slayer points.");
 			break;
 
 		default:
-			if (c.getVariables().playerRights == 3 || c.getVariables().playerRights == 8)
+			if (c.getInstance().playerRights == 3 || c.getInstance().playerRights == 8)
 				System.out.println("npcClick4_" + npcType);
-			if (c.getVariables().playerRights == 3)
+			if (c.getInstance().playerRights == 3)
 				System.out.println("Fourth Click NPC : " + npcType);
 			break;
 

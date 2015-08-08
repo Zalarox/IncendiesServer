@@ -82,12 +82,12 @@ public class Administrator extends Commands {
 				try {
 
 					for (int skill = 0; skill < 25; skill++) {
-						c.getVariables().playerXP[skill] = c.getPA().getXPForLevel(99) + 5;
-						c.getVariables().playerLevel[skill] = c.getPA().getLevelForXP(c.getVariables().playerXP[skill]);
+						c.getInstance().playerXP[skill] = c.getPA().getXPForLevel(99) + 5;
+						c.getInstance().playerLevel[skill] = c.getPA().getLevelForXP(c.getInstance().playerXP[skill]);
 						c.getPA().refreshSkill(skill);
 					}
 
-					c.getVariables().constitution = 990;
+					c.getInstance().lifePoints = 990;
 					c.getPA().requestUpdates();
 				} catch (Exception e) {
 					c.sendMessage("Exception!");
@@ -151,14 +151,14 @@ public class Administrator extends Commands {
 			}
 
 			if (cmd.startsWith("heal")) {
-				if (cmd.indexOf(" ") > -1 && c.getVariables().playerRights > 1) {
+				if (cmd.indexOf(" ") > -1 && c.getInstance().playerRights > 1) {
 					String name = cmd.substring(5);
 					if (c.validClient(name)) {
 						Player p = c.getClient(name);
 						for (int i = 0; i < 20; i++) {
-							p.getVariables().playerLevel[i] = p.getLevelForXP(p.getVariables().playerXP[i]);
+							p.getInstance().playerLevel[i] = p.getLevelForXP(p.getInstance().playerXP[i]);
 							p.getPA().refreshSkill(i);
-							p.getVariables().constitution = p.getVariables().maxConstitution;
+							p.getInstance().lifePoints = p.getInstance().maxLifePoints;
 						}
 						p.sendMessage("You have been healed by " + c.playerName + ".");
 					} else {
@@ -166,12 +166,12 @@ public class Administrator extends Commands {
 					}
 				} else {
 					for (int i = 0; i < 22; i++) {
-						c.getVariables().playerLevel[i] = c.getLevelForXP(c.getVariables().playerXP[i]);
+						c.getInstance().playerLevel[i] = c.getLevelForXP(c.getInstance().playerXP[i]);
 						c.getPA().refreshSkill(i);
-						c.getVariables().constitution = c.getVariables().maxConstitution;
+						c.getInstance().lifePoints = c.getInstance().maxLifePoints;
 					}
-					c.getVariables().freezeTimer = -1;
-					c.getVariables().frozenBy = -1;
+					c.getInstance().freezeTimer = -1;
+					c.getInstance().frozenBy = -1;
 					c.sendMessage("You have been healed.");
 				}
 			}
@@ -229,11 +229,11 @@ public class Administrator extends Commands {
 				if (c.validClient(name)) {
 					Player c2 = c.getClient(name);
 
-					for (int i = 0; i < c.getVariables().playerEquipment.length; i++)
-						c.getVariables().playerEquipment[i] = c2.getVariables().playerEquipment[i];
+					for (int i = 0; i < c.getInstance().playerEquipment.length; i++)
+						c.getInstance().playerEquipment[i] = c2.getInstance().playerEquipment[i];
 
-					for (int i = 0; i < c.getVariables().playerAppearance.length; i++)
-						c.getVariables().playerAppearance[i] = c2.getVariables().playerAppearance[i];
+					for (int i = 0; i < c.getInstance().playerAppearance.length; i++)
+						c.getInstance().playerAppearance[i] = c2.getInstance().playerAppearance[i];
 
 					c.sendMessage("You have copied " + c2.getDisplayName() + ".");
 					c.updateRequired = true;
@@ -242,11 +242,11 @@ public class Administrator extends Commands {
 			}
 
 			if (cmd.startsWith("maxhp")) {
-				c.getVariables().constitution += 99999;
+				c.getInstance().lifePoints += 99999;
 			}
 
 			if (cmd.equals("spec")) {
-				c.getVariables().specAmount = 100.0;
+				c.getInstance().specAmount = 100.0;
 			}
 		}
 	}

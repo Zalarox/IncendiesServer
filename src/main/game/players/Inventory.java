@@ -24,16 +24,16 @@ public class Inventory {
 
 	public void addItemToSlot(Item i, int slot) {
 		if (get(slot) != i.getId() + 1) {
-			c.getVariables().playerItems[slot] = i.getId() + 1;
-			c.getVariables().playerItemsN[slot] = i.getCount();
+			c.getInstance().playerItems[slot] = i.getId() + 1;
+			c.getInstance().playerItemsN[slot] = i.getCount();
 		} else {
-			c.getVariables().playerItemsN[slot] += i.getCount();
+			c.getInstance().playerItemsN[slot] += i.getCount();
 		}
 		update();
 	}
 
 	public int get(int slot) {
-		return c.getVariables().playerItems[slot];
+		return c.getInstance().playerItems[slot];
 	}
 
 	public void update() {
@@ -74,8 +74,8 @@ public class Inventory {
 	}
 
 	public void set(int slot, Item item) {
-		c.getVariables().playerItems[slot] = item.getId() + 1;
-		c.getVariables().playerItemsN[slot] = item.getCount();
+		c.getInstance().playerItems[slot] = item.getId() + 1;
+		c.getInstance().playerItemsN[slot] = item.getCount();
 		update();
 	}
 

@@ -349,7 +349,7 @@ public class SkillInterfaces {
 					"Dragon", "Barrows", "Special", "Milestones", "");
 		} else if (screen == 12) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerAttack][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerAttack][0], 0);
 			optionTab("Attack", "Milestones", "Bronze", "Iron", "Steel", "Black", "White", "Mithril", "Adamant", "Rune",
 					"Dragon", "Barrows", "Special", "Milestones", "");
 		}
@@ -387,7 +387,7 @@ public class SkillInterfaces {
 
 		else if (screen == 3) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerStrength][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerStrength][0], 0);
 			optionTab("Strength", "Milestones", "Weaponry", "Armor", "Milestones", "", "", "", "", "", "", "", "", "",
 					"");
 		}
@@ -647,7 +647,7 @@ public class SkillInterfaces {
 
 		else if (screen == 13) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerDefence][0], 0);// Skill
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerDefence][0], 0);// Skill
 																											// mastery
 			optionTab("Defence", "Milestones", "Bronze", "Iron", "Steel", "Black", "White", "Mithril", "Adamant",
 					"Rune", "Dragon", "Barrows", "Magic", "Equipment", "Milestones");
@@ -771,7 +771,7 @@ public class SkillInterfaces {
 		else if (screen == 6) {
 			clearMenu();
 			menuLine("40", "Ranging Guild", 1464, 0);
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerRanged][0], 1);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerRanged][0], 1);
 			optionTab("Ranged", "Milestones", "Bows", "Thrown", "Armour", "Crossbows", "Other", "Milestones", "", "",
 					"", "", "", "", "");
 		}
@@ -846,7 +846,7 @@ public class SkillInterfaces {
 		else if (screen == 3) {
 			clearMenu();
 			menuLine("31", "Monastery", 4682, 0);
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerPrayer][0], 1);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerPrayer][0], 1);
 			optionTab("Prayer", "Milestones", "Prayers", "Equipment", "Milestones", "", "", "", "", "", "", "", "", "",
 					"");
 		}
@@ -985,7 +985,7 @@ public class SkillInterfaces {
 		else if (screen == 6) {
 			clearMenu();
 			menuLine("66", "Magic Guild", 4675, 0);
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerMagic][0], 1);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerMagic][0], 1);
 			optionTab("Magic", "Milestones", "Spells", "Ancients", "Armour", "Weapons", "Special", "Milestones", "", "",
 					"", "", "", "", "");
 		}
@@ -1074,7 +1074,7 @@ public class SkillInterfaces {
 
 		else if (screen == 4) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerRunecrafting][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerRunecrafting][0], 0);
 			optionTab("RuneCrafting", "Milestones", "Runes", "Multiples", "Equipment", "Milestones", "", "", "", "", "",
 					"", "", "", "");
 		}
@@ -1111,7 +1111,7 @@ public class SkillInterfaces {
 
 		else if (screen == 2) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerHitpoints][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerHitpoints][0], 0);
 			optionTab("Hitpoints", "Milestones", "Hitpoints", "Milestones", "", "", "", "", "", "", "", "", "", "", "");
 		}
 	}
@@ -1208,7 +1208,7 @@ public class SkillInterfaces {
 		else if (screen == 4) {
 			clearMenu();
 			menuLine("50", "Crystal Equipment", 4207, 0);
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerAgility][0], 1);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerAgility][0], 1);
 			optionTab("Agility", "Milestones", "Courses", "Areas", "Shortcuts", "Milestones", "", "", "", "", "", "",
 					"", "", "");
 		}
@@ -1279,7 +1279,7 @@ public class SkillInterfaces {
 
 		else if (screen == 3) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerHerblore][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerHerblore][0], 0);
 			optionTab("Herblore", "Milestones", "Potions", "Herbs", "Milestones", "", "", "", "", "", "", "", "", "",
 					"");
 		}
@@ -1356,7 +1356,7 @@ public class SkillInterfaces {
 
 		else if (screen == 4) {
 			clearMenu();
-			menuLine("99", "Skill mastery", c.getItems().skillcapes[c.getVariables().playerThieving][0], 0);
+			menuLine("99", "Skill mastery", c.getItems().skillcapes[c.getInstance().playerThieving][0], 0);
 			optionTab("Thieving", "Milestones", "Pickpocket", "Stalls", "Chests", "Milestones", "", "", "", "", "", "",
 					"", "", "");
 		}
@@ -1496,7 +1496,7 @@ public class SkillInterfaces {
 		else if (screen == 8) {
 			clearMenu();
 			menuLine("40", "Crafting Guild", 1757, 0);
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerCrafting][0], 1);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerCrafting][0], 1);
 			optionTab("Crafting", "Milestones", "Weaving", "Armour", "Spinning", "Pottery", "Glass", "Jewellery",
 					"Weaponry", "Milestones", "", "", "", "", "");
 		}
@@ -1562,7 +1562,7 @@ public class SkillInterfaces {
 
 		else if (screen == 4) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerFletching][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerFletching][0], 0);
 			optionTab("Fletching", "Milestones", "Arrows", "Bows", "Darts", "Milestones", "", "", "", "", "", "", "",
 					"", "");
 		}
@@ -1640,7 +1640,7 @@ public class SkillInterfaces {
 
 		else if (screen == 4) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerSlayer][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerSlayer][0], 0);
 			optionTab("Slayer", "Milestones", "Equipment", "Monsters", "Masters", "Milestones", "", "", "", "", "", "",
 					"", "", "");
 		}
@@ -1909,7 +1909,7 @@ public class SkillInterfaces {
 					"Gold", "Elemental", "Other", "Milestones", "", "");
 		} else if (screen == 11) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerSmithing][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerSmithing][0], 0);
 			optionTab("Smithing", "Milestones", "Smelting", "Bronze", "Iron", "Steel", "Mithril", "Adamantite",
 					"Runite", "Gold", "Elemental", "Other", "Milestones", "", "");
 		}
@@ -1971,7 +1971,7 @@ public class SkillInterfaces {
 		else if (screen == 3) {
 			clearMenu();
 			menuLine("68", "Fishing Guild", 385, 0);
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerFishing][0], 1);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerFishing][0], 1);
 			optionTab("Fishing", "Milestones", "Techniques", "Catches", "Milestones", "", "", "", "", "", "", "", "",
 					"", "");
 		}
@@ -2223,7 +2223,7 @@ public class SkillInterfaces {
 		else if (screen == 13) {
 			clearMenu();
 			menuLine("32", "Chefs' Guild", 1949, 0);
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerCooking][0], 1);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerCooking][0], 1);
 			optionTab("Cooking", "Milestones", "Meats", "Bread", "Pies", "Stews", "Pizzas", "Cakes", "Wine",
 					"Hot Drinks", "Brewing", "Potatoes", "Diary", "Gnome", "Milestones");
 		}
@@ -2279,7 +2279,7 @@ public class SkillInterfaces {
 
 		else if (screen == 3) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerFiremaking][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerFiremaking][0], 0);
 			optionTab("Firemaking", "Milestones", "Firemaking", "Equipment", "Milestones", "", "", "", "", "", "", "",
 					"", "", "");
 		}
@@ -2338,7 +2338,7 @@ public class SkillInterfaces {
 
 		else if (screen == 4) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerWoodcutting][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerWoodcutting][0], 0);
 			optionTab("Woodcutting", "Milestones", "Trees", "Hatchets", "Canoes", "Milestones", "", "", "", "", "", "",
 					"", "", "");
 		}
@@ -2475,7 +2475,7 @@ public class SkillInterfaces {
 
 		else if (screen == 10) {
 			clearMenu();
-			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getVariables().playerFarming][0], 0);
+			menuLine("99", "Skill Mastery", c.getItems().skillcapes[c.getInstance().playerFarming][0], 0);
 			optionTab("Farming", "Milestones", "Allotments", "Hops", "Trees", "Fruit Trees", "Bushes", "Flowers",
 					"Herbs", "Special", "Scarecrows", "Milestones", "", "", "");
 		}

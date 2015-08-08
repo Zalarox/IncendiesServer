@@ -10,7 +10,7 @@ public class TransformHandler {
 	}
 
 	public static boolean Strykewyrm(final Player c) {
-		final NPC n = NPCHandler.npcs[c.getVariables().npcClickIndex];
+		final NPC n = NPCHandler.npcs[c.getInstance().npcClickIndex];
 		if (n == null) {
 			return false;
 		}

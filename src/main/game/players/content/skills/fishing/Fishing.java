@@ -36,7 +36,7 @@ public class Fishing {
 		CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (!c.getVariables().playerIsFishing) {
+				if (!c.getInstance().playerIsFishing) {
 					container.stop();
 				} else {
 					c.startAnimation(anim);
@@ -53,8 +53,8 @@ public class Fishing {
 	}
 
 	private static void attemptdata(final Player c, int npcId) {
-		if (c.getVariables().fishingProp[4] > 0) {
-			c.getVariables().playerIsFishing = false;
+		if (c.getInstance().fishingProp[4] > 0) {
+			c.getInstance().playerIsFishing = false;
 			return;
 		}
 		if (c.getItems().freeSlots() == 0) {
@@ -65,7 +65,7 @@ public class Fishing {
 		}
 		for (int i = 0; i < data.length; i++) {
 			if (npcId == data[i][0]) {
-				if (c.getVariables().playerLevel[c.getVariables().playerFishing] < data[i][1]) {
+				if (c.getInstance().playerLevel[c.getInstance().playerFishing] < data[i][1]) {
 					c.sendMessage("You haven't got high enough fishing level to fish here!");
 					c.sendMessage("You atleast need the fishing level of " + data[i][1] + ".");
 					c.getDH().sendStatement("You need the fishing level of " + data[i][1] + " to fish here.");
@@ -83,63 +83,63 @@ public class Fishing {
 					}
 				}
 
-				c.getVariables().fishingProp[0] = data[i][6]; // ANIM
-				c.getVariables().fishingProp[1] = data[i][4]; // FISH
-				c.getVariables().fishingProp[2] = data[i][5]; // XP
-				c.getVariables().fishingProp[3] = data[i][3]; // BAIT
-				c.getVariables().fishingProp[4] = data[i][2]; // EQUIP
-				c.getVariables().fishingProp[5] = data[i][7]; // sFish
-				c.getVariables().fishingProp[6] = data[i][8]; // sLvl
-				c.getVariables().fishingProp[7] = data[i][4]; // FISH
-				c.getVariables().fishingProp[8] = data[i][9]; // sXP
+				c.getInstance().fishingProp[0] = data[i][6]; // ANIM
+				c.getInstance().fishingProp[1] = data[i][4]; // FISH
+				c.getInstance().fishingProp[2] = data[i][5]; // XP
+				c.getInstance().fishingProp[3] = data[i][3]; // BAIT
+				c.getInstance().fishingProp[4] = data[i][2]; // EQUIP
+				c.getInstance().fishingProp[5] = data[i][7]; // sFish
+				c.getInstance().fishingProp[6] = data[i][8]; // sLvl
+				c.getInstance().fishingProp[7] = data[i][4]; // FISH
+				c.getInstance().fishingProp[8] = data[i][9]; // sXP
 
-				c.getVariables().fishingProp[9] = Misc.random(1) == 0 ? 7 : 5;
+				c.getInstance().fishingProp[9] = Misc.random(1) == 0 ? 7 : 5;
 
-				c.getVariables().fishingProp[10] = data[i][0]; // INDEX
+				c.getInstance().fishingProp[10] = data[i][0]; // INDEX
 
 				c.sendMessage("You start fishing.");
 				// c.startAnimation(c.fishingProp[0]);
-				Fishing.loopFishAnim(c, c.getVariables().fishingProp[0]);
-				c.getVariables().stopPlayerSkill = true;
-				if (c.getVariables().playerIsFishing) {
+				Fishing.loopFishAnim(c, c.getInstance().fishingProp[0]);
+				c.getInstance().stopPlayerSkill = true;
+				if (c.getInstance().playerIsFishing) {
 					return;
 				}
-				c.getVariables().playerIsFishing = true;
+				c.getInstance().playerIsFishing = true;
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						c.getVariables().fishingProp[2] = c
-								.getVariables().fishingProp[c.getVariables().fishingProp[9] == 7 ? 8 : 2];
-						if (c.getVariables().fishingProp[1] > 0) {
+						c.getInstance().fishingProp[2] = c
+								.getInstance().fishingProp[c.getInstance().fishingProp[9] == 7 ? 8 : 2];
+						if (c.getInstance().fishingProp[1] > 0) {
 							c.sendMessage(
-									"You catch a " + c.getItems().getItemName(c.getVariables().fishingProp[1]) + ".");
+									"You catch a " + c.getItems().getItemName(c.getInstance().fishingProp[1]) + ".");
 						}
-						c.getItems().addItem(c.getVariables().fishingProp[1], 1);
-						c.getPA().addSkillXP(c.getVariables().fishingProp[2] * FISHING_XP,
-								c.getVariables().playerFishing);
-						c.startAnimation(c.getVariables().fishingProp[0]);
-						if (c.getVariables().fishingProp[3] > 0) {
-							c.getItems().deleteItem(c.getVariables().fishingProp[3],
-									c.getItems().getItemSlot(c.getVariables().fishingProp[3]), 1);
-							if (!c.getItems().playerHasItem(c.getVariables().fishingProp[3], 1)) {
+						c.getItems().addItem(c.getInstance().fishingProp[1], 1);
+						c.getPA().addSkillXP(c.getInstance().fishingProp[2] * FISHING_XP,
+								c.getInstance().playerFishing);
+						c.startAnimation(c.getInstance().fishingProp[0]);
+						if (c.getInstance().fishingProp[3] > 0) {
+							c.getItems().deleteItem(c.getInstance().fishingProp[3],
+									c.getItems().getItemSlot(c.getInstance().fishingProp[3]), 1);
+							if (!c.getItems().playerHasItem(c.getInstance().fishingProp[3], 1)) {
 								c.sendMessage("You do not have any "
-										+ c.getItems().getItemName(c.getVariables().fishingProp[3])
+										+ c.getItems().getItemName(c.getInstance().fishingProp[3])
 										+ " in your inventory.");
-								c.sendMessage("You need " + c.getItems().getItemName(c.getVariables().fishingProp[3])
+								c.sendMessage("You need " + c.getItems().getItemName(c.getInstance().fishingProp[3])
 										+ " to fish here.");
 								resetFishing(c);
 								container.stop();
 							}
 						}
-						if (c.getVariables().fishingProp[5] > 0) {
-							if (c.getVariables().playerLevel[c.getVariables().playerFishing] >= c
-									.getVariables().fishingProp[6]) {
-								c.getVariables().fishingProp[1] = c.getVariables().fishingProp[Misc.random(1) == 0 ? 7
+						if (c.getInstance().fishingProp[5] > 0) {
+							if (c.getInstance().playerLevel[c.getInstance().playerFishing] >= c
+									.getInstance().fishingProp[6]) {
+								c.getInstance().fishingProp[1] = c.getInstance().fishingProp[Misc.random(1) == 0 ? 7
 										: 5];
 							}
 						}
-						if (!c.getItems().playerHasItem(c.getVariables().fishingProp[4], 1)) {
-							c.sendMessage("You need a " + c.getItems().getItemName(c.getVariables().fishingProp[4])
+						if (!c.getItems().playerHasItem(c.getInstance().fishingProp[4], 1)) {
+							c.sendMessage("You need a " + c.getItems().getItemName(c.getInstance().fishingProp[4])
 									+ " to fish from this spot.");
 							resetFishing(c);
 							container.stop();
@@ -154,11 +154,11 @@ public class Fishing {
 						// resetFishing(c);
 						// container.stop();
 						// }
-						if (!c.getVariables().stopPlayerSkill) {
+						if (!c.getInstance().stopPlayerSkill) {
 							resetFishing(c);
 							container.stop();
 						}
-						if (!c.getVariables().playerIsFishing) {
+						if (!c.getInstance().playerIsFishing) {
 							container.stop();
 						}
 					}
@@ -176,14 +176,14 @@ public class Fishing {
 		c.startAnimation(65535);
 		doingLoop = false;
 		c.getPA().removeAllWindows();
-		c.getVariables().playerIsFishing = false;
+		c.getInstance().playerIsFishing = false;
 		for (int i = 0; i < 11; i++) {
-			c.getVariables().fishingProp[i] = -1;
+			c.getInstance().fishingProp[i] = -1;
 		}
 	}
 
 	private static int playerFishingLevel(Player c) {
-		return (10 - (int) Math.floor(c.getVariables().playerLevel[c.getVariables().playerFishing] / 10));
+		return (10 - (int) Math.floor(c.getInstance().playerLevel[c.getInstance().playerFishing] / 10));
 	}
 
 	private final static int getTimer(Player c, int npcId) {

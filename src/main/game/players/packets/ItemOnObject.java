@@ -24,10 +24,10 @@ public class ItemOnObject implements PacketType {
 		int b = c.getInStream().readUnsignedWord();
 		int objectX = c.getInStream().readSignedWordBigEndianA();
 		int itemId = c.getInStream().readUnsignedWord();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		Fillables.fillTheItem(c, itemId, objectId);
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
 		Following.resetFollow(c);

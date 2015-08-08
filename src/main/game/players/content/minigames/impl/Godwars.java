@@ -23,7 +23,7 @@ public class Godwars {
 		for (int i = 0; i < gwData.length; i++) {
 			for (int i1 = 1; i1 < gwData[i].length; i1++) {
 				if (npc == gwData[i][i1]) {
-					player.getVariables().gwKills[gwData[i][0]]++;
+					player.getInstance().gwKills[gwData[i][0]]++;
 					interfaceProcess(player);
 					break;
 				}
@@ -32,10 +32,10 @@ public class Godwars {
 	}
 
 	public static void interfaceProcess(Player player) {
-		player.getPA().sendString("" + player.getVariables().gwKills[1], 14506);
-		player.getPA().sendString("" + player.getVariables().gwKills[3], 14507);
-		player.getPA().sendString("" + player.getVariables().gwKills[2], 14508);
-		player.getPA().sendString("" + player.getVariables().gwKills[0], 14509);
+		player.getPA().sendString("" + player.getInstance().gwKills[1], 14506);
+		player.getPA().sendString("" + player.getInstance().gwKills[3], 14507);
+		player.getPA().sendString("" + player.getInstance().gwKills[2], 14508);
+		player.getPA().sendString("" + player.getInstance().gwKills[0], 14509);
 		player.getPA().walkableInterface(14500);
 	}
 
@@ -46,7 +46,7 @@ public class Godwars {
 				player.sendMessage("You need a hammer to enter here.");
 				return;
 			}
-			if (player.absX >= player.getVariables().objectX) {
+			if (player.absX >= player.getInstance().objectX) {
 				player.getPA().movePlayer(2850, 5333, 2);
 			} else {
 				player.getPA().movePlayer(2851, 5333, 2);
@@ -62,11 +62,11 @@ public class Godwars {
 			break;
 
 		case 26338:
-			if (player.getVariables().playerLevel[2] < 60) {
+			if (player.getInstance().playerLevel[2] < 60) {
 				player.sendMessage("You must have a strength level of 60 to move this boulder.");
 				return;
 			}
-			if (player.absY < player.getVariables().objectY) {
+			if (player.absY < player.getInstance().objectY) {
 				player.getPA().movePlayer(2898, 3719, 0);
 			} else {
 				player.getPA().movePlayer(2898, 3715, 0);
@@ -78,8 +78,8 @@ public class Godwars {
 			break;
 
 		case 26303:
-			if ((player.getVariables().playerEquipment[3] != 9185 || player.getVariables().playerEquipment[3] != 18357)
-					|| player.getVariables().playerEquipment[player.getVariables().playerArrows] != 9419) {
+			if ((player.getInstance().playerEquipment[3] != 9185 || player.getInstance().playerEquipment[3] != 18357)
+					|| player.getInstance().playerEquipment[player.getInstance().playerArrows] != 9419) {
 				player.sendMessage("You must have a crossbow and a mithril grapple to pass this obstacle.");
 				return;
 			}
@@ -92,11 +92,11 @@ public class Godwars {
 
 		case 26428:
 			if (player.heightLevel != 6) {
-				if (player.getVariables().gwKills[0] < 20) {
+				if (player.getInstance().gwKills[0] < 20) {
 					player.sendMessage("You must have 20 Zamorak kills before entering.");
 					return;
 				}
-				player.getVariables().gwKills[0] = 0;
+				player.getInstance().gwKills[0] = 0;
 				player.getPA().movePlayer(2925, 5331, 6);
 				return;
 			}
@@ -104,11 +104,11 @@ public class Godwars {
 			break;
 		case 26427:
 			if (player.heightLevel != 4) {
-				if (player.getVariables().gwKills[2] < 20) {
+				if (player.getInstance().gwKills[2] < 20) {
 					player.sendMessage("You must have 20 Saradomin kills before entering.");
 					return;
 				}
-				player.getVariables().gwKills[2] = 0;
+				player.getInstance().gwKills[2] = 0;
 				player.getPA().movePlayer(player.absX - 1, player.absY, 4);
 				return;
 			}
@@ -116,11 +116,11 @@ public class Godwars {
 			break;
 		case 26426:
 			if (player.heightLevel != 6) {
-				if (player.getVariables().gwKills[1] < 20) {
+				if (player.getInstance().gwKills[1] < 20) {
 					player.sendMessage("You must have 20 Armadyl kills before entering.");
 					return;
 				}
-				player.getVariables().gwKills[1] = 0;
+				player.getInstance().gwKills[1] = 0;
 				player.getPA().movePlayer(2839, 5296, 6);
 				return;
 			}
@@ -128,11 +128,11 @@ public class Godwars {
 			break;
 		case 26425:
 			if (player.heightLevel != 6) {
-				if (player.getVariables().gwKills[3] < 20) {
+				if (player.getInstance().gwKills[3] < 20) {
 					player.sendMessage("You must have 20 Bandos kills before entering.");
 					return;
 				}
-				player.getVariables().gwKills[3] = 0;
+				player.getInstance().gwKills[3] = 0;
 				player.getPA().movePlayer(2864, 5354, 6);
 				return;
 			}
@@ -142,8 +142,8 @@ public class Godwars {
 	}
 
 	public static void resetKills(Player player) {
-		for (int i = 0; i < player.getVariables().gwKills.length; i++) {
-			player.getVariables().gwKills[i] = 0;
+		for (int i = 0; i < player.getInstance().gwKills.length; i++) {
+			player.getInstance().gwKills[i] = 0;
 		}
 		player.sendMessage("The power of all those you slew in the dungeon drains from your body.");
 	}
@@ -152,8 +152,8 @@ public class Godwars {
 	 * Player Wearing equipment
 	 */
 	public boolean wearingArma() {
-		for (int i = 0; i < c.getVariables().playerEquipment.length; i++) {
-			if (c.getItems().getItemName(c.getVariables().playerEquipment[i]).contains("armadyl")) {
+		for (int i = 0; i < c.getInstance().playerEquipment.length; i++) {
+			if (c.getItems().getItemName(c.getInstance().playerEquipment[i]).contains("armadyl")) {
 				return true;
 			}
 		}
@@ -161,8 +161,8 @@ public class Godwars {
 	}
 
 	public boolean wearingBandos() {
-		for (int i = 0; i < c.getVariables().playerEquipment.length; i++) {
-			if (c.getItems().getItemName(c.getVariables().playerEquipment[i]).contains("bandos")) {
+		for (int i = 0; i < c.getInstance().playerEquipment.length; i++) {
+			if (c.getItems().getItemName(c.getInstance().playerEquipment[i]).contains("bandos")) {
 				return true;
 			}
 		}
@@ -170,8 +170,8 @@ public class Godwars {
 	}
 
 	public boolean wearingSara() {
-		for (int i = 0; i < c.getVariables().playerEquipment.length; i++) {
-			if (c.getItems().getItemName(c.getVariables().playerEquipment[i]).contains("saradomin")) {
+		for (int i = 0; i < c.getInstance().playerEquipment.length; i++) {
+			if (c.getItems().getItemName(c.getInstance().playerEquipment[i]).contains("saradomin")) {
 				return true;
 			}
 		}
@@ -179,8 +179,8 @@ public class Godwars {
 	}
 
 	public boolean wearingZamm() {
-		for (int i = 0; i < c.getVariables().playerEquipment.length; i++) {
-			if (c.getItems().getItemName(c.getVariables().playerEquipment[i]).contains("zamorak")) {
+		for (int i = 0; i < c.getInstance().playerEquipment.length; i++) {
+			if (c.getItems().getItemName(c.getInstance().playerEquipment[i]).contains("zamorak")) {
 				return true;
 			}
 		}

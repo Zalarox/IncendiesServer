@@ -16,7 +16,7 @@ public class Bank5 implements PacketType {
 		int interfaceId = c.getInStream().readSignedWordBigEndianA();
 		int removeId = c.getInStream().readSignedWordBigEndianA();
 		int slot = c.getInStream().readSignedWordBigEndian();
-		if (c.getVariables().teleTimer > 0) {
+		if (c.getInstance().teleTimer > 0) {
 			return;
 		}
 		switch (interfaceId) {
@@ -75,7 +75,7 @@ public class Bank5 implements PacketType {
 		case 1121:
 		case 1122:
 		case 1123:
-			c.getSmithing().readInput(c.getVariables().playerLevel[c.getVariables().playerSmithing],
+			c.getSmithing().readInput(c.getInstance().playerLevel[c.getInstance().playerSmithing],
 					Integer.toString(removeId), c, 5);
 			break;
 

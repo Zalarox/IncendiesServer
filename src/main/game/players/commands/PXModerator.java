@@ -18,7 +18,7 @@ public class PXModerator extends Commands {
 	 * @param playerCommand
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
-		if (c.getVariables().playerRights >= 2 && c.getVariables().playerRights <= 3) {
+		if (c.getInstance().playerRights >= 2 && c.getInstance().playerRights <= 3) {
 			if (playerCommand.startsWith("interface")) {
 				String[] args = playerCommand.split(" ");
 				c.getPA().showInterface(Integer.parseInt(args[1]));
@@ -30,8 +30,8 @@ public class PXModerator extends Commands {
 			if (playerCommand.startsWith("dialogue")) {
 				try {
 					int newNPC = Integer.parseInt(playerCommand.substring(9));
-					c.getVariables().talkingNpc = newNPC;
-					c.getDH().sendDialogues(11, c.getVariables().talkingNpc);
+					c.getInstance().talkingNpc = newNPC;
+					c.getDH().sendDialogues(11, c.getInstance().talkingNpc);
 				} catch (Exception e) {
 				}
 			}
@@ -173,7 +173,7 @@ public class PXModerator extends Commands {
 			if (playerCommand.startsWith("pnpc")) {
 				try {
 					int newNPC = Integer.parseInt(playerCommand.substring(5));
-					c.getVariables().npcId2 = newNPC;
+					c.getInstance().npcId2 = newNPC;
 					c.getPA().requestUpdates();
 				} catch (Exception e) {
 				}

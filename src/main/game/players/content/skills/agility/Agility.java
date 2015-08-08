@@ -14,11 +14,11 @@ public class Agility {
 
 	public void obstacle(final Player p, int Emote, int reqAgility, int newX, int newY, final int agilityTimer, int amtEXP,
 			String message) {
-		if (p.getVariables().playerLevel[16] >= reqAgility) {
-			p.getVariables().agilityEmote = true;
+		if (p.getInstance().playerLevel[16] >= reqAgility) {
+			p.getInstance().agilityEmote = true;
 			p.walk(newX, newY, Emote);
-			p.getVariables();
-			p.getPA().addSkillXP(amtEXP, p.getVariables().playerAgility);
+			p.getInstance();
+			p.getPA().addSkillXP(amtEXP, p.getInstance().playerAgility);
 			CycleEventHandler.getSingleton().addEvent(new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer c) {
@@ -38,16 +38,16 @@ public class Agility {
 
 	public static void agilityDelay(final Player p, int Emote, final int X, final int Y, final int H, int reqAgility,
 			int amtEXP, String message) {
-		if (p.getVariables().playerLevel[16] >= reqAgility) {
+		if (p.getInstance().playerLevel[16] >= reqAgility) {
 			p.startAnimation(Emote);
-			p.getVariables().agilityEmote = true;
-			p.getVariables();
-			p.getPA().addSkillXP(amtEXP, p.getVariables().playerAgility);
+			p.getInstance().agilityEmote = true;
+			p.getInstance();
+			p.getPA().addSkillXP(amtEXP, p.getInstance().playerAgility);
 			CycleEventHandler.getSingleton().addEvent(new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer c) {
 					p.getPA().movePlayer(X, Y, H);
-					p.getVariables().agilityEmote = false;
+					p.getInstance().agilityEmote = false;
 					stop();
 				}
 
@@ -62,20 +62,20 @@ public class Agility {
 	}
 
 	private static void agilityWalk(final Player c, final int walkAnimation, final int x, final int y) {
-		c.getVariables().isRunning2 = false;
+		c.getInstance().isRunning2 = false;
 		c.getPA().sendFrame36(173, 0);
-		c.getVariables().playerWalkIndex = walkAnimation;
+		c.getInstance().playerWalkIndex = walkAnimation;
 		c.getPA().requestUpdates();
 		c.getPA().walkTo(x, y);
 		c.sendMessage("lewl agy");
 	}
 
 	private static void resetAgilityWalk(final Player c) {
-		c.getVariables().isRunning2 = true;
+		c.getInstance().isRunning2 = true;
 		c.getPA().sendFrame36(173, 1);
-		c.getVariables().playerWalkIndex = 0x333;
+		c.getInstance().playerWalkIndex = 0x333;
 		c.getPA().requestUpdates();
-		c.getVariables().doingAgility = false;
+		c.getInstance().doingAgility = false;
 	}
 
 	private static final int[] agilityObject = { 2295, 2285, 2286, 2313, 2312, 2314, 2315, 154, 4058, 2282, 2284, 2294,
@@ -103,9 +103,9 @@ public class Agility {
 
 			@Override
 			public void stop() {
-				c.getVariables().barbObstacle = 1;
-				c.getVariables();
-				c.getPA().addSkillXP(450, c.getVariables().playerAgility);
+				c.getInstance().barbObstacle = 1;
+				c.getInstance();
+				c.getPA().addSkillXP(450, c.getInstance().playerAgility);
 			}
 		}, 2);
 		CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
@@ -134,7 +134,7 @@ public class Agility {
 	}
 
 	public static void agilityCourse(final Player c, final int objectType) {
-		if (c.getVariables().doingAgility) {
+		if (c.getInstance().doingAgility) {
 			return;
 		}
 		switch (objectType) {
@@ -143,45 +143,45 @@ public class Agility {
 		 */
 
 		case 1948: // crumbling wall
-			if (c.getVariables().objectX == 2536 && c.absX < 2537) {
-				if (c.getVariables().barbObstacle == 5 && c.getVariables().playerLevel[16] >= 30) {
+			if (c.getInstance().objectX == 2536 && c.absX < 2537) {
+				if (c.getInstance().barbObstacle == 5 && c.getInstance().playerLevel[16] >= 30) {
 					c.getPA().movePlayer(2537, 3553, 0);
-					c.getVariables();
-					c.getPA().addSkillXP(175, c.getVariables().playerAgility);
-					c.getVariables().barbObstacle = 6;
-				} else if (c.getVariables().playerLevel[16] >= 30) {
+					c.getInstance();
+					c.getPA().addSkillXP(175, c.getInstance().playerAgility);
+					c.getInstance().barbObstacle = 6;
+				} else if (c.getInstance().playerLevel[16] >= 30) {
 					c.getPA().movePlayer(2537, 3553, 0);
-					c.getVariables();
-					c.getPA().addSkillXP(175, c.getVariables().playerAgility);
+					c.getInstance();
+					c.getPA().addSkillXP(175, c.getInstance().playerAgility);
 				} else {
 					c.sendMessage("You need 30 Agility to attempt this obstacle");
 				}
-			} else if (c.getVariables().objectX == 2539 && c.absX < 2540) {
-				if (c.getVariables().barbObstacle == 6 && c.getVariables().playerLevel[16] >= 30) {
+			} else if (c.getInstance().objectX == 2539 && c.absX < 2540) {
+				if (c.getInstance().barbObstacle == 6 && c.getInstance().playerLevel[16] >= 30) {
 					c.getPA().movePlayer(2540, 3553, 0);
-					c.getVariables();
-					c.getPA().addSkillXP(175, c.getVariables().playerAgility);
-					c.getVariables().barbObstacle = 7;
-				} else if (c.getVariables().playerLevel[16] >= 30) {
+					c.getInstance();
+					c.getPA().addSkillXP(175, c.getInstance().playerAgility);
+					c.getInstance().barbObstacle = 7;
+				} else if (c.getInstance().playerLevel[16] >= 30) {
 					c.getPA().movePlayer(2540, 3553, 0);
-					c.getVariables();
-					c.getPA().addSkillXP(175, c.getVariables().playerAgility);
+					c.getInstance();
+					c.getPA().addSkillXP(175, c.getInstance().playerAgility);
 				} else {
 					c.sendMessage("You need 30 Agility to attempt this obstacle");
 				}
-			} else if (c.getVariables().objectX == 2542 && c.absX < 2543) {
-				if (c.getVariables().barbObstacle == 7 && c.getVariables().playerLevel[16] >= 30) {
+			} else if (c.getInstance().objectX == 2542 && c.absX < 2543) {
+				if (c.getInstance().barbObstacle == 7 && c.getInstance().playerLevel[16] >= 30) {
 					c.getPA().movePlayer(2543, 3553, 0);
-					c.getVariables();
-					c.getPA().addSkillXP(175, c.getVariables().playerAgility);
-					c.getVariables();
-					c.getPA().addSkillXP(10000, c.getVariables().playerAgility);
-					c.getVariables().barbObstacle = 0;
+					c.getInstance();
+					c.getPA().addSkillXP(175, c.getInstance().playerAgility);
+					c.getInstance();
+					c.getPA().addSkillXP(10000, c.getInstance().playerAgility);
+					c.getInstance().barbObstacle = 0;
 					return;
-				} else if (c.getVariables().playerLevel[16] >= 30) {
+				} else if (c.getInstance().playerLevel[16] >= 30) {
 					c.getPA().movePlayer(2543, 3553, 0);
-					c.getVariables();
-					c.getPA().addSkillXP(175, c.getVariables().playerAgility);
+					c.getInstance();
+					c.getPA().addSkillXP(175, c.getInstance().playerAgility);
 				} else {
 					c.sendMessage("You need 30 Agility to attempt this obstacle");
 				}
@@ -195,7 +195,7 @@ public class Agility {
 				c.absY = 3546;
 				return;
 			}
-			c.getVariables().doingAgility = true;
+			c.getInstance().doingAgility = true;
 			agilityWalk(c, 762, -10, 0);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				int cycle = 0;
@@ -217,13 +217,13 @@ public class Agility {
 				@Override
 				public void stop() {
 					resetAgilityWalk(c);
-					c.getVariables();
-					c.getPA().addSkillXP(47 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getVariables().playerAgility);
+					c.getInstance();
+					c.getPA().addSkillXP(47 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getInstance().playerAgility);
 					// c.getVariables().playerAgility);
-					if (c.getVariables().barbObstacle == 1) {
-						c.getVariables().barbObstacle = 2;
+					if (c.getInstance().barbObstacle == 1) {
+						c.getInstance().barbObstacle = 2;
 					}
-					c.getVariables().doingAgility = false;
+					c.getInstance().doingAgility = false;
 				}
 			}, 1);
 			break;
@@ -232,9 +232,9 @@ public class Agility {
 		case 2284: // Barbarian Obstacle net
 			agilityDelay(c, 828, 2537, 3546, 1, 40, 275, "You climbed the nets succesfully.");
 			resetAgilityWalk(c);
-			c.getVariables().doingAgility = false;
-			if (c.getVariables().barbObstacle == 2) {
-				c.getVariables().barbObstacle = 3;
+			c.getInstance().doingAgility = false;
+			if (c.getInstance().barbObstacle == 2) {
+				c.getInstance().barbObstacle = 3;
 			}
 			break;
 
@@ -245,7 +245,7 @@ public class Agility {
 				c.absY = 3547;
 				return;
 			}
-			c.getVariables().doingAgility = true;
+			c.getInstance().doingAgility = true;
 			agilityWalk(c, 756, -4, 0);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				int cycle = 0;
@@ -268,10 +268,10 @@ public class Agility {
 				@Override
 				public void stop() {
 					resetAgilityWalk(c);
-					c.getPA().addSkillXP(48 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getVariables().playerAgility);
-					c.getVariables().doingAgility = false;
-					if (c.getVariables().barbObstacle == 3) {
-						c.getVariables().barbObstacle = 4;
+					c.getPA().addSkillXP(48 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getInstance().playerAgility);
+					c.getInstance().doingAgility = false;
+					if (c.getInstance().barbObstacle == 3) {
+						c.getInstance().barbObstacle = 4;
 					}
 				}
 			}, 1);
@@ -279,8 +279,8 @@ public class Agility {
 
 		case 3205: // Ladder
 			agilityDelay(c, 827, 2532, 3546, 0, 40, 180, "You climb down.");
-			if (c.getVariables().barbObstacle == 4) {
-				c.getVariables().barbObstacle = 5;
+			if (c.getInstance().barbObstacle == 4) {
+				c.getInstance().barbObstacle = 5;
 			}
 			break;
 
@@ -288,7 +288,7 @@ public class Agility {
 		 * Gnome Course
 		 */
 		case 2282:
-			c.getVariables().objectDistance = 5;
+			c.getInstance().objectDistance = 5;
 			if (c.absY < 3554) {
 				return;
 			}
@@ -303,7 +303,7 @@ public class Agility {
 				c.getPA().movePlayer(2474, 3436, 0);
 				return;
 			}
-			c.getVariables().doingAgility = true;
+			c.getInstance().doingAgility = true;
 			agilityWalk(c, 762, 0, -7);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				int cycle = 0;
@@ -326,26 +326,26 @@ public class Agility {
 				@Override
 				public void stop() {
 					resetAgilityWalk(c);
-					c.getPA().addSkillXP(11 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getVariables().playerAgility);
-					c.getVariables().logBalance = true;
-					c.getVariables().doingAgility = false;
+					c.getPA().addSkillXP(11 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getInstance().playerAgility);
+					c.getInstance().logBalance = true;
+					c.getInstance().doingAgility = false;
 				}
 			}, 1);
 			break;
 		case 2285:
 			c.startAnimation(828);
 			c.getPA().movePlayer(c.absX, 3424, 1);
-			c.getPA().addSkillXP(13 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getVariables().playerAgility);
-			c.getVariables().obstacleNetUp = true;
+			c.getPA().addSkillXP(13 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getInstance().playerAgility);
+			c.getInstance().obstacleNetUp = true;
 			break;
 		case 2313:
 			c.startAnimation(828);
 			c.getPA().movePlayer(2473, 3420, 2);
-			c.getPA().addSkillXP(12 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getVariables().playerAgility);
-			c.getVariables().treeBranchUp = true;
+			c.getPA().addSkillXP(12 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getInstance().playerAgility);
+			c.getInstance().treeBranchUp = true;
 			break;
 		case 2312:
-			c.getVariables().doingAgility = true;
+			c.getInstance().doingAgility = true;
 			if (c.absX != 2477 || c.absY != 3420) {
 				c.getPA().movePlayer(2477, 3420, 2);
 				return;
@@ -373,9 +373,9 @@ public class Agility {
 				@Override
 				public void stop() {
 					resetAgilityWalk(c);
-					c.getPA().addSkillXP(12 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getVariables().playerAgility);
-					c.getVariables().balanceRope = true;
-					c.getVariables().doingAgility = false;
+					c.getPA().addSkillXP(12 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getInstance().playerAgility);
+					c.getInstance().balanceRope = true;
+					c.getInstance().doingAgility = false;
 				}
 			}, 1);
 			break;
@@ -383,14 +383,14 @@ public class Agility {
 		case 2315:
 			c.startAnimation(828);
 			c.getPA().movePlayer(c.absX, c.absY, 0);
-			c.getPA().addSkillXP(11 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getVariables().playerAgility);
-			c.getVariables().treeBranchDown = true;
+			c.getPA().addSkillXP(11 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getInstance().playerAgility);
+			c.getInstance().treeBranchDown = true;
 			break;
 		case 2286:
 			if (c.absY > 3426) {
 				return;
 			}
-			c.getVariables().doingAgility = true;
+			c.getInstance().doingAgility = true;
 			c.startAnimation(828);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				@Override
@@ -402,9 +402,9 @@ public class Agility {
 				@Override
 				public void stop() {
 					c.turnPlayerTo(c.absX, 3426);
-					c.getPA().addSkillXP(13 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getVariables().playerAgility);
-					c.getVariables().obstacleNetOver = true;
-					c.getVariables().doingAgility = false;
+					c.getPA().addSkillXP(13 * SkillHandler.XPRates.AGILITY.getXPRate(), c.getInstance().playerAgility);
+					c.getInstance().obstacleNetOver = true;
+					c.getInstance().doingAgility = false;
 				}
 			}, 1);
 			break;
@@ -412,7 +412,7 @@ public class Agility {
 			if (c.absY > 3432) {
 				return;
 			}
-			c.getVariables().doingAgility = true;
+			c.getInstance().doingAgility = true;
 			if (c.absX != 2484 && c.absY != 3430) {
 				c.getPA().movePlayer(2484, 3430, 0);
 				return;
@@ -439,23 +439,23 @@ public class Agility {
 					c.startAnimation(748);
 					resetAgilityWalk(c);
 					if (c.absY != 3430) {
-						c.getVariables().logBalance = false;
-						c.getVariables().obstacleNetUp = false;
-						c.getVariables().treeBranchUp = false;
-						c.getVariables().balanceRope = false;
-						c.getVariables().treeBranchDown = false;
-						c.getVariables().obstacleNetOver = false;
-						c.getVariables().doingAgility = false;
-						if (c.getVariables().logBalance && c.getVariables().obstacleNetUp
-								&& c.getVariables().treeBranchUp && c.getVariables().balanceRope
-								&& c.getVariables().treeBranchDown && c.getVariables().obstacleNetOver) {
+						c.getInstance().logBalance = false;
+						c.getInstance().obstacleNetUp = false;
+						c.getInstance().treeBranchUp = false;
+						c.getInstance().balanceRope = false;
+						c.getInstance().treeBranchDown = false;
+						c.getInstance().obstacleNetOver = false;
+						c.getInstance().doingAgility = false;
+						if (c.getInstance().logBalance && c.getInstance().obstacleNetUp
+								&& c.getInstance().treeBranchUp && c.getInstance().balanceRope
+								&& c.getInstance().treeBranchDown && c.getInstance().obstacleNetOver) {
 							c.getPA().addSkillXP(50 * SkillHandler.XPRates.AGILITY.getXPRate(),
-									c.getVariables().playerAgility);
+									c.getInstance().playerAgility);
 							c.sendMessage("You have completed the full gnome agility course.");
 							return;
 						} else {
 							c.getPA().addSkillXP(22 * SkillHandler.XPRates.AGILITY.getXPRate(),
-									c.getVariables().playerAgility);
+									c.getInstance().playerAgility);
 						}
 					}
 				}
@@ -491,22 +491,22 @@ public class Agility {
 					c.startAnimation(748);
 					resetAgilityWalk(c);
 					if (c.absY != 3430) {
-						c.getVariables().logBalance = false;
-						c.getVariables().obstacleNetUp = false;
-						c.getVariables().treeBranchUp = false;
-						c.getVariables().balanceRope = false;
-						c.getVariables().treeBranchDown = false;
-						c.getVariables().obstacleNetOver = false;
-						if (c.getVariables().logBalance && c.getVariables().obstacleNetUp
-								&& c.getVariables().treeBranchUp && c.getVariables().balanceRope
-								&& c.getVariables().treeBranchDown && c.getVariables().obstacleNetOver) {
+						c.getInstance().logBalance = false;
+						c.getInstance().obstacleNetUp = false;
+						c.getInstance().treeBranchUp = false;
+						c.getInstance().balanceRope = false;
+						c.getInstance().treeBranchDown = false;
+						c.getInstance().obstacleNetOver = false;
+						if (c.getInstance().logBalance && c.getInstance().obstacleNetUp
+								&& c.getInstance().treeBranchUp && c.getInstance().balanceRope
+								&& c.getInstance().treeBranchDown && c.getInstance().obstacleNetOver) {
 							c.getPA().addSkillXP(37 * SkillHandler.XPRates.AGILITY.getXPRate(),
-									c.getVariables().playerAgility);
+									c.getInstance().playerAgility);
 							c.sendMessage("You have completed the full gnome agility course.");
 							return;
 						} else {
 							c.getPA().addSkillXP(22 * SkillHandler.XPRates.AGILITY.getXPRate(),
-									c.getVariables().playerAgility);
+									c.getInstance().playerAgility);
 						}
 					}
 				}

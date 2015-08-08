@@ -23,11 +23,11 @@ public class QuickCurses {
 		canBeSelected(c, actionId);
 		for (int j = 0; j < data.length; j++) {
 			if (data[j][0] == actionId) {
-				if (c.getVariables().quickCurses[data[j][2]]) {
-					c.getVariables().quickCurses[data[j][2]] = false;
+				if (c.getInstance().quickCurses[data[j][2]]) {
+					c.getInstance().quickCurses[data[j][2]] = false;
 					c.getPA().sendFrame36(data[j][1], 0);
 				} else {
-					c.getVariables().quickCurses[data[j][2]] = true;
+					c.getInstance().quickCurses[data[j][2]] = true;
 					c.getPA().sendFrame36(data[j][1], 1);
 				}
 			}
@@ -36,7 +36,7 @@ public class QuickCurses {
 
 	public static void loadCheckMarks(Player player) {
 		for (int j = 0; j < data.length; j++)
-			player.getPA().sendFrame36(data[j][1], player.getVariables().quickCurses[data[j][2]] ? 1 : 0);
+			player.getPA().sendFrame36(data[j][1], player.getInstance().quickCurses[data[j][2]] ? 1 : 0);
 	}
 
 	public static void canBeSelected(Player c, int actionId) {
@@ -133,7 +133,7 @@ public class QuickCurses {
 		}
 		for (int i = 0; i < MAX_CURSES; i++) {
 			if (!curse[i]) {
-				c.getVariables().quickCurses[i] = false;
+				c.getInstance().quickCurses[i] = false;
 				for (int j = 0; j < data.length; j++) {
 					if (i == data[j][2])
 						c.getPA().sendFrame36(data[j][1], 0);
@@ -145,19 +145,19 @@ public class QuickCurses {
 	public static void turnOnQuicks(Player c) {
 		boolean praySelect = false;
 		boolean curseSelect = false;
-		if (c.getVariables().playerPrayerBook == false) {
-			for (int i = 0; i < c.getVariables().quickPrayers.length; i++) {
-				if (c.getVariables().quickPrayers[i] && !c.getVariables().prayerActive[i]) {
-					c.getVariables().quickPray = true;
+		if (c.getInstance().playerPrayerBook == false) {
+			for (int i = 0; i < c.getInstance().quickPrayers.length; i++) {
+				if (c.getInstance().quickPrayers[i] && !c.getInstance().prayerActive[i]) {
+					c.getInstance().quickPray = true;
 					praySelect = true;
 					CombatPrayer.activatePrayer(c, i);
 					c.sendMessage(":quicks:on");
-					c.getVariables().quickPrayersOn = true;
+					c.getInstance().quickPrayersOn = true;
 					c.updateRequired = true;
 					c.appearanceUpdateRequired = true;
 				}
-				if (!c.getVariables().quickPrayers[i]) {
-					c.getVariables().prayerActive[i] = false;
+				if (!c.getInstance().quickPrayers[i]) {
+					c.getInstance().prayerActive[i] = false;
 					praySelect = false;
 					c.getPA().sendFrame36(CombatPrayer.PRAYER_GLOW[i], 0);
 					c.getPA().requestUpdates();
@@ -169,20 +169,20 @@ public class QuickCurses {
 				c.sendMessage("Right-click the Prayer button next to the minimap to select some.");
 			}
 		} else {
-			for (int i = 0; i < c.getVariables().quickCurses.length; i++) {
-				if (c.getVariables().quickCurses[i] && !c.getVariables().curseActive[i]) {
-					c.getVariables().quickCurse = true;
+			for (int i = 0; i < c.getInstance().quickCurses.length; i++) {
+				if (c.getInstance().quickCurses[i] && !c.getInstance().curseActive[i]) {
+					c.getInstance().quickCurse = true;
 					curseSelect = true;
 					c.curses().activateCurse(i);
 					c.sendMessage(":quicks:on");
-					c.getVariables().quickPrayersOn = true;
+					c.getInstance().quickPrayersOn = true;
 					c.updateRequired = true;
 					c.appearanceUpdateRequired = true;
 				}
-				if (!c.getVariables().quickCurses[i]) {
-					c.getVariables().curseActive[i] = false;
+				if (!c.getInstance().quickCurses[i]) {
+					c.getInstance().curseActive[i] = false;
 					curseSelect = false;
-					c.getPA().sendFrame36(c.getVariables().CURSE_GLOW[i], 0);
+					c.getPA().sendFrame36(c.getInstance().CURSE_GLOW[i], 0);
 					c.getPA().requestUpdates();
 				}
 			}
@@ -198,25 +198,25 @@ public class QuickCurses {
 		CombatPrayer.resetPrayers(c);
 		c.curses().resetCurse();
 		c.sendMessage(":quicks:off");
-		c.getVariables().quickPray = false;
-		c.getVariables().quickCurse = false;
-		c.getVariables().headIcon = -1;
+		c.getInstance().quickPray = false;
+		c.getInstance().quickCurse = false;
+		c.getInstance().headIcon = -1;
 		c.getPA().requestUpdates();
-		c.getVariables().quickPrayersOn = false;
+		c.getInstance().quickPrayersOn = false;
 		c.updateRequired = true;
 		c.appearanceUpdateRequired = true;
 	}
 
 	public static void selectQuickInterface(Player c) {
-		if (c.getVariables().playerPrayerBook == false)
+		if (c.getInstance().playerPrayerBook == false)
 			QuickPrayers.loadCheckMarks(c);
 		else
 			loadCheckMarks(c);
-		c.setSidebarInterface(5, c.getVariables().playerPrayerBook == false ? 20000 : 22000);
+		c.setSidebarInterface(5, c.getInstance().playerPrayerBook == false ? 20000 : 22000);
 		c.getPA().sendFrame106(5);
 	}
 
 	public static void clickConfirm(Player c) {
-		c.setSidebarInterface(5, c.getVariables().playerPrayerBook == true ? 22500 : 5608);
+		c.setSidebarInterface(5, c.getInstance().playerPrayerBook == true ? 22500 : 5608);
 	}
 }

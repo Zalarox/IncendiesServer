@@ -290,7 +290,7 @@ public class Trails {
 				c.getItems().deleteItem2(2795, 1);
 				c.getItems().addItem(lvl3(), 1);
 				showitem(lvl3(), "You've find another clue!");
-				c.getVariables().level3 += 1;
+				c.getInstance().level3 += 1;
 				clearPuzzle();
 			}
 			break;
@@ -308,7 +308,7 @@ public class Trails {
 				c.getItems().deleteItem2(3576, 1);
 				c.getItems().addItem(lvl3(), 1);
 				showitem(lvl3(), "You've find another clue!");
-				c.getVariables().level3 += 1;
+				c.getInstance().level3 += 1;
 				clearPuzzle();
 			}
 			break;
@@ -327,7 +327,7 @@ public class Trails {
 				c.getItems().deleteItem2(3565, 1);
 				c.getItems().addItem(lvl3(), 1);
 				showitem(lvl3(), "You've find another clue!");
-				c.getVariables().level3 += 1;
+				c.getInstance().level3 += 1;
 				clearPuzzle();
 			}
 			break;
@@ -407,14 +407,14 @@ public class Trails {
 		case 299:
 			if (x == 3249 && y == 3432) {
 				if (c.getItems().playerHasItem(2677, 1)) {
-					if (c.getVariables().level1 >= 5 && Misc.random(2) == 0) {
+					if (c.getInstance().level1 >= 5 && Misc.random(2) == 0) {
 						clueReward(c1(), 1, c1(), 1, c1(), 1, c1(), 1);
 						c.sendMessage("Well done, you've completed the Treasure Trail!");
-						c.getVariables().level1 = 0;
+						c.getInstance().level1 = 0;
 					} else {
 						c.getItems().addItem(lvl1(), 1);
 						showitem(lvl1(), "You've found another clue!");
-						c.getVariables().level1 += 1;
+						c.getInstance().level1 += 1;
 					}
 					c.getItems().deleteItem2(2677, 1);
 				}
@@ -423,14 +423,14 @@ public class Trails {
 		case 11745:
 			if (x == 2955 && y == 3390) {
 				if (c.getItems().playerHasItem(2682, 1)) {
-					if (c.getVariables().level1 >= 5 && Misc.random(2) == 0) {
+					if (c.getInstance().level1 >= 5 && Misc.random(2) == 0) {
 						clueReward(c1(), 1, c1(), 1, c1(), 1, c1(), 1);
 						c.sendMessage("Well done, you've completed the Treasure Trail!");
-						c.getVariables().level1 = 0;
+						c.getInstance().level1 = 0;
 					} else {
 						c.getItems().addItem(lvl1(), 1);
 						showitem(lvl1(), "You've found another clue!");
-						c.getVariables().level1 += 1;
+						c.getInstance().level1 += 1;
 					}
 					c.getItems().deleteItem2(2682, 1);
 				}
@@ -439,14 +439,14 @@ public class Trails {
 		case 356:
 			if (x == 2804 && y == 3428) {
 				if (c.getItems().playerHasItem(2686, 1)) {
-					if (c.getVariables().level2 >= 8 && Misc.random(2) == 0) {
+					if (c.getInstance().level2 >= 8 && Misc.random(2) == 0) {
 						clueReward(c2(), 1, c2(), 1, c2(), 1, c2(), 1);
 						c.sendMessage("Well done, you've completed the Treasure Trail!");
-						c.getVariables().level2 = 0;
+						c.getInstance().level2 = 0;
 					} else {
 						c.getItems().addItem(lvl2(), 1);
 						showitem(lvl2(), "You've found another clue!");
-						c.getVariables().level2 += 1;
+						c.getInstance().level2 += 1;
 					}
 					c.getItems().deleteItem2(2686, 1);
 				}
@@ -460,37 +460,37 @@ public class Trails {
 			c.getItems().deleteItem2(2678, 1);
 			c.getItems().addItem(lvl1(), 1);
 			showitem(lvl1(), "Zeke gives you another clue!");
-			c.getVariables().level1 += 1;
+			c.getInstance().level1 += 1;
 			return true;
 		} else if (npc == 0 && c.getItems().playerHasItem(2679, 1)) {
 			c.getItems().deleteItem2(2679, 1);
 			c.getItems().addItem(lvl1(), 1);
 			showitem(lvl1(), "Hans gives you another clue!");
-			c.getVariables().level1 += 1;
+			c.getInstance().level1 += 1;
 			return true;
 		} else if (npc == 388 && c.getItems().playerHasItem(2680, 1)) {
 			c.getItems().deleteItem2(2680, 1);
 			c.getItems().addItem(lvl1(), 1);
 			showitem(lvl1(), "The seer gives you another clue!");
-			c.getVariables().level1 += 1;
+			c.getInstance().level1 += 1;
 			return true;
 		} else if (npc == 548 && c.getItems().playerHasItem(2681, 1)) {
 			c.getItems().deleteItem2(2681, 1);
 			c.getItems().addItem(lvl1(), 1);
 			showitem(lvl1(), "Thessalia gives you another clue!");
-			c.getVariables().level1 += 1;
+			c.getInstance().level1 += 1;
 			return true;
 		} else if (npc == 379 && c.getItems().playerHasItem(2683, 1)) {
 			c.getItems().deleteItem2(2683, 1);
 			c.getItems().addItem(lvl1(), 1);
 			showitem(lvl1(), "Luthas gives you another clue!");
-			c.getVariables().level1 += 1;
+			c.getInstance().level1 += 1;
 			return true;
 		} else if (npc == 2290 && c.getItems().playerHasItem(2685, 1)) {
 			c.getItems().deleteItem2(2685, 1);
 			c.getItems().addItem(lvl2(), 1);
 			showitem(lvl2(), "Sir Tiffy gives you another clue!");
-			c.getVariables().level2 += 1;
+			c.getInstance().level2 += 1;
 			return true;
 		} else if (npc == 5141 && c.getItems().playerHasItem(2690, 1)) {
 			c.getItems().deleteItem2(2690, 1);
@@ -501,13 +501,13 @@ public class Trails {
 			c.getItems().deleteItem2(2691, 1);
 			c.getItems().addItem(lvl2(), 1);
 			showitem(lvl2(), "Kaylee gives you another clue!");
-			c.getVariables().level2 += 1;
+			c.getInstance().level2 += 1;
 			return true;
 		} else if (npc == 538 && c.getItems().playerHasItem(2692, 1)) {
 			c.getItems().deleteItem2(2692, 1);
 			c.getItems().addItem(lvl2(), 1);
 			showitem(lvl2(), "Peska gives you another clue!");
-			c.getVariables().level2 += 1;
+			c.getInstance().level2 += 1;
 			return true;
 		} else if (npc == 5142 && c.getItems().playerHasItem(2694, 1)) {
 			c.getItems().deleteItem2(2694, 1);
@@ -523,19 +523,19 @@ public class Trails {
 			c.getItems().deleteItem2(2696, 1);
 			c.getItems().addItem(lvl3(), 1);
 			showitem(lvl3(), "The monk gives you another clue!");
-			c.getVariables().level3 += 1;
+			c.getInstance().level3 += 1;
 			return true;
 		} else if (npc == 4494 && c.getItems().playerHasItem(2697, 1)) {
 			c.getItems().deleteItem2(2697, 1);
 			c.getItems().addItem(lvl3(), 1);
 			showitem(lvl3(), "General Wartface gives you another clue!");
-			c.getVariables().level3 += 1;
+			c.getInstance().level3 += 1;
 			return true;
 		} else if (npc == 1060 && c.getItems().playerHasItem(2700, 1)) {
 			c.getItems().deleteItem2(2700, 1);
 			c.getItems().addItem(lvl3(), 1);
 			showitem(lvl3(), "Denulth gives you another clue!");
-			c.getVariables().level3 += 1;
+			c.getInstance().level3 += 1;
 			return true;
 		}
 		return false;
@@ -652,38 +652,38 @@ public class Trails {
 			Clue("", "", "This anagram reveals", "who to speak to next:", "", "HTENDLU", "", "");
 			break;
 		case 2775:// level1 Chest
-			if (c.getVariables().level1 >= 5 && Misc.random(2) == 0) {
+			if (c.getInstance().level1 >= 5 && Misc.random(2) == 0) {
 				clueReward(c1(), 1, c1(), 1, c1(), 1, c1(), 1);
 				c.sendMessage("Well done, you've completed the Treasure Trail!");
-				c.getVariables().level1 = 0;
+				c.getInstance().level1 = 0;
 			} else {
 				c.getItems().addItem(lvl1(), 1);
 				showitem(lvl1(), "You've found another clue!");
-				c.getVariables().level1 += 1;
+				c.getInstance().level1 += 1;
 			}
 			c.getItems().deleteItem2(2775, 1);
 			break;
 		case 2777:// level2 Chest
-			if (c.getVariables().level2 >= 8 && Misc.random(2) == 0) {
+			if (c.getInstance().level2 >= 8 && Misc.random(2) == 0) {
 				clueReward(c2(), 1, c2(), 1, c2(), 1, c2(), 1);
 				c.sendMessage("Well done, you've completed the Treasure Trail!");
-				c.getVariables().level2 = 0;
+				c.getInstance().level2 = 0;
 			} else {
 				c.getItems().addItem(lvl2(), 1);
 				showitem(lvl2(), "You've found another clue!");
-				c.getVariables().level2 += 1;
+				c.getInstance().level2 += 1;
 			}
 			c.getItems().deleteItem2(2777, 1);
 			break;
 		case 2779:// level3 Chest
-			if (c.getVariables().level3 >= 13 && Misc.random(3) == 0) {
+			if (c.getInstance().level3 >= 13 && Misc.random(3) == 0) {
 				clueReward(c3(), 1, c3(), 1, c3(), 1, c3(), 1);
 				c.sendMessage("Well done, you've completed the Treasure Trail!");
-				c.getVariables().level3 = 0;
+				c.getInstance().level3 = 0;
 			} else {
 				c.getItems().addItem(lvl3(), 1);
 				showitem(lvl3(), "You've found another clue!");
-				c.getVariables().level3 += 1;
+				c.getInstance().level3 += 1;
 			}
 			c.getItems().deleteItem2(2779, 1);
 			break;

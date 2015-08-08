@@ -177,10 +177,10 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 		cl.setOutStreamDecryption(outC);
 		cl.outStream.packetEncryption = outC;
 
-		cl.getVariables().saveCharacter = false;
+		cl.getInstance().saveCharacter = false;
 
 		char first = name.charAt(0);
-		cl.getVariables().properName = Character.toUpperCase(first) + name.substring(1, name.length());
+		cl.getInstance().properName = Character.toUpperCase(first) + name.substring(1, name.length());
 		cl.identityPunishment = identity;
 
 		/* if(!register) { */
@@ -205,26 +205,26 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 			int load = PlayerSave.loadGame(cl, cl.playerName, cl.playerPass);
 			if (load == 0) {
 				/* if(register) { */
-				cl.getVariables().addStarter = true;
+				cl.getInstance().addStarter = true;
 				/*
 				 * returnCode = 24; } else returnCode = 23;
 				 */
 			}
 			if (load == 3) {
 				returnCode = /* register ? 22 : */ 3;
-				cl.getVariables().saveFile = false;
+				cl.getInstance().saveFile = false;
 			} else {
-				for (int i = 0; i < cl.getVariables().playerEquipment.length; i++) {
-					if (cl.getVariables().playerEquipment[i] == 0) {
-						cl.getVariables().playerEquipment[i] = -1;
-						cl.getVariables().playerEquipmentN[i] = 0;
+				for (int i = 0; i < cl.getInstance().playerEquipment.length; i++) {
+					if (cl.getInstance().playerEquipment[i] == 0) {
+						cl.getInstance().playerEquipment[i] = -1;
+						cl.getInstance().playerEquipmentN[i] = 0;
 					}
 				}
 				if (!GameEngine.playerHandler.newPlayerPlayer(cl)/* && !register */) {
 					returnCode = 7;
-					cl.getVariables().saveFile = false;
+					cl.getInstance().saveFile = false;
 				} else {
-					cl.getVariables().saveFile = true;
+					cl.getInstance().saveFile = true;
 				}
 			}
 			/* if(!register && returnCode != 23) */
@@ -238,8 +238,8 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 		bldr.setBare(true);
 		bldr.addByte((byte) returnCode);
 		if (returnCode == 2) {
-			cl.getVariables().saveCharacter = true;
-			bldr.addByte((byte) cl.getVariables().playerRights);
+			cl.getInstance().saveCharacter = true;
+			bldr.addByte((byte) cl.getInstance().playerRights);
 		} else if (returnCode == 21) {
 			bldr.addByte((byte) loginDelay);
 		} else {

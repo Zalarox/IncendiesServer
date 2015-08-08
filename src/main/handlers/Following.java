@@ -24,7 +24,7 @@ public class Following {
 		if (p.freezeTimer > 0) {
 			return false;
 		}
-		if (p.isDead || p.constitution <= 0)
+		if (p.isDead || p.lifePoints <= 0)
 			return false;
 		return true;
 	}
@@ -56,7 +56,7 @@ public class Following {
 				rangeWeaponDistance = p.goodDistance(otherX, otherY, p.getX(), p.getY(), 4),
 				bowDistance = p.goodDistance(otherX, otherY, p.getX(), p.getY(), 6),
 				mageDistance = p.goodDistance(otherX, otherY, p.getX(), p.getY(), 7),
-				castingMagic = (p.usingMagic || p.autocasting || p.spellId > 0 || p.getVariables().autocastId > 0)
+				castingMagic = (p.usingMagic || p.autocasting || p.spellId > 0 || p.getInstance().autocastId > 0)
 						&& mageDistance && p.mageFollow,
 				playerRanging = (p.usingRangeWeapon) && rangeWeaponDistance,
 				playerBowOrCross = (p.usingBow) && bowDistance;
@@ -107,15 +107,15 @@ public class Following {
 				rangeWeaponDistance = p.goodDistance(otherX, otherY, p.getX(), p.getY(), 4),
 				bowDistance = p.goodDistance(otherX, otherY, p.getX(), p.getY(), 6),
 				mageDistance = p.goodDistance(otherX, otherY, p.getX(), p.getY(), 7),
-				castingMagic = (p.usingMagic || p.autocasting || p.spellId > 0 || p.getVariables().autocastId > 0)
+				castingMagic = (p.usingMagic || p.autocasting || p.spellId > 0 || p.getInstance().autocastId > 0)
 						&& mageDistance && p.mageFollow,
 				playerRanging = (p.usingRangeWeapon) && rangeWeaponDistance,
 				playerBowOrCross = (p.usingBow) && bowDistance;
 
-		p.faceUpdate(p.getVariables().followId2);
+		p.faceUpdate(p.getInstance().followId2);
 		if (sameSpot) {
 			stepAway(p);
-			p.faceUpdate(p.getVariables().followId2);
+			p.faceUpdate(p.getInstance().followId2);
 			return;
 		}
 
@@ -133,9 +133,9 @@ public class Following {
 				return;
 			}
 		}
-		p.faceUpdate(p.getVariables().followId2);
+		p.faceUpdate(p.getInstance().followId2);
 		walk(otherX, otherY, p);
-		p.faceUpdate(p.getVariables().followId2);
+		p.faceUpdate(p.getInstance().followId2);
 	}
 
 	public static void triggerFollowing(int id, int type, Player p) {
@@ -153,9 +153,9 @@ public class Following {
 		CycleEventHandler.getSingleton().addEvent(p, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (p.getVariables().followId > 0)
+				if (p.getInstance().followId > 0)
 					player(p);
-				else if (p.getVariables().followId2 > 0)
+				else if (p.getInstance().followId2 > 0)
 					npc(p);
 				else
 					container.stop();
@@ -163,16 +163,16 @@ public class Following {
 
 			@Override
 			public void stop() {
-				p.getVariables().followId = 0;
-				p.getVariables().followId2 = 0;
+				p.getInstance().followId = 0;
+				p.getInstance().followId2 = 0;
 			}
 		}, 1);
 	}
 
 	public static void resetFollow(Player c) {
-		c.getVariables().followId = 0;
-		c.getVariables().followId2 = 0;
-		c.getVariables().mageFollow = false;
+		c.getInstance().followId = 0;
+		c.getInstance().followId2 = 0;
+		c.getInstance().mageFollow = false;
 		c.outStream.createFrame(174);
 		c.outStream.writeWord(0);
 		c.outStream.writeByte(0);

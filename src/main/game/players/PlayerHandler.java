@@ -120,9 +120,9 @@ public class PlayerHandler {
 		}
 
 		Player c = PlayerHandler.players[i];
-		if (c != null && c.disconnected && (System.currentTimeMillis() - c.getVariables().logoutDelay > 10000
-				|| c.getVariables().properLogout || kickAllPlayers)) {
-			if (players[i].getVariables().inTrade) {
+		if (c != null && c.disconnected && (System.currentTimeMillis() - c.getInstance().logoutDelay > 10000
+				|| c.getInstance().properLogout || kickAllPlayers)) {
+			if (players[i].getInstance().inTrade) {
 				if (c.opponent != null) {
 					c.opponent.Dueling.declineDuel(c.opponent, true, false);
 				}
@@ -159,10 +159,10 @@ public class PlayerHandler {
 			thread.shutdownNow();
 			return;
 		}
-		if (players[i].disconnected && (System.currentTimeMillis() - players[i].getVariables().logoutDelay > 10000
-				|| players[i].getVariables().properLogout || kickAllPlayers)) {
-			if (players[i].getVariables().inTrade) {
-				Player o = PlayerHandler.players[players[i].getVariables().tradeWith];
+		if (players[i].disconnected && (System.currentTimeMillis() - players[i].getInstance().logoutDelay > 10000
+				|| players[i].getInstance().properLogout || kickAllPlayers)) {
+			if (players[i].getInstance().inTrade) {
+				Player o = PlayerHandler.players[players[i].getInstance().tradeWith];
 				if (o != null) {
 					o.getTradeHandler().declineTrade(false);
 				}
@@ -188,9 +188,9 @@ public class PlayerHandler {
 			players[i] = null;
 			return;
 		} else {
-			if (!players[i].getVariables().initialized) {
+			if (!players[i].getInstance().initialized) {
 				players[i].initialize();
-				players[i].getVariables().initialized = true;
+				players[i].getInstance().initialized = true;
 			} else {
 				players[i].update();
 			}
@@ -240,9 +240,9 @@ public class PlayerHandler {
 				continue;
 			}
 			Player c = PlayerHandler.players[i];
-			if (c != null && c.disconnected && (System.currentTimeMillis() - c.getVariables().logoutDelay > 10000
-					|| c.getVariables().properLogout || kickAllPlayers)) {
-				if (players[i].getVariables().inTrade) {
+			if (c != null && c.disconnected && (System.currentTimeMillis() - c.getInstance().logoutDelay > 10000
+					|| c.getInstance().properLogout || kickAllPlayers)) {
+				if (players[i].getInstance().inTrade) {
 					if (c.opponent != null) {
 						c.opponent.Dueling.declineDuel(c.opponent, true, false);
 					}
@@ -280,10 +280,10 @@ public class PlayerHandler {
 			if (players[i] == null || !players[i].isActive) {
 				continue;
 			}
-			if (players[i].disconnected && (System.currentTimeMillis() - players[i].getVariables().logoutDelay > 10000
-					|| players[i].getVariables().properLogout || kickAllPlayers)) {
-				if (players[i].getVariables().inTrade) {
-					Player o = PlayerHandler.players[players[i].getVariables().tradeWith];
+			if (players[i].disconnected && (System.currentTimeMillis() - players[i].getInstance().logoutDelay > 10000
+					|| players[i].getInstance().properLogout || kickAllPlayers)) {
+				if (players[i].getInstance().inTrade) {
+					Player o = PlayerHandler.players[players[i].getInstance().tradeWith];
 					if (o != null) {
 						o.getTradeHandler().declineTrade(false);
 					}
@@ -308,9 +308,9 @@ public class PlayerHandler {
 				removePlayer(players[i]);
 				players[i] = null;
 			} else {
-				if (!players[i].getVariables().initialized) {
+				if (!players[i].getInstance().initialized) {
 					players[i].initialize();
-					players[i].getVariables().initialized = true;
+					players[i].getInstance().initialized = true;
 				} else {
 					players[i].update();
 				}
@@ -357,7 +357,7 @@ public class PlayerHandler {
 		int size = plr.npcListSize;
 		plr.npcListSize = 0;
 		for (int i = 0; i < size; i++) {
-			if (plr.getVariables().RebuildNPCList == false && plr.withinDistance(plr.npcList[i]) == true) {
+			if (plr.getInstance().RebuildNPCList == false && plr.withinDistance(plr.npcList[i]) == true) {
 				plr.npcList[i].updateNPCMovement(str);
 				plr.npcList[i].appendNPCUpdateBlock(updateBlock, plr);
 				plr.npcList[plr.npcListSize++] = plr.npcList[i];
@@ -384,7 +384,7 @@ public class PlayerHandler {
 		for (int i = 0; i < NPCHandler.maxNPCs; i++) {
 			if (NPCHandler.npcs[i] != null) {
 				int id = NPCHandler.npcs[i].npcId;
-				if (plr.getVariables().RebuildNPCList == false
+				if (plr.getInstance().RebuildNPCList == false
 						&& (plr.npcInListBitmap[id >> 3] & (1 << (id & 7))) != 0) {
 				} else if (plr.withinDistance(NPCHandler.npcs[i]) == false) {
 				} else {
@@ -393,7 +393,7 @@ public class PlayerHandler {
 			}
 		}
 
-		plr.getVariables().RebuildNPCList = false;
+		plr.getInstance().RebuildNPCList = false;
 
 		if (updateBlock.currentOffset > 0) {
 			str.writeBits(14, 16383);
@@ -467,7 +467,7 @@ public class PlayerHandler {
 		}
 
 		int[] addPlayers = toIntArray(plr.addPlayerList);
-		int addSize = plr.getVariables().addPlayerSize;
+		int addSize = plr.getInstance().addPlayerSize;
 
 		if (size + addSize > 255) {
 			addSize = size - 255;
@@ -484,15 +484,15 @@ public class PlayerHandler {
 			}
 
 			plr.addNewPlayer(players[id], str, updateBlock);
-			plr.getVariables().addPlayerSize--; // you could just put these in
+			plr.getInstance().addPlayerSize--; // you could just put these in
 												// player.java
 			plr.addPlayerList.remove((Integer) id); // but for the sake of the
 													// tutorial, it's right
 													// here.
 		}
 
-		if (plr.getVariables().addPlayerSize > 0) {
-			plr.getVariables().addPlayerSize = 0;
+		if (plr.getInstance().addPlayerSize > 0) {
+			plr.getInstance().addPlayerSize = 0;
 			plr.addPlayerList.clear();
 		}
 		// here
@@ -508,7 +508,7 @@ public class PlayerHandler {
 	}
 
 	public static void removePlayer(final Player plr) {
-		if (plr.getVariables().privateChat != 2) {
+		if (plr.getInstance().privateChat != 2) {
 			for (int d = 0; d < Constants.MAX_PLAYERS; d++) {
 				if (PlayerHandler.players[d] != null && PlayerHandler.players[d].isActive) {
 					final Player o = PlayerHandler.players[d];

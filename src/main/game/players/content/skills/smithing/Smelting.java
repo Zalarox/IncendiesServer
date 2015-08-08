@@ -45,11 +45,11 @@ public class Smelting extends SkillHandler {
 		}
 		c.getPA().sendFrame126(" ", 7441);
 		c.getPA().sendFrame164(2400);
-		c.getVariables().playerisSmelting = true;
+		c.getInstance().playerisSmelting = true;
 	}
 
 	public static void deleteTime(Player c) {
-		c.getVariables().doAmount--;
+		c.getInstance().doAmount--;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class Smelting extends SkillHandler {
 	 * @param amount
 	 */
 	public static void doAmount(Player c, int amount, int bartype) {
-		c.getVariables().doAmount = amount;
+		c.getInstance().doAmount = amount;
 		smeltBar(c, bartype);
 	}
 
@@ -71,7 +71,7 @@ public class Smelting extends SkillHandler {
 	private static void smeltBar(final Player c, int bartype) {
 		for (int i = 0; i < data.length; i++) {
 			if (bartype == data[i][0]) {
-				if (c.getVariables().playerLevel[c.getVariables().playerSmithing] < data[i][1]) { // Smithing
+				if (c.getInstance().playerLevel[c.getInstance().playerSmithing] < data[i][1]) { // Smithing
 					// level
 					c.getDH().sendStatement(
 							"You need a smithing level of at least " + data[i][1] + " in order smelt this bar.");
@@ -107,25 +107,25 @@ public class Smelting extends SkillHandler {
 					}
 				}
 
-				if (c.getVariables().playerSkilling[13]) {
+				if (c.getInstance().playerSkilling[13]) {
 					return;
 				}
 
-				c.getVariables().playerSkilling[13] = true;
-				c.getVariables().stopPlayerSkill = true;
+				c.getInstance().playerSkilling[13] = true;
+				c.getInstance().stopPlayerSkill = true;
 
-				c.getVariables().playerSkillProp[13][0] = data[i][0];// index
-				c.getVariables().playerSkillProp[13][1] = data[i][1];// Level
+				c.getInstance().playerSkillProp[13][0] = data[i][0];// index
+				c.getInstance().playerSkillProp[13][1] = data[i][1];// Level
 																		// required
-				c.getVariables().playerSkillProp[13][2] = data[i][2];// XP
-				c.getVariables().playerSkillProp[13][3] = data[i][3];// item
+				c.getInstance().playerSkillProp[13][2] = data[i][2];// XP
+				c.getInstance().playerSkillProp[13][3] = data[i][3];// item
 																		// required
-				c.getVariables().playerSkillProp[13][4] = data[i][4];// item
+				c.getInstance().playerSkillProp[13][4] = data[i][4];// item
 																		// required
 																		// 2
-				c.getVariables().playerSkillProp[13][5] = data[i][5];// coal
+				c.getInstance().playerSkillProp[13][5] = data[i][5];// coal
 																		// amount
-				c.getVariables().playerSkillProp[13][6] = data[i][6];// Final
+				c.getInstance().playerSkillProp[13][6] = data[i][6];// Final
 																		// Item
 
 				c.getPA().removeAllWindows();
@@ -134,48 +134,48 @@ public class Smelting extends SkillHandler {
 					@Override
 					public void execute(CycleEventContainer container) {
 						deleteTime(c);
-						c.getItems().deleteItem(c.getVariables().playerSkillProp[13][3], 1);
-						if (c.getVariables().playerSkillProp[13][5] == -1) {
-							c.getItems().deleteItem(c.getVariables().playerSkillProp[13][4], 1);
+						c.getItems().deleteItem(c.getInstance().playerSkillProp[13][3], 1);
+						if (c.getInstance().playerSkillProp[13][5] == -1) {
+							c.getItems().deleteItem(c.getInstance().playerSkillProp[13][4], 1);
 						}
-						if (c.getVariables().playerSkillProp[13][5] > 0) {// if
+						if (c.getInstance().playerSkillProp[13][5] > 0) {// if
 																			// coal
 																			// amount
 																			// is
 							// >0
-							c.getItems().deleteItem2(c.getVariables().playerSkillProp[13][4],
-									c.getVariables().playerSkillProp[13][5]);
+							c.getItems().deleteItem2(c.getInstance().playerSkillProp[13][4],
+									c.getInstance().playerSkillProp[13][5]);
 						}
 
 						c.sendMessage("You smelt an " // Message
-								+ c.getItems().getItemName(c.getVariables().playerSkillProp[13][6]).toLowerCase()
+								+ c.getItems().getItemName(c.getInstance().playerSkillProp[13][6]).toLowerCase()
 								+ ".");
 
-						c.getPA().addSkillXP(c.getVariables().playerSkillProp[13][2] // XP
+						c.getPA().addSkillXP(c.getInstance().playerSkillProp[13][2] // XP
 								* SkillHandler.XPRates.SMITHING.getXPRate(), 13);
-						c.getItems().addItem(c.getVariables().playerSkillProp[13][6], 1);// item
+						c.getItems().addItem(c.getInstance().playerSkillProp[13][6], 1);// item
 
-						if (!c.getItems().playerHasItem(c.getVariables().playerSkillProp[13][3], 1)) {
+						if (!c.getItems().playerHasItem(c.getInstance().playerSkillProp[13][3], 1)) {
 							c.sendMessage("You don't have enough ores to continue!");
 							resetSmelting(c);
 							container.stop();
 						}
-						if (c.getVariables().playerSkillProp[13][4] > 0) {
-							if (!c.getItems().playerHasItem(c.getVariables().playerSkillProp[13][4], 1)) {
+						if (c.getInstance().playerSkillProp[13][4] > 0) {
+							if (!c.getItems().playerHasItem(c.getInstance().playerSkillProp[13][4], 1)) {
 								c.sendMessage("You don't have enough ores to continue!");
 								resetSmelting(c);
 								container.stop();
 							}
 						}
-						if (c.getVariables().doAmount <= 0) {
+						if (c.getInstance().doAmount <= 0) {
 							resetSmelting(c);
 							container.stop();
 						}
-						if (!c.getVariables().playerSkilling[13]) {
+						if (!c.getInstance().playerSkilling[13]) {
 							resetSmelting(c);
 							container.stop();
 						}
-						if (!c.getVariables().stopPlayerSkill) {
+						if (!c.getInstance().stopPlayerSkill) {
 							resetSmelting(c);
 							container.stop();
 						}
@@ -191,13 +191,13 @@ public class Smelting extends SkillHandler {
 				CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {// animation
 					@Override
 					public void execute(CycleEventContainer container) {
-						if (!c.getVariables().playerSkilling[13]) {
+						if (!c.getInstance().playerSkilling[13]) {
 							resetSmelting(c);
 							container.stop();
 							return;
 						}
 						c.startAnimation(899);
-						if (!c.getVariables().stopPlayerSkill) {
+						if (!c.getInstance().stopPlayerSkill) {
 							container.stop();
 						}
 					}
@@ -332,11 +332,11 @@ public class Smelting extends SkillHandler {
 	 * Resets Smelting
 	 */
 	public static void resetSmelting(Player c) {
-		c.getVariables().playerSkilling[13] = false;
-		c.getVariables().stopPlayerSkill = false;
-		c.getVariables().playerisSmelting = false;
+		c.getInstance().playerSkilling[13] = false;
+		c.getInstance().stopPlayerSkill = false;
+		c.getInstance().playerisSmelting = false;
 		for (int i = 0; i < 7; i++) {
-			c.getVariables().playerSkillProp[13][i] = -1;
+			c.getInstance().playerSkillProp[13][i] = -1;
 		}
 	}
 

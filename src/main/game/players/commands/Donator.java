@@ -22,7 +22,7 @@ public class Donator extends Commands {
 		/**
 		 * Check permission level. These commands are available for Donator levels of 1, or permission levels of 2 and above.
 		 */
-		if (c.getVariables().isDonator == 1 || c.getVariables().playerRights >= 1) {
+		if (c.getInstance().isDonator == 1 || c.getInstance().playerRights >= 1) {
 			
 			if (playerCommand.startsWith("yell")) {
 				c.getYell().shout(c, playerCommand.substring(5));

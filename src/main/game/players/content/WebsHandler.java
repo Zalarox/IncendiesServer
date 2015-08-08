@@ -19,7 +19,7 @@ public class WebsHandler {
 
 	public static void handleWebs(final Player p, final int objectID, final int x, final int y, final int h,
 			final int face) {
-		if (!canSlashWeb(p.getItems().getItemName(p.getVariables().playerEquipment[3]))) {
+		if (!canSlashWeb(p.getItems().getItemName(p.getInstance().playerEquipment[3]))) {
 			p.sendMessage("You need a sharp weapon to slash the web!");
 			return;
 		}
@@ -29,11 +29,11 @@ public class WebsHandler {
 		 * the coords for inMageBank
 		 */
 		if (Misc.random(1) == 0) {
-			p.startAnimation(p.getCombat().getWepAnim(p.getItems().getItemName(p.getVariables().playerEquipment[3])));
+			p.startAnimation(p.getCombat().getWepAnim(p.getItems().getItemName(p.getInstance().playerEquipment[3])));
 			p.sendMessage("You failed to slash the web!");
 			return;
 		}
-		p.startAnimation(p.getCombat().getWepAnim(p.getItems().getItemName(p.getVariables().playerEquipment[3])));
+		p.startAnimation(p.getCombat().getWepAnim(p.getItems().getItemName(p.getInstance().playerEquipment[3])));
 		p.sendMessage("You slash the web apart!");
 		p.getPA().checkObjectSpawn(-1, x, y, face, 0);
 		GameEngine.getScheduler().schedule(new Task(WEB_RESPAWN) {

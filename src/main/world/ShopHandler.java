@@ -76,9 +76,9 @@ public class ShopHandler {
 			if (DidUpdate == true) {
 				for (int k = 1; k < Constants.MAX_PLAYERS; k++) {
 					if (PlayerHandler.players[k] != null) {
-						if (PlayerHandler.players[k].getVariables().isShopping == true
-								&& PlayerHandler.players[k].getVariables().myShopId == i) {
-							PlayerHandler.players[k].getVariables().updateShop = true;
+						if (PlayerHandler.players[k].getInstance().isShopping == true
+								&& PlayerHandler.players[k].getInstance().myShopId == i) {
+							PlayerHandler.players[k].getInstance().updateShop = true;
 							DidUpdate = false;
 							PlayerHandler.players[k].updateshop(i);
 						}

@@ -131,7 +131,7 @@ public class PestControl {
 							c.getPA().sendString("Next Departure: " + waitTimer + "", 21120);
 						c.getPA().sendString("Players Ready: " + playersInBoat() + "", 21121);
 						c.getPA().sendString("(Need " + PLAYERS_REQUIRED + " to 25 players)", 21122);
-						c.getPA().sendString("Points: " + c.getVariables().pcPoints + "", 21123);
+						c.getPA().sendString("Points: " + c.getInstance().pcPoints + "", 21123);
 
 					} catch (RuntimeException e) {
 						// TODO Auto-generated catch block
@@ -161,7 +161,7 @@ public class PestControl {
 
 				}
 				player.getPA().sendString("" + KNIGHTS_HEALTH, 21115);
-				player.getPA().sendString("" + player.getVariables().pcDamage, 21116);
+				player.getPA().sendString("" + player.getInstance().pcDamage, 21116);
 				player.getPA().sendString("Time remaining: " + gameTimer + "", 21117);
 
 			}
@@ -254,12 +254,12 @@ public class PestControl {
 				continue;
 			}
 			player.getPA().movePlayer(2657, 2639, 0);
-			if (won && player.getVariables().pcDamage > 500) {
+			if (won && player.getInstance().pcDamage > 500) {
 				player.getDH().sendDialogues(79, 3790);
 				player.sendMessage("You have won the pest control game and have been awarded " + POINT_REWARD
 						+ " Pest Control points.");
-				player.getVariables().pcPoints += POINT_REWARD + player.getVariables().getDonarPointbonus(POINT_REWARD);
-				player.getItems().addItem(995, player.getVariables().CombatLevel * 400);
+				player.getInstance().pcPoints += POINT_REWARD + player.getInstance().getDonarPointbonus(POINT_REWARD);
+				player.getItems().addItem(995, player.getInstance().CombatLevel * 400);
 			} else if (won) {
 				player.getDH().sendDialogues(77, 3790);
 				player.sendMessage("The void knights notice your lack of zeal.");
@@ -298,15 +298,15 @@ public class PestControl {
 	 * Cleans the player of any damage, loss they may of received
 	 */
 	private void cleanUpPlayer(Player player) {
-		player.getVariables().poisonDamage = 0;
+		player.getInstance().poisonDamage = 0;
 		CombatPrayer.resetPrayers(player);
 		for (int i = 0; i < 24; i++) {
-			player.getVariables().playerLevel[i] = player.getPA().getLevelForXP(player.getVariables().playerXP[i]);
+			player.getInstance().playerLevel[i] = player.getPA().getLevelForXP(player.getInstance().playerXP[i]);
 			player.getPA().refreshSkill(i);
 		}
-		player.getVariables().specAmount = 10;
-		player.getVariables().pcDamage = 0;
-		player.getItems().addSpecialBar(player.getVariables().playerEquipment[player.getVariables().playerWeapon]);
+		player.getInstance().specAmount = 10;
+		player.getInstance().pcDamage = 0;
+		player.getItems().addSpecialBar(player.getInstance().playerEquipment[player.getInstance().playerWeapon]);
 	}
 
 	/**

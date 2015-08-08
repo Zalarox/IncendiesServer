@@ -17,8 +17,8 @@ public class PlayerModerator extends Commands {
 	 * @param playerCommand
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
-		if ((c.getVariables().playerRights >= 1 && c.getVariables().playerRights <= 3)
-				|| c.getVariables().playerRights == 7 || c.getVariables().playerRights == 8) {
+		if ((c.getInstance().playerRights >= 1 && c.getInstance().playerRights <= 3)
+				|| c.getInstance().playerRights == 7 || c.getInstance().playerRights == 8) {
 			if (playerCommand.startsWith("mypos")) {
 				c.sendMessage("X: " + c.absX);
 				c.sendMessage("Y: " + c.absY);
@@ -41,17 +41,17 @@ public class PlayerModerator extends Commands {
 					String playerToTele = playerCommand.substring(10);
 					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].getVariables().properName.equalsIgnoreCase(playerToTele)) {
+							if (PlayerHandler.players[i].getInstance().properName.equalsIgnoreCase(playerToTele)) {
 								Player c2 = PlayerHandler.players[i];
-								if (c.getVariables().inWild() && (c.getVariables().playerRights != 3)) {
+								if (c.getInstance().inWild() && (c.getInstance().playerRights != 3)) {
 									c.sendMessage("You cannot move players when you are in the Wilderness.");
 									return;
 								}
-								if (c2.getVariables().inWild() && (c.getVariables().playerRights != 3)) {
+								if (c2.getInstance().inWild() && (c.getInstance().playerRights != 3)) {
 									c.sendMessage("You cannot move players when they are in the Wilderness.");
 									return;
 								}
-								c2.sendMessage("You have been teleported to " + c.getVariables().properName);
+								c2.sendMessage("You have been teleported to " + c.getInstance().properName);
 								c2.getPA().movePlayer(c.getX(), c.getY(), c.heightLevel);
 								break;
 							}

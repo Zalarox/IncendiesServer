@@ -23,7 +23,7 @@ public class BoltHandler {
 				c.getItems().deleteItem2(boltArray[i][0], 15);
 				c.getItems().addItem(boltArray[i][1], 15);
 				c.getPA().addSkillXP(boltArray[i][2] * SkillHandler.XPRates.FLETCHING.getXPRate(),
-						c.getVariables().playerFletching);
+						c.getInstance().playerFletching);
 				c.sendMessage("You create 15 " + c.getItems().getItemName(boltArray[i][1]) + ".");
 			}
 		}

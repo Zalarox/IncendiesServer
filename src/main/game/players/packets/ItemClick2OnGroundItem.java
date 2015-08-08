@@ -12,7 +12,7 @@ public class ItemClick2OnGroundItem implements PacketType {
 		final int itemX = c.getInStream().readSignedWordBigEndian();
 		final int itemY = c.getInStream().readSignedWordBigEndianA();
 		final int itemId = c.getInStream().readUnsignedWordA();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		for (final logData l : logData.values()) {
 			if (itemId == l.getLogId()) {

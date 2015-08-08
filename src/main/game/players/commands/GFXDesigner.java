@@ -12,7 +12,7 @@ public class GFXDesigner extends Commands {
 	 * @param playerCommand
 	 */
 	public static void handleCommands(Player c, String playerCommand) {
-		if (c.getVariables().playerRights == 7) {
+		if (c.getInstance().playerRights == 7) {
 
 		}
 	}

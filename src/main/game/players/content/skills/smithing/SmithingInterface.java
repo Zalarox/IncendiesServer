@@ -16,7 +16,7 @@ public class SmithingInterface {
 	}
 
 	private static String GetForlvl(final int i, final Player c) {
-		if (c.getVariables().playerLevel[13] >= i) {
+		if (c.getInstance().playerLevel[13] >= i) {
 			return "@whi@";
 		}
 		return "@bla@";

@@ -15,8 +15,8 @@ public class PlayerKilling {
 
 	// Add player to the list of killed players.
 	public boolean addPlayer(String i) {
-		if (!c.getVariables().killedPlayers.contains(i)) {
-			c.getVariables().killedPlayers.add(i);
+		if (!c.getInstance().killedPlayers.contains(i)) {
+			c.getInstance().killedPlayers.add(i);
 			return true;
 		}
 		return false;
@@ -24,8 +24,8 @@ public class PlayerKilling {
 	
 	// If the killed player is in the list, and the index is more than unique kills, remove from list.
 	public void checkForPlayer(String i) {
-		if (c.getVariables().killedPlayers.contains(i) && c.getVariables().killedPlayers.indexOf(i) >= NEEDED_KILLS) {
-			c.getVariables().killedPlayers.remove(i);
+		if (c.getInstance().killedPlayers.contains(i) && c.getInstance().killedPlayers.indexOf(i) >= NEEDED_KILLS) {
+			c.getInstance().killedPlayers.remove(i);
 		}
 	}
 

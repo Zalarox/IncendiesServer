@@ -17,28 +17,28 @@ public class DropItem implements PacketType {
 		c.getInStream().readUnsignedByte();
 		c.getInStream().readUnsignedByte();
 		int slot = c.getInStream().readUnsignedWordA();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
-		c.getVariables().alchDelay = System.currentTimeMillis();
+		c.getInstance().alchDelay = System.currentTimeMillis();
 		/*
 		 * if (itemId >= 0 && itemId <= 22000) { c.getItems().deleteItem(itemId,
 		 * slot, c.playerItemsN[slot]); c.sendMessage(
 		 * "@blu@You drop the item to the floor and it vanishes!"); return; }
 		 */
-		if (slot > c.getVariables().playerItems.length) {
+		if (slot > c.getInstance().playerItems.length) {
 			return;
 		}
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
-		if (c.getVariables().inTrade) {
+		if (c.getInstance().inTrade) {
 			c.getTradeHandler().declineTrade(true);
 		}
 		if (c.isDead) {
 			c.sendMessage("You can't drop items when you are dead.");
 			return;
 		}
-		if (c.getVariables().playerSkilling[c.getVariables().playerFiremaking]) {
+		if (c.getInstance().playerSkilling[c.getInstance().playerFiremaking]) {
 			return;
 		}
 		boolean droppable = true;
@@ -55,20 +55,20 @@ public class DropItem implements PacketType {
 				break;
 			}
 		}
-		if (c.getVariables().playerItemsN[slot] != 0 && itemId != -1
-				&& c.getVariables().playerItems[slot] == itemId + 1) {
+		if (c.getInstance().playerItemsN[slot] != 0 && itemId != -1
+				&& c.getInstance().playerItems[slot] == itemId + 1) {
 			if (destroyable) {
 				c.getPA().destroyInterface(itemId);
 				return;
 			}
 			if (droppable) {
-				if (c.getVariables().underAttackBy > 0) {
+				if (c.getInstance().underAttackBy > 0) {
 					if (c.getShops().getItemShopValue(itemId) > 1000) {
 						c.sendMessage("You may not drop items worth more than 1000 while in combat.");
 						return;
 					}
 				}
-				int amount = c.getVariables().playerItemsN[slot];
+				int amount = c.getInstance().playerItemsN[slot];
 				
 				ItemHandler.createGroundItem(c, itemId, c.getX(), c.getY(), c.heightLevel,
 						amount, c.getId());

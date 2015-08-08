@@ -7,17 +7,17 @@ import main.game.players.actions.combat.CombatPrayer;
 public class ProcessHandler {
 
 	public static void executeProcess(Player c) {
-		c.getVariables().diceTimer--;
-		c.getVariables().specRestoreTimer--;
+		c.getInstance().diceTimer--;
+		c.getInstance().specRestoreTimer--;
 		c.curses().handleProcess();
-		if (System.currentTimeMillis() - c.getVariables().lastPoison > 20000 && c.getVariables().poisonDamage > 0) {
-			int damage = c.getVariables().poisonDamage / 2;
+		if (System.currentTimeMillis() - c.getInstance().lastPoison > 20000 && c.getInstance().poisonDamage > 0) {
+			int damage = c.getInstance().poisonDamage / 2;
 			if (damage > 0) {
-				c.getVariables().lastPoison = System.currentTimeMillis();
+				c.getInstance().lastPoison = System.currentTimeMillis();
 				c.getCombat().appendHit(c, damage, 2, -1, false);
-				c.getVariables().poisonDamage--;
+				c.getInstance().poisonDamage--;
 			} else {
-				c.getVariables().poisonDamage = -1;
+				c.getInstance().poisonDamage = -1;
 				c.sendMessage("The poison has worn off.");
 			}
 		}
@@ -26,84 +26,84 @@ public class ProcessHandler {
 		}
 		CombatPrayer.handlePrayerDrain(c);
 
-		if (System.currentTimeMillis() - c.getVariables().singleCombatDelay > 3300) {
-			c.getVariables().underAttackBy = 0;
+		if (System.currentTimeMillis() - c.getInstance().singleCombatDelay > 3300) {
+			c.getInstance().underAttackBy = 0;
 		}
-		if (System.currentTimeMillis() - c.getVariables().singleCombatDelay2 > 3300) {
-			c.getVariables().underAttackBy2 = 0;
+		if (System.currentTimeMillis() - c.getInstance().singleCombatDelay2 > 3300) {
+			c.getInstance().underAttackBy2 = 0;
 		}
-		if (c.getVariables().skullTimer > 0) {
-			c.getVariables().skullTimer--;
-			if (c.getVariables().skullTimer == 1) {
-				c.getVariables().isSkulled = false;
-				c.getVariables().attackedPlayers.clear();
-				c.getVariables().headIconPk = -1;
-				c.getVariables().skullTimer = -1;
+		if (c.getInstance().skullTimer > 0) {
+			c.getInstance().skullTimer--;
+			if (c.getInstance().skullTimer == 1) {
+				c.getInstance().isSkulled = false;
+				c.getInstance().attackedPlayers.clear();
+				c.getInstance().headIconPk = -1;
+				c.getInstance().skullTimer = -1;
 				c.getPA().requestUpdates();
 			}
 		}
 
-		if (c.isDead && c.getVariables().respawnTimer == -6) {
+		if (c.isDead && c.getInstance().respawnTimer == -6) {
 			c.getPA().applyDead();
 		}
 
-		if (c.getVariables().respawnTimer == 7) {
-			c.getVariables().respawnTimer = -6;
+		if (c.getInstance().respawnTimer == 7) {
+			c.getInstance().respawnTimer = -6;
 			c.getPA().giveLife();
-		} else if (c.getVariables().respawnTimer == 12) {
-			c.getVariables().respawnTimer--;
+		} else if (c.getInstance().respawnTimer == 12) {
+			c.getInstance().respawnTimer--;
 			c.startAnimation(0x900);
-			c.getVariables().poisonDamage = -1;
+			c.getInstance().poisonDamage = -1;
 		}
 
-		if (c.getVariables().respawnTimer > -6) {
-			c.getVariables().respawnTimer--;
+		if (c.getInstance().respawnTimer > -6) {
+			c.getInstance().respawnTimer--;
 		}
-		if (c.getVariables().freezeTimer > -6) {
-			c.getVariables().freezeTimer--;
-			if (c.getVariables().frozenBy > 0) {
-				if (PlayerHandler.players[c.getVariables().frozenBy] == null) {
-					c.getVariables().freezeTimer = -1;
-					c.getVariables().frozenBy = -1;
-				} else if (!c.goodDistance(c.absX, c.absY, PlayerHandler.players[c.getVariables().frozenBy].absX,
-						PlayerHandler.players[c.getVariables().frozenBy].absY, 12)) {
-					c.getVariables().freezeTimer = -1;
-					c.getVariables().frozenBy = -1;
+		if (c.getInstance().freezeTimer > -6) {
+			c.getInstance().freezeTimer--;
+			if (c.getInstance().frozenBy > 0) {
+				if (PlayerHandler.players[c.getInstance().frozenBy] == null) {
+					c.getInstance().freezeTimer = -1;
+					c.getInstance().frozenBy = -1;
+				} else if (!c.goodDistance(c.absX, c.absY, PlayerHandler.players[c.getInstance().frozenBy].absX,
+						PlayerHandler.players[c.getInstance().frozenBy].absY, 12)) {
+					c.getInstance().freezeTimer = -1;
+					c.getInstance().frozenBy = -1;
 				}
 			}
 		}
-		if (c.getVariables().hitDelay > 0) {
-			c.getVariables().hitDelay--;
+		if (c.getInstance().hitDelay > 0) {
+			c.getInstance().hitDelay--;
 		}
 		c.getSummoning().familiarTick();
-		if (c.getVariables().hitDelay == 1) {
-			if (c.getVariables().oldNpcIndex > 0) {
-				c.getCombat().delayedHit(c.getVariables().oldNpcIndex);
+		if (c.getInstance().hitDelay == 1) {
+			if (c.getInstance().oldNpcIndex > 0) {
+				c.getCombat().delayedHit(c.getInstance().oldNpcIndex);
 			}
-			if (c.getVariables().oldPlayerIndex > 0) {
-				c.getCombat().playerDelayedHit(c.getVariables().oldPlayerIndex);
+			if (c.getInstance().oldPlayerIndex > 0) {
+				c.getCombat().playerDelayedHit(c.getInstance().oldPlayerIndex);
 			}
 		}
 
-		if (c.getVariables().attackTimer > 0) {
-			c.getVariables().attackTimer--;
+		if (c.getInstance().attackTimer > 0) {
+			c.getInstance().attackTimer--;
 		}
 
-		if (c.getVariables().attackTimer == 1) {
-			if (c.getVariables().npcIndex > 0 && c.getVariables().clickNpcType == 0) {
-				c.getCombat().attackNpc(c.getVariables().npcIndex);
+		if (c.getInstance().attackTimer == 1) {
+			if (c.getInstance().npcIndex > 0 && c.getInstance().clickNpcType == 0) {
+				c.getCombat().attackNpc(c.getInstance().npcIndex);
 			}
-			if (c.getVariables().playerIndex > 0) {
-				c.getCombat().attackPlayer(c.getVariables().playerIndex);
+			if (c.getInstance().playerIndex > 0) {
+				c.getCombat().attackPlayer(c.getInstance().playerIndex);
 			}
-		} else if (c.getVariables().attackTimer <= 0
-				&& (c.getVariables().npcIndex > 0 || c.getVariables().playerIndex > 0)) {
-			if (c.getVariables().npcIndex > 0) {
-				c.getVariables().attackTimer = 0;
-				c.getCombat().attackNpc(c.getVariables().npcIndex);
-			} else if (c.getVariables().playerIndex > 0) {
-				c.getVariables().attackTimer = 0;
-				c.getCombat().attackPlayer(c.getVariables().playerIndex);
+		} else if (c.getInstance().attackTimer <= 0
+				&& (c.getInstance().npcIndex > 0 || c.getInstance().playerIndex > 0)) {
+			if (c.getInstance().npcIndex > 0) {
+				c.getInstance().attackTimer = 0;
+				c.getCombat().attackNpc(c.getInstance().npcIndex);
+			} else if (c.getInstance().playerIndex > 0) {
+				c.getInstance().attackTimer = 0;
+				c.getCombat().attackPlayer(c.getInstance().playerIndex);
 			}
 		}
 	}

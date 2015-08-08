@@ -103,7 +103,7 @@ public class Player {
 	 * Some Variables used for Bone Burying
 	 */
 
-	public Player getVariables() {
+	public Player getInstance() {
 		return this;
 	}
 
@@ -437,11 +437,23 @@ public class Player {
 	}
 
 	public void addHp(int hp) {
-		if (constitution < maxConstitution) {
-			constitution += hp;
+		if (lifePoints < maxLifePoints) {
+			lifePoints += hp;
 		} else {
 			maxhp = 1;
 		}
+	}
+	
+	public void setMaxLP(int lp) {
+		maxLifePoints = lp;
+	}
+	
+	public void setLP(int lp) {
+		lifePoints = lp;
+	}
+	
+	public int getLP() {
+		return lifePoints;
 	}
 
 	public int getDonarPointbonus(int point) {
@@ -799,10 +811,10 @@ public class Player {
 	}
 
 	public void addToHp(int toAdd) {
-		if (constitution + toAdd >= maxConstitution) {
-			toAdd = maxConstitution - maxConstitution;
+		if (lifePoints + toAdd >= maxLifePoints) {
+			toAdd = maxLifePoints - maxLifePoints;
 		}
-		constitution += toAdd;
+		lifePoints += toAdd;
 	}
 
 	public void removeFromPrayer(int toRemove) {
@@ -881,11 +893,11 @@ public class Player {
 		isFullHelm = ItemLoader.isFullHelm(playerEquipment[playerHat]);
 		isFullMask = ItemLoader.isFullMask(playerEquipment[playerHat]);
 		isFullBody = ItemLoader.isFullBody(playerEquipment[playerChest]);
-		getPA().sendString("" + constitution, 19001);
+		getPA().sendString("" + lifePoints, 19001);
 		getPA().sendFrame126("" + playerLevel[23], 4030);
 		getPA().sendFrame126("" + playerLevel[5], 34555);
 		getPA().sendFrame126("" + getPA().getLevelForXP(playerXP[5]), 34556);
-		maxConstitution = calculateMaxLifePoints(this);
+		maxLifePoints = maxLP();
 		getPA().sendString("Join chat", 18135);
 		// getActionSender().sendCrashFrame();
 		getPA().handleWeaponStyle();
@@ -964,7 +976,7 @@ public class Player {
 
 		if (addStarter) {
 			getPA().addStarter();
-			constitution = 100;
+			lifePoints = 100;
 		}
 		initializePlayerTasks();
 		update();
@@ -1046,7 +1058,7 @@ public class Player {
 			c.getPotions().resetOverload();
 		}
 		c.getPA().resetSkills();
-		getPA().sendString("" + constitution, 19001);
+		getPA().sendString("" + lifePoints, 19001);
 		if (!inWild()) {
 			getPA().sendString("Combat Level: " + calculateCombatLevel(), 19000);
 		} else if (getLevelForXP(playerXP[23]) != 1) {
@@ -1112,8 +1124,8 @@ public class Player {
 		}
 		if (party != null && party.floor == null)
 			c.getPA().showOption(3, 0, "Invite", 1);
-		if (c.getVariables().teleBlockLength > 0 && !c.getVariables().inWild()) {
-			c.getVariables().teleBlockLength = 0;
+		if (c.getInstance().teleBlockLength > 0 && !c.getInstance().inWild()) {
+			c.getInstance().teleBlockLength = 0;
 		}
 	}
 
@@ -1121,99 +1133,31 @@ public class Player {
 		return absX >= 2660 && absX <= 2663 && absY >= 2638 && absY <= 2643;
 	}
 	
-	/**
-	 * TODO
-	 * 
-	 * Life points aren't always properly re-calculated when  
-	 * Nex armor is removed -- wearing a set of Nex armor, 
-	 * eating to full LP, and removing the Nex armor will leave  
-	 * a player's LP boosted, which isn't supposed to happen. 
-	 * This persists across logins and is only fixed by dying,
-	 * one of the few events that calculates LP properly.
-	 * 
-	 * Life point calculation (taking Nex armor into account)
-	 * is being done in the dumbest & most roundabout way possible. 
-	 * 
-	 * Ideally you'd have ONE method: getMaxLP(), calculateLP(), 
-	 * getLP() or something of the sort. Instead, this dumbass is
-	 * using THREE, and they don't even work right.
-	 * 
-	 * Also, smaller & more inconsequential things are done wrong:
-	 * the LP boost that the player has is not reflected in the head-icon
-	 * life point bar during combat. This means that, the LP bar is essentially
-	 * "over-filled" when wearing Nex armor, and will only begin to shrink
-	 * (turn red) once the boosted LP has been depleted, and the player's 
-	 * base LP begins to be affected by damage.
-	 */
-	public int calculateMaxLifePoints(Player p) {
-		int lifePoints = getLevelForXP(playerXP[3]) * 10;// The normal hp
-		if (isThereNexArmourEquipped(playerHat)) {
-			lifePoints += 66;
+	int calculateMaxLP() {
+		int calculatedLP = 990;
+		
+		if(equipment.hasNexArmor(Equipment.EQUIPMENT_HEAD)) {
+			calculatedLP += 66;
 		}
-		if (isThereNexArmourEquipped(playerChest)) {
-			lifePoints += 200;
+		
+		if(equipment.hasNexArmor(Equipment.EQUIPMENT_CHEST)) {
+			calculatedLP += 200;
 		}
-		if (isThereNexArmourEquipped(playerLegs)) {
-			lifePoints += 134;
+		
+		if(equipment.hasNexArmor(Equipment.EQUIPMENT_LEGS)) {
+			calculatedLP += 134;
 		}
-		return lifePoints;
+		
+		if(getLP() > calculatedLP) {
+			setLP(calculatedLP);
+		}
+		
+		return calculatedLP;
 	}
-
-	public int calculateLP(int slot1, int slot2, int health1, int health2, Player p) {
-		int lifePoints = getLevelForXP(playerXP[3]) * 10;// The normal hp
-		if (isThereNexArmourEquipped(slot1)) {
-			lifePoints += health1;
-		}
-		if (isThereNexArmourEquipped(slot2)) {
-			lifePoints += health2;
-		}
-		return lifePoints;
-	}
-
-	public int calculateRemoved(int slot, Player p) {
-		int lifePoints = getLevelForXP(playerXP[3]) * 10;
-		int removeLP = 0;// The normal hp
-		int maximumHealth = 0;
-		if (isThereNexArmourEquipped(slot)) {
-			if (slot == playerHat) {
-				removeLP += 66;
-				maximumHealth = calculateLP(playerChest, playerLegs, 200, 134, p);
-			} else if (slot == playerChest) {
-				removeLP += 200;
-				maximumHealth = calculateLP(playerHat, playerLegs, 66, 134, p);
-			} else if (slot == playerLegs) {
-				removeLP += 134;
-				maximumHealth = calculateLP(playerHat, playerChest, 66, 200, p);
-			}
-			if (maximumHealth < lifePoints) {
-				removeLP = 0;
-			}
-			if (constitution - removeLP < lifePoints) {
-				int l = constitution - lifePoints;
-				removeLP = l;
-			}
-			if (maximumHealth > constitution) {
-				removeLP = 0;
-			}
-		}
-		return removeLP;
-	}
-
-	public boolean isThereNexArmourEquipped(int slot) {
-		if (slot == playerHat) {
-			if (playerEquipment[slot] == 20135 || playerEquipment[slot] == 20147 || playerEquipment[slot] == 20159) {
-				return true;
-			}
-		} else if (slot == playerChest) {
-			if (playerEquipment[slot] == 20163 || playerEquipment[slot] == 20151 || playerEquipment[slot] == 20139) {
-				return true;
-			}
-		} else if (slot == playerLegs) {
-			if (playerEquipment[slot] == 20167 || playerEquipment[slot] == 20155 || playerEquipment[slot] == 20143) {
-				return true;
-			}
-		}
-		return false;
+	
+	public int maxLP() {
+		setMaxLP(calculateMaxLP()); // TODO refactor this method to getMaxLP when all possibilities set.
+		return maxLifePoints;
 	}
 
 	public void setCurrentTask(Future<?> task) {
@@ -2936,7 +2880,7 @@ public class Player {
 	}
 
 	protected void appendPlayerAppearance(Stream str) {
-		maxConstitution = getLevelForXP(playerXP[3]) * 10;
+		maxLifePoints = getLevelForXP(playerXP[3]) * 10;
 
 		playerProps.currentOffset = 0;
 		playerProps.writeByte(playerAppearance[0]);
@@ -3029,8 +2973,8 @@ public class Player {
 		playerProps.writeWord(playerTurn90CWIndex); // turn90CWAnimIndex
 		playerProps.writeWord(playerTurn90CCWIndex); // turn90CCWAnimIndex
 		playerProps.writeWord(playerRunIndex); // runAnimIndex
-		playerProps.writeWord(constitution);
-		playerProps.writeWord(calculateMaxLifePoints(this));
+		playerProps.writeWord(lifePoints);
+		playerProps.writeWord(maxLP());
 
 		/**
 		 * Handling for display names.
@@ -3290,14 +3234,14 @@ public class Player {
 
 		str.writeWordA(getHitDiff());
 		str.writeByte(hitMask);
-		if (constitution <= 0) {
-			constitution = 0;
+		if (lifePoints <= 0) {
+			lifePoints = 0;
 			isDead = true;
 		}
 		str.writeByte(hitIcon);
 		str.writeWordA(soakDamage);
-		str.writeWordA(constitution);
-		str.writeWordA(calculateMaxLifePoints(this));
+		str.writeWordA(lifePoints);
+		str.writeWordA(maxLP());
 
 	}
 
@@ -3305,24 +3249,24 @@ public class Player {
 
 		str.writeWordA(hitDiff2);
 		str.writeByte(hitMask2);
-		if (constitution <= 0) {
-			constitution = 0;
+		if (lifePoints <= 0) {
+			lifePoints = 0;
 			isDead = true;
 		}
 		str.writeByte(hitIcon2);
 		str.writeWordA(soakDamage2);
-		str.writeWordA(constitution);
-		str.writeWordA(calculateMaxLifePoints(this));
+		str.writeWordA(lifePoints);
+		str.writeWordA(maxLP());
 
 	}
 
-	public int maxConstitution = getLevelForXP(playerXP[3]) * 10;
-	public int constitution;
+	public int maxLifePoints = getLevelForXP(playerXP[3]) * 10;
+	public int lifePoints;
 	public int prayerPoints;
 	public boolean korasiSpec;
 
 	public void appendPlayerUpdateBlock(Stream str) {
-		maxConstitution = getLevelForXP(playerXP[3]) * 10;
+		maxLifePoints = getLevelForXP(playerXP[3]) * 10;
 
 		if (!updateRequired && !isChatTextUpdateRequired()) {
 			return; // nothing required
@@ -3561,15 +3505,15 @@ public class Player {
 	RIGHTS_DEVELOPER      = 3;
 	
 	public void setRights(int i) {
-		getVariables().playerRights = i;
+		getInstance().playerRights = i;
 	}
 	
 	public int getRights() {
-		return getVariables().playerRights;
+		return getInstance().playerRights;
 	}
 	
 	public boolean hasRights(int i) {
-		return (getVariables().playerRights == i ? true : false);
+		return (getInstance().playerRights == i ? true : false);
 	}
 	
 	public int getX() {
@@ -3759,13 +3703,13 @@ public class Player {
 	private Player c = this;
 
 	public void dealDamage(int damage) {
-		if (constitution - damage < 0) {
-			damage = constitution;
+		if (lifePoints - damage < 0) {
+			damage = lifePoints;
 		}
-		constitution -= damage;
+		lifePoints -= damage;
 		equpimentEffect(damage);
-		int difference = constitution - damage;
-		if (difference <= maxConstitution / 10 && difference > 0)
+		int difference = lifePoints - damage;
+		if (difference <= maxLifePoints / 10 && difference > 0)
 			appendRedemption();
 		if (playerEquipment[playerShield] == 13740 && damage > 0) { // Divine
 			int prayerDamage = (int) (damage * .15);
@@ -3785,7 +3729,7 @@ public class Player {
 	public void appendRedemption() {
 		Player c = PlayerHandler.players[this.playerId];
 		if (prayerActive[22]) {
-			constitution += (int) (maxConstitution * .25);
+			lifePoints += (int) (maxLifePoints * .25);
 			playerLevel[5] = 0;
 			c.getPA().refreshSkill(3);
 			c.getPA().refreshSkill(5);
@@ -3869,9 +3813,9 @@ public class Player {
 	private void equpimentEffect(int damage) {
 
 		if (playerEquipment[playerRing] == 2570) {
-			if (damage != constitution) {
-				int hpLimit = (int) Math.ceil(maxConstitution * 0.1);
-				int futureDamage = constitution - damage;
+			if (damage != lifePoints) {
+				int hpLimit = (int) Math.ceil(maxLifePoints * 0.1);
+				int futureDamage = lifePoints - damage;
 				if (futureDamage <= hpLimit) {
 					if (c.wildLevel <= 20) {
 						c.getItems().deleteEquipment(10, playerRing);
@@ -3883,13 +3827,13 @@ public class Player {
 		}
 
 		if (playerEquipment[playerAmulet] == 11090) {
-			if (damage != constitution) {
-				int hpLimit = (int) Math.ceil(maxConstitution * 0.2);
-				int futureDamage = constitution - damage;
+			if (damage != lifePoints) {
+				int hpLimit = (int) Math.ceil(maxLifePoints * 0.2);
+				int futureDamage = lifePoints - damage;
 				if (futureDamage <= hpLimit) {
 					if (!c.duelRule[DuelArena.RULE_FOOD]) {
-						int toHeal = (int) Math.ceil(maxConstitution * 0.3);
-						constitution += toHeal;
+						int toHeal = (int) Math.ceil(maxLifePoints * 0.3);
+						lifePoints += toHeal;
 						c.getItems().deleteEquipment(10, playerAmulet);
 						c.sendMessage("Your necklace heals you and is destroyed in the process.");
 					}

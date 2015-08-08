@@ -69,8 +69,8 @@ public class Equipment {
 			c.getOutStream().endFrameVarSizeWord();
 			c.flushOutStream();
 			
-			c.getVariables().playerEquipment[targetSlot] = wearID;
-			c.getVariables().playerEquipmentN[targetSlot] = amount;
+			c.getInstance().playerEquipment[targetSlot] = wearID;
+			c.getInstance().playerEquipmentN[targetSlot] = amount;
 			
 			c.updateRequired = true;
 			c.setAppearanceUpdateRequired(true);
@@ -94,7 +94,7 @@ public class Equipment {
 	 * @returns The ID of the item in the slot.
 	 */
 	public int getID(int slot) {
-		return c.getVariables().playerEquipment[slot];
+		return c.getInstance().playerEquipment[slot];
 	}
 	
 	/**
@@ -104,7 +104,7 @@ public class Equipment {
 	 * @returns The amount of the item in the slot.
 	 */
 	public int getAmount(int slot) {
-		return c.getVariables().playerEquipmentN[slot];
+		return c.getInstance().playerEquipmentN[slot];
 	}
 	
 	/**

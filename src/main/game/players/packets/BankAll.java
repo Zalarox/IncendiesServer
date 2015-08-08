@@ -16,7 +16,7 @@ public class BankAll implements PacketType {
 		int removeSlot = c.getInStream().readUnsignedWordA();
 		int interfaceId = c.getInStream().readUnsignedWord();
 		int removeId = c.getInStream().readUnsignedWordA();
-		if (c.getVariables().teleTimer > 0) {
+		if (c.getInstance().teleTimer > 0) {
 			return;
 		}
 		switch (interfaceId) {
@@ -29,17 +29,17 @@ public class BankAll implements PacketType {
 			break;
 
 		case 5064:
-			if (!c.getVariables().usingBoB) {
-				if (c.getVariables().inTrade) {
+			if (!c.getInstance().usingBoB) {
+				if (c.getInstance().inTrade) {
 					c.sendMessage("You can't store items while trading!");
 					return;
 				}
 				if (ItemLoader.isStackable(removeId)) {
-					c.getItems().bankItem(c.getVariables().playerItems[removeSlot], removeSlot,
-							c.getVariables().playerItemsN[removeSlot]);
+					c.getItems().bankItem(c.getInstance().playerItems[removeSlot], removeSlot,
+							c.getInstance().playerItemsN[removeSlot]);
 				} else {
-					c.getItems().bankItem(c.getVariables().playerItems[removeSlot], removeSlot,
-							c.getItems().itemAmount(c.getVariables().playerItems[removeSlot]));
+					c.getItems().bankItem(c.getInstance().playerItems[removeSlot], removeSlot,
+							c.getItems().itemAmount(c.getInstance().playerItems[removeSlot]));
 				}
 			} else {
 				c.sendMessage("" + removeSlot + " " + interfaceId + " " + removeId);
@@ -47,19 +47,19 @@ public class BankAll implements PacketType {
 			break;
 
 		case 5382:
-			c.getItems().fromBank(removeSlot, c.getVariables().bankItemsN[removeSlot]);
+			c.getItems().fromBank(removeSlot, c.getInstance().bankItemsN[removeSlot]);
 			break;
 
 		case 3322:
 			if (!DuelArena.isDueling(c) && !DuelArena.isInFirstInterface(c) && !DuelArena.isInSecondInterface(c)) {
 				if (ItemLoader.isStackable(removeId)) {
-					c.getTradeHandler().tradeItem(removeId, removeSlot, c.getVariables().playerItemsN[removeSlot]);
+					c.getTradeHandler().tradeItem(removeId, removeSlot, c.getInstance().playerItemsN[removeSlot]);
 				} else {
 					c.getTradeHandler().tradeItem(removeId, removeSlot, 28);
 				}
 			} else {
 				if (ItemLoader.isStackable(removeId) || ItemLoader.isNote(removeId)) {
-					c.Dueling.addStakedItem(removeId, removeSlot, c.getVariables().playerItemsN[removeSlot], c);
+					c.Dueling.addStakedItem(removeId, removeSlot, c.getInstance().playerItemsN[removeSlot], c);
 				} else {
 					c.Dueling.addStakedItem(removeId, removeSlot, 28, c);
 				}
@@ -87,11 +87,11 @@ public class BankAll implements PacketType {
 
 		case 6669:
 			if (ItemLoader.isStackable(removeId) || ItemLoader.isNote(removeId)) {
-				for (GameItem item : c.getVariables().stakedItems) {
+				for (GameItem item : c.getInstance().stakedItems) {
 					if (item.id == removeId) {
 						c.sendMessage("bankAll");
 						c.Dueling.removeStakedItem(removeId, removeSlot,
-								c.getVariables().stakedItems.get(removeSlot).amount, c);
+								c.getInstance().stakedItems.get(removeSlot).amount, c);
 					}
 				}
 

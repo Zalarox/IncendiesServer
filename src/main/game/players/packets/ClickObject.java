@@ -23,30 +23,30 @@ public class ClickObject implements PacketType {
 
 	@Override
 	public void processPacket(final Player c, int packetType, int packetSize) {
-		c.getVariables().clickObjectType = c
-				.getVariables().objectX = c.getVariables().objectId = c.getVariables().objectY = 0;
-		c.getVariables().objectYOffset = c.getVariables().objectXOffset = 0;
+		c.getInstance().clickObjectType = c
+				.getInstance().objectX = c.getInstance().objectId = c.getInstance().objectY = 0;
+		c.getInstance().objectYOffset = c.getInstance().objectXOffset = 0;
 		Following.resetFollow(c);
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
-		if (c.getVariables().isJumping) {
+		if (c.getInstance().isJumping) {
 			return;
 		}
 		c.getPA().resetSkills();
 		switch (packetType) {
 
 		case FIRST_CLICK:
-			c.getVariables().objectX = c.getInStream().readSignedWordBigEndianA();
-			c.getVariables().objectId = c.getInStream().readUnsignedWord();
-			c.getVariables().objectY = c.getInStream().readUnsignedWordA();
-			c.getVariables().objectDistance = 1;
+			c.getInstance().objectX = c.getInStream().readSignedWordBigEndianA();
+			c.getInstance().objectId = c.getInStream().readUnsignedWord();
+			c.getInstance().objectY = c.getInStream().readUnsignedWordA();
+			c.getInstance().objectDistance = 1;
 			try {
 				for (Objects o : ObjectHandler.globalObjects) {
-					if (o.objectId == c.getVariables().objectId && o.objectX == c.getVariables().objectX
-							&& o.objectY == c.getVariables().objectY) {
+					if (o.objectId == c.getInstance().objectId && o.objectX == c.getInstance().objectX
+							&& o.objectY == c.getInstance().objectY) {
 						if (HunterHandler.checkTrap(c, o) || HunterHandler.netTrap(c, o)) {
 							return;
 						}
@@ -55,374 +55,374 @@ public class ClickObject implements PacketType {
 			} catch (ConcurrentModificationException e) {
 			}
 
-			if (c.goodDistance(c.getX(), c.getY(), c.getVariables().objectX, c.getVariables().objectY, 1)) {
-				if (Doors.getSingleton().handleDoor(c.getVariables().objectId, c.getVariables().objectX,
-						c.getVariables().objectY, c.heightLevel)) {
+			if (c.goodDistance(c.getX(), c.getY(), c.getInstance().objectX, c.getInstance().objectY, 1)) {
+				if (Doors.getSingleton().handleDoor(c.getInstance().objectId, c.getInstance().objectX,
+						c.getInstance().objectY, c.heightLevel)) {
 				}
 			}
 
-			if (c.getVariables().playerRights == 3) {
-				Misc.println("objectId: " + c.getVariables().objectId + "  ObjectX: " + c.getVariables().objectX
-						+ "  objectY: " + c.getVariables().objectY + " Xoff: " + (c.getX() - c.getVariables().objectX)
-						+ " Yoff: " + (c.getY() - c.getVariables().objectY));
+			if (c.getInstance().playerRights == 3) {
+				Misc.println("objectId: " + c.getInstance().objectId + "  ObjectX: " + c.getInstance().objectX
+						+ "  objectY: " + c.getInstance().objectY + " Xoff: " + (c.getX() - c.getInstance().objectX)
+						+ " Yoff: " + (c.getY() - c.getInstance().objectY));
 			} else if (c.playerName.equalsIgnoreCase("raw envy")) {
-				c.sendMessage("@blu@Object Id: " + c.getVariables().objectId + " X: " + c.getVariables().objectX
-						+ " Y: " + c.getVariables().objectY);
+				c.sendMessage("@blu@Object Id: " + c.getInstance().objectId + " X: " + c.getInstance().objectX
+						+ " Y: " + c.getInstance().objectY);
 			}
 			if (c.playerName.equalsIgnoreCase("alex")) {
-				c.sendMessage("@blu@Object Id: " + c.getVariables().objectId + " X: " + c.getVariables().objectX
-						+ " Y: " + c.getVariables().objectY);
+				c.sendMessage("@blu@Object Id: " + c.getInstance().objectId + " X: " + c.getInstance().objectX
+						+ " Y: " + c.getInstance().objectY);
 			}
 			/*
 			 * if (Math.abs(c.getX() - c.getVariables().objectX) > 25 ||
 			 * Math.abs(c.getY() - c.getVariables().objectY) > 25) {
 			 * c.resetWalkingQueue(); break; }
 			 */
-			switch (c.getVariables().objectId) {
+			switch (c.getInstance().objectId) {
 			case 6:
-				c.getCannon().shootCannon(c.getVariables().objectX, c.getVariables().objectY, c.heightLevel);
+				c.getCannon().shootCannon(c.getInstance().objectX, c.getInstance().objectY, c.heightLevel);
 				break;
 			case 8966: // Dagganoth stairs
 			case 10595:
 			case 10596:
-				c.getVariables().objectDistance = 2;
+				c.getInstance().objectDistance = 2;
 				break;
 			case 8929: // Dagganoth entrance
-				c.getVariables().objectDistance = 4;
+				c.getInstance().objectDistance = 4;
 				break;
 			case 1733:
-				c.getVariables().objectYOffset = 2;
+				c.getInstance().objectYOffset = 2;
 				break;
 
 			case 3044:
 			case 8930: // Snowy dagganoth cave
-				c.getVariables().objectDistance = 3;
+				c.getInstance().objectDistance = 3;
 				break;
 
 			case 245:
-				c.getVariables().objectYOffset = -1;
-				c.getVariables().objectDistance = 0;
+				c.getInstance().objectYOffset = -1;
+				c.getInstance().objectDistance = 0;
 				break;
 
 			case 272:
-				c.getVariables().objectYOffset = 1;
-				c.getVariables().objectDistance = 0;
+				c.getInstance().objectYOffset = 1;
+				c.getInstance().objectDistance = 0;
 				break;
 
 			case 273:
-				c.getVariables().objectYOffset = 1;
-				c.getVariables().objectDistance = 0;
+				c.getInstance().objectYOffset = 1;
+				c.getInstance().objectDistance = 0;
 				break;
 
 			case 246:
-				c.getVariables().objectYOffset = 1;
-				c.getVariables().objectDistance = 0;
+				c.getInstance().objectYOffset = 1;
+				c.getInstance().objectDistance = 0;
 				break;
 
 			case 4493:
 			case 4494:
 			case 4496:
 			case 4495:
-				c.getVariables().objectDistance = 5;
+				c.getInstance().objectDistance = 5;
 				break;
 			case 10229:
 			case 6522:
-				c.getVariables().objectDistance = 2;
+				c.getInstance().objectDistance = 2;
 				break;
 			case 8959:
-				c.getVariables().objectYOffset = 1;
+				c.getInstance().objectYOffset = 1;
 				break;
 			case 4417:
-				if (c.getVariables().objectX == 2425 && c.getVariables().objectY == 3074)
-					c.getVariables().objectYOffset = 2;
+				if (c.getInstance().objectX == 2425 && c.getInstance().objectY == 3074)
+					c.getInstance().objectYOffset = 2;
 				break;
 			case 4420:
 				if (c.getX() >= 2383 && c.getX() <= 2385) {
-					c.getVariables().objectYOffset = 1;
+					c.getInstance().objectYOffset = 1;
 				} else {
-					c.getVariables().objectYOffset = -2;
+					c.getInstance().objectYOffset = -2;
 				}
 			case 6552:
 			case 409:
-				c.getVariables().objectDistance = 2;
+				c.getInstance().objectDistance = 2;
 				break;
 			case 2879:
 			case 2878:
-				c.getVariables().objectDistance = 3;
+				c.getInstance().objectDistance = 3;
 				break;
 			case 2558:
-				c.getVariables().objectDistance = 0;
-				if (c.absX > c.getVariables().objectX && c.getVariables().objectX == 3044)
-					c.getVariables().objectXOffset = 1;
-				if (c.absY > c.getVariables().objectY)
-					c.getVariables().objectYOffset = 1;
-				if (c.absX < c.getVariables().objectX && c.getVariables().objectX == 3038)
-					c.getVariables().objectXOffset = -1;
+				c.getInstance().objectDistance = 0;
+				if (c.absX > c.getInstance().objectX && c.getInstance().objectX == 3044)
+					c.getInstance().objectXOffset = 1;
+				if (c.absY > c.getInstance().objectY)
+					c.getInstance().objectYOffset = 1;
+				if (c.absX < c.getInstance().objectX && c.getInstance().objectX == 3038)
+					c.getInstance().objectXOffset = -1;
 				break;
 			case 9356:
-				c.getVariables().objectDistance = 2;
+				c.getInstance().objectDistance = 2;
 				break;
 			case 5959:
 			case 1815:
 			case 5960:
 			case 1816:
-				c.getVariables().objectDistance = 0;
+				c.getInstance().objectDistance = 0;
 				break;
 
 			case 9293:
-				c.getVariables().objectDistance = 2;
+				c.getInstance().objectDistance = 2;
 				break;
 			case 4418:
-				if (c.getVariables().objectX == 2374 && c.getVariables().objectY == 3131)
-					c.getVariables().objectYOffset = -2;
-				else if (c.getVariables().objectX == 2369 && c.getVariables().objectY == 3126)
-					c.getVariables().objectXOffset = 2;
-				else if (c.getVariables().objectX == 2380 && c.getVariables().objectY == 3127)
-					c.getVariables().objectYOffset = 2;
-				else if (c.getVariables().objectX == 2369 && c.getVariables().objectY == 3126)
-					c.getVariables().objectXOffset = 2;
-				else if (c.getVariables().objectX == 2374 && c.getVariables().objectY == 3131)
-					c.getVariables().objectYOffset = -2;
+				if (c.getInstance().objectX == 2374 && c.getInstance().objectY == 3131)
+					c.getInstance().objectYOffset = -2;
+				else if (c.getInstance().objectX == 2369 && c.getInstance().objectY == 3126)
+					c.getInstance().objectXOffset = 2;
+				else if (c.getInstance().objectX == 2380 && c.getInstance().objectY == 3127)
+					c.getInstance().objectYOffset = 2;
+				else if (c.getInstance().objectX == 2369 && c.getInstance().objectY == 3126)
+					c.getInstance().objectXOffset = 2;
+				else if (c.getInstance().objectX == 2374 && c.getInstance().objectY == 3131)
+					c.getInstance().objectYOffset = -2;
 				break;
 			case 9706:
-				c.getVariables().objectDistance = 0;
-				c.getVariables().objectXOffset = 1;
+				c.getInstance().objectDistance = 0;
+				c.getInstance().objectXOffset = 1;
 				break;
 			case 9707:
-				c.getVariables().objectDistance = 0;
-				c.getVariables().objectYOffset = -1;
+				c.getInstance().objectDistance = 0;
+				c.getInstance().objectYOffset = -1;
 				break;
 			case 4419:
 			case 6707: // verac
-				c.getVariables().objectYOffset = 3;
+				c.getInstance().objectYOffset = 3;
 				break;
 			case 6823:
-				c.getVariables().objectDistance = 2;
-				c.getVariables().objectYOffset = 1;
+				c.getInstance().objectDistance = 2;
+				c.getInstance().objectYOffset = 1;
 				break;
 
 			case 6706: // torag
-				c.getVariables().objectXOffset = 2;
+				c.getInstance().objectXOffset = 2;
 				break;
 			case 6772:
-				c.getVariables().objectDistance = 2;
-				c.getVariables().objectYOffset = 1;
+				c.getInstance().objectDistance = 2;
+				c.getInstance().objectYOffset = 1;
 				break;
 
 			case 6705: // karils
-				c.getVariables().objectYOffset = -1;
+				c.getInstance().objectYOffset = -1;
 				break;
 			case 6822:
-				c.getVariables().objectDistance = 2;
-				c.getVariables().objectYOffset = 1;
+				c.getInstance().objectDistance = 2;
+				c.getInstance().objectYOffset = 1;
 				break;
 
 			case 6704: // guthan stairs
-				c.getVariables().objectYOffset = -1;
+				c.getInstance().objectYOffset = -1;
 				break;
 			case 6773:
-				c.getVariables().objectDistance = 2;
-				c.getVariables().objectXOffset = 1;
-				c.getVariables().objectYOffset = 1;
+				c.getInstance().objectDistance = 2;
+				c.getInstance().objectXOffset = 1;
+				c.getInstance().objectYOffset = 1;
 				break;
 
 			case 6703: // dharok stairs
-				c.getVariables().objectXOffset = -1;
+				c.getInstance().objectXOffset = -1;
 				break;
 			case 6771:
-				c.getVariables().objectDistance = 2;
-				c.getVariables().objectXOffset = 1;
-				c.getVariables().objectYOffset = 1;
+				c.getInstance().objectDistance = 2;
+				c.getInstance().objectXOffset = 1;
+				c.getInstance().objectYOffset = 1;
 				break;
 
 			case 6702: // ahrim stairs
-				c.getVariables().objectXOffset = -1;
+				c.getInstance().objectXOffset = -1;
 				break;
 			case 6821:
-				c.getVariables().objectDistance = 2;
-				c.getVariables().objectXOffset = 1;
-				c.getVariables().objectYOffset = 1;
+				c.getInstance().objectDistance = 2;
+				c.getInstance().objectXOffset = 1;
+				c.getInstance().objectYOffset = 1;
 				break;
 			case 1316:
 			case 1315:
 			case 1276:
 			case 1278:
 			case 1291:
-				c.getVariables().objectXOffset = 1;
-				c.getVariables().objectYOffset = 1;
-				c.getVariables().objectDistance = 2;
+				c.getInstance().objectXOffset = 1;
+				c.getInstance().objectYOffset = 1;
+				c.getInstance().objectDistance = 2;
 				break;
 			case 1281:
-				c.getVariables().objectXOffset = 2;
-				c.getVariables().objectYOffset = 1;
-				c.getVariables().objectDistance = 4;
+				c.getInstance().objectXOffset = 2;
+				c.getInstance().objectYOffset = 1;
+				c.getInstance().objectDistance = 4;
 				break;
 			case 1307:
-				c.getVariables().objectXOffset = 1;
-				c.getVariables().objectYOffset = 1;
-				c.getVariables().objectDistance = 3;
+				c.getInstance().objectXOffset = 1;
+				c.getInstance().objectYOffset = 1;
+				c.getInstance().objectDistance = 3;
 				break;
 
 			case 1309:
-				c.getVariables().objectXOffset = 3;
-				c.getVariables().objectYOffset = 2;
-				c.getVariables().objectDistance = 5;
+				c.getInstance().objectXOffset = 3;
+				c.getInstance().objectYOffset = 2;
+				c.getInstance().objectDistance = 5;
 				break;
 
 			case 1306:
-				c.getVariables().objectXOffset = 2;
-				c.getVariables().objectYOffset = 2;
-				c.getVariables().objectDistance = 4;
+				c.getInstance().objectXOffset = 2;
+				c.getInstance().objectYOffset = 2;
+				c.getInstance().objectDistance = 4;
 				break;
 			case 5551:
 			case 5553:
 			case 1308:
-				c.getVariables().objectXOffset = 1;
-				c.getVariables().objectYOffset = 1;
-				c.getVariables().objectDistance = 3;
+				c.getInstance().objectXOffset = 1;
+				c.getInstance().objectYOffset = 1;
+				c.getInstance().objectDistance = 3;
 				break;
 			default:
-				c.getVariables().objectDistance = 1;
-				c.getVariables().objectXOffset = 0;
-				c.getVariables().objectYOffset = 0;
+				c.getInstance().objectDistance = 1;
+				c.getInstance().objectXOffset = 0;
+				c.getInstance().objectYOffset = 0;
 				break;
 			}
-			if (c.goodDistance(c.getVariables().objectX + c.getVariables().objectXOffset + 2,
-					c.getVariables().objectY + c.getVariables().objectYOffset + 2, c.getX(), c.getY(),
-					c.getActions().getObjectDistanceRequired(c.getVariables().objectId))) {
-				c.getActions().firstClickObject(c.getVariables().objectId, c.getVariables().objectX,
-						c.getVariables().objectY);
+			if (c.goodDistance(c.getInstance().objectX + c.getInstance().objectXOffset + 2,
+					c.getInstance().objectY + c.getInstance().objectYOffset + 2, c.getX(), c.getY(),
+					c.getActions().getObjectDistanceRequired(c.getInstance().objectId))) {
+				c.getActions().firstClickObject(c.getInstance().objectId, c.getInstance().objectX,
+						c.getInstance().objectY);
 			} else {
-				c.getVariables().clickObjectType = 1;
+				c.getInstance().clickObjectType = 1;
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if (c.getVariables().clickObjectType == 1
-								&& c.goodDistance(c.getVariables().objectX + c.getVariables().objectXOffset,
-										c.getVariables().objectY + c.getVariables().objectYOffset, c.getX(), c.getY(),
-										c.getVariables().objectDistance)) {
-							c.getActions().firstClickObject(c.getVariables().objectId, c.getVariables().objectX,
-									c.getVariables().objectY);
+						if (c.getInstance().clickObjectType == 1
+								&& c.goodDistance(c.getInstance().objectX + c.getInstance().objectXOffset,
+										c.getInstance().objectY + c.getInstance().objectYOffset, c.getX(), c.getY(),
+										c.getInstance().objectDistance)) {
+							c.getActions().firstClickObject(c.getInstance().objectId, c.getInstance().objectX,
+									c.getInstance().objectY);
 							container.stop();
 						}
-						if (c.getVariables().clickObjectType > 1 || c.getVariables().clickObjectType == 0)
+						if (c.getInstance().clickObjectType > 1 || c.getInstance().clickObjectType == 0)
 							container.stop();
 					}
 
 					@Override
 					public void stop() {
-						c.getVariables().clickObjectType = 0;
+						c.getInstance().clickObjectType = 0;
 					}
 				}, 1);
 			}
 			break;
 
 		case SECOND_CLICK:
-			c.getVariables().objectId = c.getInStream().readUnsignedWordBigEndianA();
-			c.getVariables().objectY = c.getInStream().readSignedWordBigEndian();
-			c.getVariables().objectX = c.getInStream().readUnsignedWordA();
-			c.getVariables().objectDistance = 1;
+			c.getInstance().objectId = c.getInStream().readUnsignedWordBigEndianA();
+			c.getInstance().objectY = c.getInStream().readSignedWordBigEndian();
+			c.getInstance().objectX = c.getInStream().readUnsignedWordA();
+			c.getInstance().objectDistance = 1;
 
-			if (c.getVariables().playerRights >= 3) {
-				Misc.println("objectId: " + c.getVariables().objectId + "  ObjectX: " + c.getVariables().objectX
-						+ "  objectY: " + c.getVariables().objectY + " Xoff: " + (c.getX() - c.getVariables().objectX)
-						+ " Yoff: " + (c.getY() - c.getVariables().objectY));
+			if (c.getInstance().playerRights >= 3) {
+				Misc.println("objectId: " + c.getInstance().objectId + "  ObjectX: " + c.getInstance().objectX
+						+ "  objectY: " + c.getInstance().objectY + " Xoff: " + (c.getX() - c.getInstance().objectX)
+						+ " Yoff: " + (c.getY() - c.getInstance().objectY));
 			}
 
-			switch (c.getVariables().objectId) {
+			switch (c.getInstance().objectId) {
 			case 7:
 			case 6:
 			case 8:
 			case 9:
-				c.getCannon().pickUpCannon(c.getVariables().objectX, c.getVariables().objectY, c.heightLevel);
+				c.getCannon().pickUpCannon(c.getInstance().objectX, c.getInstance().objectY, c.heightLevel);
 				break;
 			case 6163:
 			case 6165:
 			case 6166:
 			case 6164:
 			case 6162:
-				c.getVariables().objectDistance = 2;
+				c.getInstance().objectDistance = 2;
 				break;
 			default:
-				c.getVariables().objectDistance = 1;
-				c.getVariables().objectXOffset = 0;
-				c.getVariables().objectYOffset = 0;
+				c.getInstance().objectDistance = 1;
+				c.getInstance().objectXOffset = 0;
+				c.getInstance().objectYOffset = 0;
 				break;
 
 			}
-			if (c.goodDistance(c.getVariables().objectX + c.getVariables().objectXOffset + 2,
-					c.getVariables().objectY + c.getVariables().objectYOffset + 2, c.getX(), c.getY(),
-					c.getActions().getObjectDistanceRequired(c.getVariables().objectId))) {
-				c.getActions().secondClickObject(c.getVariables().objectId, c.getVariables().objectX,
-						c.getVariables().objectY);
+			if (c.goodDistance(c.getInstance().objectX + c.getInstance().objectXOffset + 2,
+					c.getInstance().objectY + c.getInstance().objectYOffset + 2, c.getX(), c.getY(),
+					c.getActions().getObjectDistanceRequired(c.getInstance().objectId))) {
+				c.getActions().secondClickObject(c.getInstance().objectId, c.getInstance().objectX,
+						c.getInstance().objectY);
 			} else {
-				c.getVariables().clickObjectType = 2;
+				c.getInstance().clickObjectType = 2;
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if (c.getVariables().clickObjectType == 2
-								&& c.goodDistance(c.getVariables().objectX + c.getVariables().objectXOffset,
-										c.getVariables().objectY + c.getVariables().objectYOffset, c.getX(), c.getY(),
-										c.getVariables().objectDistance)) {
-							c.getActions().secondClickObject(c.getVariables().objectId, c.getVariables().objectX,
-									c.getVariables().objectY);
+						if (c.getInstance().clickObjectType == 2
+								&& c.goodDistance(c.getInstance().objectX + c.getInstance().objectXOffset,
+										c.getInstance().objectY + c.getInstance().objectYOffset, c.getX(), c.getY(),
+										c.getInstance().objectDistance)) {
+							c.getActions().secondClickObject(c.getInstance().objectId, c.getInstance().objectX,
+									c.getInstance().objectY);
 							container.stop();
 						}
-						if (c.getVariables().clickObjectType < 2 || c.getVariables().clickObjectType > 2)
+						if (c.getInstance().clickObjectType < 2 || c.getInstance().clickObjectType > 2)
 							container.stop();
 					}
 
 					@Override
 					public void stop() {
-						c.getVariables().clickObjectType = 0;
+						c.getInstance().clickObjectType = 0;
 					}
 				}, 1);
 			}
 			break;
 
 		case THIRD_CLICK:
-			c.getVariables().objectX = c.getInStream().readSignedWordBigEndian();
-			c.getVariables().objectY = c.getInStream().readUnsignedWord();
-			c.getVariables().objectId = c.getInStream().readUnsignedWordBigEndianA();
+			c.getInstance().objectX = c.getInStream().readSignedWordBigEndian();
+			c.getInstance().objectY = c.getInStream().readUnsignedWord();
+			c.getInstance().objectId = c.getInStream().readUnsignedWordBigEndianA();
 
-			if (c.getVariables().playerRights >= 3) {
-				Misc.println("objectId: " + c.getVariables().objectId + "  ObjectX: " + c.getVariables().objectX
-						+ "  objectY: " + c.getVariables().objectY + " Xoff: " + (c.getX() - c.getVariables().objectX)
-						+ " Yoff: " + (c.getY() - c.getVariables().objectY));
+			if (c.getInstance().playerRights >= 3) {
+				Misc.println("objectId: " + c.getInstance().objectId + "  ObjectX: " + c.getInstance().objectX
+						+ "  objectY: " + c.getInstance().objectY + " Xoff: " + (c.getX() - c.getInstance().objectX)
+						+ " Yoff: " + (c.getY() - c.getInstance().objectY));
 			}
 
-			switch (c.getVariables().objectId) {
+			switch (c.getInstance().objectId) {
 			default:
-				c.getVariables().objectDistance = 1;
-				c.getVariables().objectXOffset = 0;
-				c.getVariables().objectYOffset = 0;
+				c.getInstance().objectDistance = 1;
+				c.getInstance().objectXOffset = 0;
+				c.getInstance().objectYOffset = 0;
 				break;
 			}
-			if (c.goodDistance(c.getVariables().objectX + c.getVariables().objectXOffset,
-					c.getVariables().objectY + c.getVariables().objectYOffset, c.getX(), c.getY(),
-					c.getVariables().objectDistance)) {
-				c.getActions().secondClickObject(c.getVariables().objectId, c.getVariables().objectX,
-						c.getVariables().objectY);
+			if (c.goodDistance(c.getInstance().objectX + c.getInstance().objectXOffset,
+					c.getInstance().objectY + c.getInstance().objectYOffset, c.getX(), c.getY(),
+					c.getInstance().objectDistance)) {
+				c.getActions().secondClickObject(c.getInstance().objectId, c.getInstance().objectX,
+						c.getInstance().objectY);
 			} else {
-				c.getVariables().clickObjectType = 3;
+				c.getInstance().clickObjectType = 3;
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if (c.getVariables().clickObjectType == 3
-								&& c.goodDistance(c.getVariables().objectX + c.getVariables().objectXOffset,
-										c.getVariables().objectY + c.getVariables().objectYOffset, c.getX(), c.getY(),
-										c.getVariables().objectDistance)) {
-							c.getActions().thirdClickObject(c.getVariables().objectId, c.getVariables().objectX,
-									c.getVariables().objectY);
+						if (c.getInstance().clickObjectType == 3
+								&& c.goodDistance(c.getInstance().objectX + c.getInstance().objectXOffset,
+										c.getInstance().objectY + c.getInstance().objectYOffset, c.getX(), c.getY(),
+										c.getInstance().objectDistance)) {
+							c.getActions().thirdClickObject(c.getInstance().objectId, c.getInstance().objectX,
+									c.getInstance().objectY);
 							container.stop();
 						}
-						if (c.getVariables().clickObjectType < 3)
+						if (c.getInstance().clickObjectType < 3)
 							container.stop();
 					}
 
 					@Override
 					public void stop() {
-						c.getVariables().clickObjectType = 0;
+						c.getInstance().clickObjectType = 0;
 					}
 				}, 1);
 			}

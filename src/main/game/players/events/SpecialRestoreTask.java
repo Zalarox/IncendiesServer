@@ -14,11 +14,11 @@ public class SpecialRestoreTask extends Task {
 
 	@Override
 	protected void execute() {
-		if (player.getVariables().specAmount < 10) {
-			player.getVariables().specAmount += .5;
-			if (player.getVariables().specAmount > 10)
-				player.getVariables().specAmount = 10;
-			player.getItems().addSpecialBar(player.getVariables().playerEquipment[player.getVariables().playerWeapon]);
+		if (player.getInstance().specAmount < 10) {
+			player.getInstance().specAmount += .5;
+			if (player.getInstance().specAmount > 10)
+				player.getInstance().specAmount = 10;
+			player.getItems().addSpecialBar(player.getInstance().playerEquipment[player.getInstance().playerWeapon]);
 		}
 	}
 }

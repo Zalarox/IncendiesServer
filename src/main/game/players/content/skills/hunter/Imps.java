@@ -208,24 +208,24 @@ public class Imps {
 		case 7906:
 			if (n.caught)
 				return true;
-			if (System.currentTimeMillis() - p.getVariables().skillTimer < 1500) {
+			if (System.currentTimeMillis() - p.getInstance().skillTimer < 1500) {
 				return true;
 			}
-			p.getVariables().skillTimer = System.currentTimeMillis();
+			p.getInstance().skillTimer = System.currentTimeMillis();
 			if (!p.goodDistance(p.getX(), p.getY(), n.getX(), n.getY(), 2))
 				return true;
-			if ((p.getVariables().playerEquipment[p.getVariables().playerWeapon] != 11259
-					&& p.getVariables().playerEquipment[p.getVariables().playerWeapon] != 10010)) {
+			if ((p.getInstance().playerEquipment[p.getInstance().playerWeapon] != 11259
+					&& p.getInstance().playerEquipment[p.getInstance().playerWeapon] != 10010)) {
 				p.sendMessage("You need a net to catch imps!");
 				return true;
 			}
-			if (p.getVariables().playerLevel[22] < getReq(n.npcType)) {
+			if (p.getInstance().playerLevel[22] < getReq(n.npcType)) {
 				p.sendMessage("You need a hunter level of " + getReq(n.npcType) + " to catch this impling.");
 				return true;
 			}
 			p.turnPlayerTo(n.absX, n.absY);
 			p.startAnimation(5209);
-			if (Misc.random(10) >= ((p.getVariables().playerLevel[22] - 10) / 10) + 1) {
+			if (Misc.random(10) >= ((p.getInstance().playerLevel[22] - 10) / 10) + 1) {
 				p.sendMessage("You fail catching it.");
 				return true;
 			}

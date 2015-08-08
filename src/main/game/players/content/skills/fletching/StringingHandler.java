@@ -102,14 +102,14 @@ public class StringingHandler {
 	}
 
 	private static void handleInterface(final Player c, final int bowID) {
-		if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+		if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 			return;
 		}
 		Stringing s = Stringing.getID(bowID);
 		c.getPA().sendFrame164(4429);
-		c.getVariables().isOnInterface = true;
-		c.getVariables().isStringing = true;
-		c.getVariables().stringu = s.getBowID();
+		c.getInstance().isOnInterface = true;
+		c.getInstance().isStringing = true;
+		c.getInstance().stringu = s.getBowID();
 		boolean view190 = true;
 		c.getPA().sendFrame246(1746, view190 ? 140 : 140, s.getNewBow());
 		c.getPA().sendFrame126(getLine(c) + "" + c.getItems().getItemName(s.getNewBow()) + "", 2799);
@@ -118,14 +118,14 @@ public class StringingHandler {
 	public static void stringBow(final Player c, final int item, final int amount) {
 		final Stringing s = Stringing.getID(item);
 		c.getPA().closeAllWindows();
-		if (System.currentTimeMillis() - c.getVariables().lastThieve < 150) {
+		if (System.currentTimeMillis() - c.getInstance().lastThieve < 150) {
 			return;
 		}
-		if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == true) {
+		if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == true) {
 			return;
 		}
-		c.getVariables().lastThieve = System.currentTimeMillis();
-		if (c.getVariables().playerLevel[c.getVariables().playerFletching] < s.getReq()) {
+		c.getInstance().lastThieve = System.currentTimeMillis();
+		if (c.getInstance().playerLevel[c.getInstance().playerFletching] < s.getReq()) {
 			c.sendMessage("You must have a fletching level of at least " + s.getReq() + " to string this bow.");
 			return;
 		}
@@ -134,17 +134,17 @@ public class StringingHandler {
 		} else {
 			c.startAnimation(6679);
 		}
-		c.getVariables().doAmount = amount;
-		c.getVariables().isStringing = true;
-		c.getVariables().playerSkilling[c.getVariables().playerFletching] = true;
+		c.getInstance().doAmount = amount;
+		c.getInstance().isStringing = true;
+		c.getInstance().playerSkilling[c.getInstance().playerFletching] = true;
 		CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (c.getVariables().doAmount == 0) {
+				if (c.getInstance().doAmount == 0) {
 					container.stop();
 					return;
 				}
-				if (c.getVariables().playerSkilling[c.getVariables().playerFletching] == false) {
+				if (c.getInstance().playerSkilling[c.getInstance().playerFletching] == false) {
 					container.stop();
 					return;
 				}
@@ -162,18 +162,18 @@ public class StringingHandler {
 				c.getItems().deleteItem(STRING, 1);
 				c.getItems().addItem(s.getNewBow(), 1);
 				c.getPA().addSkillXP(s.getXP() * SkillHandler.XPRates.FLETCHING.getXPRate(),
-						c.getVariables().playerFletching);
-				c.getVariables().doAmount--;
+						c.getInstance().playerFletching);
+				c.getInstance().doAmount--;
 			}
 
 			@Override
 			public void stop() {
 				c.getPA().closeAllWindows();
-				c.startAnimation(c.getVariables().playerStandIndex);
-				c.getVariables().doAmount = 0;
-				c.getVariables().isStringing = false;
-				c.getVariables().isOnInterface = false;
-				c.getVariables().playerSkilling[c.getVariables().playerFletching] = false;
+				c.startAnimation(c.getInstance().playerStandIndex);
+				c.getInstance().doAmount = 0;
+				c.getInstance().isStringing = false;
+				c.getInstance().isOnInterface = false;
+				c.getInstance().playerSkilling[c.getInstance().playerFletching] = false;
 			}
 		}, 2);
 	}

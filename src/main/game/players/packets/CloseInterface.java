@@ -15,8 +15,8 @@ public class CloseInterface implements PacketType {
 
 		if (c.getStatedInterface() == "flour")
 			FlourRelated.handleButton(c, 53204);
-		if (c.getVariables().inTrade) {
-			if (!c.getVariables().acceptedTrade) {
+		if (c.getInstance().inTrade) {
+			if (!c.getInstance().acceptedTrade) {
 				c.getTradeHandler().declineTrade(false);
 			}
 		}
@@ -26,7 +26,7 @@ public class CloseInterface implements PacketType {
 				c.Dueling.declineDuel(c, true, false);
 			}
 		}
-		if (c.getVariables().killedDuelOpponent) {
+		if (c.getInstance().killedDuelOpponent) {
 			c.Dueling.claimDuelRewards(c);
 		}
 		c.getPA().closeActivities();

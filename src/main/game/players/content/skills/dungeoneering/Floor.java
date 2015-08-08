@@ -45,7 +45,7 @@ public class Floor {
 				floorAccessability.add(accessedPortals[i]);
 			}
 		}
-		members[0].p.getVariables().party.setFloor(this);
+		members[0].p.getInstance().party.setFloor(this);
 		for (int i = 0; i < Constants.MAIN_NPC_LOCATIONS[this.roomId].length; i++) {
 			new Npc(Constants.MAIN_NPC_LOCATIONS[this.roomId][i][1], Constants.MAIN_NPC_LOCATIONS[this.roomId][i][2],
 					this.heightLevel, 0, 0, 0, 0, Constants.MAIN_NPC_LOCATIONS[this.roomId][i][0]).spawn();

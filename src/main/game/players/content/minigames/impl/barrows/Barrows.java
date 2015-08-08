@@ -116,14 +116,14 @@ public class Barrows {
 		if (p == null)
 			return;
 		barrowData b = getBarrowDataForObject(index);
-		if (p.getVariables().lastBrother == 0)
-			p.getVariables().lastBrother = getLastBrother(BarrowsConstants.brotherData);
+		if (p.getInstance().lastBrother == 0)
+			p.getInstance().lastBrother = getLastBrother(BarrowsConstants.brotherData);
 		if (!spawnedBrother(p, b.getType()) && !killedBrother(p, b.getType())) {
-			if (p.getVariables().lastBrother == b.getNpc()) {
+			if (p.getInstance().lastBrother == b.getNpc()) {
 				sendTunnelDialogue(p);
 				return;
 			}
-			p.getVariables().brotherSpawned[b.getType()] = true;
+			p.getInstance().brotherSpawned[b.getType()] = true;
 			NPCHandler.spawnNpc(p, b.getNpc(), b.getX(), b.getY(), -1, 0, b.getHP(), b.getMaxHit(), b.getAttack(),
 					b.getDefence(), true, true);
 		} else {
@@ -141,7 +141,7 @@ public class Barrows {
 		if (p != null) {
 			for (int id = 0; id < BarrowsConstants.brotherData.length; id++) {
 				if (NPCHandler.npcs[i].npcType == BarrowsConstants.brotherData[id]) {
-					p.getVariables().brotherKilled[id] = true;
+					p.getInstance().brotherKilled[id] = true;
 				}
 			}
 		}
@@ -164,13 +164,13 @@ public class Barrows {
 	 * @param secondItem
 	 */
 	public static void appendChest(Player p, int randomItem, int secondItem) {
-		if (p.getVariables().lastBrother == 0 || getBarrowKillCount(p.getVariables().brotherKilled) < 5)
+		if (p.getInstance().lastBrother == 0 || getBarrowKillCount(p.getInstance().brotherKilled) < 5)
 			return;
-		barrowData b = getBarrowDataForNpc(p.getVariables().lastBrother);
+		barrowData b = getBarrowDataForNpc(p.getInstance().lastBrother);
 		if (!killedBrother(p, b.getType())) {
 			NPCHandler.spawnNpc(p, b.getNpc(), 3552, 9694, 0, 0, b.getHP(), b.getMaxHit(), b.getAttack(),
 					b.getDefence(), true, true);
-			p.getVariables().brotherSpawned[b.getType()] = true;
+			p.getInstance().brotherSpawned[b.getType()] = true;
 			return;
 		}
 		p.getPA().sendFrame99(0);
@@ -217,8 +217,8 @@ public class Barrows {
 					int randomHit = 20 + Misc.random(50);
 					p.getPA().createPlayersProjectile(p.absX, p.absY, p.absX, p.absY, 60, 60, 60, 43, 31,
 							-p.playerId - 1, 0);
-					if (p.getVariables().constitution - randomHit < 0)
-						randomHit = p.getVariables().constitution;
+					if (p.getInstance().lifePoints - randomHit < 0)
+						randomHit = p.getInstance().lifePoints;
 					p.handleHitMask(randomHit, 0, -1, 0, false);
 					p.dealDamage(randomHit);
 					timer = BarrowsConstants.ROCK_TIMER;
@@ -289,7 +289,7 @@ public class Barrows {
 	 * @return
 	 */
 	private static boolean killedBrother(Player p, int index) {
-		return p.getVariables().brotherKilled[index];
+		return p.getInstance().brotherKilled[index];
 	}
 
 	/**
@@ -300,7 +300,7 @@ public class Barrows {
 	 * @return
 	 */
 	private static boolean spawnedBrother(Player p, int index) {
-		return p.getVariables().brotherSpawned[index];
+		return p.getInstance().brotherSpawned[index];
 	}
 
 	/**
@@ -310,10 +310,10 @@ public class Barrows {
 	 */
 	public static void resetBarrows(Player p) {
 		for (int index = 0; index < 6; index++) {
-			p.getVariables().brotherSpawned[index] = false;
-			p.getVariables().brotherKilled[index] = false;
+			p.getInstance().brotherSpawned[index] = false;
+			p.getInstance().brotherKilled[index] = false;
 		}
-		p.getVariables().lastBrother = 0;
+		p.getInstance().lastBrother = 0;
 		System.out.println("Reseted barrows for player: " + p.playerName);
 	}
 
@@ -338,7 +338,7 @@ public class Barrows {
 	 */
 	public static void handleStaircases(Player p, int index) {
 		StairCases s = getStairCaseForID(index);
-		p.getVariables().brotherSpawned[s.getType()] = false;
+		p.getInstance().brotherSpawned[s.getType()] = false;
 		p.getPA().movePlayer(s.getX() + Misc.random(2), s.getY() + Misc.random(2), 0);
 		p.getPA().sendFrame99(0);
 	}
@@ -361,7 +361,7 @@ public class Barrows {
 	 */
 	static void sendTunnelDialogue(Player p) {
 		DialogueHandler.sendStatement(p, "You've found a hidden tunnel, do you want to enter?");
-		p.getVariables().nextChat = 155;
+		p.getInstance().nextChat = 155;
 	}
 
 	/**

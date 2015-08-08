@@ -14,11 +14,11 @@ public class Walking implements PacketType {
 
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 			return;
 		}
-		if (c.getVariables().doingAgility) {
+		if (c.getInstance().doingAgility) {
 			return;
 		}
 		c.sentWarning = false;
@@ -33,94 +33,94 @@ public class Walking implements PacketType {
 		}
 		c.faceUpdate(0);
 		// c.playerIndex = 0;
-		c.getVariables().npcIndex = 0;
+		c.getInstance().npcIndex = 0;
 		// c.followId = 0;
-		c.getVariables().followId2 = 0;
+		c.getInstance().followId2 = 0;
 
 		if (packetType == 248 || packetType == 164) {
-			c.getVariables().clickObjectType = 0;
-			c.getVariables().clickNpcType = 0;
+			c.getInstance().clickObjectType = 0;
+			c.getInstance().clickNpcType = 0;
 			c.faceUpdate(0);
-			c.getVariables().npcIndex = 0;
-			c.getVariables().playerIndex = 0;
-			if (c.getVariables().followId > 0 || c.getVariables().followId2 > 0)
+			c.getInstance().npcIndex = 0;
+			c.getInstance().playerIndex = 0;
+			if (c.getInstance().followId > 0 || c.getInstance().followId2 > 0)
 				Following.resetFollow(c);
 		}
 		c.getPA().removeAllWindows();
-		if (c.getVariables().duelRule[DuelArena.RULE_MOVEMENT] && DuelArena.isDueling(c)) {
-			if (PlayerHandler.players[c.getVariables().duelingWith] != null) {
-				if (!c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getVariables().duelingWith].getX(),
-						PlayerHandler.players[c.getVariables().duelingWith].getY(), 1)
-						|| c.getVariables().attackTimer == 0) {
+		if (c.getInstance().duelRule[DuelArena.RULE_MOVEMENT] && DuelArena.isDueling(c)) {
+			if (PlayerHandler.players[c.getInstance().duelingWith] != null) {
+				if (!c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getInstance().duelingWith].getX(),
+						PlayerHandler.players[c.getInstance().duelingWith].getY(), 1)
+						|| c.getInstance().attackTimer == 0) {
 					c.sendMessage("Movement has been disabled in this duel!");
 				}
 			}
-			c.getVariables().playerIndex = 0;
+			c.getInstance().playerIndex = 0;
 			return;
 		}
-		if (c.getVariables().playerSkilling[c.getVariables().playerFiremaking]) {
+		if (c.getInstance().playerSkilling[c.getInstance().playerFiremaking]) {
 			return;
 		}
-		for (boolean ps : c.getVariables().playerSkilling) {
+		for (boolean ps : c.getInstance().playerSkilling) {
 			if (ps)
 				ps = false;
 		}
-		if (c.getVariables().playerIsWoodcutting)
-			c.getVariables().playerIsWoodcutting = false;
-		if (c.getVariables().teleTimer >= 1) {
-			c.getVariables().playerIndex = 0;
+		if (c.getInstance().playerIsWoodcutting)
+			c.getInstance().playerIsWoodcutting = false;
+		if (c.getInstance().teleTimer >= 1) {
+			c.getInstance().playerIndex = 0;
 			return;
 		}
-		if (c.getVariables().freezeTimer > 0) {
-			if (PlayerHandler.players[c.getVariables().playerIndex] != null) {
-				if (c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getVariables().playerIndex].getX(),
-						PlayerHandler.players[c.getVariables().playerIndex].getY(), 1) && packetType != 98) {
-					c.getVariables().playerIndex = 0;
+		if (c.getInstance().freezeTimer > 0) {
+			if (PlayerHandler.players[c.getInstance().playerIndex] != null) {
+				if (c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getInstance().playerIndex].getX(),
+						PlayerHandler.players[c.getInstance().playerIndex].getY(), 1) && packetType != 98) {
+					c.getInstance().playerIndex = 0;
 					return;
 				}
 			}
 			if (packetType != 98) {
 				c.sendMessage("A magical force stops you from moving.");
-				c.getVariables().playerIndex = 0;
+				c.getInstance().playerIndex = 0;
 			}
 			return;
 		}
 
-		if (System.currentTimeMillis() - c.getVariables().lastSpear < 4000) {
+		if (System.currentTimeMillis() - c.getInstance().lastSpear < 4000) {
 			c.sendMessage("You have been stunned.");
-			c.getVariables().playerIndex = 0;
+			c.getInstance().playerIndex = 0;
 			return;
 		}
 		if (SkillHandler.playerIsBusy(c))
-			if (c.getVariables().playerIsFishing) {
+			if (c.getInstance().playerIsFishing) {
 				c.startAnimation(65535);
 				c.getPA().removeAllWindows();
-				c.getVariables().playerIsFishing = false;
+				c.getInstance().playerIsFishing = false;
 				for (int i = 0; i < 11; i++) {
-					c.getVariables().fishingProp[i] = -1;
+					c.getInstance().fishingProp[i] = -1;
 				}
 			}
 
-		if (c.getVariables().stopPlayerSkill) {
-			c.getVariables().stopPlayerSkill = false;
+		if (c.getInstance().stopPlayerSkill) {
+			c.getInstance().stopPlayerSkill = false;
 			// CycleEventHandler.getInstance().stopEvents(c);
 		}
 
 		if (packetType == 98) {
-			c.getVariables().mageAllowed = true;
+			c.getInstance().mageAllowed = true;
 		}
 
 		if (DuelArena.isDueling(c)) {
-			if (c.getVariables().killedDuelOpponent) {
+			if (c.getInstance().killedDuelOpponent) {
 				c.Dueling.claimDuelRewards(c);
 				return;
 			}
 		}
 
-		if (c.getVariables().respawnTimer > 3) {
+		if (c.getInstance().respawnTimer > 3) {
 			return;
 		}
-		if (c.getVariables().inTrade) {
+		if (c.getInstance().inTrade) {
 			c.getTradeHandler().declineTrade(false);
 			return;
 		}
@@ -132,7 +132,7 @@ public class Walking implements PacketType {
 			c.newWalkCmdSteps = 0;
 			return;
 		}
-		c.getVariables().interfaceIdOpen = 0;
+		c.getInstance().interfaceIdOpen = 0;
 		c.getNewWalkCmdX()[0] = c.getNewWalkCmdY()[0] = 0;
 		final int firstStepX = c.getInStream().readSignedWordBigEndianA() - c.getMapRegionX() * 8;
 		for (int i = 1; i < c.newWalkCmdSteps; i++) {

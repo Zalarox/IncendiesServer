@@ -10,7 +10,7 @@ public class Interface {
 		p.setSidebarInterface(14, 26224);
 		// p.getPA().sendFrame126(p.playerName, 26235);
 		clearParty(false, p);
-		loadStatistics(p, p.getVariables().party.getFloor());
+		loadStatistics(p, p.getInstance().party.getFloor());
 	}
 
 	public void loadStatistics(Player c, Floor f) {
@@ -43,10 +43,10 @@ public class Interface {
 			}
 			p.setSidebarInterface(14, 27224);
 			p.party = null;
-		} else if (p.getVariables().party != null) {
+		} else if (p.getInstance().party != null) {
 			for (int i = 0; i < strings.length; i++) {
-				p.getPA().sendFrame126((p.getVariables().party.members[i] == null ? " "
-						: p.getVariables().party.members[i].p.playerName), strings[i]);
+				p.getPA().sendFrame126((p.getInstance().party.members[i] == null ? " "
+						: p.getInstance().party.members[i].p.playerName), strings[i]);
 			}
 		}
 	}

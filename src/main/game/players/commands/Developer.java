@@ -170,7 +170,7 @@ public class Developer extends Commands {
 					if (PlayerHandler.getPlayer(i) != null) {
 						Player c2 = PlayerHandler.getPlayer(i);
 						if (c2.getDisplayName().equalsIgnoreCase(player)) {
-							c2.getVariables().impersonation = impersonation;
+							c2.getInstance().impersonation = impersonation;
 						}
 					}
 				}
@@ -322,7 +322,7 @@ public class Developer extends Commands {
 					
 					try {	
 						
-						c.getVariables().npcId2 = pnpc;
+						c.getInstance().npcId2 = pnpc;
 						c.getPA().requestUpdates();
 						
 					} catch (Exception e) {
@@ -338,8 +338,8 @@ public class Developer extends Commands {
 					
 					try {
 						
-						c.getVariables().talkingNpc = dialogue;
-						c.getDH().sendDialogues(11, c.getVariables().talkingNpc);
+						c.getInstance().talkingNpc = dialogue;
+						c.getDH().sendDialogues(11, c.getInstance().talkingNpc);
 						
 					} catch (Exception e) {
 						c.sendMessage("Exception!");

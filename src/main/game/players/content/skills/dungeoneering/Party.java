@@ -72,13 +72,13 @@ public class Party {
 		if (p.party.floor != null) {
 			p.getItems().dropAllItems();
 			p.getItems().deleteAllItems();
-			p.getItems().sendWeapon(p.getVariables().playerEquipment[p.playerWeapon],
-					p.getItems().getItemName(p.getVariables().playerEquipment[p.playerWeapon]));
+			p.getItems().sendWeapon(p.getInstance().playerEquipment[p.playerWeapon],
+					p.getItems().getItemName(p.getInstance().playerEquipment[p.playerWeapon]));
 			p.getItems().resetBonus();
 			p.getItems().getBonus();
 			p.getItems().writeBonus();
 			p.getCombat().getPlayerAnimIndex(
-					p.getItems().getItemName(p.getVariables().playerEquipment[p.playerWeapon]).toLowerCase());
+					p.getItems().getItemName(p.getInstance().playerEquipment[p.playerWeapon]).toLowerCase());
 			p.getPA().requestUpdates();
 			if (p.party.members[1] == null) {
 				p.party.floor.clearFloor();

@@ -14,20 +14,20 @@ public class SkillRestoreTask extends Task {
 
 	@Override
 	protected void execute() {
-		for (int level = 0; level < player.getVariables().playerLevel.length; level++) {
-			if (player.getVariables().playerLevel[level] < (player
-					.getLevelForXP(player.getVariables().playerXP[level]))) {
+		for (int level = 0; level < player.getInstance().playerLevel.length; level++) {
+			if (player.getInstance().playerLevel[level] < (player
+					.getLevelForXP(player.getInstance().playerXP[level]))) {
 				if (level != 5) { // prayer doesn't restore
-					player.getVariables().playerLevel[level] += 1;
-					player.getPA().setSkillLevel(level, player.getVariables().playerLevel[level],
-							player.getVariables().playerXP[level]);
+					player.getInstance().playerLevel[level] += 1;
+					player.getPA().setSkillLevel(level, player.getInstance().playerLevel[level],
+							player.getInstance().playerXP[level]);
 					player.getPA().refreshSkill(level);
 				}
-			} else if (player.getVariables().playerLevel[level] > (player
-					.getLevelForXP(player.getVariables().playerXP[level]))) {
-				player.getVariables().playerLevel[level] -= 1;
-				player.getPA().setSkillLevel(level, player.getVariables().playerLevel[level],
-						player.getVariables().playerXP[level]);
+			} else if (player.getInstance().playerLevel[level] > (player
+					.getLevelForXP(player.getInstance().playerXP[level]))) {
+				player.getInstance().playerLevel[level] -= 1;
+				player.getPA().setSkillLevel(level, player.getInstance().playerLevel[level],
+						player.getInstance().playerXP[level]);
 				player.getPA().refreshSkill(level);
 			}
 		}

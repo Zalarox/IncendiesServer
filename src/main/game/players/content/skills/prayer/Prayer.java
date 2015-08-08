@@ -83,15 +83,15 @@ public class Prayer extends SkillHandler {
 	 */
 	public static void buryBone(final Player c, final int itemID, final int slot) {
 		final PrayerData p = PrayerData.getID(itemID);
-		if (System.currentTimeMillis() - c.getVariables().buryDelay > 1500) {
+		if (System.currentTimeMillis() - c.getInstance().buryDelay > 1500) {
 			// if (itemID == p.getItemID()/* &&
 			// c.getItems().playerHasItem(p.getItemID())*/) {
-			c.getVariables().playerSkilling[5] = true;
+			c.getInstance().playerSkilling[5] = true;
 			c.getItems().deleteItem(itemID, slot, 1);
 			c.getPA().addSkillXP(p.getExpGained() * XPRates.PRAYER.getXPRate(), 5);
 			c.startAnimation(827);
 			c.sendMessage("You bury the bones.");
-			c.getVariables().buryDelay = System.currentTimeMillis();
+			c.getInstance().buryDelay = System.currentTimeMillis();
 			// }
 		}
 	}
@@ -111,26 +111,26 @@ public class Prayer extends SkillHandler {
 			return;
 		if (itemID == p.getItemID() && c.getItems().playerHasItem(itemID) && c.absX >= altarX - 1
 				&& c.absX <= altarX + 2 && c.absY >= altarY - 1 && c.absY <= altarY + 1) {
-			c.getVariables().playerSkilling[5] = true;
+			c.getInstance().playerSkilling[5] = true;
 			placeBonesOnAltar(c, itemID, altarX, altarY, p);
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (!c.getItems().playerHasItem(itemID) || !(c.getVariables().playerSkilling[5])
+					if (!c.getItems().playerHasItem(itemID) || !(c.getInstance().playerSkilling[5])
 							|| !(c.absX >= altarX - 1 && c.absX <= altarX + 2 && c.absY >= altarY - 1
 									&& c.absY <= altarY + 1))
 						container.stop();
-					if (c.getVariables().timesBuried == timesToBury)
+					if (c.getInstance().timesBuried == timesToBury)
 						container.stop();
-					if (c.getVariables().playerSkilling[5])
+					if (c.getInstance().playerSkilling[5])
 						placeBonesOnAltar(c, itemID, altarX, altarY, p);
 				}
 
 				@Override
 				public void stop() {
-					c.getVariables().playerSkilling[5] = false;
+					c.getInstance().playerSkilling[5] = false;
 					c.startAnimation(65535);
-					c.getVariables().timesBuried = 0;
+					c.getInstance().timesBuried = 0;
 				}
 			}, 4);
 		}
@@ -153,7 +153,7 @@ public class Prayer extends SkillHandler {
 		c.startAnimation(896);
 		c.getPA().createPlayersStillGfx(624, altarX, altarY, 0, 0);
 		c.sendMessage("The gods are pleased with your offerings.");
-		c.getVariables().timesBuried += 1;
+		c.getInstance().timesBuried += 1;
 		// c.sendMessage("Debug - You buried : "+c.timesBuryed);
 	}
 
@@ -172,9 +172,9 @@ public class Prayer extends SkillHandler {
 				buryAltarBone(c, item, altarX, altarY, 1);
 				return;
 			}
-			c.getVariables().prayerItemID = item;
-			c.getVariables().altarXCoord = altarX;
-			c.getVariables().altarYCoord = altarY;
+			c.getInstance().prayerItemID = item;
+			c.getInstance().altarXCoord = altarX;
+			c.getInstance().altarYCoord = altarY;
 			c.getPA().sendFrame164(4429);
 			c.getPA().sendFrame126("How many would you like to offer?", 2800);
 			c.getPA().sendFrame246(1746, 150, p.getItemID());
@@ -189,25 +189,25 @@ public class Prayer extends SkillHandler {
 	 * @param buttonID
 	 */
 	public static void handleButtons(final Player c, int buttonID) {
-		if (c.getVariables().playerSkilling[5])
+		if (c.getInstance().playerSkilling[5])
 			return;
 		if (buttonID == 10239 || buttonID == 10238 || buttonID == 6211)
 			c.getPA().removeAllWindows();
 		switch (buttonID) {
 		case 10239:
-			buryAltarBone(c, c.getVariables().prayerItemID, c.getVariables().altarXCoord, c.getVariables().altarYCoord,
+			buryAltarBone(c, c.getInstance().prayerItemID, c.getInstance().altarXCoord, c.getInstance().altarYCoord,
 					1);
 			break;
 		case 10238:
-			buryAltarBone(c, c.getVariables().prayerItemID, c.getVariables().altarXCoord, c.getVariables().altarYCoord,
+			buryAltarBone(c, c.getInstance().prayerItemID, c.getInstance().altarXCoord, c.getInstance().altarYCoord,
 					5);
 			break;
 		case 6211:
-			buryAltarBone(c, c.getVariables().prayerItemID, c.getVariables().altarXCoord, c.getVariables().altarYCoord,
+			buryAltarBone(c, c.getInstance().prayerItemID, c.getInstance().altarXCoord, c.getInstance().altarYCoord,
 					-1);
 			break;
 		case 6212:
-			c.getVariables().PrayX = true;
+			c.getInstance().PrayX = true;
 			c.outStream.createFrame(27);
 			break;
 		}

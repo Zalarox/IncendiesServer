@@ -60,9 +60,9 @@ public class Curses {
 
 	public void activateCurse(int i) {
 		// Inside duel arena
-		if (c.getVariables().duelRule[DuelArena.RULE_PRAYER]) {
+		if (c.getInstance().duelRule[DuelArena.RULE_PRAYER]) {
 			for (int p = 0; p < 19; p++) {
-				c.getVariables().curseActive[p] = false;
+				c.getInstance().curseActive[p] = false;
 				c.getPA().sendFrame36(GLOW[p], 0);
 			}
 			c.sendMessage("Prayer has been disabled in this duel!");
@@ -70,7 +70,7 @@ public class Curses {
 		}
 
 		// Inside barbarian defence/assault
-		if (c.getVariables().inBarbDef) {
+		if (c.getInstance().inBarbDef) {
 			c.getPA().sendFrame36(GLOW[i], 0);
 			c.sendMessage("The barbarians are strongly against the use of prayers!");
 			return;
@@ -80,15 +80,15 @@ public class Curses {
 				LEECH_SPEC };
 		int[] saps = { SAP_WARRIOR, SAP_RANGER, SAP_MAGE, SAP_SPIRIT };
 		int[] isHeadIcon = { DEFLECT_MAGIC, DEFLECT_MISSILES, DEFLECT_MELEE, WRATH, SOUL_SPLIT };
-		if (c.getVariables().playerLevel[5] > 0 || !Constants.PRAYER_POINTS_REQUIRED) {
-			if (c.getPA().getLevelForXP(c.getVariables().playerXP[5]) >= PRAYER_LEVEL_REQUIRED[i]
+		if (c.getInstance().playerLevel[5] > 0 || !Constants.PRAYER_POINTS_REQUIRED) {
+			if (c.getPA().getLevelForXP(c.getInstance().playerXP[5]) >= PRAYER_LEVEL_REQUIRED[i]
 					|| !Constants.PRAYER_LEVEL_REQUIRED) {
-				if (!c.getVariables().curseActive[i])
+				if (!c.getInstance().curseActive[i])
 					curseEmote(i);
 				boolean headIcon = false;
 				switch (i) {
 				case PROTECT_ITEM:
-					c.getVariables().lastProtItem = System.currentTimeMillis();
+					c.getInstance().lastProtItem = System.currentTimeMillis();
 					break;
 				
 					// Sap curses TODO code functionality
@@ -96,7 +96,7 @@ public class Curses {
 				case SAP_RANGER:
 				case SAP_MAGE:
 				case SAP_SPIRIT:
-					if (!c.getVariables().curseActive[i]) {
+					if (!c.getInstance().curseActive[i]) {
 						for (int j = 0; j < leeches.length; j++) {
 							if (leeches[j] != i)
 								deactivate(leeches[j]);
@@ -113,7 +113,7 @@ public class Curses {
 				case LEECH_STRENGTH:
 				case LEECH_ENERGY:
 				case LEECH_SPEC:
-					if (!c.getVariables().curseActive[i]) {
+					if (!c.getInstance().curseActive[i]) {
 						for (int j = 0; j < saps.length; j++) {
 							if (saps[j] != i) {
 								deactivate(saps[j]);
@@ -128,17 +128,17 @@ public class Curses {
 				case DEFLECT_MAGIC:
 				case DEFLECT_MISSILES:
 				case DEFLECT_MELEE: // Horrible code, TODO fix
-					if (System.currentTimeMillis() - c.getVariables().stopPrayerDelay < 5000) {
+					if (System.currentTimeMillis() - c.getInstance().stopPrayerDelay < 5000) {
 						c.sendMessage("You have been injured and can't use this prayer!");
 						deactivate(i);
 						return;
 					}
 					if (i == DEFLECT_MAGIC)
-						c.getVariables().protMageDelay = System.currentTimeMillis();
+						c.getInstance().protMageDelay = System.currentTimeMillis();
 					else if (i == DEFLECT_MISSILES)
-						c.getVariables().protRangeDelay = System.currentTimeMillis();
+						c.getInstance().protRangeDelay = System.currentTimeMillis();
 					else if (i == DEFLECT_MELEE)
-						c.getVariables().protMeleeDelay = System.currentTimeMillis();
+						c.getInstance().protMeleeDelay = System.currentTimeMillis();
 					
 				case WRATH: // TODO code functionality
 					
@@ -147,7 +147,7 @@ public class Curses {
 					if (i != DEFLECT_SUMMONING) {
 						deactivate(DEFLECT_SUMMONING);
 					}
-					if (!c.getVariables().curseActive[i]) {
+					if (!c.getInstance().curseActive[i]) {
 						for (int j = 0; j < isHeadIcon.length; j++) {
 							if (isHeadIcon[j] != i)
 								deactivate(isHeadIcon[j]);
@@ -156,7 +156,7 @@ public class Curses {
 					break;
 
 				case TURMOIL:
-					if (!c.getVariables().curseActive[i]) {
+					if (!c.getInstance().curseActive[i]) {
 						for (int j = 0; j < leeches.length; j++) {
 							if (leeches[j] != i)
 								deactivate(leeches[j]);
@@ -170,28 +170,28 @@ public class Curses {
 				}
 				
 				if (i == DEFLECT_MAGIC)
-					c.getVariables().protMageDelay = System.currentTimeMillis();
+					c.getInstance().protMageDelay = System.currentTimeMillis();
 				else if (i == DEFLECT_MISSILES)
-					c.getVariables().protRangeDelay = System.currentTimeMillis();
+					c.getInstance().protRangeDelay = System.currentTimeMillis();
 				else if (i == DEFLECT_MELEE)
-					c.getVariables().protMeleeDelay = System.currentTimeMillis();
+					c.getInstance().protMeleeDelay = System.currentTimeMillis();
 				if (!headIcon) {
-					if (!c.getVariables().curseActive[i]) {
-						c.getVariables().curseActive[i] = true;
+					if (!c.getInstance().curseActive[i]) {
+						c.getInstance().curseActive[i] = true;
 						c.getPA().sendFrame36(GLOW[i], 1);
 					} else {
-						c.getVariables().curseActive[i] = false;
+						c.getInstance().curseActive[i] = false;
 						c.getPA().sendFrame36(GLOW[i], 0);
 					}
 				} else {
-					if (!c.getVariables().curseActive[i]) {
-						c.getVariables().curseActive[i] = true;
+					if (!c.getInstance().curseActive[i]) {
+						c.getInstance().curseActive[i] = true;
 						c.getPA().sendFrame36(GLOW[i], 1);
-						c.getVariables().headIcon = HEADICONS[i];
+						c.getInstance().headIcon = HEADICONS[i];
 						c.getPA().requestUpdates();
 					} else {
 						deactivate(i);
-						c.getVariables().headIcon = -1;
+						c.getInstance().headIcon = -1;
 						c.getPA().requestUpdates();
 					}
 				}
@@ -236,7 +236,7 @@ public class Curses {
 	}
 
 	public void deactivate(int i) {
-		c.getVariables().curseActive[i] = false;
+		c.getInstance().curseActive[i] = false;
 		c.getPA().sendFrame36(GLOW[i], 0);
 	}
 
@@ -246,27 +246,27 @@ public class Curses {
 		Player c2 = null;
 		double otherLevel = 0;
 		double turmoilMultiplier = stat.equalsIgnoreCase("Strength") ? 1.23 : 1.15;
-		if (c.getVariables().oldPlayerIndex > 0)
-			c2 = PlayerHandler.players[c.getVariables().oldPlayerIndex];
-		else if (c.getVariables().oldNpcIndex > 0)
-			n = NPCHandler.npcs[c.getVariables().oldNpcIndex];
+		if (c.getInstance().oldPlayerIndex > 0)
+			c2 = PlayerHandler.players[c.getInstance().oldPlayerIndex];
+		else if (c.getInstance().oldNpcIndex > 0)
+			n = NPCHandler.npcs[c.getInstance().oldNpcIndex];
 		if (stat.equalsIgnoreCase("Defence")) {
 			if (c2 != null)
-				otherLevel = c2.getLevelForXP(c2.getVariables().playerXP[1]) * 0.15;
+				otherLevel = c2.getLevelForXP(c2.getInstance().playerXP[1]) * 0.15;
 			else if (n != null)
 				otherLevel = n.getCombatLevel() * 0.15;
 			else
 				otherLevel = 0;
 		} else if (stat.equalsIgnoreCase("Strength")) {
 			if (c2 != null)
-				otherLevel = c2.getLevelForXP(c2.getVariables().playerXP[2]) * 0.10;
+				otherLevel = c2.getLevelForXP(c2.getInstance().playerXP[2]) * 0.10;
 			else if (n != null)
 				otherLevel = n.getCombatLevel() * 0.10;
 			else
 				otherLevel = 0;
 		} else if (stat.equalsIgnoreCase("Attack")) {
 			if (c2 != null)
-				otherLevel = c2.getLevelForXP(c2.getVariables().playerXP[0]) * 0.15;
+				otherLevel = c2.getLevelForXP(c2.getInstance().playerXP[0]) * 0.15;
 			else if (n != null)
 				otherLevel = n.getCombatLevel() * 0.15;
 			else
@@ -279,24 +279,24 @@ public class Curses {
 	}
 
 	public void soulSplit(int id, int damage) {
-		if (c.getVariables().curseActive[SOUL_SPLIT] && c.getVariables().ssDelay <= 0) {
-			if (c.getVariables().oldPlayerIndex > 0) {
+		if (c.getInstance().curseActive[SOUL_SPLIT] && c.getInstance().ssDelay <= 0) {
+			if (c.getInstance().oldPlayerIndex > 0) {
 				c.ssTarget = PlayerHandler.players[id];
 				if (c.ssTarget == null)
 					return;
 				c.getPA().createPlayersProjectile(c.getX(), c.getY(), (c.getX() - c.ssTarget.getX()) * -1,
 						(c.getY() - c.ssTarget.getY()) * -1, 50, 75, 2263, 25, 25, -id - 1, 0);
-				c.ssTarget.getVariables().playerLevel[5] -= (c.ssTarget.getVariables().playerLevel[5] < 6)
-						? c.ssTarget.getVariables().playerLevel[5] : 5;
+				c.ssTarget.getInstance().playerLevel[5] -= (c.ssTarget.getInstance().playerLevel[5] < 6)
+						? c.ssTarget.getInstance().playerLevel[5] : 5;
 				c.ssTarget.getPA().refreshSkill(5);
-			} else if (c.getVariables().oldNpcIndex > 0) {
-				c.getVariables().ssTargetNPC = NPCHandler.npcs[id];
+			} else if (c.getInstance().oldNpcIndex > 0) {
+				c.getInstance().ssTargetNPC = NPCHandler.npcs[id];
 				c.getPA().createPlayersProjectile(c.getX(), c.getY(),
-						(c.getX() - c.getVariables().ssTargetNPC.getX()) * -1,
-						(c.getY() - c.getVariables().ssTargetNPC.getY()) * -1, 50, 75, 2263, 25, 25, id + 1, 0);
+						(c.getX() - c.getInstance().ssTargetNPC.getX()) * -1,
+						(c.getY() - c.getInstance().ssTargetNPC.getY()) * -1, 50, 75, 2263, 25, 25, id + 1, 0);
 			}
-			c.getVariables().ssHeal = damage / 5;
-			c.getVariables().ssDelay = 5;
+			c.getInstance().ssHeal = damage / 5;
+			c.getInstance().ssDelay = 5;
 		}
 	}
 
@@ -305,8 +305,8 @@ public class Curses {
 		int endGFX = 0;
 		int[] curseTypes = { LEECH_ATTACK, LEECH_RANGED, LEECH_MAGIC, LEECH_DEFENCE, LEECH_STRENGTH, LEECH_ENERGY,
 				LEECH_SPEC };
-		if (!c.getVariables().curseActive[curseTypes[leechType]] || Misc.random(3) < 3) {
-			c.getVariables().leechDelay = 0;
+		if (!c.getInstance().curseActive[curseTypes[leechType]] || Misc.random(3) < 3) {
+			c.getInstance().leechDelay = 0;
 			return;
 		}
 		switch (leechType) {
@@ -339,21 +339,21 @@ public class Curses {
 			endGFX = 2258;
 			break;
 		}
-		if (c.getVariables().oldPlayerIndex > 0) {
+		if (c.getInstance().oldPlayerIndex > 0) {
 			c.leechTarget = PlayerHandler.players[id];
 			c.getPA().createPlayersProjectile(c.getX(), c.getY(), (c.getX() - c.leechTarget.getX()) * -1,
 					(c.getY() - c.leechTarget.getY()) * -1, 50, 75, projectile, 25, 25,
-					-c.getVariables().oldPlayerIndex - 1, 0);
-		} else if (c.getVariables().oldNpcIndex > 0) {
-			c.getVariables().leechTargetNPC = NPCHandler.npcs[id];
+					-c.getInstance().oldPlayerIndex - 1, 0);
+		} else if (c.getInstance().oldNpcIndex > 0) {
+			c.getInstance().leechTargetNPC = NPCHandler.npcs[id];
 			c.getPA().createPlayersProjectile(c.getX(), c.getY(),
-					(c.getX() - c.getVariables().leechTargetNPC.getX()) * -1,
-					(c.getY() - c.getVariables().leechTargetNPC.getY()) * -1, 50, 75, projectile, 25, 25,
-					c.getVariables().oldNpcIndex + 1, 0);
+					(c.getX() - c.getInstance().leechTargetNPC.getX()) * -1,
+					(c.getY() - c.getInstance().leechTargetNPC.getY()) * -1, 50, 75, projectile, 25, 25,
+					c.getInstance().oldNpcIndex + 1, 0);
 		}
 		c.startAnimation(12575);
-		c.getVariables().leechEndGFX = endGFX;
-		c.getVariables().leechType = leechType;
+		c.getInstance().leechEndGFX = endGFX;
+		c.getInstance().leechType = leechType;
 	}
 
 	private void leechEffect(int leechType) {
@@ -383,38 +383,38 @@ public class Curses {
 	}
 
 	public void handleProcess() {
-		if (c.getVariables().ssDelay > 0)
-			c.getVariables().ssDelay--;
-		if (c.getVariables().ssDelay == 3) {
+		if (c.getInstance().ssDelay > 0)
+			c.getInstance().ssDelay--;
+		if (c.getInstance().ssDelay == 3) {
 			if (c.ssTarget != null) {
 				c.getPA().createPlayersProjectile(c.ssTarget.getX(), c.ssTarget.getY(),
 						(c.ssTarget.getY() - c.getY()) * -1, (c.ssTarget.getX() - c.getX()) * -1, 50, 75, 2263, 25, 25,
 						-c.getId() - 1, 40);
 				c.ssTarget.gfx0(2264);
-			} else if (c.getVariables().ssTargetNPC != null) {
-				c.getPA().createPlayersProjectile(c.getVariables().ssTargetNPC.getX(),
-						c.getVariables().ssTargetNPC.getY(), (c.getVariables().ssTargetNPC.getY() - c.getY()) * -1,
-						(c.getVariables().ssTargetNPC.getX() - c.getX()) * -1, 50, 75, 2263, 25, 25, -c.getId() - 1,
+			} else if (c.getInstance().ssTargetNPC != null) {
+				c.getPA().createPlayersProjectile(c.getInstance().ssTargetNPC.getX(),
+						c.getInstance().ssTargetNPC.getY(), (c.getInstance().ssTargetNPC.getY() - c.getY()) * -1,
+						(c.getInstance().ssTargetNPC.getX() - c.getX()) * -1, 50, 75, 2263, 25, 25, -c.getId() - 1,
 						40);
-				c.getVariables().ssTargetNPC.gfx0(2264);
+				c.getInstance().ssTargetNPC.gfx0(2264);
 			}
-			if (c.getVariables().constitution < c.getVariables().maxConstitution)
-				c.addToHp(c.getVariables().ssHeal);
+			if (c.getInstance().lifePoints < c.getInstance().maxLifePoints)
+				c.addToHp(c.getInstance().ssHeal);
 		}
-		if (c.getVariables().leechDelay > 0)
-			c.getVariables().leechDelay--;
-		if (c.getVariables().leechDelay == 5) {
-			if (c.getVariables().oldPlayerIndex > 0)
-				appendRandomLeech(c.getVariables().oldPlayerIndex, Misc.random(6));
-			else if (c.getVariables().oldNpcIndex > 0)
-				appendRandomLeech(c.getVariables().oldNpcIndex, Misc.random(6));
-		} else if (c.getVariables().leechDelay == 3) {
+		if (c.getInstance().leechDelay > 0)
+			c.getInstance().leechDelay--;
+		if (c.getInstance().leechDelay == 5) {
+			if (c.getInstance().oldPlayerIndex > 0)
+				appendRandomLeech(c.getInstance().oldPlayerIndex, Misc.random(6));
+			else if (c.getInstance().oldNpcIndex > 0)
+				appendRandomLeech(c.getInstance().oldNpcIndex, Misc.random(6));
+		} else if (c.getInstance().leechDelay == 3) {
 			if (c.leechTarget != null) {
-				c.leechTarget.gfx0(c.getVariables().leechEndGFX);
-				leechEffect(c.getVariables().leechType);
-			} else if (c.getVariables().leechTargetNPC != null) {
-				c.getVariables().leechTargetNPC.gfx0(c.getVariables().leechEndGFX);
-				leechEffectNPC(c.getVariables().leechType);
+				c.leechTarget.gfx0(c.getInstance().leechEndGFX);
+				leechEffect(c.getInstance().leechType);
+			} else if (c.getInstance().leechTargetNPC != null) {
+				c.getInstance().leechTargetNPC.gfx0(c.getInstance().leechEndGFX);
+				leechEffectNPC(c.getInstance().leechType);
 			}
 		}
 	}

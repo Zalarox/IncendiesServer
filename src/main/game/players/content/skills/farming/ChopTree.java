@@ -205,7 +205,7 @@ public class ChopTree {
 
 	public static int getAxeIndex(Player player) {
 		for (int i = 0; i < axes.length; i++) {
-			if (player.getVariables().playerEquipment[player.getVariables().playerWeapon] == (axes[i].getId())) {
+			if (player.getInstance().playerEquipment[player.getInstance().playerWeapon] == (axes[i].getId())) {
 				return i;
 			}
 		}

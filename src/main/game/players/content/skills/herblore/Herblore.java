@@ -61,7 +61,7 @@ public class Herblore extends SkillHandler {
 	public static void cleanTheHerb(Player c, int itemId) {
 		for (int i = 0; i < CLEANING_HERB.length; i++) {
 			if (itemId == CLEANING_HERB[i][0]) {
-				if (c.getVariables().playerLevel[c.playerHerblore] < CLEANING_HERB[i][2]) {
+				if (c.getInstance().playerLevel[c.playerHerblore] < CLEANING_HERB[i][2]) {
 					c.sendMessage("You haven't got high enough Herblore level to clean this herb!");
 					c.sendMessage("You need the Herblore level of " + CLEANING_HERB[i][2] + " to clean this herb.");
 					c.getDH().sendStatement(
@@ -78,11 +78,11 @@ public class Herblore extends SkillHandler {
 	}
 
 	public static void setUpUnfinished(Player c, int useItem, int otherItem) {
-		c.getVariables().secondHerb = false;
+		c.getInstance().secondHerb = false;
 		for (int i = 0; i < ITEM_ON_VIAL.length; i++) {
 			if ((useItem == 227 && otherItem == ITEM_ON_VIAL[i][0])
 					|| (useItem == ITEM_ON_VIAL[i][0] && otherItem == 227)) {
-				if (c.getVariables().playerLevel[c.playerHerblore] < ITEM_ON_VIAL[i][2]) {
+				if (c.getInstance().playerLevel[c.playerHerblore] < ITEM_ON_VIAL[i][2]) {
 					c.sendMessage("You haven't got high enough Herblore level to make this potion!");
 					c.sendMessage("You need the Herblore level of " + ITEM_ON_VIAL[i][2] + " to make this potion.");
 					c.getDH().sendStatement(
@@ -93,19 +93,19 @@ public class Herblore extends SkillHandler {
 				c.getPA().sendFrame164(4429);
 				c.getPA().sendFrame246(1746, 190, ITEM_ON_VIAL[i][1]);
 				c.getPA().sendFrame126(getLine() + "" + c.getItems().getItemName(ITEM_ON_VIAL[i][1]) + "", 2799);
-				c.getVariables().doingHerb = ITEM_ON_VIAL[i][0];
-				c.getVariables().newHerb = ITEM_ON_VIAL[i][1];
-				c.getVariables().newXp = 0;
+				c.getInstance().doingHerb = ITEM_ON_VIAL[i][0];
+				c.getInstance().newHerb = ITEM_ON_VIAL[i][1];
+				c.getInstance().newXp = 0;
 			}
 		}
 	}
 
 	public static void setUpPotion(Player c, int useItem, int otherItem) {
-		c.getVariables().secondHerb = true;
+		c.getInstance().secondHerb = true;
 		for (int i = 0; i < ITEM_ON_ITEM.length; i++) {
 			if ((useItem == ITEM_ON_ITEM[i][1] && otherItem == ITEM_ON_ITEM[i][0])
 					|| (useItem == ITEM_ON_ITEM[i][0] && otherItem == ITEM_ON_ITEM[i][1])) {
-				if (c.getVariables().playerLevel[c.playerHerblore] < ITEM_ON_ITEM[i][3]) {
+				if (c.getInstance().playerLevel[c.playerHerblore] < ITEM_ON_ITEM[i][3]) {
 					c.sendMessage("You haven't got high enough Herblore level to make this potion!");
 					c.sendMessage("You need the Herblore level of " + ITEM_ON_ITEM[i][3] + " to make this potion.");
 					c.getDH().sendStatement(
@@ -116,16 +116,16 @@ public class Herblore extends SkillHandler {
 				c.getPA().sendFrame164(4429);
 				c.getPA().sendFrame246(1746, 190, ITEM_ON_ITEM[i][2]);
 				c.getPA().sendFrame126(getLine() + "" + c.getItems().getItemName(ITEM_ON_ITEM[i][2]) + "", 2799);
-				c.getVariables().doingHerb = ITEM_ON_ITEM[i][0];
-				c.getVariables().newHerb = ITEM_ON_ITEM[i][2];
-				c.getVariables().newItem = ITEM_ON_ITEM[i][1];
-				c.getVariables().newXp = ITEM_ON_ITEM[i][4];
+				c.getInstance().doingHerb = ITEM_ON_ITEM[i][0];
+				c.getInstance().newHerb = ITEM_ON_ITEM[i][2];
+				c.getInstance().newItem = ITEM_ON_ITEM[i][1];
+				c.getInstance().newXp = ITEM_ON_ITEM[i][4];
 			}
 		}
 	}
 
 	public static void finishOverload(Player c) {
-		if (c.getVariables().playerLevel[c.playerHerblore] < 96) {
+		if (c.getInstance().playerLevel[c.playerHerblore] < 96) {
 			c.sendMessage("You haven't got high enough Herblore level to make this potion!");
 			c.sendMessage("You need the Herblore level of 96 to make this potion.");
 			c.getDH().sendStatement("You need a herblore level of 96 to make this potion.");
@@ -139,12 +139,12 @@ public class Herblore extends SkillHandler {
 	}
 
 	public static void finishUnfinished(Player c, int amount) {
-		if (c.getVariables().newHerb == -1 || c.getVariables().doingHerb == -1) {
+		if (c.getInstance().newHerb == -1 || c.getInstance().doingHerb == -1) {
 			resetHerblore(c);
 			return;
 		}
 		int item1 = c.getItems().getItemAmount(227);
-		int item2 = c.getItems().getItemAmount(c.getVariables().doingHerb);
+		int item2 = c.getItems().getItemAmount(c.getInstance().doingHerb);
 		if (amount > item2) {
 			amount = item2;
 		} else if (amount > item1) {
@@ -155,64 +155,64 @@ public class Herblore extends SkillHandler {
 			resetHerblore(c);
 			return;
 		}
-		if (!c.getItems().playerHasItem(c.getVariables().doingHerb, amount)) {
+		if (!c.getItems().playerHasItem(c.getInstance().doingHerb, amount)) {
 			c.sendMessage("You don't have enough herbs to make that many!");
 			resetHerblore(c);
 			return;
 		}
-		c.getVariables().doAmount = amount;
+		c.getInstance().doAmount = amount;
 		makePotion(c, amount, 227, "un");
 	}
 
 	public static void finishPotion(Player c, int amount) {
-		if (c.getVariables().newHerb == -1 || c.getVariables().doingHerb == -1) {
+		if (c.getInstance().newHerb == -1 || c.getInstance().doingHerb == -1) {
 			resetHerblore(c);
 			return;
 		}
-		int item1 = c.getItems().getItemAmount(c.getVariables().newItem);
-		int item2 = c.getItems().getItemAmount(c.getVariables().doingHerb);
+		int item1 = c.getItems().getItemAmount(c.getInstance().newItem);
+		int item2 = c.getItems().getItemAmount(c.getInstance().doingHerb);
 		if (amount > item2) {
 			amount = item2;
 		} else if (amount > item1) {
 			amount = item1;
 		}
-		if (!c.getItems().playerHasItem(c.getVariables().newItem, amount)) {
-			c.sendMessage("You don't have enough " + c.getItems().getItemName(c.getVariables().newItem)
+		if (!c.getItems().playerHasItem(c.getInstance().newItem, amount)) {
+			c.sendMessage("You don't have enough " + c.getItems().getItemName(c.getInstance().newItem)
 					+ " to make that many!");
 			resetHerblore(c);
 			return;
 		}
-		if (!c.getItems().playerHasItem(c.getVariables().doingHerb, amount)) {
+		if (!c.getItems().playerHasItem(c.getInstance().doingHerb, amount)) {
 			c.sendMessage("You don't have enough unfinished potions to make that many!");
 			resetHerblore(c);
 			return;
 		}
-		c.getVariables().doAmount = amount;
-		makePotion(c, amount, c.getVariables().newItem, "");
+		c.getInstance().doAmount = amount;
+		makePotion(c, amount, c.getInstance().newItem, "");
 	}
 
 	private static void makePotion(final Player c, final int amount, final int otherItem, final String s) {
-		final int xp = (c.getVariables().newXp * SkillHandler.XPRates.HERBLORE.getXPRate());
-		final int item1 = c.getVariables().doingHerb;
+		final int xp = (c.getInstance().newXp * SkillHandler.XPRates.HERBLORE.getXPRate());
+		final int item1 = c.getInstance().doingHerb;
 		final int item2 = otherItem;
-		final int newItem1 = c.getVariables().newHerb;
-		c.getVariables().stopPlayerSkill = true;
+		final int newItem1 = c.getInstance().newHerb;
+		c.getInstance().stopPlayerSkill = true;
 		c.startAnimation(363);
 		c.getPA().removeAllWindows();
-		if (c.getVariables().herbloreI) {
+		if (c.getInstance().herbloreI) {
 			return;
 		}
-		c.getVariables().herbloreI = true;
+		c.getInstance().herbloreI = true;
 		CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
 				if (!c.getItems().playerHasItem(item1, 1) || !c.getItems().playerHasItem(item2, 1)
-						|| c.getVariables().doAmount <= 0) {
+						|| c.getInstance().doAmount <= 0) {
 					resetHerblore(c);
 					container.stop();
 					return;
 				}
-				if (!c.getVariables().stopPlayerSkill) {
+				if (!c.getInstance().stopPlayerSkill) {
 					resetHerblore(c);
 					container.stop();
 					return;
@@ -233,17 +233,17 @@ public class Herblore extends SkillHandler {
 	}
 
 	public static void addTime(Player c) {
-		c.getVariables().doAmount--;
+		c.getInstance().doAmount--;
 	}
 
 	public static void resetHerblore(Player c) {
 		c.getPA().removeAllWindows();
-		c.getVariables().newHerb = -1;
-		c.getVariables().doingHerb = -1;
-		c.getVariables().newXp = 0;
-		c.getVariables().herbloreI = false;
-		c.getVariables().herbAmount = -1;
-		c.getVariables().newItem = -1;
-		c.getVariables().secondHerb = false;
+		c.getInstance().newHerb = -1;
+		c.getInstance().doingHerb = -1;
+		c.getInstance().newXp = 0;
+		c.getInstance().herbloreI = false;
+		c.getInstance().herbAmount = -1;
+		c.getInstance().newItem = -1;
+		c.getInstance().secondHerb = false;
 	}
 }

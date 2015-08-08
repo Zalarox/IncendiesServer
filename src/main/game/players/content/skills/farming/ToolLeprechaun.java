@@ -259,16 +259,16 @@ public class ToolLeprechaun {
 	}
 
 	public void updateClientInterface(ToolStoreData toolStoreData, int count, int index) {
-		player.getVariables().tempBoolean = false;
+		player.getInstance().tempBoolean = false;
 		if (count > 0) {
 			if (index >= 5 && index <= 13) {
-				player.getVariables().tempBoolean = true;
+				player.getInstance().tempBoolean = true;
 			}
 			player.getPA().sendString("@gre@" + toolStoreData.getToolName(), toolStoreData.getToolFrameId());
 			player.getPA().sendString("@gre@" + count, toolStoreData.getToolCountFrameId());
 		} else {
 			// watering can doses
-			if (index >= 5 && index <= 13 && player.getVariables().tempBoolean) {
+			if (index >= 5 && index <= 13 && player.getInstance().tempBoolean) {
 				return;
 			}
 			// secateurs

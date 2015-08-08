@@ -12,19 +12,19 @@ public class WearItem implements PacketType {
 	@Override
 	@SuppressWarnings("unused")
 	public void processPacket(Player c, int packetType, int packetSize) {
-		c.getVariables().wearId = c.getInStream().readUnsignedWord();
-		c.getVariables().wearSlot = c.getInStream().readUnsignedWordA();
-		c.getVariables().interfaceId = c.getInStream().readUnsignedWordA();
+		c.getInstance().wearId = c.getInStream().readUnsignedWord();
+		c.getInstance().wearSlot = c.getInStream().readUnsignedWordA();
+		c.getInstance().interfaceId = c.getInStream().readUnsignedWordA();
 		// c.sendMessage(c.getItems().getItemName(c.wearId));
-		if (c.getVariables().wearSlot > c.getVariables().playerItems.length) {
-			c.getVariables().wearSlot = -1;
+		if (c.getInstance().wearSlot > c.getInstance().playerItems.length) {
+			c.getInstance().wearSlot = -1;
 			return;
 		}
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		c.getPA().closeActivities();
-		int oldCombatTimer = c.getVariables().attackTimer;
-		if (c.getVariables().playerIndex > 0 || c.getVariables().npcIndex > 0)
+		int oldCombatTimer = c.getInstance().attackTimer;
+		if (c.getInstance().playerIndex > 0 || c.getInstance().npcIndex > 0)
 			c.getCombat().resetPlayerAttack();
 		/*
 		 * if(c.interfaceIdOpen == 24700) {
@@ -37,17 +37,17 @@ public class WearItem implements PacketType {
 		 * }
 		 */
 		for (int[] element : Pouches.POUCHES) {
-			if (c.getVariables().wearId == element[0]) {
-				Pouches.emptyEssencePouch(c, c.getVariables().wearId);
+			if (c.getInstance().wearId == element[0]) {
+				Pouches.emptyEssencePouch(c, c.getInstance().wearId);
 				return;
 			}
 		}
 		// c.attackTimer = oldCombatTimer;
 		c.getPA().resetSkills();
-		c.getItems().wearItem(c.getVariables().wearId, c.getVariables().wearSlot);
-		c.getVariables().maxConstitution = c.getVariables().calculateMaxLifePoints(c);
+		c.getItems().wearItem(c.getInstance().wearId, c.getInstance().wearSlot);
+		c.maxLP();
 		c.getPA().refreshSkill(3);
-		if (c.getVariables().interfaceIdOpen == 15106) {
+		if (c.getInstance().interfaceIdOpen == 15106) {
 		} else {
 			c.getPA().removeAllWindows();
 		}

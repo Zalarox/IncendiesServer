@@ -19,7 +19,7 @@ public class Skill {
 	}
 
 	public int getLevel()[] {
-		return c.getVariables().playerLevel;
+		return c.getInstance().playerLevel;
 	}
 
 	public void addExp(int skill, double xp) {
@@ -27,11 +27,11 @@ public class Skill {
 	}
 
 	public int getPlayerLevel(int id) {
-		return c.getVariables().playerLevel[id];
+		return c.getInstance().playerLevel[id];
 	}
 
 	public int getClientLevel(int id) {
-		return c.getVariables().playerLevel[id];
+		return c.getInstance().playerLevel[id];
 	}
 
 }

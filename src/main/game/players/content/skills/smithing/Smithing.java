@@ -32,7 +32,7 @@ public class Smithing {
 	public boolean canSmelt(final int barType) {
 		for (int j = 0; j < SMELT_BARS.length; j++) {
 			if (barType == SMELT_BARS[j]) {
-				return c.getVariables().playerLevel[c.getVariables().playerSmithing] >= BAR_REQS[j];
+				return c.getInstance().playerLevel[c.getInstance().playerSmithing] >= BAR_REQS[j];
 			}
 		}
 		return false;
@@ -945,8 +945,8 @@ public class Smithing {
 
 	public void doAction(final Player c, final int toadd, final int toremove, final int toremove2,
 			final int timestomake, final int NOTUSED, final int NOTUSED2, final int xp) {
-		c.getVariables().event = 3;
-		c.getVariables().makeTimes = timestomake;
+		c.getInstance().event = 3;
+		c.getInstance().makeTimes = timestomake;
 		c.getPA().closeAllWindows();
 		if (!c.getItems().playerHasItem(toremove, toremove2)) {
 			c.sendMessage("You don't have enough bars to make this item!");
@@ -957,14 +957,14 @@ public class Smithing {
 			return;
 		}
 		c.startAnimation(898);
-		if (c.getVariables().playerSkilling[c.getVariables().playerSmithing] == true) {
+		if (c.getInstance().playerSkilling[c.getInstance().playerSmithing] == true) {
 			return;
 		}
-		c.getVariables().playerSkilling[c.getVariables().playerSmithing] = true;
+		c.getInstance().playerSkilling[c.getInstance().playerSmithing] = true;
 		CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (c.getVariables().playerSkilling[c.getVariables().playerSmithing] == false) {
+				if (c.getInstance().playerSkilling[c.getInstance().playerSmithing] == false) {
 					container.stop();
 					return;
 				}
@@ -978,11 +978,11 @@ public class Smithing {
 					container.stop();
 					return;
 				}
-				if (c.getVariables().makeTimes == 0) {
+				if (c.getInstance().makeTimes == 0) {
 					container.stop();
 					return;
 				}
-				if (c.getVariables().makeTimes != 1 && c.getItems().playerHasItem(toremove, toremove2)
+				if (c.getInstance().makeTimes != 1 && c.getItems().playerHasItem(toremove, toremove2)
 						&& c.getItems().playerHasItem(2347, 1)) {
 					c.startAnimation(898);
 				}
@@ -1003,13 +1003,13 @@ public class Smithing {
 				c.getPA().addSkillXP(xp * SkillHandler.XPRates.SMITHING.getXPRate(), 13);
 				c.getPA().refreshSkill(13);
 				c.sendMessage("You make a " + c.getItems().getItemName(toadd) + ".");
-				c.getVariables().makeTimes--;
+				c.getInstance().makeTimes--;
 			}
 
 			@Override
 			public void stop() {
-				c.getVariables().playerSkilling[c.getVariables().playerSmithing] = false;
-				c.getVariables().makeTimes = 0;
+				c.getInstance().playerSkilling[c.getInstance().playerSmithing] = false;
+				c.getInstance().makeTimes = 0;
 			}
 		}, 3);
 	}
@@ -1076,7 +1076,7 @@ public class Smithing {
 		}
 		c.getPA().sendFrame126(" ", 7441);
 		c.getPA().sendFrame164(2400);
-		c.getVariables().playerisSmelting = true;
+		c.getInstance().playerisSmelting = true;
 	}
 
 }

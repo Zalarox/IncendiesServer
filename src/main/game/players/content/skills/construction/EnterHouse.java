@@ -16,7 +16,7 @@ public class EnterHouse {
 			c.getPA().removeAllWindows();
 			return;
 		}
-		if (c.getVariables().inWild()) {
+		if (c.getInstance().inWild()) {
 			c.getPA().removeAllWindows();
 			return;
 		}

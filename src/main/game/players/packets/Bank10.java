@@ -17,7 +17,7 @@ public class Bank10 implements PacketType {
 		int interfaceId = c.getInStream().readUnsignedWordBigEndian();
 		int removeId = c.getInStream().readUnsignedWordA();
 		int slot = c.getInStream().readUnsignedWordA();
-		if (c.getVariables().teleTimer > 0) {
+		if (c.getInstance().teleTimer > 0) {
 			return;
 		}
 		if (removeId >= 5509 && removeId <= 5514) {
@@ -84,7 +84,7 @@ public class Bank10 implements PacketType {
 		case 1121:
 		case 1122:
 		case 1123:
-			c.getSmithing().readInput(c.getVariables().playerLevel[c.getVariables().playerSmithing],
+			c.getSmithing().readInput(c.getInstance().playerLevel[c.getInstance().playerSmithing],
 					Integer.toString(removeId), c, 10);
 			break;
 		}

@@ -20,15 +20,15 @@ public class ItemClick3 implements PacketType {
 		int itemId11 = c.getInStream().readSignedWordBigEndianA();
 		int slot = c.getInStream().readSignedWordBigEndian();
 		int itemId = c.getInStream().readSignedWordA();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
-		if (slot > c.getVariables().playerItems.length) {
+		if (slot > c.getInstance().playerItems.length) {
 			return;
 		}
 		if (Runecrafting.clickTalisman(c, itemId)) {
 			return;
 		}
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
 		if (HunterLooting.giveLoot(c, itemId, false)) {
@@ -50,9 +50,9 @@ public class ItemClick3 implements PacketType {
 			}
 			break;
 		default:
-			if (c.getVariables().playerRights == 3)
+			if (c.getInstance().playerRights == 3)
 				c.getSummoning().summonFamiliar(itemId, false);
-			if (c.getVariables().playerRights == 3)
+			if (c.getInstance().playerRights == 3)
 				Misc.println(c.playerName + " - Item3rdOption: " + itemId + " : " + itemId11 + " : " + slot);
 			break;
 		}

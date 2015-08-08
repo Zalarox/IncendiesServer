@@ -10,8 +10,8 @@ import main.game.players.Player;
 public class BankSearch {
 
 	public static int orderItems(Player c) {
-		for (int i = 0; i < c.getVariables().bankArray.length; i++) {
-			if (c.getVariables().bankArray[i] == null) {
+		for (int i = 0; i < c.getInstance().bankArray.length; i++) {
+			if (c.getInstance().bankArray[i] == null) {
 				return i;
 			}
 		}
@@ -19,9 +19,9 @@ public class BankSearch {
 	}
 
 	public static void clearItems(Player c) {
-		for (int i = 0; i < c.getVariables().bankArray.length; i++) {
-			if (c.getVariables().bankArray[i] != null) {
-				c.getVariables().bankArray[i] = null;
+		for (int i = 0; i < c.getInstance().bankArray.length; i++) {
+			if (c.getInstance().bankArray[i] != null) {
+				c.getInstance().bankArray[i] = null;
 			}
 		}
 	}
@@ -34,12 +34,12 @@ public class BankSearch {
 	public static void inputText(Player c, String text) {
 		int matches = 0;
 		clearItems(c);
-		c.getVariables().bankText = text;
+		c.getInstance().bankText = text;
 		for (int i = 0; i < Constants.BANK_SIZE; i++) {
 			/*
 			 * New item variable is opened due to loop
 			 */
-			GameItem bank = new GameItem(c.getVariables().bankItems[i], c.getVariables().bankItemsN[i]);
+			GameItem bank = new GameItem(c.getInstance().bankItems[i], c.getInstance().bankItemsN[i]);
 
 			if (bank.id == 0 || bank.id == -1) {
 				continue;
@@ -61,12 +61,12 @@ public class BankSearch {
 			text = text.toLowerCase();
 
 			if (name.contains(text)) {
-				c.getVariables().bankArray[orderItems(c)] = bank;
+				c.getInstance().bankArray[orderItems(c)] = bank;
 				matches += 1;
 			}
 		}
 		c.sendMessage("Item matches found @whi@" + matches);
-		c.getPA().sendItemOnInterface(5382, c.getVariables().bankArray);
+		c.getPA().sendItemOnInterface(5382, c.getInstance().bankArray);
 
 	}
 }

@@ -19,16 +19,16 @@ public class FollowPlayer implements PacketType {
 		if (PlayerHandler.players[followPlayer] == null) {
 			return;
 		}
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 			return;
 		}
-		c.getVariables().playerIndex = 0;
-		c.getVariables().npcIndex = 0;
-		c.getVariables().mageFollow = false;
-		c.getVariables().usingBow = false;
-		c.getVariables().usingRangeWeapon = false;
-		c.getVariables().followDistance = 1;
+		c.getInstance().playerIndex = 0;
+		c.getInstance().npcIndex = 0;
+		c.getInstance().mageFollow = false;
+		c.getInstance().usingBow = false;
+		c.getInstance().usingRangeWeapon = false;
+		c.getInstance().followDistance = 1;
 		Following.triggerFollowing(followPlayer, 0, c);
 	}
 }

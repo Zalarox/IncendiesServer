@@ -16,7 +16,7 @@ public class ItemOnGroundItem implements PacketType {
 		int gItemY = c.getInStream().readSignedWordA();
 		int itemUsedSlot = c.getInStream().readSignedWordBigEndianA();
 		int gItemX = c.getInStream().readUnsignedWord();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		switch (itemUsed) {
 		case 590:
@@ -24,7 +24,7 @@ public class ItemOnGroundItem implements PacketType {
 			Firemaking.attemptFire(c, itemUsed, groundItem, gItemX, gItemY, true);
 			break;
 		default:
-			if (c.getVariables().playerRights == 3)
+			if (c.getInstance().playerRights == 3)
 				Misc.println("ItemUsed " + itemUsed + " on Ground Item " + groundItem);
 			break;
 		}

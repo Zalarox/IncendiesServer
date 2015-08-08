@@ -183,10 +183,10 @@ public class PlayerAssistant {
 				continue;
 			final Player t = p;
 			if (t.absX >= x1 && t.absX <= x2 && t.absY >= y1 && t.absY <= y2) {
-				int hit = t.getVariables().playerLevel[c.playerHitpoints] / hp;
+				int hit = t.getInstance().playerLevel[c.playerHitpoints] / hp;
 				t.setHitDiff2(hit);
 				t.setHitUpdateRequired2(true);
-				t.getVariables().playerLevel[c.playerHitpoints] -= hit;
+				t.getInstance().playerLevel[c.playerHitpoints] -= hit;
 				t.getPA().refreshSkill(c.playerHitpoints);
 				t.updateRequired = true;
 			}
@@ -200,13 +200,13 @@ public class PlayerAssistant {
 		/**
 		 * Player is already reseting
 		 */
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			return;
 		}
 		/**
 		 * Cant rest in combat
 		 */
-		if (c.getVariables().underAttackBy > 0 || c.getVariables().underAttackBy2 > 0) {
+		if (c.getInstance().underAttackBy > 0 || c.getInstance().underAttackBy2 > 0) {
 			c.sendMessage("You can't rest in combat!");
 			return;
 		}
@@ -215,10 +215,10 @@ public class PlayerAssistant {
 		 */
 		c.startAnimation(11786);
 		c.stopMovement();
-		c.getVariables().npcIndex = 0;
-		c.getVariables().npcClickIndex = 0;
-		c.getVariables().playerIndex = 0;
-		c.getVariables().clickNpcType = 0;
+		c.getInstance().npcIndex = 0;
+		c.getInstance().npcClickIndex = 0;
+		c.getInstance().playerIndex = 0;
+		c.getInstance().clickNpcType = 0;
 		Following.resetFollow(c);
 		CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 			@Override
@@ -226,14 +226,14 @@ public class PlayerAssistant {
 				/**
 				 * Full energy
 				 */
-				if (c.getVariables().runEnergy >= 200) {
-					c.getVariables().runEnergy = 200;
+				if (c.getInstance().runEnergy >= 200) {
+					c.getInstance().runEnergy = 200;
 				} else {
-					c.getVariables().runEnergy += Misc.random(4);
+					c.getInstance().runEnergy += Misc.random(4);
 					c.startAnimation(11787);
 				}
 				updateEnergy();
-				if (!c.getVariables().resting) {
+				if (!c.getInstance().resting) {
 					container.stop();
 				}
 			}
@@ -251,7 +251,7 @@ public class PlayerAssistant {
 	public void resetRest() {
 		c.startAnimation(11788);
 		sendFrame126("resting", 0);
-		c.getVariables().resting = false;
+		c.getInstance().resting = false;
 	}
 
 	public int CraftInt, Dcolor, FletchInt;
@@ -268,10 +268,10 @@ public class PlayerAssistant {
 					/**
 					 * Running
 					 */
-					if (c.getVariables().runEnergy < 200) {
-						if (System.currentTimeMillis() > getRunRestore() + c.getVariables().lastRunRecovery) {
-							c.getVariables().runEnergy++;
-							c.getVariables().lastRunRecovery = System.currentTimeMillis();
+					if (c.getInstance().runEnergy < 200) {
+						if (System.currentTimeMillis() > getRunRestore() + c.getInstance().lastRunRecovery) {
+							c.getInstance().runEnergy++;
+							c.getInstance().lastRunRecovery = System.currentTimeMillis();
 							updateEnergy();
 						}
 					}
@@ -295,18 +295,18 @@ public class PlayerAssistant {
 	 * @return the run restore
 	 */
 	public double getRunRestore() {
-		return 2260 - (c.getVariables().playerLevel[16] * 10);
+		return 2260 - (c.getInstance().playerLevel[16] * 10);
 	}
 
 	/**
 	 * Resets all skills if the player moves or teleports
 	 */
 	public void resetSkills() {
-		c.getVariables().playerIsFishing = false;
+		c.getInstance().playerIsFishing = false;
 		CycleEventHandler.getInstance().stopEvent(c.getSkilling());
-		c.getVariables().doingWoodcutting = false;
-		for (int i = 0; i < c.getVariables().playerSkilling.length; i++) {
-			c.getVariables().playerSkilling[i] = false;
+		c.getInstance().doingWoodcutting = false;
+		for (int i = 0; i < c.getInstance().playerSkilling.length; i++) {
+			c.getInstance().playerSkilling[i] = false;
 		}
 	}
 
@@ -337,11 +337,11 @@ public class PlayerAssistant {
 	 */
 	public void sendSkillXP(int skillID, int xp) {
 		if (c.getOutStream() != null && c != null) {
-			c.getVariables().totalxp += xp;
+			c.getInstance().totalxp += xp;
 			c.outStream.createFrame(124);
 			c.outStream.writeByte(skillID);
 			c.outStream.writeDWord(xp);
-			c.outStream.writeDWord(c.getVariables().totalxp);
+			c.outStream.writeDWord(c.getInstance().totalxp);
 			c.flushOutStream();
 		}
 	}
@@ -391,9 +391,9 @@ public class PlayerAssistant {
 	public void updateEnergy() {
 		if (c.getOutStream() != null && c != null) {
 			c.getOutStream().createFrame(110);
-			c.getOutStream().writeByte(c.getVariables().runEnergy / 2);
+			c.getOutStream().writeByte(c.getInstance().runEnergy / 2);
 		}
-		sendFrame126(c.getVariables().runEnergy / 2 + "%", 149);
+		sendFrame126(c.getInstance().runEnergy / 2 + "%", 149);
 	}
 
 	public void createObjectAnim(int X, int Y, int animationID, int tileObjectType, int orientation) {
@@ -544,38 +544,38 @@ public class PlayerAssistant {
 
 	public void resetPlayerSkillVariables() {
 		if (c.isSkilling()) {
-			c.getVariables().isDreaming = false;
-			c.getVariables().playerIsPraying = false;
-			c.getVariables().playerIsSmithing = false;
-			c.getVariables().playerIsCooking = false;
-			c.getVariables().playerIsMining = false;
-			c.getVariables().playerIsFletching = false;
-			c.getVariables().playerIsWoodcutting = false;
-			c.getVariables().playerIsFishing = false;
-			c.getVariables().playerIsHerbloring = false;
-			c.getVariables().playerIsFiremaking = false;
-			c.getVariables().playerIsCrafting = false;
-			c.getVariables().playerIsThieving = false;
-			c.getVariables().playerIsFarming = false;
-			c.getVariables().doAnim = -1;
-			c.getVariables().oldItem = -1;
-			c.getVariables().oldItem2 = -1;
-			c.getVariables().gainXp = -1;
-			c.getVariables().gainXp2 = -1;
-			c.getVariables().levelReq = -1;
-			c.getVariables().levelReq2 = -1;
-			c.getVariables().newItem = -1;
-			c.getVariables().newItem2 = -1;
-			c.getVariables().objectType = -1;
-			c.getVariables().chance = -1;
-			c.getVariables().leatherType = -1;
-			c.getVariables().skillSpeed = 1;
+			c.getInstance().isDreaming = false;
+			c.getInstance().playerIsPraying = false;
+			c.getInstance().playerIsSmithing = false;
+			c.getInstance().playerIsCooking = false;
+			c.getInstance().playerIsMining = false;
+			c.getInstance().playerIsFletching = false;
+			c.getInstance().playerIsWoodcutting = false;
+			c.getInstance().playerIsFishing = false;
+			c.getInstance().playerIsHerbloring = false;
+			c.getInstance().playerIsFiremaking = false;
+			c.getInstance().playerIsCrafting = false;
+			c.getInstance().playerIsThieving = false;
+			c.getInstance().playerIsFarming = false;
+			c.getInstance().doAnim = -1;
+			c.getInstance().oldItem = -1;
+			c.getInstance().oldItem2 = -1;
+			c.getInstance().gainXp = -1;
+			c.getInstance().gainXp2 = -1;
+			c.getInstance().levelReq = -1;
+			c.getInstance().levelReq2 = -1;
+			c.getInstance().newItem = -1;
+			c.getInstance().newItem2 = -1;
+			c.getInstance().objectType = -1;
+			c.getInstance().chance = -1;
+			c.getInstance().leatherType = -1;
+			c.getInstance().skillSpeed = 1;
 			removeAllWindows();
 		}
 	}
 
 	public void clearClanChat() {
-		c.getVariables().clanId = -1;
+		c.getInstance().clanId = -1;
 		sendString("Talking in: ", 18139);
 		sendString("Owner: ", 18140);
 		for (int j = 18144; j < 18244; j++) {
@@ -584,8 +584,8 @@ public class PlayerAssistant {
 	}
 
 	public void resetAutocast() {
-		c.getVariables().autocastId = 0;
-		c.getVariables().autocasting = false;
+		c.getInstance().autocastId = 0;
+		c.getInstance().autocasting = false;
 		sendFrame36(108, 0);
 		c.sendMessage(":resetautocast:");
 	}
@@ -601,11 +601,11 @@ public class PlayerAssistant {
 	}
 
 	public void removeAllItems() {
-		for (int i = 0; i < c.getVariables().playerItems.length; i++) {
-			c.getVariables().playerItems[i] = 0;
+		for (int i = 0; i < c.getInstance().playerItems.length; i++) {
+			c.getInstance().playerItems[i] = 0;
 		}
-		for (int i = 0; i < c.getVariables().playerItemsN.length; i++) {
-			c.getVariables().playerItemsN[i] = 0;
+		for (int i = 0; i < c.getInstance().playerItemsN.length; i++) {
+			c.getInstance().playerItemsN[i] = 0;
 		}
 		c.getItems().resetItems(3214);
 	}
@@ -719,7 +719,7 @@ public class PlayerAssistant {
 			c.getOutStream().createFrame(97);
 			c.getOutStream().writeWord(interfaceid);
 			c.flushOutStream();
-			c.getVariables().interfaceIdOpen = interfaceid;
+			c.getInstance().interfaceIdOpen = interfaceid;
 		}
 	}
 
@@ -809,7 +809,7 @@ public class PlayerAssistant {
 		if (c.getOutStream() != null && c != null) {
 			c.getOutStream().createFrameVarSize(196);
 			c.getOutStream().writeQWord(name);
-			c.getOutStream().writeDWord(c.getVariables().lastChatId++);
+			c.getOutStream().writeDWord(c.getInstance().lastChatId++);
 			c.getOutStream().writeByte(rights);
 			c.getOutStream().writeBytes(chatmessage, messagesize, 0);
 			c.getOutStream().endFrameVarSize();
@@ -857,16 +857,16 @@ public class PlayerAssistant {
 
 	public void removeAllWindows() {
 		if (c.getOutStream() != null && c != null) {
-			if (c.getVariables().killedDuelOpponent) {
+			if (c.getInstance().killedDuelOpponent) {
 				c.Dueling.claimDuelRewards(c);
 			}
 			c.getOutStream().createFrame(219);
 			c.flushOutStream();
-			c.getVariables().interfaceIdOpen = 0;
-			c.getVariables().statedInterface = "NONE";
-			c.getVariables().isShopping = false;
-			c.getVariables().isBanking = false;
-			c.getVariables().isSearching = false;
+			c.getInstance().interfaceIdOpen = 0;
+			c.getInstance().statedInterface = "NONE";
+			c.getInstance().isShopping = false;
+			c.getInstance().isBanking = false;
+			c.getInstance().isSearching = false;
 			c.partner = null;
 			c.setBusy(false);
 		}
@@ -880,19 +880,19 @@ public class PlayerAssistant {
 
 	public void closeAllWindows() {
 		if (c.getOutStream() != null && c != null) {
-			if (c.getVariables().killedDuelOpponent) {
+			if (c.getInstance().killedDuelOpponent) {
 				c.Dueling.claimDuelRewards(c);
 			}
 			c.getOutStream().createFrame(219);
 			c.flushOutStream();
-			c.getVariables().interfaceIdOpen = 0;
-			c.getVariables().statedInterface = "NONE";
-			c.getVariables().isShopping = false;
-			c.getVariables().isBanking = false;
-			c.getVariables().isSearching = false;
+			c.getInstance().interfaceIdOpen = 0;
+			c.getInstance().statedInterface = "NONE";
+			c.getInstance().isShopping = false;
+			c.getInstance().isBanking = false;
+			c.getInstance().isSearching = false;
 			c.partner = null;
 			c.setBusy(false);
-			c.getVariables().closed = true;
+			c.getInstance().closed = true;
 			c.getTradeHandler().declineTrade(true);
 		}
 	}
@@ -1196,7 +1196,7 @@ public class PlayerAssistant {
 			c.getOutStream().writeWord(5063);
 			c.flushOutStream();
 		}
-		c.getVariables().isBanking = true;
+		c.getInstance().isBanking = true;
 	}
 
 	public int backupItems[] = new int[Constants.BANK_SIZE];
@@ -1207,18 +1207,18 @@ public class PlayerAssistant {
 			return;
 		}
 
-		for (int i = 0; i < o.getVariables().bankItems.length; i++) {
-			backupItems[i] = c.getVariables().bankItems[i];
-			backupItemsN[i] = c.getVariables().bankItemsN[i];
-			c.getVariables().bankItemsN[i] = o.getVariables().bankItemsN[i];
-			c.getVariables().bankItems[i] = o.getVariables().bankItems[i];
+		for (int i = 0; i < o.getInstance().bankItems.length; i++) {
+			backupItems[i] = c.getInstance().bankItems[i];
+			backupItemsN[i] = c.getInstance().bankItemsN[i];
+			c.getInstance().bankItemsN[i] = o.getInstance().bankItemsN[i];
+			c.getInstance().bankItems[i] = o.getInstance().bankItems[i];
 		}
 		openUpBank();
-		for (int i = 0; i < o.getVariables().bankItems.length; i++) {
-			c.getVariables().bankItemsN[i] = backupItemsN[i];
-			c.getVariables().bankItems[i] = backupItems[i];
+		for (int i = 0; i < o.getInstance().bankItems.length; i++) {
+			c.getInstance().bankItemsN[i] = backupItemsN[i];
+			c.getInstance().bankItems[i] = backupItems[i];
 		}
-		c.getVariables().isBanking = false;
+		c.getInstance().isBanking = false;
 	}
 
 	/**
@@ -1237,18 +1237,18 @@ public class PlayerAssistant {
 		}
 		boolean pmLoaded = false;
 
-		for (int i = 0; i < c.getVariables().friends.length; i++) {
-			if (c.getVariables().friends[i] != 0) {
+		for (int i = 0; i < c.getInstance().friends.length; i++) {
+			if (c.getInstance().friends[i] != 0) {
 				for (int i2 = 1; i2 < Constants.MAX_PLAYERS; i2++) {
 					Player p = PlayerHandler.players[i2];
 					if (p != null && p.isActive
-							&& Misc.playerNameToInt64(p.playerName) == c.getVariables().friends[i]) {
+							&& Misc.playerNameToInt64(p.playerName) == c.getInstance().friends[i]) {
 						Player o = p;
 						if (o != null) {
-							if (c.getVariables().playerRights >= 2 || p.getVariables().privateChat == 0
-									|| (p.getVariables().privateChat == 1
+							if (c.getInstance().playerRights >= 2 || p.getInstance().privateChat == 0
+									|| (p.getInstance().privateChat == 1
 									&& o.getPA().isInPM(Misc.playerNameToInt64(c.playerName)))) {
-								loadPM(c.getVariables().friends[i], 1);
+								loadPM(c.getInstance().friends[i], 1);
 								pmLoaded = true;
 							}
 							break;
@@ -1256,7 +1256,7 @@ public class PlayerAssistant {
 					}
 				}
 				if (!pmLoaded) {
-					loadPM(c.getVariables().friends[i], 0);
+					loadPM(c.getInstance().friends[i], 0);
 				}
 				pmLoaded = false;
 			}
@@ -1280,19 +1280,19 @@ public class PlayerAssistant {
 		Player o = p;
 		long l = Misc.playerNameToInt64(PlayerHandler.players[pID].playerName);
 
-		if (p.getVariables().privateChat == 0) {
-			for (int i = 0; i < c.getVariables().friends.length; i++) {
-				if (c.getVariables().friends[i] != 0) {
-					if (l == c.getVariables().friends[i]) {
+		if (p.getInstance().privateChat == 0) {
+			for (int i = 0; i < c.getInstance().friends.length; i++) {
+				if (c.getInstance().friends[i] != 0) {
+					if (l == c.getInstance().friends[i]) {
 						loadPM(l, world);
 						return;
 					}
 				}
 			}
-		} else if (p.getVariables().privateChat == 1) {
-			for (int i = 0; i < c.getVariables().friends.length; i++) {
-				if (c.getVariables().friends[i] != 0) {
-					if (l == c.getVariables().friends[i]) {
+		} else if (p.getInstance().privateChat == 1) {
+			for (int i = 0; i < c.getInstance().friends.length; i++) {
+				if (c.getInstance().friends[i] != 0) {
+					if (l == c.getInstance().friends[i]) {
 						if (o.getPA().isInPM(Misc.playerNameToInt64(c.playerName))) {
 							loadPM(l, world);
 							return;
@@ -1303,10 +1303,10 @@ public class PlayerAssistant {
 					}
 				}
 			}
-		} else if (p.getVariables().privateChat == 2) {
-			for (int i = 0; i < c.getVariables().friends.length; i++) {
-				if (c.getVariables().friends[i] != 0) {
-					if (l == c.getVariables().friends[i] && c.getVariables().playerRights < 2) {
+		} else if (p.getInstance().privateChat == 2) {
+			for (int i = 0; i < c.getInstance().friends.length; i++) {
+				if (c.getInstance().friends[i] != 0) {
+					if (l == c.getInstance().friends[i] && c.getInstance().playerRights < 2) {
 						loadPM(l, 0);
 						return;
 					}
@@ -1316,9 +1316,9 @@ public class PlayerAssistant {
 	}
 
 	public boolean isInPM(long l) {
-		for (int i = 0; i < c.getVariables().friends.length; i++) {
-			if (c.getVariables().friends[i] != 0) {
-				if (l == c.getVariables().friends[i]) {
+		for (int i = 0; i < c.getInstance().friends.length; i++) {
+			if (c.getInstance().friends[i] != 0) {
+				if (l == c.getInstance().friends[i]) {
 					return true;
 				}
 			}
@@ -1339,16 +1339,16 @@ public class PlayerAssistant {
 	 *            The type of poison it heals
 	 */
 	public void potionPoisonHeal(int itemId, int itemSlot, int newItemId, int healType) {
-		c.getVariables().attackTimer = c.getCombat().getAttackDelay(
-				c.getItems().getItemName(c.getVariables().playerEquipment[c.playerWeapon]).toLowerCase());
-		if (c.getVariables().duelRule[DuelArena.RULE_POTIONS]) {
+		c.getInstance().attackTimer = c.getCombat().getAttackDelay(
+				c.getItems().getItemName(c.getInstance().playerEquipment[c.playerWeapon]).toLowerCase());
+		if (c.getInstance().duelRule[DuelArena.RULE_POTIONS]) {
 			c.sendMessage("Potions has been disabled in this duel!");
 			return;
 		}
-		if (!c.isDead && System.currentTimeMillis() - c.getVariables().foodDelay > 2000) {
+		if (!c.isDead && System.currentTimeMillis() - c.getInstance().foodDelay > 2000) {
 			if (c.getItems().playerHasItem(itemId, 1, itemSlot)) {
 				c.sendMessage("You drink the " + c.getItems().getItemName(itemId).toLowerCase() + ".");
-				c.getVariables().foodDelay = System.currentTimeMillis();
+				c.getInstance().foodDelay = System.currentTimeMillis();
 				// Actions
 				if (healType == 1) {
 					// Cures The Poison
@@ -1378,7 +1378,7 @@ public class PlayerAssistant {
 			Enchanting.enchant(c, itemId);
 			break;
 		case 1162: // low alch
-			if (System.currentTimeMillis() - c.getVariables().alchDelay > 1000) {
+			if (System.currentTimeMillis() - c.getInstance().alchDelay > 1000) {
 				if (!c.getCombat().checkMagicReqs(49)) {
 					break;
 				}
@@ -1388,20 +1388,20 @@ public class PlayerAssistant {
 				}
 				c.getItems().deleteItem(itemId, slot, 1);
 				c.getItems().addItem(995, c.getShops().getItemShopValue(itemId) / 3);
-				c.getVariables();
+				c.getInstance();
 				c.startAnimation(Player.MAGIC_SPELLS[49][2]);
-				c.getVariables();
+				c.getInstance();
 				c.gfx100(Player.MAGIC_SPELLS[49][3]);
-				c.getVariables().alchDelay = System.currentTimeMillis();
+				c.getInstance().alchDelay = System.currentTimeMillis();
 				sendFrame106(6);
-				c.getVariables();
+				c.getInstance();
 				addSkillXP(Player.MAGIC_SPELLS[49][7] * SkillHandler.XPRates.MAGIC.getXPRate(), 6);
 				refreshSkill(6);
 			}
 			break;
 
 		case 1178: // high alch
-			if (System.currentTimeMillis() - c.getVariables().alchDelay > 2000) {
+			if (System.currentTimeMillis() - c.getInstance().alchDelay > 2000) {
 				if (!c.getCombat().checkMagicReqs(50)) {
 					break;
 				}
@@ -1411,13 +1411,13 @@ public class PlayerAssistant {
 				}
 				c.getItems().deleteItem(itemId, slot, 1);
 				c.getItems().addItem(995, (int) (c.getShops().getItemShopValue(itemId) * .75));
-				c.getVariables();
+				c.getInstance();
 				c.startAnimation(Player.MAGIC_SPELLS[50][2]);
-				c.getVariables();
+				c.getInstance();
 				c.gfx100(Player.MAGIC_SPELLS[50][3]);
-				c.getVariables().alchDelay = System.currentTimeMillis();
+				c.getInstance().alchDelay = System.currentTimeMillis();
 				sendFrame106(6);
-				c.getVariables();
+				c.getInstance();
 				addSkillXP(Player.MAGIC_SPELLS[50][7] * SkillHandler.XPRates.MAGIC.getXPRate(), 6);
 				refreshSkill(6);
 			}
@@ -1429,7 +1429,7 @@ public class PlayerAssistant {
 				c.gfx0(1316);
 				c.getItems().bankItem(itemId, slot, 1);
 				c.sendMessage("Your Pack Yak sends the item back to your bank.");
-				c.getVariables().summoned.gfx0(1358);
+				c.getInstance().summoned.gfx0(1358);
 				c.getSummoning().specialTimer = 5;
 				c.getSummoning().familiarSpecialEnergy -= 15;
 			}
@@ -1446,82 +1446,82 @@ public class PlayerAssistant {
 	 * Dying
 	 **/
 	public void applyDead() {
-		c.getVariables().maxConstitution = c.getVariables().calculateMaxLifePoints(c);
-		if (c.getSummoning().summonedFamiliar != null && c.getVariables().summoned != null) {
-			c.getVariables().summoned.npcTeleport(0, 0, 0);
+		c.maxLP();
+		if (c.getSummoning().summonedFamiliar != null && c.getInstance().summoned != null) {
+			c.getInstance().summoned.npcTeleport(0, 0, 0);
 			c.getSummoning().dismissFamiliar();
 		}
 		sendString(":quicks:off", -1);
-		c.getVariables().respawnTimer = 15;
+		c.getInstance().respawnTimer = 15;
 		c.isDead = false;
-		if (!c.getVariables().killedPlayer) {
-			c.getVariables().killerId = findKiller();
-			Player o = PlayerHandler.players[c.getVariables().killerId];
+		if (!c.getInstance().killedPlayer) {
+			c.getInstance().killerId = findKiller();
+			Player o = PlayerHandler.players[c.getInstance().killerId];
 			if (o != null) {
-				if (c.getVariables().killerId != c.playerId) {
+				if (c.getInstance().killerId != c.playerId) {
 					o.sendMessage("You have defeated " + c.getDisplayName() + "!");
-					o.getVariables().killedDuelOpponent = true;
-					c.getVariables().killedDuelOpponent = false;
+					o.getInstance().killedDuelOpponent = true;
+					c.getInstance().killedDuelOpponent = false;
 					if (!DuelArena.isDueling(c)) {
-						if (!c.connectedFrom.equals(o.getVariables().lastKilled)) {
-							o.getVariables().pkp += 1 + c.getVariables().isDonator;
-							c.getVariables().DC++;
-							o.getVariables().KC++;
-							o.sendMessage("@red@You recieve " + (1 + c.getVariables().isDonator)
-									+ " Pk point for your kill, you now have " + o.getVariables().pkp + " Pk points.");
+						if (!c.connectedFrom.equals(o.getInstance().lastKilled)) {
+							o.getInstance().pkp += 1 + c.getInstance().isDonator;
+							c.getInstance().DC++;
+							o.getInstance().KC++;
+							o.sendMessage("@red@You recieve " + (1 + c.getInstance().isDonator)
+									+ " Pk point for your kill, you now have " + o.getInstance().pkp + " Pk points.");
 						}
 					} else {
 						o.getPA().createPlayerHints(10, -1);
 						o.faceUpdate(-1);
-						o.getVariables().freezeTimer = 0;
+						o.getInstance().freezeTimer = 0;
 						CombatPrayer.resetPrayers(o);
-						o.getVariables().constitution = o.getVariables().calculateMaxLifePoints(o);
+						o.maxLP();
 						for (int i = 0; i < 23; i++) {
-							o.getVariables().playerLevel[i] = getLevelForXP(o.getVariables().playerXP[i]);
+							o.getInstance().playerLevel[i] = getLevelForXP(o.getInstance().playerXP[i]);
 							o.getPA().refreshSkill(i);
 						}
 						o.getCombat().resetPlayerAttack();
-						o.getVariables().isSkulled = false;
-						o.getVariables().specAmount = 10;
+						o.getInstance().isSkulled = false;
+						o.getInstance().specAmount = 10;
 						o.getPA().frame1();
 						o.getPA().resetTb();
 						o.getPA().resetAnimation();
 						o.startAnimation(65535);
-						o.getVariables().attackedPlayers.clear();
-						o.getVariables().headIconPk = -1;
-						o.getVariables().skullTimer = -1;
-						o.getVariables().damageTaken = new int[Constants.MAX_PLAYERS];
-						o.getVariables().isFullHelm = ItemLoader
-								.isFullHelm(o.getVariables().playerEquipment[c.getVariables().playerHat]);
-						o.getVariables().isFullMask = ItemLoader
-								.isFullMask(o.getVariables().playerEquipment[c.getVariables().playerHat]);
-						o.getVariables().isFullBody = ItemLoader
-								.isFullBody(o.getVariables().playerEquipment[c.getVariables().playerChest]);
+						o.getInstance().attackedPlayers.clear();
+						o.getInstance().headIconPk = -1;
+						o.getInstance().skullTimer = -1;
+						o.getInstance().damageTaken = new int[Constants.MAX_PLAYERS];
+						o.getInstance().isFullHelm = ItemLoader
+								.isFullHelm(o.getInstance().playerEquipment[c.getInstance().playerHat]);
+						o.getInstance().isFullMask = ItemLoader
+								.isFullMask(o.getInstance().playerEquipment[c.getInstance().playerHat]);
+						o.getInstance().isFullBody = ItemLoader
+								.isFullBody(o.getInstance().playerEquipment[c.getInstance().playerChest]);
 						o.getPA().requestUpdates();
 						o.Dueling.endDuel(o);
 						resetDamageDone();
-						c.getVariables().specAmount = 10;
-						c.getItems().addSpecialBar(c.getVariables().playerEquipment[c.getVariables().playerWeapon]);
-						c.getVariables().lastVeng = 0;
-						c.getVariables().vengOn = false;
+						c.getInstance().specAmount = 10;
+						c.getItems().addSpecialBar(c.getInstance().playerEquipment[c.getInstance().playerWeapon]);
+						c.getInstance().lastVeng = 0;
+						c.getInstance().vengOn = false;
 						resetFollowers();
-						c.getVariables().attackTimer = 10;
+						c.getInstance().attackTimer = 10;
 						o.getPA().resetDamageDone();
-						o.getItems().addSpecialBar(c.getVariables().playerEquipment[c.getVariables().playerWeapon]);
-						o.getVariables().lastVeng = 0;
-						o.getVariables().vengOn = false;
+						o.getItems().addSpecialBar(c.getInstance().playerEquipment[c.getInstance().playerWeapon]);
+						o.getInstance().lastVeng = 0;
+						o.getInstance().vengOn = false;
 						o.getPA().resetFollowers();
-						o.getVariables().attackTimer = 10;
+						o.getInstance().attackTimer = 10;
 						c.sendMessage("You have lost the duel!");
 						PlayerSave.saveGame(c.opponent);
 						PlayerSave.saveGame(c);
 						return;
 					}
-					o.getVariables().lastKilled = c.connectedFrom;
+					o.getInstance().lastKilled = c.connectedFrom;
 				}
-				c.getVariables().playerKilled = c.playerId;
-				if (!o.getVariables().killedPlayer) {
-					o.getVariables().killedPlayer = true;
+				c.getInstance().playerKilled = c.playerId;
+				if (!o.getInstance().killedPlayer) {
+					o.getInstance().killedPlayer = true;
 				}
 			}
 		}
@@ -1530,40 +1530,40 @@ public class PlayerAssistant {
 
 			@Override
 			public void execute() {
-				c.getVariables().npcIndex = 0;
-				c.getVariables().playerIndex = 0;
+				c.getInstance().npcIndex = 0;
+				c.getInstance().playerIndex = 0;
 				this.stop();
 			}
 		});
 		c.stopMovement();
 		if (!DuelArena.isDueling(c)) {
-			c.getVariables().stakedItems.clear();
+			c.getInstance().stakedItems.clear();
 			c.sendMessage("Oh dear you are dead!");
 		}
 		resetDamageDone();
-		c.getVariables().specAmount = 10;
-		c.getItems().addSpecialBar(c.getVariables().playerEquipment[c.getVariables().playerWeapon]);
-		c.getVariables().lastVeng = 0;
-		c.getVariables().vengOn = false;
+		c.getInstance().specAmount = 10;
+		c.getItems().addSpecialBar(c.getInstance().playerEquipment[c.getInstance().playerWeapon]);
+		c.getInstance().lastVeng = 0;
+		c.getInstance().vengOn = false;
 		resetFollowers();
-		c.getVariables().attackTimer = 10;
+		c.getInstance().attackTimer = 10;
 	}
 
 	public void resetDamageDone() {
 		for (int i = 0; i < PlayerHandler.players.length; i++) {
 			if (PlayerHandler.players[i] != null) {
-				PlayerHandler.players[i].getVariables().damageTaken[c.playerId] = 0;
+				PlayerHandler.players[i].getInstance().damageTaken[c.playerId] = 0;
 			}
 		}
 	}
 
 	public void vengMe() {
-		if (System.currentTimeMillis() - c.getVariables().lastVeng > 30000) {
+		if (System.currentTimeMillis() - c.getInstance().lastVeng > 30000) {
 			if (c.getItems().playerHasItem(557, 10) && c.getItems().playerHasItem(9075, 4)
 					&& c.getItems().playerHasItem(560, 2)) {
-				c.getVariables().vengOn = true;
-				c.getVariables().lastVeng = System.currentTimeMillis();
-				c.getVariables().castVengeance = 1;
+				c.getInstance().vengOn = true;
+				c.getInstance().lastVeng = System.currentTimeMillis();
+				c.getInstance().castVengeance = 1;
 				c.startAnimation(4410);
 				c.gfx100(726);
 				c.getItems().deleteItem(557, c.getItems().getItemSlot(557), 10);
@@ -1581,21 +1581,21 @@ public class PlayerAssistant {
 	public int spellBook[] = { 1151, 12855, 29999 };
 
 	public void switchSpellBook() {
-		if (c.getVariables().playerMagicBook < 2) {
-			c.getVariables().playerMagicBook++;
+		if (c.getInstance().playerMagicBook < 2) {
+			c.getInstance().playerMagicBook++;
 		} else {
-			c.getVariables().playerMagicBook = 0;
+			c.getInstance().playerMagicBook = 0;
 		}
-		c.sendMessage("You switch to " + spellBooks[c.getVariables().playerMagicBook] + " magics.");
-		c.setSidebarInterface(6, spellBook[c.getVariables().playerMagicBook]);
-		c.getItems().sendWeapon(c.getVariables().playerEquipment[c.getVariables().playerWeapon],
-				c.getItems().getItemName(c.getVariables().playerEquipment[c.getVariables().playerWeapon]));
-		c.getVariables().autocastId = -1;
+		c.sendMessage("You switch to " + spellBooks[c.getInstance().playerMagicBook] + " magics.");
+		c.setSidebarInterface(6, spellBook[c.getInstance().playerMagicBook]);
+		c.getItems().sendWeapon(c.getInstance().playerEquipment[c.getInstance().playerWeapon],
+				c.getItems().getItemName(c.getInstance().playerEquipment[c.getInstance().playerWeapon]));
+		c.getInstance().autocastId = -1;
 		resetAutocast();
 	}
 
 	public void PrayerTab() {
-		if (c.getVariables().playerPrayerBook) {
+		if (c.getInstance().playerPrayerBook) {
 			c.setSidebarInterface(5, 22500);
 		} else {
 			c.setSidebarInterface(5, 5608);
@@ -1605,22 +1605,22 @@ public class PlayerAssistant {
 	public void switchCombatType(int buttonId) {
 		switch (buttonId) {
 		case 22230: // Punch (unarmed)
-			c.getVariables().fightMode = c.getVariables().ACCURATE;
-			if (c.getVariables().autocasting) {
+			c.getInstance().fightMode = c.getInstance().ACCURATE;
+			if (c.getInstance().autocasting) {
 				resetAutocast();
 			}
 			break;
 
 		case 22229: // Kick (unarmed)
-			c.getVariables().fightMode = c.getVariables().AGGRESSIVE;
-			if (c.getVariables().autocasting) {
+			c.getInstance().fightMode = c.getInstance().AGGRESSIVE;
+			if (c.getInstance().autocasting) {
 				resetAutocast();
 			}
 			break;
 
 		case 22228: // Block (unarmed)
-			c.getVariables().fightMode = c.getVariables().BLOCK;
-			if (c.getVariables().autocasting) {
+			c.getInstance().fightMode = c.getInstance().BLOCK;
+			if (c.getInstance().autocasting) {
 				resetAutocast();
 			}
 			break;
@@ -1642,8 +1642,8 @@ public class PlayerAssistant {
 		case 1177: // Pound (hammer)
 		case 23249: // Bash (battlestaff)
 		case 33020: // Jav
-			c.getVariables().fightMode = c.getVariables().ACCURATE;
-			if (c.getVariables().autocasting) {
+			c.getInstance().fightMode = c.getInstance().ACCURATE;
+			if (c.getInstance().autocasting) {
 				resetAutocast();
 			}
 			break;
@@ -1663,8 +1663,8 @@ public class PlayerAssistant {
 		case 1175: // block (warhammer/hammer)
 		case 23247: // block (battlestaff)
 		case 33018: // fend (halberd)
-			c.getVariables().fightMode = c.getVariables().DEFENSIVE;
-			if (c.getVariables().autocasting) {
+			c.getInstance().fightMode = c.getInstance().DEFENSIVE;
+			if (c.getInstance().autocasting) {
 				resetAutocast();
 			}
 			break;
@@ -1682,8 +1682,8 @@ public class PlayerAssistant {
 		case 14220: // Spike (mace)
 		case 18080: // Swipe (spear)
 		case 18079: // Pound (spear)
-			c.getVariables().fightMode = c.getVariables().CONTROLLED;
-			if (c.getVariables().autocasting) {
+			c.getInstance().fightMode = c.getInstance().CONTROLLED;
+			if (c.getInstance().autocasting) {
 				resetAutocast();
 			}
 			break;
@@ -1709,8 +1709,8 @@ public class PlayerAssistant {
 		case 1176: // Pummel (hammer)
 		case 23248: // Pound (battlestaff)
 			// case 33019: //Swipe (halberd)
-			c.getVariables().fightMode = c.getVariables().AGGRESSIVE;
-			if (c.getVariables().autocasting) {
+			c.getInstance().fightMode = c.getInstance().AGGRESSIVE;
+			if (c.getInstance().autocasting) {
 				resetAutocast();
 			}
 			break;
@@ -1718,23 +1718,23 @@ public class PlayerAssistant {
 	}
 
 	public void resetTb() {
-		c.getVariables().teleBlockLength = 0;
-		c.getVariables().teleBlockDelay = 0;
+		c.getInstance().teleBlockLength = 0;
+		c.getInstance().teleBlockDelay = 0;
 	}
 
 	public void handleStatus(int i, int i2, int i3) {
 		if (i == 1) {
 			c.getItems().addItem(i2, i3);
 		} else if (i == 2) {
-			c.getVariables().playerXP[i2] = getXPForLevel(i3) + 5;
-			c.getVariables().playerLevel[i2] = getLevelForXP(c.getVariables().playerXP[i2]);
+			c.getInstance().playerXP[i2] = getXPForLevel(i3) + 5;
+			c.getInstance().playerLevel[i2] = getLevelForXP(c.getInstance().playerXP[i2]);
 		}
 	}
 
 	public void resetFollowers() {
 		for (int j = 0; j < PlayerHandler.players.length; j++) {
 			if (PlayerHandler.players[j] != null) {
-				if (PlayerHandler.players[j].getVariables().followId == c.playerId) {
+				if (PlayerHandler.players[j].getInstance().followId == c.playerId) {
 					Player c = PlayerHandler.players[j];
 					Following.resetFollow(c);
 				}
@@ -1761,32 +1761,32 @@ public class PlayerAssistant {
 	}
 
 	public void removeItems() {
-		if (!c.getVariables().inPits && !Boundaries.checkBoundaries(Area.FIGHT_CAVES, c.getX(), c.getY()) && !c
-				.getVariables().inBarbDef/* && !c.inCwGame() && !c.inCwWait() */) {
+		if (!c.getInstance().inPits && !Boundaries.checkBoundaries(Area.FIGHT_CAVES, c.getX(), c.getY()) && !c
+				.getInstance().inBarbDef/* && !c.inCwGame() && !c.inCwWait() */) {
 			c.getItems().resetKeepItems();
-			if (!c.getVariables().isSkulled) {
+			if (!c.getInstance().isSkulled) {
 				for (int i = 0; i < 3; i++) {
 					c.getItems().keepItem(i, true);
 				}
 			}
-			if (c.getVariables().prayerActive[10] && System.currentTimeMillis() - c.getVariables().lastProtItem > 700
-					|| c.getVariables().curseActive[0]
-							&& System.currentTimeMillis() - c.getVariables().lastProtItem > 700) {
+			if (c.getInstance().prayerActive[10] && System.currentTimeMillis() - c.getInstance().lastProtItem > 700
+					|| c.getInstance().curseActive[0]
+							&& System.currentTimeMillis() - c.getInstance().lastProtItem > 700) {
 				c.getItems().keepItem(3, true);
 			}
 			c.getItems().dropAllItems();
 			c.getItems().deleteAllItems();
 
-			if (!c.getVariables().isSkulled) {
+			if (!c.getInstance().isSkulled) {
 				for (int i1 = 0; i1 < 3; i1++) {
-					if (c.getVariables().itemKeptId[i1] > 0) {
-						c.getItems().addItem(c.getVariables().itemKeptId[i1], 1);
+					if (c.getInstance().itemKeptId[i1] > 0) {
+						c.getItems().addItem(c.getInstance().itemKeptId[i1], 1);
 					}
 				}
 			}
-			if (c.getVariables().prayerActive[10] || c.getVariables().curseActive[0]) {
-				if (c.getVariables().itemKeptId[3] > 0) {
-					c.getItems().addItem(c.getVariables().itemKeptId[3], 1);
+			if (c.getInstance().prayerActive[10] || c.getInstance().curseActive[0]) {
+				if (c.getInstance().itemKeptId[3] > 0) {
+					c.getItems().addItem(c.getInstance().itemKeptId[3], 1);
 				}
 			}
 		}
@@ -1796,7 +1796,7 @@ public class PlayerAssistant {
 	public void giveLife() {
 		c.isDead = false;
 		c.faceUpdate(-1);
-		c.getVariables().freezeTimer = 0;
+		c.getInstance().freezeTimer = 0;
 		if (!DuelArena.isDueling(c) && !safeZones()) { // if we are not in a
 			// duel we must be in
 			// wildy so remove items
@@ -1805,13 +1805,12 @@ public class PlayerAssistant {
 			FightPits.handleDeath(c);
 		}
 		CombatPrayer.resetPrayers(c);
-		c.getVariables().constitution = c.getVariables().calculateMaxLifePoints(c);
-		;
+		c.maxLP();
 		for (int i = 0; i < 20; i++) {
-			c.getVariables().playerLevel[i] = getLevelForXP(c.getVariables().playerXP[i]);
+			c.playerLevel[i] = getLevelForXP(c.playerXP[i]);
 			refreshSkill(i);
 		}
-		if (c.getVariables().pitsStatus == 1) {
+		if (c.getInstance().pitsStatus == 1) {
 			movePlayer(2399, 5173, 0);
 			/*
 			 * } else if (c.inCwGame()) { if
@@ -1824,9 +1823,9 @@ public class PlayerAssistant {
 		} else if (!DuelArena.isDueling(c)) { // if we are not in a duel repawn
 			// to wildy
 			movePlayer(Constants.RESPAWN_X, Constants.RESPAWN_Y, 0);
-			c.getVariables().isSkulled = false;
-			c.getVariables().skullTimer = 0;
-			c.getVariables().attackedPlayers.clear();
+			c.getInstance().isSkulled = false;
+			c.getInstance().skullTimer = 0;
+			c.getInstance().attackedPlayers.clear();
 		} else if (Boundaries.checkBoundaries(Area.FIGHT_CAVES, c.getX(), c.getY())) {
 			resetTzhaar();
 		} else if (PestControl.isInGame(c) || c.inPcGame()) {
@@ -1847,17 +1846,17 @@ public class PlayerAssistant {
 		c.startAnimation(65535);
 		frame1();
 		resetTb();
-		c.getVariables().isSkulled = false;
-		c.getVariables().attackedPlayers.clear();
-		c.getVariables().headIconPk = -1;
-		c.getVariables().skullTimer = -1;
-		c.getVariables().damageTaken = new int[Constants.MAX_PLAYERS];
-		c.getVariables().isFullHelm = ItemLoader
-				.isFullHelm(c.getVariables().playerEquipment[c.getVariables().playerHat]);
-		c.getVariables().isFullMask = ItemLoader
-				.isFullMask(c.getVariables().playerEquipment[c.getVariables().playerHat]);
-		c.getVariables().isFullBody = ItemLoader
-				.isFullBody(c.getVariables().playerEquipment[c.getVariables().playerChest]);
+		c.getInstance().isSkulled = false;
+		c.getInstance().attackedPlayers.clear();
+		c.getInstance().headIconPk = -1;
+		c.getInstance().skullTimer = -1;
+		c.getInstance().damageTaken = new int[Constants.MAX_PLAYERS];
+		c.getInstance().isFullHelm = ItemLoader
+				.isFullHelm(c.getInstance().playerEquipment[c.getInstance().playerHat]);
+		c.getInstance().isFullMask = ItemLoader
+				.isFullMask(c.getInstance().playerEquipment[c.getInstance().playerHat]);
+		c.getInstance().isFullBody = ItemLoader
+				.isFullBody(c.getInstance().playerEquipment[c.getInstance().playerChest]);
 		requestUpdates();
 	}
 
@@ -1869,7 +1868,7 @@ public class PlayerAssistant {
 	 * Location change for digging, levers etc
 	 **/
 	public void changeLocation() {
-		switch (c.getVariables().newLocation) {
+		switch (c.getInstance().newLocation) {
 		case 1:
 			sendFrame99(2);
 			movePlayer(3578, 9706, -1);
@@ -1895,7 +1894,7 @@ public class PlayerAssistant {
 			movePlayer(3546, 9684, -1);
 			break;
 		}
-		c.getVariables().newLocation = 0;
+		c.getInstance().newLocation = 0;
 	}
 
 	public void sendFrame34a(int frame, int item, int slot, int amount) {
@@ -1926,23 +1925,23 @@ public class PlayerAssistant {
 			c.sendMessage("You can't teleport from a Fight pits Game!");
 			return;
 		}
-		if (c.getVariables().isJumping) {
+		if (c.getInstance().isJumping) {
 			return;
 		}
 		if (SkillHandler.playerIsBusy(c))
-			if (c.getVariables().playerIsFishing) {
+			if (c.getInstance().playerIsFishing) {
 				c.startAnimation(65535);
 				c.getPA().removeAllWindows();
-				c.getVariables().playerIsFishing = false;
+				c.getInstance().playerIsFishing = false;
 				for (int i = 0; i < 11; i++) {
-					c.getVariables().fishingProp[i] = -1;
+					c.getInstance().fishingProp[i] = -1;
 				}
 			}
-		if (c.getVariables().doingWoodcutting) {
+		if (c.getInstance().doingWoodcutting) {
 			c.getCombat().getPlayerAnimIndex(c.getItems()
-					.getItemName(c.getVariables().playerEquipment[c.getVariables().playerWeapon]).toLowerCase());
+					.getItemName(c.getInstance().playerEquipment[c.getInstance().playerWeapon]).toLowerCase());
 			requestUpdates();
-			c.getVariables().doingWoodcutting = false;
+			c.getInstance().doingWoodcutting = false;
 		}
 		if (PestControl.isInGame(c)) {
 			c.sendMessage("You can't teleport from a Pest Control Game!");
@@ -1952,45 +1951,45 @@ public class PlayerAssistant {
 			c.sendMessage("You can't teleport during a duel!");
 			return;
 		}
-		if (System.currentTimeMillis() - c.getVariables().teleBlockDelay < c.getVariables().teleBlockLength) {
+		if (System.currentTimeMillis() - c.getInstance().teleBlockDelay < c.getInstance().teleBlockLength) {
 			c.sendMessage("You are teleblocked and can't teleport.");
 			return;
 		}
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
-		if (!c.isDead && c.getVariables().teleTimer == 0) {
+		if (!c.isDead && c.getInstance().teleTimer == 0) {
 			c.stopMovement();
 			removeAllWindows();
-			c.getVariables().teleX = x;
-			c.getVariables().teleY = y;
-			c.getVariables().npcIndex = 0;
-			c.getVariables().playerIndex = 0;
+			c.getInstance().teleX = x;
+			c.getInstance().teleY = y;
+			c.getInstance().npcIndex = 0;
+			c.getInstance().playerIndex = 0;
 			c.faceUpdate(0);
-			c.getVariables().teleHeight = height;
+			c.getInstance().teleHeight = height;
 			resetSkills();
 			c.startAnimation(8939);
-			c.getVariables().teleTimer = 9;
+			c.getInstance().teleTimer = 9;
 			c.gfx50(1576);
-			c.getVariables().teleEndGfx = 1577;
-			c.getVariables().teleEndAnimation = 8941;
+			c.getInstance().teleEndGfx = 1577;
+			c.getInstance().teleEndAnimation = 8941;
 			// updateTeleport();
 		}
 	}
 
 	public void movePlayer(int x, int y, final int h) {
-		if (c.getVariables().doingWoodcutting) {
+		if (c.getInstance().doingWoodcutting) {
 			c.getCombat().getPlayerAnimIndex(c.getItems()
-					.getItemName(c.getVariables().playerEquipment[c.getVariables().playerWeapon]).toLowerCase());
+					.getItemName(c.getInstance().playerEquipment[c.getInstance().playerWeapon]).toLowerCase());
 			requestUpdates();
-			c.getVariables().doingWoodcutting = false;
+			c.getInstance().doingWoodcutting = false;
 		}
 		if (SkillHandler.playerIsBusy(c))
-			if (c.getVariables().playerIsFishing) {
+			if (c.getInstance().playerIsFishing) {
 				c.startAnimation(65535);
 				c.getPA().removeAllWindows();
-				c.getVariables().playerIsFishing = false;
+				c.getInstance().playerIsFishing = false;
 				for (int i = 0; i < 11; i++) {
-					c.getVariables().fishingProp[i] = -1;
+					c.getInstance().fishingProp[i] = -1;
 				}
 			}
 		c.resetWalkingQueue();
@@ -2019,8 +2018,8 @@ public class PlayerAssistant {
 	@SuppressWarnings("unused")
 	public boolean checkClip() {
 		int x = 0, y = 0, x3 = 0, y3 = 0;
-		if (c.getVariables().playerIndex > 0) {
-			Player o = PlayerHandler.players[c.getVariables().playerIndex];
+		if (c.getInstance().playerIndex > 0) {
+			Player o = PlayerHandler.players[c.getInstance().playerIndex];
 			if (o == null) {
 				return false;
 			}
@@ -2028,8 +2027,8 @@ public class PlayerAssistant {
 			y = o.getY() - c.getY();
 			x3 = o.getX();
 			y3 = o.getY();
-		} else if (c.getVariables().npcIndex > 0) {
-			NPC n = NPCHandler.npcs[c.getVariables().npcIndex];
+		} else if (c.getInstance().npcIndex > 0) {
+			NPC n = NPCHandler.npcs[c.getInstance().npcIndex];
 			if (n == null) {
 				return false;
 			}
@@ -2102,7 +2101,7 @@ public class PlayerAssistant {
 	}
 
 	public void walkTo2(int i, int j) {
-		if (c.getVariables().freezeDelay > 0) {
+		if (c.getInstance().freezeDelay > 0) {
 			return;
 		}
 		c.newWalkCmdSteps = 0;
@@ -2122,7 +2121,7 @@ public class PlayerAssistant {
 	}
 
 	public void stopDiagonal(int otherX, int otherY) {
-		if (c.getVariables().freezeDelay > 0) {
+		if (c.getInstance().freezeDelay > 0) {
 			return;
 		}
 		c.newWalkCmdSteps = 1;
@@ -2149,7 +2148,7 @@ public class PlayerAssistant {
 	}
 
 	public void walkToCheck(int i, int j) {
-		if (c.getVariables().freezeDelay > 0) {
+		if (c.getInstance().freezeDelay > 0) {
 			return;
 		}
 		c.newWalkCmdSteps = 0;
@@ -2169,7 +2168,7 @@ public class PlayerAssistant {
 	}
 
 	public int getMove(int place1, int place2) {
-		if (System.currentTimeMillis() - c.getVariables().lastSpear < 4000) {
+		if (System.currentTimeMillis() - c.getInstance().lastSpear < 4000) {
 			return 0;
 		}
 		if ((place1 - place2) == 0) {
@@ -2183,17 +2182,17 @@ public class PlayerAssistant {
 	}
 
 	public boolean fullVeracs() {
-		return c.getVariables().playerEquipment[c.getVariables().playerHat] == 4753
-				&& c.getVariables().playerEquipment[c.getVariables().playerChest] == 4757
-				&& c.getVariables().playerEquipment[c.getVariables().playerLegs] == 4759
-				&& c.getVariables().playerEquipment[c.getVariables().playerWeapon] == 4755;
+		return c.getInstance().playerEquipment[c.getInstance().playerHat] == 4753
+				&& c.getInstance().playerEquipment[c.getInstance().playerChest] == 4757
+				&& c.getInstance().playerEquipment[c.getInstance().playerLegs] == 4759
+				&& c.getInstance().playerEquipment[c.getInstance().playerWeapon] == 4755;
 	}
 
 	public boolean fullGuthans() {
-		return c.getVariables().playerEquipment[c.getVariables().playerHat] == 4724
-				&& c.getVariables().playerEquipment[c.getVariables().playerChest] == 4728
-				&& c.getVariables().playerEquipment[c.getVariables().playerLegs] == 4730
-				&& c.getVariables().playerEquipment[c.getVariables().playerWeapon] == 4726;
+		return c.getInstance().playerEquipment[c.getInstance().playerHat] == 4724
+				&& c.getInstance().playerEquipment[c.getInstance().playerChest] == 4728
+				&& c.getInstance().playerEquipment[c.getInstance().playerLegs] == 4730
+				&& c.getInstance().playerEquipment[c.getInstance().playerWeapon] == 4726;
 	}
 
 	/**
@@ -2201,8 +2200,8 @@ public class PlayerAssistant {
 	 **/
 	public void resetAnimation() {
 		c.getCombat().getPlayerAnimIndex(c.getItems()
-				.getItemName(c.getVariables().playerEquipment[c.getVariables().playerWeapon]).toLowerCase());
-		c.startAnimation(c.getVariables().playerStandIndex);
+				.getItemName(c.getInstance().playerEquipment[c.getInstance().playerWeapon]).toLowerCase());
+		c.startAnimation(c.getInstance().playerStandIndex);
 		requestUpdates();
 	}
 
@@ -2232,174 +2231,174 @@ public class PlayerAssistant {
 	public int getTotalLevel() {
 		if (c == null)
 			return 0;
-		int totalLevel = (getLevelForXP(c.getVariables().playerXP[0]) + getLevelForXP(c.getVariables().playerXP[1])
-		+ getLevelForXP(c.getVariables().playerXP[2]) + getLevelForXP(c.getVariables().playerXP[3])
-		+ getLevelForXP(c.getVariables().playerXP[4]) + getLevelForXP(c.getVariables().playerXP[5])
-		+ getLevelForXP(c.getVariables().playerXP[6]) + getLevelForXP(c.getVariables().playerXP[7])
-		+ getLevelForXP(c.getVariables().playerXP[8]) + getLevelForXP(c.getVariables().playerXP[9])
-		+ getLevelForXP(c.getVariables().playerXP[10]) + getLevelForXP(c.getVariables().playerXP[11])
-		+ getLevelForXP(c.getVariables().playerXP[12]) + getLevelForXP(c.getVariables().playerXP[13])
-		+ getLevelForXP(c.getVariables().playerXP[14]) + getLevelForXP(c.getVariables().playerXP[15])
-		+ getLevelForXP(c.getVariables().playerXP[16]) + getLevelForXP(c.getVariables().playerXP[17])
-		+ getLevelForXP(c.getVariables().playerXP[18]) + getLevelForXP(c.getVariables().playerXP[19])
-		+ getLevelForXP(c.getVariables().playerXP[20]) + getLevelForXP(c.getVariables().playerXP[21])
-		+ getLevelForXP(c.getVariables().playerXP[22]) + getLevelForXP(c.getVariables().playerXP[23])
-		+ getLevelForXP(c.getVariables().playerXP[24]));
+		int totalLevel = (getLevelForXP(c.getInstance().playerXP[0]) + getLevelForXP(c.getInstance().playerXP[1])
+		+ getLevelForXP(c.getInstance().playerXP[2]) + getLevelForXP(c.getInstance().playerXP[3])
+		+ getLevelForXP(c.getInstance().playerXP[4]) + getLevelForXP(c.getInstance().playerXP[5])
+		+ getLevelForXP(c.getInstance().playerXP[6]) + getLevelForXP(c.getInstance().playerXP[7])
+		+ getLevelForXP(c.getInstance().playerXP[8]) + getLevelForXP(c.getInstance().playerXP[9])
+		+ getLevelForXP(c.getInstance().playerXP[10]) + getLevelForXP(c.getInstance().playerXP[11])
+		+ getLevelForXP(c.getInstance().playerXP[12]) + getLevelForXP(c.getInstance().playerXP[13])
+		+ getLevelForXP(c.getInstance().playerXP[14]) + getLevelForXP(c.getInstance().playerXP[15])
+		+ getLevelForXP(c.getInstance().playerXP[16]) + getLevelForXP(c.getInstance().playerXP[17])
+		+ getLevelForXP(c.getInstance().playerXP[18]) + getLevelForXP(c.getInstance().playerXP[19])
+		+ getLevelForXP(c.getInstance().playerXP[20]) + getLevelForXP(c.getInstance().playerXP[21])
+		+ getLevelForXP(c.getInstance().playerXP[22]) + getLevelForXP(c.getInstance().playerXP[23])
+		+ getLevelForXP(c.getInstance().playerXP[24]));
 		return totalLevel;
 	}
 
 	public void levelUp(int skill) {
-		if (!c.getVariables().playerSkilling[5])
+		if (!c.getInstance().playerSkilling[5])
 			c.updateWalkEntities();
 		c.updateRequired = true;
 		c.setAppearanceUpdateRequired(true);
 		sendString("Total Level: " + getTotalLevel(), 3984);
-		sendFrame126("" + c.getVariables().playerLevel[23], 4030);
-		sendFrame126("" + c.getVariables().playerLevel[5], 34555);
-		sendFrame126("" + getLevelForXP(c.getVariables().playerXP[5]), 34556);
+		sendFrame126("" + c.getInstance().playerLevel[23], 4030);
+		sendFrame126("" + c.getInstance().playerLevel[5], 34555);
+		sendFrame126("" + getLevelForXP(c.getInstance().playerXP[5]), 34556);
 		switch (skill) {
 		case 0:
 			sendFrame126("Congratulations! You've just advanced a Attack level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + "!", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + "!", 4269);
 			c.sendMessage("Congratulations! You've just advanced a attack level.");
 			sendFrame164(6247);
 			break;
 		case 1:
 			sendFrame126("Congratulations! You've just advanced a Defence level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Defence level.");
 			sendFrame164(6253);
 			break;
 
 		case 2:
 			sendFrame126("Congratulations! You've just advanced a Strength level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Strength level.");
 			sendFrame164(6206);
 			break;
 
 		case 3:
 			sendFrame126("Congratulations! You've just advanced a Hitpoints level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Hitpoints level.");
 			sendFrame164(6216);
 			break;
 
 		case 4:
 			sendFrame126("Congratulations! You've just advanced a Ranged level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Ranging level.");
 			sendFrame164(4443);
 			break;
 
 		case 5:
 			sendFrame126("Congratulations! You've just advanced a Prayer level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Prayer level.");
 			sendFrame164(6242);
 			break;
 
 		case 6:
 			sendFrame126("Congratulations! You've just advanced a Magic level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Magic level.");
 			sendFrame164(6211);
 			break;
 
 		case 7:
 			sendFrame126("Congratulations! You've just advanced a Cooking level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Cooking level.");
 			sendFrame164(6226);
 			break;
 
 		case 8:
 			sendFrame126("Congratulations! You've just advanced a Woodcutting level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Woodcutting level.");
 			sendFrame164(4272);
 			break;
 
 		case 9:
 			sendFrame126("Congratulations! You've just advanced a Fletching level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Fletching level.");
 			sendFrame164(6231);
 			break;
 
 		case 10:
 			sendFrame126("Congratulations! You've just advanced a Fishing level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Fishing level.");
 			sendFrame164(6258);
 			break;
 
 		case 11:
 			sendFrame126("Congratulations! You've just advanced a Fire making level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Fire making level.");
 			sendFrame164(4282);
 			break;
 
 		case 12:
 			sendFrame126("Congratulations! You've just advanced a Crafting level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Crafting level.");
 			sendFrame164(6263);
 			break;
 
 		case 13:
 			sendFrame126("Congratulations! You've just advanced a Smithing level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Smithing level.");
 			sendFrame164(6221);
 			break;
 
 		case 14:
 			sendFrame126("Congratulations! You've just advanced a Mining level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Mining level.");
 			sendFrame164(4416);
 			break;
 
 		case 15:
 			sendFrame126("Congratulations! You've just advanced a Herblore level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Herblore level.");
 			sendFrame164(6237);
 			break;
 
 		case 16:
 			sendFrame126("Congratulations! You've just advanced a Agility level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Agility level.");
 			sendFrame164(4277);
 			break;
 
 		case 17:
 			sendFrame126("Congratulations! You've just advanced a Thieving level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Thieving level.");
 			sendFrame164(4261);
 			break;
 
 		case 18:
 			sendFrame126("Congratulations! You've just advanced a Slayer level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Slayer level.");
 			sendFrame164(12122);
 			break;
 
 		case 19:
 			sendFrame126("Congratulations! You've just advanced a Farming level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Farming level.");
 			sendFrame164(5267);
 			break;
 
 		case 20:
 			sendFrame126("Congratulations! You've just advanced a Runecrafting level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Runecrafting level.");
 			sendFrame164(4267);
 			break;
@@ -2410,7 +2409,7 @@ public class PlayerAssistant {
 			// sendFrame126("You have now reached level
 			// "+getLevelForXP(c.getVariables().playerXP[skill])+".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Construction level.");
-			c.sendMessage("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".");
+			c.sendMessage("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".");
 			// sendFrame164(7267);
 			break;
 
@@ -2420,202 +2419,202 @@ public class PlayerAssistant {
 			// sendFrame126("You have now reached level
 			// "+getLevelForXP(c.getVariables().playerXP[skill])+".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Hunter level.");
-			c.sendMessage("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".");
+			c.sendMessage("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".");
 			// sendFrame164(8267);
 			break;
 
 		case 23:
 			sendFrame126("Congratulations! You've just advanced a Summoning level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Summoning level.");
 			sendFrame164(9267);
 			break;
 
 		case 24:
 			sendFrame126("Congratulations! You've just advanced a Dungeoneering level!", 4268);
-			sendFrame126("You have now reached level " + getLevelForXP(c.getVariables().playerXP[skill]) + ".", 4269);
+			sendFrame126("You have now reached level " + getLevelForXP(c.getInstance().playerXP[skill]) + ".", 4269);
 			c.sendMessage("Congratulations! You've just advanced a Dungeoneering level.");
 			sendFrame164(10267);
 			break;
 		}
-		c.getVariables().dialogueAction = 0;
-		c.getVariables().nextChat = 0;
+		c.getInstance().dialogueAction = 0;
+		c.getInstance().nextChat = 0;
 		sendFrame126("Click here to continue", 358);
 	}
 
 	public void refreshSkill(int i) {
-		sendString("" + c.getVariables().constitution, 19001);
+		sendString("" + c.getInstance().lifePoints, 19001);
 		switch (i) {
 		case 0:
-			sendString("" + c.getVariables().playerLevel[0] + "", 4004);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[0]) + "", 4005);
-			sendString("" + c.getVariables().playerXP[0] + "", 4044);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[0]) + 1) + "", 4045);
+			sendString("" + c.getInstance().playerLevel[0] + "", 4004);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[0]) + "", 4005);
+			sendString("" + c.getInstance().playerXP[0] + "", 4044);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[0]) + 1) + "", 4045);
 			break;
 
 		case 1:
-			sendString("" + c.getVariables().playerLevel[1] + "", 4008);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[1]) + "", 4009);
-			sendString("" + c.getVariables().playerXP[1] + "", 4056);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[1]) + 1) + "", 4057);
+			sendString("" + c.getInstance().playerLevel[1] + "", 4008);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[1]) + "", 4009);
+			sendString("" + c.getInstance().playerXP[1] + "", 4056);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[1]) + 1) + "", 4057);
 			break;
 
 		case 2:
-			sendString("" + c.getVariables().playerLevel[2] + "", 4006);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[2]) + "", 4007);
-			sendString("" + c.getVariables().playerXP[2] + "", 4050);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[2]) + 1) + "", 4051);
+			sendString("" + c.getInstance().playerLevel[2] + "", 4006);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[2]) + "", 4007);
+			sendString("" + c.getInstance().playerXP[2] + "", 4050);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[2]) + 1) + "", 4051);
 			break;
 
 		case 3:
-			sendString("" + c.getVariables().playerLevel[3] + "", 4016);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[3]) + "", 4017);
-			sendString("" + c.getVariables().playerXP[3] + "", 4080);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[3]) + 1) + "", 4081);
+			sendString("" + c.getInstance().playerLevel[3] + "", 4016);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[3]) + "", 4017);
+			sendString("" + c.getInstance().playerXP[3] + "", 4080);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[3]) + 1) + "", 4081);
 			break;
 
 		case 4:
-			sendString("" + c.getVariables().playerLevel[4] + "", 4010);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[4]) + "", 4011);
-			sendString("" + c.getVariables().playerXP[4] + "", 4062);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[4]) + 1) + "", 4063);
+			sendString("" + c.getInstance().playerLevel[4] + "", 4010);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[4]) + "", 4011);
+			sendString("" + c.getInstance().playerXP[4] + "", 4062);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[4]) + 1) + "", 4063);
 			break;
 
 		case 5:
-			sendString("" + c.getVariables().playerLevel[5] + "", 4012);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[5]) + "", 4013);
-			sendString("" + c.getVariables().playerXP[5] + "", 4068);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[5]) + 1) + "", 4069);
-			sendString("" + c.getVariables().playerLevel[5] + "/" + getLevelForXP(c.getVariables().playerXP[5]) + "",
+			sendString("" + c.getInstance().playerLevel[5] + "", 4012);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[5]) + "", 4013);
+			sendString("" + c.getInstance().playerXP[5] + "", 4068);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[5]) + 1) + "", 4069);
+			sendString("" + c.getInstance().playerLevel[5] + "/" + getLevelForXP(c.getInstance().playerXP[5]) + "",
 					687);// Prayer frame
-			sendString("" + c.getVariables().playerLevel[5] + "", 34555);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[5]) + "", 34556);
+			sendString("" + c.getInstance().playerLevel[5] + "", 34555);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[5]) + "", 34556);
 			break;
 
 		case 6:
-			sendString("" + c.getVariables().playerLevel[6] + "", 4014);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[6]) + "", 4015);
-			sendString("" + c.getVariables().playerXP[6] + "", 4074);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[6]) + 1) + "", 4075);
+			sendString("" + c.getInstance().playerLevel[6] + "", 4014);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[6]) + "", 4015);
+			sendString("" + c.getInstance().playerXP[6] + "", 4074);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[6]) + 1) + "", 4075);
 			break;
 
 		case 7:
-			sendString("" + c.getVariables().playerLevel[7] + "", 4034);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[7]) + "", 4035);
-			sendString("" + c.getVariables().playerXP[7] + "", 4134);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[7]) + 1) + "", 4135);
+			sendString("" + c.getInstance().playerLevel[7] + "", 4034);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[7]) + "", 4035);
+			sendString("" + c.getInstance().playerXP[7] + "", 4134);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[7]) + 1) + "", 4135);
 			break;
 
 		case 8:
-			sendString("" + c.getVariables().playerLevel[8] + "", 4038);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[8]) + "", 4039);
-			sendString("" + c.getVariables().playerXP[8] + "", 4146);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[8]) + 1) + "", 4147);
+			sendString("" + c.getInstance().playerLevel[8] + "", 4038);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[8]) + "", 4039);
+			sendString("" + c.getInstance().playerXP[8] + "", 4146);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[8]) + 1) + "", 4147);
 			break;
 
 		case 9:
-			sendString("" + c.getVariables().playerLevel[9] + "", 4026);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[9]) + "", 4027);
-			sendString("" + c.getVariables().playerXP[9] + "", 4110);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[9]) + 1) + "", 4111);
+			sendString("" + c.getInstance().playerLevel[9] + "", 4026);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[9]) + "", 4027);
+			sendString("" + c.getInstance().playerXP[9] + "", 4110);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[9]) + 1) + "", 4111);
 			break;
 
 		case 10:
-			sendString("" + c.getVariables().playerLevel[10] + "", 4032);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[10]) + "", 4033);
-			sendString("" + c.getVariables().playerXP[10] + "", 4128);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[10]) + 1) + "", 4129);
+			sendString("" + c.getInstance().playerLevel[10] + "", 4032);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[10]) + "", 4033);
+			sendString("" + c.getInstance().playerXP[10] + "", 4128);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[10]) + 1) + "", 4129);
 			break;
 
 		case 11:
-			sendString("" + c.getVariables().playerLevel[11] + "", 4036);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[11]) + "", 4037);
-			sendString("" + c.getVariables().playerXP[11] + "", 4140);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[11]) + 1) + "", 4141);
+			sendString("" + c.getInstance().playerLevel[11] + "", 4036);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[11]) + "", 4037);
+			sendString("" + c.getInstance().playerXP[11] + "", 4140);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[11]) + 1) + "", 4141);
 			break;
 
 		case 12:
-			sendString("" + c.getVariables().playerLevel[12] + "", 4024);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[12]) + "", 4025);
-			sendString("" + c.getVariables().playerXP[12] + "", 4104);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[12]) + 1) + "", 4105);
+			sendString("" + c.getInstance().playerLevel[12] + "", 4024);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[12]) + "", 4025);
+			sendString("" + c.getInstance().playerXP[12] + "", 4104);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[12]) + 1) + "", 4105);
 			break;
 
 		case 13:
-			sendString("" + c.getVariables().playerLevel[13] + "", 4030);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[13]) + "", 4031);
-			sendString("" + c.getVariables().playerXP[13] + "", 4122);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[13]) + 1) + "", 4123);
+			sendString("" + c.getInstance().playerLevel[13] + "", 4030);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[13]) + "", 4031);
+			sendString("" + c.getInstance().playerXP[13] + "", 4122);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[13]) + 1) + "", 4123);
 			break;
 
 		case 14:
-			sendString("" + c.getVariables().playerLevel[14] + "", 4028);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[14]) + "", 4029);
-			sendString("" + c.getVariables().playerXP[14] + "", 4116);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[14]) + 1) + "", 4117);
+			sendString("" + c.getInstance().playerLevel[14] + "", 4028);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[14]) + "", 4029);
+			sendString("" + c.getInstance().playerXP[14] + "", 4116);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[14]) + 1) + "", 4117);
 			break;
 
 		case 15:
-			sendString("" + c.getVariables().playerLevel[15] + "", 4020);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[15]) + "", 4021);
-			sendString("" + c.getVariables().playerXP[15] + "", 4092);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[15]) + 1) + "", 4093);
+			sendString("" + c.getInstance().playerLevel[15] + "", 4020);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[15]) + "", 4021);
+			sendString("" + c.getInstance().playerXP[15] + "", 4092);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[15]) + 1) + "", 4093);
 			break;
 
 		case 16:
-			sendString("" + c.getVariables().playerLevel[16] + "", 4018);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[16]) + "", 4019);
-			sendString("" + c.getVariables().playerXP[16] + "", 4086);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[16]) + 1) + "", 4087);
+			sendString("" + c.getInstance().playerLevel[16] + "", 4018);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[16]) + "", 4019);
+			sendString("" + c.getInstance().playerXP[16] + "", 4086);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[16]) + 1) + "", 4087);
 			break;
 
 		case 17:
-			sendString("" + c.getVariables().playerLevel[17] + "", 4022);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[17]) + "", 4023);
-			sendString("" + c.getVariables().playerXP[17] + "", 4098);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[17]) + 1) + "", 4099);
+			sendString("" + c.getInstance().playerLevel[17] + "", 4022);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[17]) + "", 4023);
+			sendString("" + c.getInstance().playerXP[17] + "", 4098);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[17]) + 1) + "", 4099);
 			break;
 
 		case 18:
-			sendString("" + c.getVariables().playerLevel[18] + "", 12166);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[18]) + "", 12167);
-			sendString("" + c.getVariables().playerXP[18] + "", 12171);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[18]) + 1) + "", 12172);
+			sendString("" + c.getInstance().playerLevel[18] + "", 12166);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[18]) + "", 12167);
+			sendString("" + c.getInstance().playerXP[18] + "", 12171);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[18]) + 1) + "", 12172);
 			break;
 
 		case 19:
-			sendString("" + c.getVariables().playerLevel[19] + "", 13926);
-			sendString("" + getLevelForXP(c.getVariables().playerXP[19]) + "", 13927);
-			sendString("" + c.getVariables().playerXP[19] + "", 13921);
-			sendString("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[19]) + 1) + "", 13922);
+			sendString("" + c.getInstance().playerLevel[19] + "", 13926);
+			sendString("" + getLevelForXP(c.getInstance().playerXP[19]) + "", 13927);
+			sendString("" + c.getInstance().playerXP[19] + "", 13921);
+			sendString("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[19]) + 1) + "", 13922);
 			break;
 
 		case 20:
-			sendFrame126("" + c.getVariables().playerLevel[20] + "", 4152);
-			sendFrame126("" + getLevelForXP(c.getVariables().playerXP[20]) + "", 4153);
-			sendFrame126("" + c.getVariables().playerXP[20] + "", 4157);
-			sendFrame126("" + getXPForLevel(getLevelForXP(c.getVariables().playerXP[20]) + 1) + "", 4159);
+			sendFrame126("" + c.getInstance().playerLevel[20] + "", 4152);
+			sendFrame126("" + getLevelForXP(c.getInstance().playerXP[20]) + "", 4153);
+			sendFrame126("" + c.getInstance().playerXP[20] + "", 4157);
+			sendFrame126("" + getXPForLevel(getLevelForXP(c.getInstance().playerXP[20]) + 1) + "", 4159);
 			break;
 
 		case 21: // construction
-			sendFrame126("@yel@" + c.getVariables().playerLevel[21] + "", 18165);
-			sendFrame126("@yel@" + c.getVariables().playerLevel[21] + "", 18169);
+			sendFrame126("@yel@" + c.getInstance().playerLevel[21] + "", 18165);
+			sendFrame126("@yel@" + c.getInstance().playerLevel[21] + "", 18169);
 			break;
 
 		case 22:
-			sendFrame126("@yel@" + c.getVariables().playerLevel[22] + "", 18166); // hunter
-			sendFrame126("@yel@" + c.getVariables().playerLevel[22] + "", 18170); // hunter
+			sendFrame126("@yel@" + c.getInstance().playerLevel[22] + "", 18166); // hunter
+			sendFrame126("@yel@" + c.getInstance().playerLevel[22] + "", 18170); // hunter
 			break;
 
 		case 23: // Dungeoneering
-			sendFrame126("@yel@" + c.getVariables().playerLevel[23] + "", 18168);
-			sendFrame126("@yel@" + c.getVariables().playerLevel[23] + "", 18172);
+			sendFrame126("@yel@" + c.getInstance().playerLevel[23] + "", 18168);
+			sendFrame126("@yel@" + c.getInstance().playerLevel[23] + "", 18172);
 			break;
 
 		case 24: // summoning
-			sendFrame126("@yel@" + c.getVariables().playerLevel[24] + "", 18167);
-			sendFrame126("@yel@" + c.getVariables().playerLevel[24] + "", 18171);
-			sendFrame126("" + c.getVariables().playerXP[24] + "", 29803);
+			sendFrame126("@yel@" + c.getInstance().playerLevel[24] + "", 18167);
+			sendFrame126("@yel@" + c.getInstance().playerLevel[24] + "", 18171);
+			sendFrame126("" + c.getInstance().playerXP[24] + "", 29803);
 			break;
 
 		}
@@ -2675,35 +2674,35 @@ public class PlayerAssistant {
 
 	public boolean addSkillXP(double xpAmmount, int skill) {
 		// c.xpRecieved += amount*Config.SERVER_EXP_BONUS;
-		if (c.getVariables().xpRecieved >= 2000) {
+		if (c.getInstance().xpRecieved >= 2000) {
 			// EventHandler.getRandomEvent(c);
 		}
-		if (c.getVariables().expLock) {
+		if (c.getInstance().expLock) {
 			return false;
 		}
-		if (xpAmmount + c.getVariables().playerXP[skill] < 0 || c.getVariables().playerXP[skill] > 200000000) {
-			if (c.getVariables().playerXP[skill] > 200000000) {
-				c.getVariables().playerXP[skill] = 200000000;
+		if (xpAmmount + c.getInstance().playerXP[skill] < 0 || c.getInstance().playerXP[skill] > 200000000) {
+			if (c.getInstance().playerXP[skill] > 200000000) {
+				c.getInstance().playerXP[skill] = 200000000;
 			}
 			return false;
 		}
 		xpAmmount *= Constants.SERVER_EXP_BONUS;
-		int oldLevel = getLevelForXP(c.getVariables().playerXP[skill]);
-		c.getVariables().playerXP[skill] += xpAmmount;
-		if (oldLevel < getLevelForXP(c.getVariables().playerXP[skill])) {
-			if (c.getVariables().playerLevel[skill] < c.getLevelForXP(c.getVariables().playerXP[skill]) && skill != 3
+		int oldLevel = getLevelForXP(c.getInstance().playerXP[skill]);
+		c.getInstance().playerXP[skill] += xpAmmount;
+		if (oldLevel < getLevelForXP(c.getInstance().playerXP[skill])) {
+			if (c.getInstance().playerLevel[skill] < c.getLevelForXP(c.getInstance().playerXP[skill]) && skill != 3
 					&& skill != 5) {
-				c.getVariables().playerLevel[skill] = c.getLevelForXP(c.getVariables().playerXP[skill]);
+				c.getInstance().playerLevel[skill] = c.getLevelForXP(c.getInstance().playerXP[skill]);
 			}
 			levelUp(skill);
 			c.gfx100(199);
 			requestUpdates();
 		}
-		if (c.getVariables().playerXP[skill] > 200000000) {
-			c.getVariables().playerXP[skill] = 200000000;
+		if (c.getInstance().playerXP[skill] > 200000000) {
+			c.getInstance().playerXP[skill] = 200000000;
 			return false;
 		}
-		setSkillLevel(skill, c.getVariables().playerLevel[skill], c.getVariables().playerXP[skill]);
+		setSkillLevel(skill, c.getInstance().playerLevel[skill], c.getInstance().playerXP[skill]);
 		refreshSkill(skill);
 		sendSkillXP(skill, (int) xpAmmount);
 		return true;
@@ -2782,14 +2781,14 @@ public class PlayerAssistant {
 
 	public void handleGlory(int gloryId) {
 		c.getDH().sendOption4("Edgeville", "Karamja", "Al Kharid", "Draynor Village");
-		c.getVariables().usingGlory = true;
+		c.getInstance().usingGlory = true;
 	}
 
 	public void resetVariables() {
-		c.getVariables().usingGlory = false;
-		c.getVariables().smeltInterface = false;
-		c.getVariables().smeltType = 0;
-		c.getVariables().smeltAmount = 0;
+		c.getInstance().usingGlory = false;
+		c.getInstance().smeltInterface = false;
+		c.getInstance().smeltType = 0;
+		c.getInstance().smeltAmount = 0;
 	}
 
 	public boolean inPitsWait() {
@@ -2801,13 +2800,13 @@ public class PlayerAssistant {
 
 	public int antiFire() {
 		int toReturn = 0;
-		if (c.getVariables().antiFirePot) {
+		if (c.getInstance().antiFirePot) {
 			toReturn++;
 		}
-		if (c.getVariables().playerEquipment[c.getVariables().playerShield] == 1540 || c.getVariables().prayerActive[12]
-				|| c.getVariables().playerEquipment[c.getVariables().playerShield] == 11285
-				|| c.getVariables().playerEquipment[c.getVariables().playerShield] == 11283
-				|| c.getVariables().playerEquipment[c.getVariables().playerShield] == 11284) {
+		if (c.getInstance().playerEquipment[c.getInstance().playerShield] == 1540 || c.getInstance().prayerActive[12]
+				|| c.getInstance().playerEquipment[c.getInstance().playerShield] == 11285
+				|| c.getInstance().playerEquipment[c.getInstance().playerShield] == 11283
+				|| c.getInstance().playerEquipment[c.getInstance().playerShield] == 11284) {
 			toReturn++;
 		}
 		return toReturn;
@@ -2882,7 +2881,7 @@ public class PlayerAssistant {
 	}
 
 	public void setSidebarInterfaces() {
-		if (!c.getVariables().isDonePicking) {
+		if (!c.getInstance().isDonePicking) {
 			for (int i = 0; i < 14; i++) {
 				c.setSidebarInterface(i, -1);
 			}
@@ -2895,7 +2894,7 @@ public class PlayerAssistant {
 			c.setSidebarInterface(3, 3213);
 			c.setSidebarInterface(4, 1644);
 			c.setSidebarInterface(5, 22500); // Curses - 22500 5608
-			c.setSidebarInterface(6, spellBook[c.getVariables().playerMagicBook]);
+			c.setSidebarInterface(6, spellBook[c.getInstance().playerMagicBook]);
 			c.setSidebarInterface(7, -1);
 			c.setSidebarInterface(8, 5065);
 			c.setSidebarInterface(9, 5715);
@@ -2914,8 +2913,8 @@ public class PlayerAssistant {
 
 	public int getWearingAmount() {
 		int count = 0;
-		for (int j = 0; j < c.getVariables().playerEquipment.length; j++) {
-			if (c.getVariables().playerEquipment[j] > 0) {
+		for (int j = 0; j < c.getInstance().playerEquipment.length; j++) {
+			if (c.getInstance().playerEquipment[j] > 0) {
 				count++;
 			}
 		}
@@ -2937,9 +2936,9 @@ public class PlayerAssistant {
 			break;
 		case 11283:
 		case 11284:
-			if (c.getVariables().playerIndex > 0) {
+			if (c.getInstance().playerIndex > 0) {
 				c.getCombat().handleDfs();
-			} else if (c.getVariables().npcIndex > 0) {
+			} else if (c.getInstance().npcIndex > 0) {
 				c.getCombat().handleDfsNPC();
 			}
 			break;
@@ -2965,7 +2964,7 @@ public class PlayerAssistant {
 			y = -1;
 		}
 		moveCheck(x, y);
-		c.getVariables().lastSpear = System.currentTimeMillis();
+		c.getInstance().lastSpear = System.currentTimeMillis();
 	}
 
 	public void moveCheck(int xMove, int yMove) {
@@ -2987,8 +2986,8 @@ public class PlayerAssistant {
 							PlayerHandler.players[j].absY, 40)
 					|| c.goodDistance(c.absX, c.absY, PlayerHandler.players[j].absX,
 							PlayerHandler.players[j].absY + 9400, 40)) {
-				if (c.getVariables().damageTaken[j] > damage) {
-					damage = c.getVariables().damageTaken[j];
+				if (c.getInstance().damageTaken[j] > damage) {
+					damage = c.getInstance().damageTaken[j];
 					killer = j;
 				}
 			}
@@ -2997,17 +2996,17 @@ public class PlayerAssistant {
 	}
 
 	public void resetTzhaar() {
-		c.getVariables().waveId = -1;
-		c.getVariables().tzhaarToKill = -1;
-		c.getVariables().tzhaarKilled = -1;
+		c.getInstance().waveId = -1;
+		c.getInstance().tzhaarToKill = -1;
+		c.getInstance().tzhaarKilled = -1;
 		movePlayer(2438, 5168, 0);
 	}
 
 	public void enterCaves() {
 		c.getPA().movePlayer(2413, 5117, c.playerId * 4);
-		c.getVariables().waveId = 0;
-		c.getVariables().tzhaarToKill = -1;
-		c.getVariables().tzhaarKilled = -1;
+		c.getInstance().waveId = 0;
+		c.getInstance().tzhaarToKill = -1;
+		c.getInstance().tzhaarKilled = -1;
 		CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
@@ -3028,9 +3027,9 @@ public class PlayerAssistant {
 	 */
 
 	public void appendPoison(int damage) {
-		if (System.currentTimeMillis() - c.getVariables().lastPoisonSip > c.getVariables().poisonImmune) {
+		if (System.currentTimeMillis() - c.getInstance().lastPoisonSip > c.getInstance().poisonImmune) {
 			c.sendMessage("You have been poisoned!");
-			c.getVariables().poisonDamage = damage;
+			c.getInstance().poisonDamage = damage;
 		}
 	}
 
@@ -3049,23 +3048,23 @@ public class PlayerAssistant {
 		if (i < 0) {
 			return;
 		}
-		c.sendMessage("This pouch has " + c.getVariables().pouches[i] + " rune ess in it.");
+		c.sendMessage("This pouch has " + c.getInstance().pouches[i] + " rune ess in it.");
 	}
 
 	public void fillPouch(int i) {
 		if (i < 0) {
 			return;
 		}
-		int toAdd = c.getVariables().POUCH_SIZE[i] - c.getVariables().pouches[i];
+		int toAdd = c.getInstance().POUCH_SIZE[i] - c.getInstance().pouches[i];
 		if (toAdd > c.getItems().getItemAmount(1436)) {
 			toAdd = c.getItems().getItemAmount(1436);
 		}
-		if (toAdd > c.getVariables().POUCH_SIZE[i] - c.getVariables().pouches[i]) {
-			toAdd = c.getVariables().POUCH_SIZE[i] - c.getVariables().pouches[i];
+		if (toAdd > c.getInstance().POUCH_SIZE[i] - c.getInstance().pouches[i]) {
+			toAdd = c.getInstance().POUCH_SIZE[i] - c.getInstance().pouches[i];
 		}
 		if (toAdd > 0) {
 			c.getItems().deleteItem(1436, toAdd);
-			c.getVariables().pouches[i] += toAdd;
+			c.getInstance().pouches[i] += toAdd;
 		}
 	}
 
@@ -3073,13 +3072,13 @@ public class PlayerAssistant {
 		if (i < 0) {
 			return;
 		}
-		int toAdd = c.getVariables().pouches[i];
+		int toAdd = c.getInstance().pouches[i];
 		if (toAdd > c.getItems().freeSlots()) {
 			toAdd = c.getItems().freeSlots();
 		}
 		if (toAdd > 0) {
 			c.getItems().addItem(1436, toAdd);
-			c.getVariables().pouches[i] -= toAdd;
+			c.getInstance().pouches[i] -= toAdd;
 		}
 	}
 
@@ -3089,11 +3088,11 @@ public class PlayerAssistant {
 	 */
 
 	public void fixAllBarrows() {
-		for (int j = 0; j < c.getVariables().playerItems.length; j++) {
+		for (int j = 0; j < c.getInstance().playerItems.length; j++) {
 			boolean breakOut = false;
 			for (int i = 0; i < c.getItems().brokenBarrows.length; i++) {
-				if (c.getVariables().playerItems[j] - 1 == c.getItems().brokenBarrows[i][1]) {
-					c.getVariables().playerItems[j] = c.getItems().brokenBarrows[i][0] + 1;
+				if (c.getInstance().playerItems[j] - 1 == c.getItems().brokenBarrows[i][1]) {
+					c.getInstance().playerItems[j] = c.getItems().brokenBarrows[i][0] + 1;
 				}
 			}
 			if (breakOut) {
@@ -3129,7 +3128,7 @@ public class PlayerAssistant {
 		for (int i = 0; i < info.length; i++) {
 			sendString(info[i][0], Integer.parseInt(info[i][1]));
 		}
-		c.getVariables().destroyItem = itemId;
+		c.getInstance().destroyItem = itemId;
 		sendChatInterface(14170);
 	}
 
@@ -3137,23 +3136,23 @@ public class PlayerAssistant {
 		String itemName = c.getItems().getItemName(itemId);
 		c.getItems().deleteItem(itemId, 1);
 		c.sendMessage("Your " + itemName + " vanishes as you drop it on the ground.");
-		c.getVariables().destroyItem = 0;
+		c.getInstance().destroyItem = 0;
 	}
 
 	public void handleWeaponStyle() {
-		if (c.getVariables().fightMode == 0) {
-			sendFrame36(43, c.getVariables().fightMode);
-		} else if (c.getVariables().fightMode == 1) {
+		if (c.getInstance().fightMode == 0) {
+			sendFrame36(43, c.getInstance().fightMode);
+		} else if (c.getInstance().fightMode == 1) {
 			sendFrame36(43, 3);
-		} else if (c.getVariables().fightMode == 2) {
+		} else if (c.getInstance().fightMode == 2) {
 			sendFrame36(43, 1);
-		} else if (c.getVariables().fightMode == 3) {
+		} else if (c.getInstance().fightMode == 3) {
 			sendFrame36(43, 2);
 		}
 	}
 
 	public boolean dialogueAction(int i) {
-		return c.getVariables().dialogueAction == i;
+		return c.getInstance().dialogueAction == i;
 	}
 
 	@SuppressWarnings("unused")
@@ -3385,13 +3384,13 @@ public class PlayerAssistant {
 	public int getBoostStat(int skill, boolean sup) {
 		int increaseBy = 0;
 		if (sup) {
-			increaseBy = (int) (c.getLevelForXP(c.getVariables().playerXP[skill]) * .20);
+			increaseBy = (int) (c.getLevelForXP(c.getInstance().playerXP[skill]) * .20);
 		} else {
-			increaseBy = (int) (c.getLevelForXP(c.getVariables().playerXP[skill]) * .06);
+			increaseBy = (int) (c.getLevelForXP(c.getInstance().playerXP[skill]) * .06);
 		}
-		if (c.getVariables().playerLevel[skill] + increaseBy > c.getLevelForXP(c.getVariables().playerXP[skill])
+		if (c.getInstance().playerLevel[skill] + increaseBy > c.getLevelForXP(c.getInstance().playerXP[skill])
 				+ increaseBy) {
-			return c.getLevelForXP(c.getVariables().playerXP[skill]) + increaseBy - c.getVariables().playerLevel[skill];
+			return c.getLevelForXP(c.getInstance().playerXP[skill]) + increaseBy - c.getInstance().playerLevel[skill];
 		}
 		return increaseBy;
 	}
@@ -3399,24 +3398,24 @@ public class PlayerAssistant {
 	public int getBoostStat1(int skill, boolean sup) {
 		int increaseBy = 0;
 		if (sup) {
-			increaseBy = (int) (c.getLevelForXP(c.getVariables().playerXP[skill]) * .10);
+			increaseBy = (int) (c.getLevelForXP(c.getInstance().playerXP[skill]) * .10);
 		} else {
-			increaseBy = (int) (c.getLevelForXP(c.getVariables().playerXP[skill]) * .06);
+			increaseBy = (int) (c.getLevelForXP(c.getInstance().playerXP[skill]) * .06);
 		}
-		if (c.getVariables().playerLevel[skill] + increaseBy > c.getLevelForXP(c.getVariables().playerXP[skill])
+		if (c.getInstance().playerLevel[skill] + increaseBy > c.getLevelForXP(c.getInstance().playerXP[skill])
 				+ increaseBy) {
-			return c.getLevelForXP(c.getVariables().playerXP[skill]) + increaseBy - c.getVariables().playerLevel[skill];
+			return c.getLevelForXP(c.getInstance().playerXP[skill]) + increaseBy - c.getInstance().playerLevel[skill];
 		}
 		return increaseBy;
 	}
 
 	public void boostStat(int skillID, boolean sup) {
-		c.getVariables().playerLevel[skillID] += getBoostStat(skillID, sup);
+		c.getInstance().playerLevel[skillID] += getBoostStat(skillID, sup);
 		c.getPA().refreshSkill(skillID);
 	}
 
 	public void boostStat1(int skillID, boolean sup) {
-		c.getVariables().playerLevel[skillID] += getBoostStat1(skillID, sup);
+		c.getInstance().playerLevel[skillID] += getBoostStat1(skillID, sup);
 		c.getPA().refreshSkill(skillID);
 	}
 }

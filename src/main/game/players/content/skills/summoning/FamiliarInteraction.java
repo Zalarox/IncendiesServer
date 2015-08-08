@@ -1024,7 +1024,7 @@ public class FamiliarInteraction {
 			if (f.getNPCID() == c.getSummoning().summonedFamiliar.npcId + 1)
 				name = f.getFamiliarName();
 		}
-		switch (c.getVariables().familiarID) {
+		switch (c.getInstance().familiarID) {
 		case 6829: // Spirit wolf
 			chat = new String[] { "What are you doing?", "Danger!", "I smell something good! Hunting time!" };
 			break;
@@ -1306,12 +1306,12 @@ public class FamiliarInteraction {
 		}
 		if (chat.equals("Null") || name.equals("Null") || chat == null || name == null)
 			return;
-		c.getVariables().nextChat = 512;
+		c.getInstance().nextChat = 512;
 		sendFamiliarChat(c, chat, name);
 	}
 
 	private static void sendFamiliarChat(Player c, String[] message, String familiarName) {
-		c.getDH().sendNpcChat3("", message[(int) (Math.random() * message.length)], "", c.getVariables().familiarID,
+		c.getDH().sendNpcChat3("", message[(int) (Math.random() * message.length)], "", c.getInstance().familiarID,
 				familiarName);
 	}
 }

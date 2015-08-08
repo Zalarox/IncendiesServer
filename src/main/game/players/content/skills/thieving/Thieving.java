@@ -27,25 +27,25 @@ public class Thieving {
 	}
 
 	public void stealFromNPC(int id) {
-		if (System.currentTimeMillis() - c.getVariables().lastThieve < 2000)
+		if (System.currentTimeMillis() - c.getInstance().lastThieve < 2000)
 			return;
 		for (int j = 0; j < npcThieving.length; j++) {
 			if (npcThieving[j][0] == id) {
-				if (c.getVariables().playerLevel[c.getVariables().playerThieving] >= npcThieving[j][1]) {
-					if (Misc.random(c.getVariables().playerLevel[c.getVariables().playerThieving] + 2
+				if (c.getInstance().playerLevel[c.getInstance().playerThieving] >= npcThieving[j][1]) {
+					if (Misc.random(c.getInstance().playerLevel[c.getInstance().playerThieving] + 2
 							- npcThieving[j][1]) != 1) {
 						c.getPA().addSkillXP(npcThieving[j][2] * SkillHandler.XPRates.THIEVING.getXPRate(),
-								c.getVariables().playerThieving);
+								c.getInstance().playerThieving);
 						c.getItems().addItem(995, npcThieving[j][3]);
 						c.startAnimation(881);
-						c.getVariables().lastThieve = System.currentTimeMillis();
+						c.getInstance().lastThieve = System.currentTimeMillis();
 						c.sendMessage("You manage to steal some money.");
 						break;
 					} else {
 						c.setHitDiff(npcThieving[j][4]);
 						c.setHitUpdateRequired(true);
-						c.getVariables().constitution -= npcThieving[j][4] * 10;
-						c.getVariables().lastThieve = System.currentTimeMillis() + 2000;
+						c.getInstance().lifePoints -= npcThieving[j][4] * 10;
+						c.getInstance().lastThieve = System.currentTimeMillis() + 2000;
 						break;
 					}
 				} else {
@@ -57,15 +57,15 @@ public class Thieving {
 
 	public void stealFromStall(int id, int xp, int level, final int i, final int x, final int y) {
 		c.turnPlayerTo(x, y);
-		if (System.currentTimeMillis() - c.getVariables().lastThieve < 2500)
+		if (System.currentTimeMillis() - c.getInstance().lastThieve < 2500)
 			return;
-		if (c.getVariables().playerLevel[c.getVariables().playerThieving] >= level) {
+		if (c.getInstance().playerLevel[c.getInstance().playerThieving] >= level) {
 			int quantity = (int) (Math.random() * 2 + 1);
 			
 			if (c.getItems().addItem(id, quantity)) {
 				c.startAnimation(832);
-				c.getPA().addSkillXP(xp * SkillHandler.XPRates.THIEVING.getXPRate(), c.getVariables().playerThieving);
-				c.getVariables().lastThieve = System.currentTimeMillis();
+				c.getPA().addSkillXP(xp * SkillHandler.XPRates.THIEVING.getXPRate(), c.getInstance().playerThieving);
+				c.getInstance().lastThieve = System.currentTimeMillis();
 				c.sendMessage("You steal a " + main.game.items.ItemLoader.getItemName(id) + ".");
 				c.getPA().checkObjectSpawn(634, x, y, 1, 10);
 				GameEngine.getScheduler().schedule(new Task(6) {

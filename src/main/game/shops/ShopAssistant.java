@@ -23,8 +23,8 @@ public class ShopAssistant {
 		c.setBusy(true);
 		c.getItems().resetItems(3823);
 		resetShop(ShopID);
-		c.getVariables().isShopping = true;
-		c.getVariables().myShopId = ShopID;
+		c.getInstance().isShopping = true;
+		c.getInstance().myShopId = ShopID;
 		c.getPA().sendFrame248(3824, 3822);
 		c.getPA().sendString(ShopHandler.ShopName[ShopID], 3901);
 	}
@@ -32,10 +32,10 @@ public class ShopAssistant {
 	public void updatePlayerShop() {
 		for (int i = 1; i < Constants.MAX_PLAYERS; i++) {
 			if (PlayerHandler.players[i] != null) {
-				if (PlayerHandler.players[i].getVariables().isShopping == true
-						&& PlayerHandler.players[i].getVariables().myShopId == c.getVariables().myShopId
+				if (PlayerHandler.players[i].getInstance().isShopping == true
+						&& PlayerHandler.players[i].getInstance().myShopId == c.getInstance().myShopId
 						&& i != c.playerId) {
-					PlayerHandler.players[i].getVariables().updateShop = true;
+					PlayerHandler.players[i].getInstance().updateShop = true;
 				}
 			}
 		}
@@ -43,7 +43,7 @@ public class ShopAssistant {
 
 	public boolean shopSellsItem(int itemID) {
 		for (int i = 0; i < ShopHandler.ShopItems.length; i++) {
-			if (itemID == (ShopHandler.ShopItems[c.getVariables().myShopId][i] - 1)) {
+			if (itemID == (ShopHandler.ShopItems[c.getInstance().myShopId][i] - 1)) {
 				return true;
 			}
 		}
@@ -106,7 +106,7 @@ public class ShopAssistant {
 
 		TotPrice = ShopValue;
 
-		if (ShopHandler.ShopBModifier[c.getVariables().myShopId] == 1) {
+		if (ShopHandler.ShopBModifier[c.getInstance().myShopId] == 1) {
 			TotPrice *= 1;
 			TotPrice *= 1;
 			if (Type == 1) {
@@ -138,32 +138,32 @@ public class ShopAssistant {
 		int ShopValue = (int) Math.floor(getItemShopValue(removeId, 0, removeSlot));
 		ShopValue *= 1.15;
 		String ShopAdd = "";
-		if (c.getVariables().myShopId == 3) {
+		if (c.getInstance().myShopId == 3) {
 			c.sendMessage(c.getItems().getItemName(removeId) + ": currently costs " + getSpecialItemValue(removeId)
 					+ " points.");
 			return;
 		}
-		if (c.getVariables().myShopId == 13) {
+		if (c.getInstance().myShopId == 13) {
 			c.sendMessage(c.getItems().getItemName(removeId) + ": currently costs " + getSpecialItemValue(removeId)
 					+ " points.");
 			return;
 		}
-		if (c.getVariables().myShopId == 69) {
+		if (c.getInstance().myShopId == 69) {
 			c.sendMessage(c.getItems().getItemName(removeId) + ": currently costs " + getSpecialItemValue(removeId)
 					+ " points.");
 			return;
 		}
-		if (c.getVariables().myShopId == 70) {
+		if (c.getInstance().myShopId == 70) {
 			c.sendMessage(c.getItems().getItemName(removeId) + ": currently costs " + getSpecialItemValue(removeId)
 					+ " points.");
 			return;
 		}
-		if (c.getVariables().myShopId == 71) {
+		if (c.getInstance().myShopId == 71) {
 			c.sendMessage(c.getItems().getItemName(removeId) + ": currently costs " + getSpecialItemValue(removeId)
 					+ " points.");
 			return;
 		}
-		if (c.getVariables().myShopId == 72) {
+		if (c.getInstance().myShopId == 72) {
 			c.sendMessage(c.getItems().getItemName(removeId) + ": currently costs " + getSpecialItemValue(removeId)
 					+ " points.");
 			return;
@@ -385,9 +385,9 @@ public class ShopAssistant {
 			}
 		}
 		boolean IsIn = false;
-		if (ShopHandler.ShopSModifier[c.getVariables().myShopId] > 1) {
-			for (int j = 0; j <= ShopHandler.ShopItemsStandard[c.getVariables().myShopId]; j++) {
-				if (removeId == (ShopHandler.ShopItems[c.getVariables().myShopId][j] - 1)) {
+		if (ShopHandler.ShopSModifier[c.getInstance().myShopId] > 1) {
+			for (int j = 0; j <= ShopHandler.ShopItemsStandard[c.getInstance().myShopId]; j++) {
+				if (removeId == (ShopHandler.ShopItems[c.getInstance().myShopId][j] - 1)) {
 					IsIn = true;
 					break;
 				}
@@ -400,7 +400,7 @@ public class ShopAssistant {
 		} else {
 			int ShopValue = (int) Math.floor(getItemShopValue(removeId, 1, removeSlot));
 			String ShopAdd = "";
-			int coinsShop = c.getVariables().myShopId != 1 ? ShopValue : (ShopValue - (ShopValue / 3));
+			int coinsShop = c.getInstance().myShopId != 1 ? ShopValue : (ShopValue - (ShopValue / 3));
 			if (coinsShop >= 1000 && coinsShop < 1000000) {
 				ShopAdd = " (" + ((coinsShop) / 1000) + "K)";
 			} else if (coinsShop >= 1000000) {
@@ -411,9 +411,9 @@ public class ShopAssistant {
 	}
 
 	public boolean sellItem(int itemID, int fromSlot, int amount) {
-		if (c.getVariables().inTrade)
+		if (c.getInstance().inTrade)
 			return false;
-		if (!(c.getVariables().myShopId == 1 || (c.getVariables().myShopId == 73
+		if (!(c.getInstance().myShopId == 1 || (c.getInstance().myShopId == 73
 				&& (itemID == 1897 || itemID == 6814 || itemID == 1796 || itemID == 1613))))
 			return false;
 		for (int i : Constants.ITEM_SELLABLE) {
@@ -423,11 +423,11 @@ public class ShopAssistant {
 			}
 		}
 
-		if (amount > 0 && itemID == (c.getVariables().playerItems[fromSlot] - 1)) {
-			if (ShopHandler.ShopSModifier[c.getVariables().myShopId] > 1) {
+		if (amount > 0 && itemID == (c.getInstance().playerItems[fromSlot] - 1)) {
+			if (ShopHandler.ShopSModifier[c.getInstance().myShopId] > 1) {
 				boolean IsIn = false;
-				for (int i = 0; i <= ShopHandler.ShopItemsStandard[c.getVariables().myShopId]; i++) {
-					if (itemID == (ShopHandler.ShopItems[c.getVariables().myShopId][i] - 1)) {
+				for (int i = 0; i <= ShopHandler.ShopItemsStandard[c.getInstance().myShopId]; i++) {
+					if (itemID == (ShopHandler.ShopItems[c.getInstance().myShopId][i] - 1)) {
 						IsIn = true;
 						break;
 					}
@@ -439,13 +439,13 @@ public class ShopAssistant {
 				}
 			}
 
-			if (amount > c.getVariables().playerItemsN[fromSlot]
-					&& (ItemLoader.isNote((c.getVariables().playerItems[fromSlot] - 1)) == true
-							|| ItemLoader.isNote((c.getVariables().playerItems[fromSlot] - 1)) == true)) {
-				amount = c.getVariables().playerItemsN[fromSlot];
+			if (amount > c.getInstance().playerItemsN[fromSlot]
+					&& (ItemLoader.isNote((c.getInstance().playerItems[fromSlot] - 1)) == true
+							|| ItemLoader.isNote((c.getInstance().playerItems[fromSlot] - 1)) == true)) {
+				amount = c.getInstance().playerItemsN[fromSlot];
 			} else if (amount > c.getItems().getItemAmount(itemID)
-					&& ItemLoader.isNote((c.getVariables().playerItems[fromSlot] - 1)) == false
-					&& ItemLoader.isStackable((c.getVariables().playerItems[fromSlot] - 1)) == false) {
+					&& ItemLoader.isNote((c.getInstance().playerItems[fromSlot] - 1)) == false
+					&& ItemLoader.isStackable((c.getInstance().playerItems[fromSlot] - 1)) == false) {
 				amount = c.getItems().getItemAmount(itemID);
 			}
 			// double ShopValue;
@@ -454,7 +454,7 @@ public class ShopAssistant {
 			// int Overstock;
 			for (int i = amount; i > 0; i--) {
 				TotPrice2 = (int) Math.floor(getItemShopValue(itemID, 1, fromSlot));
-				int coinsShop = c.getVariables().myShopId != 1 ? TotPrice2 : (TotPrice2 - (TotPrice2 / 3));
+				int coinsShop = c.getInstance().myShopId != 1 ? TotPrice2 : (TotPrice2 - (TotPrice2 / 3));
 				if (c.getItems().freeSlots() > 0 || c.getItems().playerHasItem(995)) {
 					if (ItemLoader.isNote(itemID) == false) {
 						c.getItems().deleteItem(itemID, c.getItems().getItemSlot(itemID), 1);
@@ -469,7 +469,7 @@ public class ShopAssistant {
 				}
 			}
 			c.getItems().resetItems(3823);
-			resetShop(c.getVariables().myShopId);
+			resetShop(c.getInstance().myShopId);
 			updatePlayerShop();
 			return true;
 		}
@@ -485,17 +485,17 @@ public class ShopAssistant {
 			itemID = c.getItems().getUnnotedItem(itemID);
 		}
 		for (int i = 0; i < ShopHandler.ShopItems.length; i++) {
-			if ((ShopHandler.ShopItems[c.getVariables().myShopId][i] - 1) == itemID) {
-				ShopHandler.ShopItemsN[c.getVariables().myShopId][i] += amount;
+			if ((ShopHandler.ShopItems[c.getInstance().myShopId][i] - 1) == itemID) {
+				ShopHandler.ShopItemsN[c.getInstance().myShopId][i] += amount;
 				Added = true;
 			}
 		}
 		if (Added == false) {
 			for (int i = 0; i < ShopHandler.ShopItems.length; i++) {
-				if (ShopHandler.ShopItems[c.getVariables().myShopId][i] == 0) {
-					ShopHandler.ShopItems[c.getVariables().myShopId][i] = (itemID + 1);
-					ShopHandler.ShopItemsN[c.getVariables().myShopId][i] = amount;
-					ShopHandler.ShopItemsDelay[c.getVariables().myShopId][i] = 0;
+				if (ShopHandler.ShopItems[c.getInstance().myShopId][i] == 0) {
+					ShopHandler.ShopItems[c.getInstance().myShopId][i] = (itemID + 1);
+					ShopHandler.ShopItemsN[c.getInstance().myShopId][i] = amount;
+					ShopHandler.ShopItemsDelay[c.getInstance().myShopId][i] = 0;
 					break;
 				}
 			}
@@ -506,29 +506,29 @@ public class ShopAssistant {
 	@SuppressWarnings("unused")
 	public boolean buyItem(int itemID, int fromSlot, int amount) {
 
-		if (ShopHandler.ShopItems[c.getVariables().myShopId][fromSlot] - 1 != itemID
-				&& c.getVariables().myShopId != 14) {
+		if (ShopHandler.ShopItems[c.getInstance().myShopId][fromSlot] - 1 != itemID
+				&& c.getInstance().myShopId != 14) {
 			return false;
 		}
-		if (c.getVariables().myShopId == 14) {
+		if (c.getInstance().myShopId == 14) {
 			skillBuy(itemID);
 			return false;
-		} else if (c.getVariables().myShopId == 3) {
+		} else if (c.getInstance().myShopId == 3) {
 			handleOtherShop(itemID);
 			return false;
-		} else if (c.getVariables().myShopId == 13) {
+		} else if (c.getInstance().myShopId == 13) {
 			handleOtherShop(itemID);
 			return false;
-		} else if (c.getVariables().myShopId == 72) {
+		} else if (c.getInstance().myShopId == 72) {
 			handleOtherShop(itemID);
 			return false;
-		} else if (c.getVariables().myShopId == 71) {
+		} else if (c.getInstance().myShopId == 71) {
 			handleOtherShop(itemID);
 			return false;
-		} else if (c.getVariables().myShopId == 69) {
+		} else if (c.getInstance().myShopId == 69) {
 			handleOtherShop(itemID);
 			return false;
-		} else if (c.getVariables().myShopId == 70) {
+		} else if (c.getInstance().myShopId == 70) {
 			handleOtherShop(itemID);
 			return false;
 		}
@@ -537,8 +537,8 @@ public class ShopAssistant {
 					? main.game.players.content.skills.dungeoneering.Constants.CURRENCY : 995;
 			if (!shopSellsItem(itemID))
 				return false;
-			if (amount > ShopHandler.ShopItemsN[c.getVariables().myShopId][fromSlot]) {
-				amount = ShopHandler.ShopItemsN[c.getVariables().myShopId][fromSlot];
+			if (amount > ShopHandler.ShopItemsN[c.getInstance().myShopId][fromSlot]) {
+				amount = ShopHandler.ShopItemsN[c.getInstance().myShopId][fromSlot];
 			}
 			// double ShopValue;
 			// double TotPrice;
@@ -547,7 +547,7 @@ public class ShopAssistant {
 			int Slot = 0;
 			int Slot1 = 0;// Tokkul
 			int Slot2 = 0;// Pking Points
-			if (c.getVariables().myShopId == 17 || c.getVariables().myShopId == 2 && c.getVariables().myShopId == 4) {
+			if (c.getInstance().myShopId == 17 || c.getInstance().myShopId == 2 && c.getInstance().myShopId == 4) {
 				handleOtherShop(itemID);
 				return false;
 			}
@@ -565,13 +565,13 @@ public class ShopAssistant {
 				TotPrice2 = (int) Math.floor(getItemShopValue(itemID, 0, fromSlot));
 				Slot = c.getItems().getItemSlot(currency);
 				Slot1 = c.getItems().getItemSlot(6529);
-				if (Slot == -1 && c.getVariables().myShopId != 29 && c.getVariables().myShopId != 30
-						&& c.getVariables().myShopId != 31 && c.getVariables().myShopId != 47) {
+				if (Slot == -1 && c.getInstance().myShopId != 29 && c.getInstance().myShopId != 30
+						&& c.getInstance().myShopId != 31 && c.getInstance().myShopId != 47) {
 					c.sendMessage("You don't have enough coins.");
 					break;
 				}
-				if (Slot1 == -1 && c.getVariables().myShopId == 29 || c.getVariables().myShopId == 30
-						|| c.getVariables().myShopId == 31) {
+				if (Slot1 == -1 && c.getInstance().myShopId == 29 || c.getInstance().myShopId == 30
+						|| c.getInstance().myShopId == 31) {
 					c.sendMessage("You don't have enough tokkul.");
 					break;
 				}
@@ -579,16 +579,16 @@ public class ShopAssistant {
 					TotPrice2 = (int) Math.floor(getItemShopValue(itemID, 0, fromSlot));
 					TotPrice2 *= 1.66;
 				}
-				if (c.getVariables().myShopId != 29 || c.getVariables().myShopId != 30
-						|| c.getVariables().myShopId != 31 || c.getVariables().myShopId != 47) {
-					if (c.getVariables().playerItemsN[Slot] >= TotPrice2) {
+				if (c.getInstance().myShopId != 29 || c.getInstance().myShopId != 30
+						|| c.getInstance().myShopId != 31 || c.getInstance().myShopId != 47) {
+					if (c.getInstance().playerItemsN[Slot] >= TotPrice2) {
 						if (c.getItems().freeSlots() > 0) {
 							c.getItems().deleteItem(currency, c.getItems().getItemSlot(currency), TotPrice2);
 							c.getItems().addItem(itemID, 1);
-							ShopHandler.ShopItemsN[c.getVariables().myShopId][fromSlot] -= 1;
-							ShopHandler.ShopItemsDelay[c.getVariables().myShopId][fromSlot] = 0;
-							if ((fromSlot + 1) > ShopHandler.ShopItemsStandard[c.getVariables().myShopId]) {
-								ShopHandler.ShopItems[c.getVariables().myShopId][fromSlot] = 0;
+							ShopHandler.ShopItemsN[c.getInstance().myShopId][fromSlot] -= 1;
+							ShopHandler.ShopItemsDelay[c.getInstance().myShopId][fromSlot] = 0;
+							if ((fromSlot + 1) > ShopHandler.ShopItemsStandard[c.getInstance().myShopId]) {
+								ShopHandler.ShopItems[c.getInstance().myShopId][fromSlot] = 0;
 							}
 						} else {
 							c.sendMessage("You don't have enough space in your inventory.");
@@ -599,16 +599,16 @@ public class ShopAssistant {
 						break;
 					}
 				}
-				if (c.getVariables().myShopId == 29 || c.getVariables().myShopId == 30
-						|| c.getVariables().myShopId == 31) {
-					if (c.getVariables().playerItemsN[Slot1] >= TotPrice2) {
+				if (c.getInstance().myShopId == 29 || c.getInstance().myShopId == 30
+						|| c.getInstance().myShopId == 31) {
+					if (c.getInstance().playerItemsN[Slot1] >= TotPrice2) {
 						if (c.getItems().freeSlots() > 0) {
 							c.getItems().deleteItem(6529, c.getItems().getItemSlot(6529), TotPrice2);
 							c.getItems().addItem(itemID, 1);
-							ShopHandler.ShopItemsN[c.getVariables().myShopId][fromSlot] -= 1;
-							ShopHandler.ShopItemsDelay[c.getVariables().myShopId][fromSlot] = 0;
-							if ((fromSlot + 1) > ShopHandler.ShopItemsStandard[c.getVariables().myShopId]) {
-								ShopHandler.ShopItems[c.getVariables().myShopId][fromSlot] = 0;
+							ShopHandler.ShopItemsN[c.getInstance().myShopId][fromSlot] -= 1;
+							ShopHandler.ShopItemsDelay[c.getInstance().myShopId][fromSlot] = 0;
+							if ((fromSlot + 1) > ShopHandler.ShopItemsStandard[c.getInstance().myShopId]) {
+								ShopHandler.ShopItems[c.getInstance().myShopId][fromSlot] = 0;
 							}
 						} else {
 							c.sendMessage("You don't have enough space in your inventory.");
@@ -621,7 +621,7 @@ public class ShopAssistant {
 				}
 			}
 			c.getItems().resetItems(3823);
-			resetShop(c.getVariables().myShopId);
+			resetShop(c.getInstance().myShopId);
 			updatePlayerShop();
 			return true;
 		}
@@ -629,80 +629,80 @@ public class ShopAssistant {
 	}
 
 	public void handleOtherShop(int itemID) {
-		if (c.getVariables().myShopId == 17) {
-			if (c.getVariables().magePoints >= getSpecialItemValue(itemID)) {
+		if (c.getInstance().myShopId == 17) {
+			if (c.getInstance().magePoints >= getSpecialItemValue(itemID)) {
 				if (c.getItems().freeSlots() > 0) {
-					c.getVariables().magePoints -= getSpecialItemValue(itemID);
+					c.getInstance().magePoints -= getSpecialItemValue(itemID);
 					c.getItems().addItem(itemID, 1);
 					c.getItems().resetItems(3823);
 				}
 			} else {
 				c.sendMessage("You do not have enough points to buy this item.2");
 			}
-		} else if (c.getVariables().myShopId == 18) {
-			if (c.getVariables().pcPoints >= getSpecialItemValue(itemID)) {
+		} else if (c.getInstance().myShopId == 18) {
+			if (c.getInstance().pcPoints >= getSpecialItemValue(itemID)) {
 				if (c.getItems().freeSlots() > 0) {
-					c.getVariables().pcPoints -= getSpecialItemValue(itemID);
+					c.getInstance().pcPoints -= getSpecialItemValue(itemID);
 					c.getItems().addItem(itemID, 1);
 					c.getItems().resetItems(3823);
 				}
 			} else {
 				c.sendMessage("You do not have enough points to buy this item.");
 			}
-		} else if (c.getVariables().myShopId == 69) { // Donator Points shop 1
-			if (c.getVariables().DonatorPoints >= getSpecialItemValue(itemID)) {
+		} else if (c.getInstance().myShopId == 69) { // Donator Points shop 1
+			if (c.getInstance().DonatorPoints >= getSpecialItemValue(itemID)) {
 				if (c.getItems().freeSlots() > 0) {
-					c.getVariables().DonatorPoints -= getSpecialItemValue(itemID);
+					c.getInstance().DonatorPoints -= getSpecialItemValue(itemID);
 					c.getItems().addItem(itemID, 1);
 					c.getItems().resetItems(3823);
 				}
 			} else {
 				c.sendMessage("You do not have enough Donator points.");
 			}
-		} else if (c.getVariables().myShopId == 70) { // Donator Points shop 2
-			if (c.getVariables().DonatorPoints >= getSpecialItemValue(itemID)) {
+		} else if (c.getInstance().myShopId == 70) { // Donator Points shop 2
+			if (c.getInstance().DonatorPoints >= getSpecialItemValue(itemID)) {
 				if (c.getItems().freeSlots() > 0) {
-					c.getVariables().DonatorPoints -= getSpecialItemValue(itemID);
+					c.getInstance().DonatorPoints -= getSpecialItemValue(itemID);
 					c.getItems().addItem(itemID, 1);
 					c.getItems().resetItems(3823);
 				}
 			} else {
 				c.sendMessage("You do not have enough Donator points.");
 			}
-		} else if (c.getVariables().myShopId == 71) { // Slayer points shop
-			if (c.getVariables().SlayerPoints >= getSpecialItemValue(itemID)) {
+		} else if (c.getInstance().myShopId == 71) { // Slayer points shop
+			if (c.getInstance().SlayerPoints >= getSpecialItemValue(itemID)) {
 				if (c.getItems().freeSlots() > 0) {
-					c.getVariables().SlayerPoints -= getSpecialItemValue(itemID);
+					c.getInstance().SlayerPoints -= getSpecialItemValue(itemID);
 					c.getItems().addItem(itemID, 1);
 					c.getItems().resetItems(3823);
 				}
 			} else {
 				c.sendMessage("You do not have enough Slayer points.");
 			}
-		} else if (c.getVariables().myShopId == 72) { // Pest control shop
-			if (c.getVariables().pcPoints >= getSpecialItemValue(itemID)) {
+		} else if (c.getInstance().myShopId == 72) { // Pest control shop
+			if (c.getInstance().pcPoints >= getSpecialItemValue(itemID)) {
 				if (c.getItems().freeSlots() > 0) {
-					c.getVariables().pcPoints -= getSpecialItemValue(itemID);
+					c.getInstance().pcPoints -= getSpecialItemValue(itemID);
 					c.getItems().addItem(itemID, 1);
 					c.getItems().resetItems(3823);
 				}
 			} else {
 				c.sendMessage("You do not have enough Pest Control points.");
 			}
-		} else if (c.getVariables().myShopId == 13) { // Voting point shop
-			if (c.getVariables().votingPoints >= getSpecialItemValue(itemID)) {
+		} else if (c.getInstance().myShopId == 13) { // Voting point shop
+			if (c.getInstance().votingPoints >= getSpecialItemValue(itemID)) {
 				if (c.getItems().freeSlots() > 0) {
-					c.getVariables().votingPoints -= getSpecialItemValue(itemID);
+					c.getInstance().votingPoints -= getSpecialItemValue(itemID);
 					c.getItems().addItem(itemID, 1);
 					c.getItems().resetItems(3823);
 				}
 			} else {
 				c.sendMessage("You do not have enough Voting points.");
 			}
-		} else if (c.getVariables().myShopId == 3) { // Pk points shop
-			if (c.getVariables().pkp >= getSpecialItemValue(itemID)) {
+		} else if (c.getInstance().myShopId == 3) { // Pk points shop
+			if (c.getInstance().pkp >= getSpecialItemValue(itemID)) {
 				if (c.getItems().freeSlots() > 0) {
-					c.getVariables().pkp -= getSpecialItemValue(itemID);
+					c.getInstance().pkp -= getSpecialItemValue(itemID);
 					c.getItems().addItem(itemID, 1);
 					c.getItems().resetItems(3823);
 				}
@@ -718,7 +718,7 @@ public class ShopAssistant {
 			capes = 1;
 		else
 			capes = 0;
-		c.getVariables().myShopId = 14;
+		c.getInstance().myShopId = 14;
 		setupSkillCapes(capes, get99Count());
 	}
 
@@ -728,8 +728,8 @@ public class ShopAssistant {
 
 	public int get99Count() {
 		int count = 0;
-		for (int j = 0; j < c.getVariables().playerLevel.length; j++) {
-			if (c.getLevelForXP(c.getVariables().playerXP[j]) >= 99) {
+		for (int j = 0; j < c.getInstance().playerLevel.length; j++) {
+			if (c.getLevelForXP(c.getInstance().playerXP[j]) >= 99) {
 				count++;
 			}
 		}
@@ -739,8 +739,8 @@ public class ShopAssistant {
 	public void setupSkillCapes(int capes, int capes2) {
 		// synchronized (c) {
 		c.getItems().resetItems(3823);
-		c.getVariables().isShopping = true;
-		c.getVariables().myShopId = 14;
+		c.getInstance().isShopping = true;
+		c.getInstance().myShopId = 14;
 		c.getPA().sendFrame248(3824, 3822);
 		c.getPA().sendString("Skillcape Shop", 3901);
 
@@ -755,7 +755,7 @@ public class ShopAssistant {
 		@SuppressWarnings("unused")
 		int TotalCount = 0;
 		for (int i = 0; i < 25; i++) {
-			if (c.getLevelForXP(c.getVariables().playerXP[i]) < 99)
+			if (c.getLevelForXP(c.getInstance().playerXP[i]) < 99)
 				continue;
 			c.getOutStream().writeByte(1);
 			c.getOutStream().writeWordBigEndianA(skillCapes[i] + 2);
@@ -776,7 +776,7 @@ public class ShopAssistant {
 			if (skillCapes[j] == item || skillCapes[j] + 1 == item) {
 				if (c.getItems().freeSlots() > 1) {
 					if (c.getItems().playerHasItem(995, 99000)) {
-						if (c.getLevelForXP(c.getVariables().playerXP[j]) >= 99) {
+						if (c.getLevelForXP(c.getInstance().playerXP[j]) >= 99) {
 							c.getItems().deleteItem(995, c.getItems().getItemSlot(995), 99000);
 							c.getItems().addItem(skillCapes[j] + nn, 1);
 							c.getItems().addItem(skillCapes[j] + 2, 1);

@@ -48,16 +48,16 @@ public class DwarfMultiCannon {
 					if (!player.getItems().playerHasItem(CANNON_BASE_ID))
 						setup.stop();
 					player.startAnimation(827);
-					player.getVariables().cannonBaseX = player.absX;
-					player.getVariables().cannonBaseY = player.absY;
-					player.getVariables().cannonBaseH = player.heightLevel;
-					player.getVariables().hasCannon = true;
-					player.getVariables().settingUpCannon = true;
-					player.getVariables().setUpBase = true;
+					player.getInstance().cannonBaseX = player.absX;
+					player.getInstance().cannonBaseY = player.absY;
+					player.getInstance().cannonBaseH = player.heightLevel;
+					player.getInstance().hasCannon = true;
+					player.getInstance().settingUpCannon = true;
+					player.getInstance().setUpBase = true;
 					Objects base = new Objects(CANNON_BASE, player.absX, player.absY, 0, 0, 10, 0, true);
 					GameEngine.objectHandler.addObject(base);
 					GameEngine.objectHandler.placeObject(base);
-					player.getVariables().oldCannon = base;
+					player.getInstance().oldCannon = base;
 					player.getItems().deleteItem(CANNON_BASE_ID, 1);
 					base.belongsTo = player.playerName;
 					firstTime = true;
@@ -65,16 +65,16 @@ public class DwarfMultiCannon {
 
 				case 3:
 					if (!player.getItems().playerHasItem(CANNON_STAND_ID)) {
-						player.getVariables().settingUpCannon = false;
+						player.getInstance().settingUpCannon = false;
 						setup.stop();
 					}
 					player.startAnimation(827);
-					player.getVariables().setUpStand = true;
+					player.getInstance().setUpStand = true;
 					Objects stand = new Objects(CANNON_STAND, player.absX, player.absY, 0, 0, 10, 0, true);
-					GameEngine.objectHandler.removeObject(player.getVariables().oldCannon);
+					GameEngine.objectHandler.removeObject(player.getInstance().oldCannon);
 					GameEngine.objectHandler.addObject(stand);
 					GameEngine.objectHandler.placeObject(stand);
-					player.getVariables().oldCannon = stand;
+					player.getInstance().oldCannon = stand;
 					player.getItems().deleteItem(CANNON_STAND_ID, 1);
 					stand.belongsTo = player.playerName;
 					firstTime = true;
@@ -82,16 +82,16 @@ public class DwarfMultiCannon {
 
 				case 2:
 					if (!player.getItems().playerHasItem(CANNON_BARRELS_ID)) {
-						player.getVariables().settingUpCannon = false;
+						player.getInstance().settingUpCannon = false;
 						setup.stop();
 					}
 					player.startAnimation(827);
-					player.getVariables().setUpBarrels = true;
+					player.getInstance().setUpBarrels = true;
 					Objects barrel = new Objects(CANNON_BARRELS, player.absX, player.absY, 0, 0, 10, 0, true);
-					GameEngine.objectHandler.removeObject(player.getVariables().oldCannon);
+					GameEngine.objectHandler.removeObject(player.getInstance().oldCannon);
 					GameEngine.objectHandler.addObject(barrel);
 					GameEngine.objectHandler.placeObject(barrel);
-					player.getVariables().oldCannon = barrel;
+					player.getInstance().oldCannon = barrel;
 					player.getItems().deleteItem(CANNON_BARRELS_ID, 1);
 					barrel.belongsTo = player.playerName;
 					firstTime = true;
@@ -99,19 +99,19 @@ public class DwarfMultiCannon {
 
 				case 1:
 					if (!player.getItems().playerHasItem(CANNON_FURNACE_ID)) {
-						player.getVariables().settingUpCannon = false;
+						player.getInstance().settingUpCannon = false;
 						setup.stop();
 					}
 					player.startAnimation(827);
-					player.getVariables().setUpFurnace = true;
+					player.getInstance().setUpFurnace = true;
 					Objects cannon = new Objects(CANNON, player.absX, player.absY, 0, 0, 10, 0, true);
-					GameEngine.objectHandler.removeObject(player.getVariables().oldCannon);
+					GameEngine.objectHandler.removeObject(player.getInstance().oldCannon);
 					GameEngine.objectHandler.addObject(cannon);
 					GameEngine.objectHandler.placeObject(cannon);
-					player.getVariables().oldCannon = cannon;
+					player.getInstance().oldCannon = cannon;
 					player.getItems().deleteItem(CANNON_FURNACE_ID, 1);
 					cannon.belongsTo = player.playerName;
-					player.getVariables().settingUpCannon = false;
+					player.getInstance().settingUpCannon = false;
 					firstTime = true;
 					setup.stop();
 					break;
@@ -131,8 +131,8 @@ public class DwarfMultiCannon {
 	public void shootCannon(int x, int y, int h) {
 		Objects cannon = null;
 		for (main.game.objects.Objects o : ObjectHandler.globalObjects) {
-			if (o.objectX == player.getVariables().cannonBaseX && o.objectY == player.getVariables().cannonBaseY
-					&& o.objectHeight == player.getVariables().cannonBaseH) {
+			if (o.objectX == player.getInstance().cannonBaseX && o.objectY == player.getInstance().cannonBaseY
+					&& o.objectHeight == player.getInstance().cannonBaseH) {
 				cannon = o;
 			}
 		}
@@ -145,25 +145,25 @@ public class DwarfMultiCannon {
 			player.sendMessage("This is not your cannon!");
 			return;
 		}
-		if (player.getVariables().cannonIsShooting) {
+		if (player.getInstance().cannonIsShooting) {
 			if (player.getItems().playerHasItem(CANNONBALL)) {
 				int amountOfCannonBalls = player.getItems().getItemAmount(CANNONBALL) > 30 ? 30
 						: player.getItems().getItemAmount(CANNONBALL);
-				player.getVariables().cannonBalls += amountOfCannonBalls;
+				player.getInstance().cannonBalls += amountOfCannonBalls;
 				player.sendMessage("You reload the cannon.");
 			} else {
 				player.sendMessage("Your cannon is already firing!");
 				return;
 			}
 		}
-		if (player.getVariables().cannonBalls < 1) {
+		if (player.getInstance().cannonBalls < 1) {
 			int amountOfCannonBalls = player.getItems().getItemAmount(CANNONBALL) > 30 ? 30
 					: player.getItems().getItemAmount(CANNONBALL);
 			if (amountOfCannonBalls < 1) {
 				player.sendMessage("You need ammo to shoot this cannon!");
 				return;
 			}
-			player.getVariables().cannonBalls = amountOfCannonBalls;
+			player.getInstance().cannonBalls = amountOfCannonBalls;
 			player.sendMessage("You load your cannon with ammo.");
 			player.getItems().deleteItem(CANNONBALL, player.getItems().getItemSlot(CANNONBALL), amountOfCannonBalls);
 			if (firstTime) {
@@ -174,16 +174,16 @@ public class DwarfMultiCannon {
 	}
 
 	private void startFiringCannon(final Objects cannon) {
-		player.getVariables().cannonIsShooting = true;
+		player.getInstance().cannonIsShooting = true;
 		CycleEventHandler.getSingleton().addEvent(player, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer fire) {
-				if (player.getVariables().cannonBalls < 1) {
+				if (player.getInstance().cannonBalls < 1) {
 					player.sendMessage("Your cannon has run out of ammo!");
-					player.getVariables().cannonIsShooting = false;
+					player.getInstance().cannonIsShooting = false;
 					fire.stop();
 				} else {
-					player.getVariables().rotation++;
+					player.getInstance().rotation++;
 					rotateCannon(cannon);
 				}
 			}
@@ -192,11 +192,11 @@ public class DwarfMultiCannon {
 			public void stop() {
 
 			}
-		}, (player.getVariables().inMulti() ? 2 : 4));
+		}, (player.getInstance().inMulti() ? 2 : 4));
 	}
 
 	private void rotateCannon(Objects cannon) {
-		switch (player.getVariables().rotation) {
+		switch (player.getInstance().rotation) {
 		case 1: // north
 			player.getPA().objectAnim(cannon.objectX, cannon.objectY, 516, 10, -1);
 			break;
@@ -220,7 +220,7 @@ public class DwarfMultiCannon {
 			break;
 		case 8: // north-west
 			player.getPA().objectAnim(cannon.objectX, cannon.objectY, 515, 10, -1);
-			player.getVariables().rotation = 0;
+			player.getInstance().rotation = 0;
 			break;
 		}
 	}
@@ -228,8 +228,8 @@ public class DwarfMultiCannon {
 	public void pickUpCannon(int x, int y, int h) {
 		Objects cannon = null;
 		for (main.game.objects.Objects o : ObjectHandler.globalObjects) {
-			if (o.objectX == player.getVariables().cannonBaseX && o.objectY == player.getVariables().cannonBaseY
-					&& o.objectHeight == player.getVariables().cannonBaseH) {
+			if (o.objectX == player.getInstance().cannonBaseX && o.objectY == player.getInstance().cannonBaseY
+					&& o.objectHeight == player.getInstance().cannonBaseH) {
 				cannon = o;
 			}
 		}
@@ -246,82 +246,82 @@ public class DwarfMultiCannon {
 			GameEngine.objectHandler.addObject(empty);
 			GameEngine.objectHandler.placeObject(empty);
 			GameEngine.objectHandler.removeObject(empty);
-			if (player.getVariables().setUpBase) {
+			if (player.getInstance().setUpBase) {
 				if (player.getItems().freeSlots() > 0)
 					player.getItems().addItem(CANNON_BASE_ID, 1);
 				else {
 					player.getItems().addItemToBank(CANNON_BASE_ID, 1);
 					player.sendMessage("You did not have enough inventory space, so this cannon part was banked.");
 				}
-				player.getVariables().setUpBase = false;
+				player.getInstance().setUpBase = false;
 			}
-			if (player.getVariables().setUpStand) {
+			if (player.getInstance().setUpStand) {
 				if (player.getItems().freeSlots() > 0)
 					player.getItems().addItem(CANNON_STAND_ID, 1);
 				else {
 					player.getItems().addItemToBank(CANNON_STAND_ID, 1);
 					player.sendMessage("You did not have enough inventory space, so this cannon part was banked.");
 				}
-				player.getVariables().setUpStand = false;
+				player.getInstance().setUpStand = false;
 			}
-			if (player.getVariables().setUpBarrels) {
+			if (player.getInstance().setUpBarrels) {
 				if (player.getItems().freeSlots() > 0)
 					player.getItems().addItem(CANNON_BARRELS_ID, 1);
 				else {
 					player.getItems().addItemToBank(CANNON_BARRELS_ID, 1);
 					player.sendMessage("You did not have enough inventory space, so this cannon part was banked.");
 				}
-				player.getVariables().setUpBarrels = false;
+				player.getInstance().setUpBarrels = false;
 			}
-			if (player.getVariables().setUpFurnace) {
+			if (player.getInstance().setUpFurnace) {
 				if (player.getItems().freeSlots() > 0)
 					player.getItems().addItem(CANNON_FURNACE_ID, 1);
 				else {
 					player.getItems().addItemToBank(CANNON_FURNACE_ID, 1);
 					player.sendMessage("You did not have enough inventory space, so this cannon part was banked.");
 				}
-				player.getVariables().setUpFurnace = false;
+				player.getInstance().setUpFurnace = false;
 			}
-			if (player.getVariables().cannonBalls > 0) {
+			if (player.getInstance().cannonBalls > 0) {
 				if (player.getItems().freeSlots() > 0)
-					player.getItems().addItem(CANNONBALL, player.getVariables().cannonBalls);
+					player.getItems().addItem(CANNONBALL, player.getInstance().cannonBalls);
 				else {
-					player.getItems().addItemToBank(CANNONBALL, player.getVariables().cannonBalls);
+					player.getItems().addItemToBank(CANNONBALL, player.getInstance().cannonBalls);
 					player.sendMessage(
 							"You did not have enough inventory space, so your cannonballs have been banked.");
 				}
-				player.getVariables().cannonBalls = 0;
+				player.getInstance().cannonBalls = 0;
 			}
 			firstTime = false;
 		}
 	}
 
 	public static void checkNPCDistance(Player player) {
-		NPC n = getNPCWithinDistance(player, player.getVariables().cannonBaseX, player.getVariables().cannonBaseY,
-				player.getVariables().cannonBaseH);
+		NPC n = getNPCWithinDistance(player, player.getInstance().cannonBaseX, player.getInstance().cannonBaseY,
+				player.getInstance().cannonBaseH);
 		int damage = Misc.random(300);
-		if (n != null && player.getVariables().inMulti() && n.inMulti()) {
-			startCannonballProjectile(player, player.getVariables().oldCannon, n);
+		if (n != null && player.getInstance().inMulti() && n.inMulti()) {
+			startCannonballProjectile(player, player.getInstance().oldCannon, n);
 			n.hitIcon = 1;
 			n.hitDiff = damage;
 			n.HP -= damage;
 			n.hitUpdateRequired = true;
 			n.killerId = player.playerId;
 			n.facePlayer(player.playerId);
-			player.getVariables().cannonBalls--;
+			player.getInstance().cannonBalls--;
 		} else {// TODO Fixup the attacking in single zones to only attack one
-			if (player != null && n != null && (n != null && n.killerId == 0 && player.getVariables().killerId == 0)
+			if (player != null && n != null && (n != null && n.killerId == 0 && player.getInstance().killerId == 0)
 					|| (n != null && n.killerId == player.playerId))
 				return;
 			if (n != null) {
-				startCannonballProjectile(player, player.getVariables().oldCannon, n);
+				startCannonballProjectile(player, player.getInstance().oldCannon, n);
 				n.hitIcon = 1;
 				n.hitDiff = damage;
 				n.HP -= damage;
 				n.hitUpdateRequired = true;
 				n.killerId = player.playerId;
 				n.facePlayer(player.playerId);
-				player.getVariables().cannonBalls--;
+				player.getInstance().cannonBalls--;
 			}
 		}
 	}
@@ -331,14 +331,14 @@ public class DwarfMultiCannon {
 		for (int i = 0; i < NPCHandler.maxNPCs; i++) {
 			if (NPCHandler.npcs[i] != null) {
 				npc = NPCHandler.npcs[i];
-				int myX = players.getVariables().cannonBaseX;
-				int myY = players.getVariables().cannonBaseY;
+				int myX = players.getInstance().cannonBaseX;
+				int myY = players.getInstance().cannonBaseY;
 				int theirX = npc.absX;
 				int theirY = npc.absY;
 				if (NPCHandler.goodDistance(npc.getX(), npc.getY(), myX, myY, 20) && !npc.isDead
 						&& npc.heightLevel == height && !npc.isDead && npc.HP != 0 && npc.npcType != 1266
 						&& npc.npcType != 1268) {
-					switch (players.getVariables().rotation) {
+					switch (players.getInstance().rotation) {
 					case 1: // north
 						if (theirY > myY && theirX >= myX - 1 && theirX <= myX + 1)
 							return npc;
@@ -385,7 +385,7 @@ public class DwarfMultiCannon {
 			int offX = ((oX - n.getX()) * -1);
 			int offY = ((oY - n.getY()) * -1);
 			player.getPA().createPlayersProjectile(oX, oY, offY, offX, 50, 60, 53, 40, 20,
-					-player.getVariables().oldNpcIndex + 1, 30);
+					-player.getInstance().oldNpcIndex + 1, 30);
 		}
 	}
 
@@ -394,8 +394,8 @@ public class DwarfMultiCannon {
 	}
 
 	private final boolean canSetUpCannon(int x, int y) {
-		return inGoodArea(x, y) || player.getVariables().playerLevel[3] > 0 || player.getVariables().hasCannon
-				|| !player.getVariables().settingUpCannon;
+		return inGoodArea(x, y) || player.getInstance().playerLevel[3] > 0 || player.getInstance().hasCannon
+				|| !player.getInstance().settingUpCannon;
 	}
 
 	private final boolean inGoodArea(int x, int y) {

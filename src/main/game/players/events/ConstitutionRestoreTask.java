@@ -14,9 +14,9 @@ public class ConstitutionRestoreTask extends Task {
 
 	@Override
 	protected void execute() {
-		if (player.getVariables().constitution < player.getVariables().calculateMaxLifePoints(player)) {
-			if (player.getVariables().constitution != 0)
-				player.getVariables().constitution += 1;
+		if (player.getInstance().lifePoints < player.getInstance().maxLP()) {
+			if (player.getInstance().lifePoints != 0)
+				player.getInstance().lifePoints += 1;
 		}
 	}
 }

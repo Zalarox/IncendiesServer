@@ -78,8 +78,8 @@ public class FightCaves {
 	public static void tzKihEffect(Player c, int i, int damage) {
 		if (NPCHandler.npcs[i].npcType == TZ_KIH) {
 			if (c != null) {
-				if (c.getVariables().playerLevel[5] > 0) {
-					c.getVariables().playerLevel[5] -= 1 + damage;
+				if (c.getInstance().playerLevel[5] > 0) {
+					c.getInstance().playerLevel[5] -= 1 + damage;
 					c.getPA().refreshSkill(5);
 				}
 			}
@@ -109,7 +109,7 @@ public class FightCaves {
 			int def = getDef(TZ_KEK_SPAWN);
 
 			if (c != null) {
-				if (c.getVariables().tzKekTimer == 0) {
+				if (c.getInstance().tzKekTimer == 0) {
 					if (NPCHandler.npcs[i].isDead) {
 						NPCHandler.spawnNpc(c, TZ_KEK_SPAWN, x, y, c.heightLevel, 0, hp, max, atk, def, true, true);
 						NPCHandler.spawnNpc(c, TZ_KEK_SPAWN, x1, y1, c.heightLevel, 0, hp, max, atk, def, true, true);

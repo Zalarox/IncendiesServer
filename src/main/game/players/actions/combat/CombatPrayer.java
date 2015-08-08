@@ -52,9 +52,9 @@ public class CombatPrayer {
 			1, 0, -1, -1, 3, 5, 4, -1, -1 };
 
 	public static void activatePrayer(Player c, int i) {
-		if (c.getVariables().duelRule[DuelArena.RULE_PRAYER]) {
+		if (c.getInstance().duelRule[DuelArena.RULE_PRAYER]) {
 			for (int p = 0; p < PRAYER.length; p++) {
-				c.getVariables().prayerActive[p] = false;
+				c.getInstance().prayerActive[p] = false;
 				c.getPA().sendFrame36(PRAYER_GLOW[p], 0);
 			}
 			c.sendMessage("Prayer has been disabled in this duel!");
@@ -62,23 +62,23 @@ public class CombatPrayer {
 		}
 		switch (i) {
 		case 24:
-			if (c.getPA().getLevelForXP(c.getVariables().playerXP[5]) < 60
-					|| c.getPA().getLevelForXP(c.getVariables().playerXP[1]) < 65) {
+			if (c.getPA().getLevelForXP(c.getInstance().playerXP[5]) < 60
+					|| c.getPA().getLevelForXP(c.getInstance().playerXP[1]) < 65) {
 				c.getPA().sendFrame36(PRAYER_GLOW[i], 0);
 				c.sendMessage("You need a Prayer level of 60 and a Defence level of 65 to use Chivalry.");
 				return;
 			}
 			break;
 		case 25:
-			if (c.getPA().getLevelForXP(c.getVariables().playerXP[5]) < 70
-					|| c.getPA().getLevelForXP(c.getVariables().playerXP[1]) < 70) {
+			if (c.getPA().getLevelForXP(c.getInstance().playerXP[5]) < 70
+					|| c.getPA().getLevelForXP(c.getInstance().playerXP[1]) < 70) {
 				c.getPA().sendFrame36(PRAYER_GLOW[i], 0);
 				c.sendMessage("You need a Prayer level of 70 and Defence level of 70 to use Piety.");
 				return;
 			}
 			break;
 		}
-		if (c.getVariables().inBarbDef) {
+		if (c.getInstance().inBarbDef) {
 			c.getPA().sendFrame36(PRAYER_GLOW[i], 0);
 			c.sendMessage("The barbarians are strongly against the use of prayers!");
 			return;
@@ -89,18 +89,18 @@ public class CombatPrayer {
 		int[] rangePray = { 3, 11, 19 };
 		int[] magePray = { 4, 12, 20 };
 
-		if (c.getVariables().playerLevel[5] > 0 || !Constants.PRAYER_POINTS_REQUIRED) {
-			if (c.getPA().getLevelForXP(c.getVariables().playerXP[5]) >= PRAYER_LEVEL_REQUIRED[i]
+		if (c.getInstance().playerLevel[5] > 0 || !Constants.PRAYER_POINTS_REQUIRED) {
+			if (c.getPA().getLevelForXP(c.getInstance().playerXP[5]) >= PRAYER_LEVEL_REQUIRED[i]
 					|| !Constants.PRAYER_LEVEL_REQUIRED) {
 				boolean headIcon = false;
 				switch (i) {
 				case 0:
 				case 5:
 				case 13:
-					if (c.getVariables().prayerActive[i] == false) {
+					if (c.getInstance().prayerActive[i] == false) {
 						for (int j = 0; j < defPray.length; j++) {
 							if (defPray[j] != i) {
-								c.getVariables().prayerActive[defPray[j]] = false;
+								c.getInstance().prayerActive[defPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[defPray[j]], 0);
 							}
 						}
@@ -110,22 +110,22 @@ public class CombatPrayer {
 				case 1:
 				case 6:
 				case 14:
-					if (c.getVariables().prayerActive[i] == false) {
+					if (c.getInstance().prayerActive[i] == false) {
 						for (int j = 0; j < strPray.length; j++) {
 							if (strPray[j] != i) {
-								c.getVariables().prayerActive[strPray[j]] = false;
+								c.getInstance().prayerActive[strPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[strPray[j]], 0);
 							}
 						}
 						for (int j = 0; j < rangePray.length; j++) {
 							if (rangePray[j] != i) {
-								c.getVariables().prayerActive[rangePray[j]] = false;
+								c.getInstance().prayerActive[rangePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[rangePray[j]], 0);
 							}
 						}
 						for (int j = 0; j < magePray.length; j++) {
 							if (magePray[j] != i) {
-								c.getVariables().prayerActive[magePray[j]] = false;
+								c.getInstance().prayerActive[magePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[magePray[j]], 0);
 							}
 						}
@@ -135,22 +135,22 @@ public class CombatPrayer {
 				case 2:
 				case 7:
 				case 15:
-					if (c.getVariables().prayerActive[i] == false) {
+					if (c.getInstance().prayerActive[i] == false) {
 						for (int j = 0; j < atkPray.length; j++) {
 							if (atkPray[j] != i) {
-								c.getVariables().prayerActive[atkPray[j]] = false;
+								c.getInstance().prayerActive[atkPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[atkPray[j]], 0);
 							}
 						}
 						for (int j = 0; j < rangePray.length; j++) {
 							if (rangePray[j] != i) {
-								c.getVariables().prayerActive[rangePray[j]] = false;
+								c.getInstance().prayerActive[rangePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[rangePray[j]], 0);
 							}
 						}
 						for (int j = 0; j < magePray.length; j++) {
 							if (magePray[j] != i) {
-								c.getVariables().prayerActive[magePray[j]] = false;
+								c.getInstance().prayerActive[magePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[magePray[j]], 0);
 							}
 						}
@@ -160,28 +160,28 @@ public class CombatPrayer {
 				case 3:// range prays
 				case 11:
 				case 19:
-					if (c.getVariables().prayerActive[i] == false) {
+					if (c.getInstance().prayerActive[i] == false) {
 						for (int j = 0; j < atkPray.length; j++) {
 							if (atkPray[j] != i) {
-								c.getVariables().prayerActive[atkPray[j]] = false;
+								c.getInstance().prayerActive[atkPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[atkPray[j]], 0);
 							}
 						}
 						for (int j = 0; j < strPray.length; j++) {
 							if (strPray[j] != i) {
-								c.getVariables().prayerActive[strPray[j]] = false;
+								c.getInstance().prayerActive[strPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[strPray[j]], 0);
 							}
 						}
 						for (int j = 0; j < rangePray.length; j++) {
 							if (rangePray[j] != i) {
-								c.getVariables().prayerActive[rangePray[j]] = false;
+								c.getInstance().prayerActive[rangePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[rangePray[j]], 0);
 							}
 						}
 						for (int j = 0; j < magePray.length; j++) {
 							if (magePray[j] != i) {
-								c.getVariables().prayerActive[magePray[j]] = false;
+								c.getInstance().prayerActive[magePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[magePray[j]], 0);
 							}
 						}
@@ -190,41 +190,41 @@ public class CombatPrayer {
 				case 4:
 				case 12:
 				case 20:
-					if (c.getVariables().prayerActive[i] == false) {
+					if (c.getInstance().prayerActive[i] == false) {
 						for (int j = 0; j < atkPray.length; j++) {
 							if (atkPray[j] != i) {
-								c.getVariables().prayerActive[atkPray[j]] = false;
+								c.getInstance().prayerActive[atkPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[atkPray[j]], 0);
 							}
 						}
 						for (int j = 0; j < strPray.length; j++) {
 							if (strPray[j] != i) {
-								c.getVariables().prayerActive[strPray[j]] = false;
+								c.getInstance().prayerActive[strPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[strPray[j]], 0);
 							}
 						}
 						for (int j = 0; j < rangePray.length; j++) {
 							if (rangePray[j] != i) {
-								c.getVariables().prayerActive[rangePray[j]] = false;
+								c.getInstance().prayerActive[rangePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[rangePray[j]], 0);
 							}
 						}
 						for (int j = 0; j < magePray.length; j++) {
 							if (magePray[j] != i) {
-								c.getVariables().prayerActive[magePray[j]] = false;
+								c.getInstance().prayerActive[magePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[magePray[j]], 0);
 							}
 						}
 					}
 					break;
 				case 10:
-					c.getVariables().lastProtItem = System.currentTimeMillis();
+					c.getInstance().lastProtItem = System.currentTimeMillis();
 					break;
 
 				case 16:
 				case 17:
 				case 18:
-					if (System.currentTimeMillis() - c.getVariables().stopPrayerDelay < 5000) {
+					if (System.currentTimeMillis() - c.getInstance().stopPrayerDelay < 5000) {
 						c.sendMessage("You have been injured and can't use this prayer!");
 						c.getPA().sendFrame36(PRAYER_GLOW[16], 0);
 						c.getPA().sendFrame36(PRAYER_GLOW[17], 0);
@@ -232,52 +232,52 @@ public class CombatPrayer {
 						return;
 					}
 					if (i == 16)
-						c.getVariables().protMageDelay = System.currentTimeMillis();
+						c.getInstance().protMageDelay = System.currentTimeMillis();
 					else if (i == 17)
-						c.getVariables().protRangeDelay = System.currentTimeMillis();
+						c.getInstance().protRangeDelay = System.currentTimeMillis();
 					else if (i == 18)
-						c.getVariables().protMeleeDelay = System.currentTimeMillis();
+						c.getInstance().protMeleeDelay = System.currentTimeMillis();
 				case 21:
 				case 22:
 				case 23:
 					headIcon = true;
 					for (int p = 16; p < 24; p++) {
 						if (i != p && p != 19 && p != 20) {
-							c.getVariables().prayerActive[p] = false;
+							c.getInstance().prayerActive[p] = false;
 							c.getPA().sendFrame36(PRAYER_GLOW[p], 0);
 						}
 					}
 					break;
 				case 24:
 				case 25:
-					if (c.getVariables().prayerActive[i] == false) {
+					if (c.getInstance().prayerActive[i] == false) {
 						for (int j = 0; j < atkPray.length; j++) {
 							if (atkPray[j] != i) {
-								c.getVariables().prayerActive[atkPray[j]] = false;
+								c.getInstance().prayerActive[atkPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[atkPray[j]], 0);
 							}
 						}
 						for (int j = 0; j < strPray.length; j++) {
 							if (strPray[j] != i) {
-								c.getVariables().prayerActive[strPray[j]] = false;
+								c.getInstance().prayerActive[strPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[strPray[j]], 0);
 							}
 						}
 						for (int j = 0; j < rangePray.length; j++) {
 							if (rangePray[j] != i) {
-								c.getVariables().prayerActive[rangePray[j]] = false;
+								c.getInstance().prayerActive[rangePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[rangePray[j]], 0);
 							}
 						}
 						for (int j = 0; j < magePray.length; j++) {
 							if (magePray[j] != i) {
-								c.getVariables().prayerActive[magePray[j]] = false;
+								c.getInstance().prayerActive[magePray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[magePray[j]], 0);
 							}
 						}
 						for (int j = 0; j < defPray.length; j++) {
 							if (defPray[j] != i) {
-								c.getVariables().prayerActive[defPray[j]] = false;
+								c.getInstance().prayerActive[defPray[j]] = false;
 								c.getPA().sendFrame36(PRAYER_GLOW[defPray[j]], 0);
 							}
 						}
@@ -286,23 +286,23 @@ public class CombatPrayer {
 				}
 
 				if (!headIcon) {
-					if (c.getVariables().prayerActive[i] == false) {
-						c.getVariables().prayerActive[i] = true;
+					if (c.getInstance().prayerActive[i] == false) {
+						c.getInstance().prayerActive[i] = true;
 						c.getPA().sendFrame36(PRAYER_GLOW[i], 1);
 					} else {
-						c.getVariables().prayerActive[i] = false;
+						c.getInstance().prayerActive[i] = false;
 						c.getPA().sendFrame36(PRAYER_GLOW[i], 0);
 					}
 				} else {
-					if (c.getVariables().prayerActive[i] == false) {
-						c.getVariables().prayerActive[i] = true;
+					if (c.getInstance().prayerActive[i] == false) {
+						c.getInstance().prayerActive[i] = true;
 						c.getPA().sendFrame36(PRAYER_GLOW[i], 1);
-						c.getVariables().headIcon = PRAYER_HEAD_ICONS[i];
+						c.getInstance().headIcon = PRAYER_HEAD_ICONS[i];
 						c.getPA().requestUpdates();
 					} else {
-						c.getVariables().prayerActive[i] = false;
+						c.getInstance().prayerActive[i] = false;
 						c.getPA().sendFrame36(PRAYER_GLOW[i], 0);
-						c.getVariables().headIcon = -1;
+						c.getInstance().headIcon = -1;
 						c.getPA().requestUpdates();
 					}
 				}
@@ -322,24 +322,24 @@ public class CombatPrayer {
 	}
 
 	public static void resetPrayers(Player c) {
-		for (int i = 0; i < c.getVariables().prayerActive.length; i++) {
-			c.getVariables().prayerActive[i] = false;
+		for (int i = 0; i < c.getInstance().prayerActive.length; i++) {
+			c.getInstance().prayerActive[i] = false;
 			c.getPA().sendFrame36(PRAYER_GLOW[i], 0);
 		}
 		c.sendMessage(":quicks:off");
 		c.curses().resetCurse();
-		c.getVariables().headIcon = -1;
+		c.getInstance().headIcon = -1;
 		c.getPA().requestUpdates();
 	}
 
 	public static void reducePrayerLevel(Player c) {
-		if (c.getVariables().playerLevel[5] - 1 > 0) {
-			c.getVariables().playerLevel[5] -= 1;
+		if (c.getInstance().playerLevel[5] - 1 > 0) {
+			c.getInstance().playerLevel[5] -= 1;
 		} else {
 			c.sendMessage("You have run out of prayer points!");
-			c.getVariables().playerLevel[5] = 0;
+			c.getInstance().playerLevel[5] = 0;
 			resetPrayers(c);
-			c.getVariables().prayerId = -1;
+			c.getInstance().prayerId = -1;
 		}
 		c.getPA().refreshSkill(5);
 	}
@@ -348,28 +348,28 @@ public class CombatPrayer {
 		if (c.isDead) {
 			return;
 		}
-		c.getVariables().usingPrayer = false;
+		c.getInstance().usingPrayer = false;
 		double toRemove = 0.0;
-		for (int j = 0; j < c.getVariables().prayerActive.length; j++) {
-			if (c.getVariables().prayerActive[j]) {
+		for (int j = 0; j < c.getInstance().prayerActive.length; j++) {
+			if (c.getInstance().prayerActive[j]) {
 				toRemove += PRAYER_DRAIN_RATE[j] / 10;
-				c.getVariables().usingPrayer = true;
+				c.getInstance().usingPrayer = true;
 			}
 		}
-		for (int j = 0; j < c.getVariables().curseActive.length; j++) {
-			if (c.getVariables().curseActive[j]) {
+		for (int j = 0; j < c.getInstance().curseActive.length; j++) {
+			if (c.getInstance().curseActive[j]) {
 				toRemove += (c.curses().curseData[j] / 10);
-				c.getVariables().usingPrayer = true;
+				c.getInstance().usingPrayer = true;
 			}
 		}
-		if (!c.getVariables().usingPrayer)
+		if (!c.getInstance().usingPrayer)
 			return;
 		if (toRemove > 0) {
-			toRemove /= (1 + (0.035 * c.getVariables().playerBonus[11]));
+			toRemove /= (1 + (0.035 * c.getInstance().playerBonus[11]));
 		}
-		c.getVariables().prayerPoint -= toRemove;
-		if (c.getVariables().prayerPoint <= 0) {
-			c.getVariables().prayerPoint = 1.0 + c.getVariables().prayerPoint;
+		c.getInstance().prayerPoint -= toRemove;
+		if (c.getInstance().prayerPoint <= 0) {
+			c.getInstance().prayerPoint = 1.0 + c.getInstance().prayerPoint;
 			reducePrayerLevel(c);
 		}
 	}

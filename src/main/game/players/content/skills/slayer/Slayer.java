@@ -113,16 +113,16 @@ public class Slayer {
 	 * @return
 	 */
 	public boolean canDoTask(Player p, Assignment t) {
-		return p.getVariables().playerLevel[p.getVariables().playerSlayer] >= t.req;
+		return p.getInstance().playerLevel[p.getInstance().playerSlayer] >= t.req;
 	}
 
 	public int getTaskDifficulty(Player p) {
 		int d = 1;
-		if (p.getVariables().combatLevel > 45 && p.getVariables().combatLevel < 75)
+		if (p.getInstance().combatLevel > 45 && p.getInstance().combatLevel < 75)
 			d = 2;
-		if (p.getVariables().combatLevel > 75 && p.getVariables().combatLevel < 100)
+		if (p.getInstance().combatLevel > 75 && p.getInstance().combatLevel < 100)
 			d = 3;
-		if (p.getVariables().combatLevel > 100)
+		if (p.getInstance().combatLevel > 100)
 			d = 4;
 		return d;
 	}
@@ -131,7 +131,7 @@ public class Slayer {
 	 * Assigns the final task
 	 */
 	public void assignTask(Player p, final int difficulty) {
-		p.getVariables().taskDifficulty = difficulty;
+		p.getInstance().taskDifficulty = difficulty;
 		while (currentTask == null)
 			currentTask = findRandomTask(p, difficulty);
 		currentTask.amountToKill = Misc.random(difficulty * 30) + 25;
@@ -151,7 +151,7 @@ public class Slayer {
 	 */
 	public boolean ableToSlay(Player p, NPC n) {
 		for (Assignment t : Assignment.values()) {
-			if (p.getVariables().playerLevel[p.getVariables().playerSlayer] < t.getReq()
+			if (p.getInstance().playerLevel[p.getInstance().playerSlayer] < t.getReq()
 					&& n.getNpcName().contains(t.toFormattedString().toLowerCase())) {
 				p.sendMessage("You need a slayer level of " + t.getReq() + " to harm this NPC.");
 				return false;
@@ -207,14 +207,14 @@ public class Slayer {
 		currentTask.amountToKill--;
 		if (currentTask.amountToKill <= 0) {
 			resetTask();
-			p.getVariables().totalTasks += 1;
-			p.getVariables().SlayerPoints += getReceivedPoints(p, p.getVariables().taskDifficulty)
-					+ p.getVariables().getDonarPointbonus(getReceivedPoints(p, p.getVariables().taskDifficulty));
-			p.sendMessage("You've completed " + p.getVariables().totalTasks
-					+ " task in a row and received " + (getReceivedPoints(p, p.getVariables().taskDifficulty) + p
-							.getVariables().getDonarPointbonus(getReceivedPoints(p, p.getVariables().taskDifficulty)))
+			p.getInstance().totalTasks += 1;
+			p.getInstance().SlayerPoints += getReceivedPoints(p, p.getInstance().taskDifficulty)
+					+ p.getInstance().getDonarPointbonus(getReceivedPoints(p, p.getInstance().taskDifficulty));
+			p.sendMessage("You've completed " + p.getInstance().totalTasks
+					+ " task in a row and received " + (getReceivedPoints(p, p.getInstance().taskDifficulty) + p
+							.getInstance().getDonarPointbonus(getReceivedPoints(p, p.getInstance().taskDifficulty)))
 					+ " points.");
-			p.getVariables().taskDifficulty = 0;
+			p.getInstance().taskDifficulty = 0;
 		}
 	}
 
@@ -228,9 +228,9 @@ public class Slayer {
 	private int getReceivedPoints(Player p, final int difficulty) {
 		int points = (difficulty == 1 ? 2 : difficulty == 2 ? 10 : difficulty == 3 ? 20 : 35);
 		int bonus = 0;
-		for (int Rows = 0; Rows < p.getVariables().totalTasks + 50; Rows++) {
-			bonus = (p.getVariables().totalTasks == (10 * Rows) ? 5
-					: p.getVariables().totalTasks == (50 * Rows) ? 15 : 1);
+		for (int Rows = 0; Rows < p.getInstance().totalTasks + 50; Rows++) {
+			bonus = (p.getInstance().totalTasks == (10 * Rows) ? 5
+					: p.getInstance().totalTasks == (50 * Rows) ? 15 : 1);
 		}
 		return points + bonus;
 	}

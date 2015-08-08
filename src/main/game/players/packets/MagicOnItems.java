@@ -15,14 +15,14 @@ public class MagicOnItems implements PacketType {
 		int itemId = c.getInStream().readSignedWordA();
 		int junk = c.getInStream().readSignedWord();
 		int spellId = c.getInStream().readSignedWordA();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
-		if (slot > c.getVariables().playerItems.length) {
+		if (slot > c.getInstance().playerItems.length) {
 			return;
 		}
-		c.getVariables().usingMagic = true;
+		c.getInstance().usingMagic = true;
 		c.getPA().magicOnItems(slot, itemId, spellId);
-		c.getVariables().usingMagic = false;
+		c.getInstance().usingMagic = false;
 
 	}
 

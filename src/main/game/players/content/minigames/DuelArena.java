@@ -90,7 +90,7 @@ public class DuelArena {
 	 */
 	public static void addToDuel(Player player) {
 		isDueling.add(player);
-		player.getVariables().canOffer = false;
+		player.getInstance().canOffer = false;
 	}
 
 	/**
@@ -116,8 +116,8 @@ public class DuelArena {
 		 * Ensure that neither player can send offers once they enter the
 		 * dueling screen.
 		 */
-		player.getVariables().canOffer = true;
-		opponent.getVariables().canOffer = true;
+		player.getInstance().canOffer = true;
+		opponent.getInstance().canOffer = true;
 	}
 	
 	/**
@@ -135,8 +135,8 @@ public class DuelArena {
 		isInSecondInterface.add(player);
 		isInSecondInterface.add(opponent);
 		
-		player.getVariables().canOffer = false;
-		opponent.getVariables().canOffer = false;
+		player.getInstance().canOffer = false;
+		opponent.getInstance().canOffer = false;
 	}
 	
 	/**
@@ -248,7 +248,7 @@ public class DuelArena {
 			 * around.
 			 */
 			player.copyOfOpponent = opponent;
-			player.getVariables().headingTowardsPlayer = true;
+			player.getInstance().headingTowardsPlayer = true;
 			
 			CycleEventHandler.getInstance().addEvent(player, new CycleEvent() {
 				int timer = 0;
@@ -257,7 +257,7 @@ public class DuelArena {
 				public void execute(CycleEventContainer container) {
 					if (timer >= 20)
 						container.stop();
-					if (!player.getVariables().headingTowardsPlayer)
+					if (!player.getInstance().headingTowardsPlayer)
 						container.stop();
 					if (player.goodDistance(player.copyOfOpponent.getX(), player.copyOfOpponent.getY(), player.getX(),
 							player.getY(), 1)
@@ -273,7 +273,7 @@ public class DuelArena {
 				@Override
 				public void stop() {
 					if (player != null)
-						player.getVariables().headingTowardsPlayer = false;
+						player.getInstance().headingTowardsPlayer = false;
 				}
 			}, 1);
 			return false;
@@ -293,7 +293,7 @@ public class DuelArena {
 	 */
 	public void requestDuel(Player opponent, Player player, boolean face) {
 		try {
-			player.getVariables().playerIndex = 0;
+			player.getInstance().playerIndex = 0;
 			
 			/**
 			 * If a player is already in the dueling interface, decline it.
@@ -328,14 +328,14 @@ public class DuelArena {
 			/**
 			 * The player has now requested a duel.
 			 */
-			player.getVariables().duelRequested = true;
+			player.getInstance().duelRequested = true;
 			
 			/**
 			 * The duel's outcome is not yet decided, so these variables shall
 			 * be set false for now.
 			 */
-			player.getVariables().killedDuelOpponent = false;
-			opponent.getVariables().killedDuelOpponent = false;
+			player.getInstance().killedDuelOpponent = false;
+			opponent.getInstance().killedDuelOpponent = false;
 			
 			/**
 			 * Opponent check. Make sure both players are opponents of one another.
@@ -354,7 +354,7 @@ public class DuelArena {
 					 * one another rather than answering requests in the
 					 * chatbox.
 					 */
-					&& player.getVariables().duelRequested && opponent.getVariables().duelRequested) {
+					&& player.getInstance().duelRequested && opponent.getInstance().duelRequested) {
 				
 				/**
 				 * If everything checks out, add them to the ArrayList and open
@@ -403,19 +403,19 @@ public class DuelArena {
 		 * If they've just opened this interface, there's no possible way they
 		 * could have clicked either <Accept> button.
 		 */
-		player.getVariables().acceptedFirst = false;
-		player.getVariables().acceptedSecond = false;
+		player.getInstance().acceptedFirst = false;
+		player.getInstance().acceptedSecond = false;
 		
 		refreshDuelRules(player);
 		refreshDuelScreen(player);
 		
-		player.getVariables().canOffer = true;
+		player.getInstance().canOffer = true;
 		
 		/**
 		 * Populate the interface.
 		 */
-		for (int i = 0; i < player.getVariables().playerEquipment.length; i++) {
-			getDuelEquipment(player.getVariables().playerEquipment[i], player.getVariables().playerEquipmentN[i], i,
+		for (int i = 0; i < player.getInstance().playerEquipment.length; i++) {
+			getDuelEquipment(player.getInstance().playerEquipment[i], player.getInstance().playerEquipmentN[i], i,
 					player);
 		}
 		
@@ -433,7 +433,7 @@ public class DuelArena {
 			return;
 		}
 		String itemId = "";
-		for (GameItem item : c.getVariables().stakedItems) {
+		for (GameItem item : c.getInstance().stakedItems) {
 			if (ItemLoader.isStackable(item.id) || ItemLoader.isNote(item.id)) {
 				itemId += c.getItems().getItemName(item.id) + " x " + Misc.format(item.amount) + "\\n";
 			} else {
@@ -442,7 +442,7 @@ public class DuelArena {
 		}
 		c.getPA().sendString(itemId, 6516);
 		itemId = "";
-		for (GameItem item : c.opponent.getVariables().stakedItems) {
+		for (GameItem item : c.opponent.getInstance().stakedItems) {
 			if (ItemLoader.isStackable(item.id) || ItemLoader.isNote(item.id)) {
 				itemId += c.getItems().getItemName(item.id) + " x " + Misc.format(item.amount) + "\\n";
 			} else {
@@ -456,7 +456,7 @@ public class DuelArena {
 		}
 		c.getPA().sendString("Hitpoints will be restored.", 8250);
 		c.getPA().sendString("Boosted stats will be restored.", 8238);
-		if (c.getVariables().duelRule[RULE_OBSTACLES]) {
+		if (c.getInstance().duelRule[RULE_OBSTACLES]) {
 			c.getPA().sendString("There will be obstacles in the arena.", 8239);
 		}
 		c.getPA().sendString("", 8240);
@@ -468,7 +468,7 @@ public class DuelArena {
 
 		int lineNumber = 8242;
 		for (int i = 0; i < 8; i++) {
-			if (c.getVariables().duelRule[i]) {
+			if (c.getInstance().duelRule[i]) {
 				c.getPA().sendString("" + rulesOption[i], lineNumber);
 				lineNumber++;
 			}
@@ -494,13 +494,13 @@ public class DuelArena {
 				declineDuel(c.opponent, false, false);
 		}
 		c.opponent = null;
-		c.getVariables().canOffer = true;
+		c.getInstance().canOffer = true;
 		removeFromFirstInterface(c);
 		removeFromSecondInterface(c);
 		removeFromDueling(c);
-		c.getVariables().duelSpaceReq = 0;
-		c.getVariables().duelRequested = false;
-		for (GameItem item : c.getVariables().stakedItems) {
+		c.getInstance().duelSpaceReq = 0;
+		c.getInstance().duelRequested = false;
+		for (GameItem item : c.getInstance().stakedItems) {
 			if (item.amount < 1)
 				continue;
 			if (ItemLoader.isStackable(item.id) || ItemLoader.isNote(item.id)) {
@@ -509,8 +509,8 @@ public class DuelArena {
 				c.getItems().addItem(item.id, 1);
 			}
 		}
-		c.getVariables().otherStakedItems.clear();
-		c.getVariables().stakedItems.clear();
+		c.getInstance().otherStakedItems.clear();
+		c.getInstance().stakedItems.clear();
 		resetDuelRules(c);
 	}
 	
@@ -530,23 +530,23 @@ public class DuelArena {
 		/**
 		 * Set head-icon hints.
 		 */
-		player.getVariables().headIconHints = 2;
+		player.getInstance().headIconHints = 2;
 		
 		/**
 		 * If applicable, enforce the rule dictating that prayer may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_PRAYER]) {
+		if (player.getInstance().duelRule[RULE_PRAYER]) {
 			/**
 			 * Iterate through prayers. If they're active, deactivate them, turn
 			 * the glowing sprites off, and remove head-icons. Then request an
 			 * appearance update.
 			 */
 			for (int p = 0; p < CombatPrayer.PRAYER.length; p++) {
-				player.getVariables().prayerActive[p] = false;
+				player.getInstance().prayerActive[p] = false;
 				player.getPA().sendFrame36(CombatPrayer.PRAYER_GLOW[p], 0);
 			}
-			player.getVariables().headIcon = -1;
+			player.getInstance().headIcon = -1;
 			player.getPA().requestUpdates();
 		}
 		
@@ -554,40 +554,40 @@ public class DuelArena {
 		 * If applicable, enforce the rule dictating that hats may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_HATS]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[0], 0);
+		if (player.getInstance().duelRule[RULE_HATS]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[0], 0);
 		}
 		
 		/**
 		 * If applicable, enforce the rule dictating that capes may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_CAPES]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[1], 1);
+		if (player.getInstance().duelRule[RULE_CAPES]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[1], 1);
 		}
 		
 		/**
 		 * If applicable, enforce the rule dictating that amulets may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_AMULETS]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[2], 2);
+		if (player.getInstance().duelRule[RULE_AMULETS]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[2], 2);
 		}
 		
 		/**
 		 * If applicable, enforce the rule dictating that weapons may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_WEAPONS]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[3], 3);
+		if (player.getInstance().duelRule[RULE_WEAPONS]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[3], 3);
 		}
 		
 		/**
 		 * If applicable, enforce the rule dictating that bodies may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_BODIES]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[4], 4);
+		if (player.getInstance().duelRule[RULE_BODIES]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[4], 4);
 		}
 		
 		/**
@@ -597,19 +597,19 @@ public class DuelArena {
 		 * Requires extra handling for two-handed weapons. Since they occupy
 		 * both hands and are used to block, they are considered shields.
 		 */
-		if (player.getVariables().duelRule[RULE_SHIELDS]) {
+		if (player.getInstance().duelRule[RULE_SHIELDS]) {
 			/**
 			 * Remove the shield.
 			 */
-			player.getItems().removeItem(player.getVariables().playerEquipment[5], 5);
+			player.getItems().removeItem(player.getInstance().playerEquipment[5], 5);
 			
 			/**
 			 * Check if the weapon is two-handed. If it is, remove the weapon.
 			 */
 			if (player.getItems().is2handed(
-					player.getItems().getItemName(player.getVariables().playerEquipment[3]).toLowerCase(),
-					player.getVariables().playerEquipment[3])) {
-				player.getItems().removeItem(player.getVariables().playerEquipment[3], 3);
+					player.getItems().getItemName(player.getInstance().playerEquipment[3]).toLowerCase(),
+					player.getInstance().playerEquipment[3])) {
+				player.getItems().removeItem(player.getInstance().playerEquipment[3], 3);
 			}
 		}
 		
@@ -617,40 +617,40 @@ public class DuelArena {
 		 * If applicable, enforce the rule dictating that legs may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_LEGS]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[7], 7);
+		if (player.getInstance().duelRule[RULE_LEGS]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[7], 7);
 		}
 		
 		/**
 		 * If applicable, enforce the rule dictating that gloves may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_GLOVES]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[9], 9);
+		if (player.getInstance().duelRule[RULE_GLOVES]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[9], 9);
 		}
 		
 		/**
 		 * If applicable, enforce the rule dictating that boots may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_BOOTS]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[10], 10);
+		if (player.getInstance().duelRule[RULE_BOOTS]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[10], 10);
 		}
 		
 		/**
 		 * If applicable, enforce the rule dictating that rings may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_RINGS]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[12], 12);
+		if (player.getInstance().duelRule[RULE_RINGS]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[12], 12);
 		}
 		
 		/**
 		 * If applicable, enforce the rule dictating that arrows may not be
 		 * used.
 		 */
-		if (player.getVariables().duelRule[RULE_ARROWS]) {
-			player.getItems().removeItem(player.getVariables().playerEquipment[13], 13);
+		if (player.getInstance().duelRule[RULE_ARROWS]) {
+			player.getItems().removeItem(player.getInstance().playerEquipment[13], 13);
 		}
 		
 		/**
@@ -661,21 +661,21 @@ public class DuelArena {
 		/**
 		 * Reset special energy.
 		 */
-		player.getVariables().specAmount = 10;
-		player.getItems().addSpecialBar(player.getVariables().playerEquipment[player.getVariables().playerWeapon]);
+		player.getInstance().specAmount = 10;
+		player.getItems().addSpecialBar(player.getInstance().playerEquipment[player.getInstance().playerWeapon]);
 		
 		/**
 		 * Rules for obstacles/movement are handled here, since they
 		 * conveniently line up with the point at which we teleport the
 		 * contestants to the arena.
 		 */
-		if (player.getVariables().duelRule[RULE_OBSTACLES]) {
+		if (player.getInstance().duelRule[RULE_OBSTACLES]) {
 			/**
 			 * If both obstacles and no-movement are enabled, move the players
 			 * to the appropriate position.
 			 */
-			if (player.getVariables().duelRule[RULE_MOVEMENT]) {
-				player.getPA().movePlayer(player.getVariables().duelTeleX, player.getVariables().duelTeleY, 0);
+			if (player.getInstance().duelRule[RULE_MOVEMENT]) {
+				player.getPA().movePlayer(player.getInstance().duelTeleX, player.getInstance().duelTeleY, 0);
 			} else {
 				player.getPA().movePlayer(3366 + Misc.random(12), 3246 + Misc.random(6), 0);
 			}
@@ -685,8 +685,8 @@ public class DuelArena {
 			 * If no-movement is enabled but obstacles are not, move the players
 			 * to the appropriate position.
 			 */
-			if (player.getVariables().duelRule[RULE_MOVEMENT]) {
-				player.getPA().movePlayer(player.getVariables().duelTeleX, player.getVariables().duelTeleY, 0);
+			if (player.getInstance().duelRule[RULE_MOVEMENT]) {
+				player.getPA().movePlayer(player.getInstance().duelTeleX, player.getInstance().duelTeleY, 0);
 			} else {
 				player.getPA().movePlayer(3335 + Misc.random(12), 3246 + Misc.random(6), 0);
 			}
@@ -696,7 +696,7 @@ public class DuelArena {
 		/**
 		 * Reset the freeze timer, the player isn't frozen just yet!
 		 */
-		player.getVariables().freezeTimer = 0;
+		player.getInstance().freezeTimer = 0;
 		
 		/**
 		 * Reset prayers.
@@ -706,13 +706,13 @@ public class DuelArena {
 		/**
 		 * Boost their hitpoints up to maximum.
 		 */
-		player.getVariables().constitution = player.getVariables().calculateMaxLifePoints(player);
+		player.getInstance().lifePoints = player.getInstance().maxLP();
 		
 		/**
 		 * Refresh skills once more, now that they're in the arena.
 		 */
 		for (int i = 0; i < 20; i++) {
-			player.getVariables().playerLevel[i] = player.getPA().getLevelForXP(player.getVariables().playerXP[i]);
+			player.getInstance().playerLevel[i] = player.getPA().getLevelForXP(player.getInstance().playerXP[i]);
 			player.getPA().refreshSkill(i);
 		}
 		
@@ -724,7 +724,7 @@ public class DuelArena {
 		/**
 		 * Not skulled, since we're not in PvP.
 		 */
-		player.getVariables().isSkulled = false;
+		player.getInstance().isSkulled = false;
 		
 		/**
 		 * Not tele-blocked, either.
@@ -740,17 +740,17 @@ public class DuelArena {
 		/**
 		 * Reset some more stuff.
 		 */
-		player.getVariables().attackedPlayers.clear();
-		player.getVariables().headIconPk = -1;
-		player.getVariables().skullTimer = -1;
-		player.getVariables().damageTaken = new int[Constants.MAX_PLAYERS];
+		player.getInstance().attackedPlayers.clear();
+		player.getInstance().headIconPk = -1;
+		player.getInstance().skullTimer = -1;
+		player.getInstance().damageTaken = new int[Constants.MAX_PLAYERS];
 		
-		player.getVariables().isFullHelm = ItemLoader
-				.isFullHelm(player.opponent.getVariables().playerEquipment[player.getVariables().playerHat]);
-		player.getVariables().isFullMask = ItemLoader
-				.isFullMask(player.opponent.getVariables().playerEquipment[player.getVariables().playerHat]);
-		player.getVariables().isFullBody = ItemLoader
-				.isFullBody(player.opponent.getVariables().playerEquipment[player.getVariables().playerChest]);
+		player.getInstance().isFullHelm = ItemLoader
+				.isFullHelm(player.opponent.getInstance().playerEquipment[player.getInstance().playerHat]);
+		player.getInstance().isFullMask = ItemLoader
+				.isFullMask(player.opponent.getInstance().playerEquipment[player.getInstance().playerHat]);
+		player.getInstance().isFullBody = ItemLoader
+				.isFullBody(player.opponent.getInstance().playerEquipment[player.getInstance().playerChest]);
 		
 		/**
 		 * Add the head-icon hint to the opponent.
@@ -766,34 +766,34 @@ public class DuelArena {
 		 * Refresh skills.
 		 */
 		for (int i = 0; i < 20; i++) {
-			player.getVariables().playerLevel[i] = player.getPA().getLevelForXP(player.getVariables().playerXP[i]);
+			player.getInstance().playerLevel[i] = player.getPA().getLevelForXP(player.getInstance().playerXP[i]);
 			player.getPA().refreshSkill(i);
 		}
 		
 		/**
 		 * Populate the player's otherStakedItems list the the opponent's staked items.
 		 */
-		for (GameItem item : player.opponent.getVariables().stakedItems) {
-			player.getVariables().otherStakedItems.add(new GameItem(item.id, item.amount));
+		for (GameItem item : player.opponent.getInstance().stakedItems) {
+			player.getInstance().otherStakedItems.add(new GameItem(item.id, item.amount));
 		}
 		
 		/**
 		 * More resetting.
 		 */
-		player.getItems().sendWeapon(player.getVariables().playerEquipment[player.getVariables().playerWeapon],
-				player.getItems().getItemName(player.getVariables().playerEquipment[player.getVariables().playerWeapon]));
+		player.getItems().sendWeapon(player.getInstance().playerEquipment[player.getInstance().playerWeapon],
+				player.getItems().getItemName(player.getInstance().playerEquipment[player.getInstance().playerWeapon]));
 		
 		player.getItems().resetBonus();
 		player.getItems().getBonus();
 		player.getItems().writeBonus();
 		
 		player.getCombat().getPlayerAnimIndex(player.getItems()
-				.getItemName(player.getVariables().playerEquipment[player.getVariables().playerWeapon]).toLowerCase());
+				.getItemName(player.getInstance().playerEquipment[player.getInstance().playerWeapon]).toLowerCase());
 		
 		player.getPA().requestUpdates();
 		
-		player.getVariables().castVengeance = 0;
-		player.getVariables().vengOn = false;
+		player.getInstance().castVengeance = 0;
+		player.getInstance().vengOn = false;
 	}
 	
 	/**
@@ -830,15 +830,15 @@ public class DuelArena {
 		 * they have.
 		 */
 		for (int i = 0; i < 20; i++) {
-			player.getVariables().playerLevel[i] = player.getPA().getLevelForXP(player.getVariables().playerXP[i]);
+			player.getInstance().playerLevel[i] = player.getPA().getLevelForXP(player.getInstance().playerXP[i]);
 			player.getPA().refreshSkill(i);
 		}
 		
 		/**
 		 * Reset Vengeance.
 		 */
-		player.getVariables().castVengeance = 0;
-		player.getVariables().vengOn = false;
+		player.getInstance().castVengeance = 0;
+		player.getInstance().vengOn = false;
 		
 		/**
 		 * Refresh their hitpoints. 
@@ -850,7 +850,7 @@ public class DuelArena {
 		/**
 		 * Populate & display the dueling reward interface.
 		 */
-		if (!player.getVariables().autoGive)
+		if (!player.getInstance().autoGive)
 			getDuelRewards(player);
 		player.getPA().showInterface(REWARD_INTERFACE);
 		
@@ -873,8 +873,8 @@ public class DuelArena {
 		 * The player is permitted to send offers, and has a space requirement
 		 * of 0
 		 */
-		player.getVariables().canOffer = true;
-		player.getVariables().duelSpaceReq = 0;
+		player.getInstance().canOffer = true;
+		player.getInstance().duelSpaceReq = 0;
 		
 		/**
 		 * Reset combat-related variables.
@@ -884,7 +884,7 @@ public class DuelArena {
 		/**
 		 * A duel has just been won -- the player has NOT requested a duel.
 		 */
-		player.getVariables().duelRequested = false;
+		player.getInstance().duelRequested = false;
 		
 		/**
 		 * Schedule a new task that will give the player their items.
@@ -895,7 +895,7 @@ public class DuelArena {
 				/**
 				 * Iterate through the staked items.
 				 */
-				for (GameItem item : player.getVariables().stakedItems) {
+				for (GameItem item : player.getInstance().stakedItems) {
 					/**
 					 * If neither the ID nor the amount is null...
 					 */
@@ -935,7 +935,7 @@ public class DuelArena {
 				 * Clear staked items, because there are none, and kill the
 				 * task.
 				 */
-				player.getVariables().stakedItems.clear();
+				player.getInstance().stakedItems.clear();
 				this.stop();
 			}
 		});
@@ -947,7 +947,7 @@ public class DuelArena {
 		 * a disconnection). We want to make sure the player gets their items
 		 * ASAP, should such an event occur.
 		 */
-		if (player.getVariables().autoGive)
+		if (player.getInstance().autoGive)
 			claimDuelRewards(player);
 	}
 	
@@ -965,9 +965,9 @@ public class DuelArena {
 			 * Populate the interface with the OTHER player's staked items --
 			 * because those are the ones that they win :P
 			 */
-			player.getOutStream().writeWord(player.getVariables().otherStakedItems.toArray().length);
+			player.getOutStream().writeWord(player.getInstance().otherStakedItems.toArray().length);
 
-			for (GameItem item : player.getVariables().otherStakedItems) {
+			for (GameItem item : player.getInstance().otherStakedItems) {
 				if (item.amount > 254) {
 					player.getOutStream().writeByte(255);
 					player.getOutStream().writeDWord_v2(item.amount);
@@ -987,7 +987,7 @@ public class DuelArena {
 	}
 	
 	public void claimDuelRewards(Player player) {
-		for (GameItem item : player.getVariables().otherStakedItems) {
+		for (GameItem item : player.getInstance().otherStakedItems) {
 			if (item.id > 0 && item.amount > 0) {
 				if (ItemLoader.isStackable(item.id)) {
 					player.getInventory().add(item.id, item.amount);
@@ -1005,7 +1005,7 @@ public class DuelArena {
 		removeFromDueling(player);
 		removeFromFirstInterface(player);
 		removeFromSecondInterface(player);
-		player.getVariables().killedDuelOpponent = false;
+		player.getInstance().killedDuelOpponent = false;
 		resetDuel(player);
 		resetDuelItems(player);
 	}
@@ -1023,8 +1023,8 @@ public class DuelArena {
 			return;
 		}
 		
-		player.getVariables().acceptedFirst = false;
-		player.opponent.getVariables().acceptedFirst = false;
+		player.getInstance().acceptedFirst = false;
+		player.opponent.getInstance().acceptedFirst = false;
 		
 		player.opponent.getPA().sendString("", 6684);
 		player.getPA().sendString("", 6684);
@@ -1062,7 +1062,7 @@ public class DuelArena {
 		/**
 		 * ID check. If the IDs don't match, something's up.
 		 */
-		if (itemID != player.getVariables().playerItems[fromSlot] - 1) {
+		if (itemID != player.getInstance().playerItems[fromSlot] - 1) {
 			return false;
 		}
 
@@ -1116,7 +1116,7 @@ public class DuelArena {
 		/**
 		 * If the player shouldn't be able to send duel offers, something's up.
 		 */
-		if (!player.getVariables().canOffer) {
+		if (!player.getInstance().canOffer) {
 			return false;
 		}
 		
@@ -1132,7 +1132,7 @@ public class DuelArena {
 		if (!ItemLoader.isStackable(itemID)) {
 			for (int a = 0; a < amount; a++) {
 				if (player.getItems().playerHasItem(itemID, 1)) {
-					player.getVariables().stakedItems.add(new GameItem(itemID, 1));
+					player.getInstance().stakedItems.add(new GameItem(itemID, 1));
 					player.getItems().deleteItem(itemID, player.getItems().getItemSlot(itemID), 1);
 				}
 			}
@@ -1174,7 +1174,7 @@ public class DuelArena {
 			 * Then we can re-use the method's own variables when we make the call
 			 * to deleteItem(). Pretty cool.
 			 */
-			for (GameItem item : player.getVariables().stakedItems) {
+			for (GameItem item : player.getInstance().stakedItems) {
 				if (item.id == itemID) {
 					found = true;
 					item.amount += amount;
@@ -1189,7 +1189,7 @@ public class DuelArena {
 				 * the staking screen as a new <GameItem>.
 				 */
 				player.getItems().deleteItem(itemID, fromSlot, amount);
-				player.getVariables().stakedItems.add(new GameItem(itemID, amount));
+				player.getInstance().stakedItems.add(new GameItem(itemID, amount));
 			}
 		}
 		
@@ -1257,7 +1257,7 @@ public class DuelArena {
 		 * item, space-wise.
 		 */
 		if (ItemLoader.isStackable(itemID)) {
-			if (player.getItems().freeSlots() - 1 < (player.getVariables().duelSpaceReq)) {
+			if (player.getItems().freeSlots() - 1 < (player.getInstance().duelSpaceReq)) {
 				player.sendMessage("You have too many rules set to remove that item.");
 				return false;
 			}
@@ -1266,7 +1266,7 @@ public class DuelArena {
 		/**
 		 * Ensure the player is allowed to send duel offers.
 		 */
-		if (!player.getVariables().canOffer) {
+		if (!player.getInstance().canOffer) {
 			return false;
 		}
 
@@ -1285,22 +1285,22 @@ public class DuelArena {
 			
 			for (int a = 0; a < amount; a++) {
 				
-				for (GameItem item : player.getVariables().stakedItems) {
+				for (GameItem item : player.getInstance().stakedItems) {
 					
 					if (item.id == itemID) {
 						
 						if (!item.stackable) {
 							
-							if (player.getItems().freeSlots() - 1 < (player.getVariables().duelSpaceReq)) {
+							if (player.getItems().freeSlots() - 1 < (player.getInstance().duelSpaceReq)) {
 								goodSpace = false;
 								break;
 							}
 							
-							player.getVariables().stakedItems.remove(item);
+							player.getInstance().stakedItems.remove(item);
 							player.getItems().addItem(itemID, 1);
 							
 						} else {
-							if (player.getItems().freeSlots() - 1 < (player.getVariables().duelSpaceReq)) {
+							if (player.getItems().freeSlots() - 1 < (player.getInstance().duelSpaceReq)) {
 								goodSpace = false;
 								break;
 							}
@@ -1311,13 +1311,13 @@ public class DuelArena {
 								
 							} else {
 								
-								if (player.getItems().freeSlots() - 1 < (player.getVariables().duelSpaceReq)) {
+								if (player.getItems().freeSlots() - 1 < (player.getInstance().duelSpaceReq)) {
 									goodSpace = false;
 									break;
 								}
 								
 								amount = item.amount;
-								player.getVariables().stakedItems.remove(item);
+								player.getInstance().stakedItems.remove(item);
 								player.getItems().addItem(itemID, amount);
 							}
 						}
@@ -1344,7 +1344,7 @@ public class DuelArena {
 		/**
 		 * And add them to the inventory.
 		 */
-		for (GameItem item : player.getVariables().stakedItems) {
+		for (GameItem item : player.getInstance().stakedItems) {
 			
 			if (item.id == itemID) {
 				
@@ -1359,7 +1359,7 @@ public class DuelArena {
 					} else {
 						
 						amount = item.amount;
-						player.getVariables().stakedItems.remove(item);
+						player.getInstance().stakedItems.remove(item);
 						player.getItems().addItem(itemID, amount);
 					}
 				}
@@ -1410,7 +1410,7 @@ public class DuelArena {
 			return;
 		}
 		
-		if (!player.getVariables().canOffer) {
+		if (!player.getInstance().canOffer) {
 			return;
 		}
 		
@@ -1420,8 +1420,8 @@ public class DuelArena {
 		player.getPA().sendString("", 6684);
 		player.opponent.getPA().sendString("", 6684);
 		
-		player.getVariables().acceptedFirst = false;
-		player.opponent.getVariables().acceptedFirst = false;
+		player.getInstance().acceptedFirst = false;
+		player.opponent.getInstance().acceptedFirst = false;
 		
 		removeDuelConsent(player);
 		
@@ -1429,26 +1429,26 @@ public class DuelArena {
 		 * Handles computing space requirements. <duelSlot> represents the
 		 * equipment slot that is disabled by a duel rule.
 		 */
-		player.opponent.getVariables().duelSlot = player.getVariables().duelSlot;
+		player.opponent.getInstance().duelSlot = player.getInstance().duelSlot;
 		
-		if (i >= 11 && player.getVariables().duelSlot > -1) {
+		if (i >= 11 && player.getInstance().duelSlot > -1) {
 			
-			if (player.getVariables().playerEquipment[player.getVariables().duelSlot] > 0) {
-				if (!player.getVariables().duelRule[i]) {
-					player.getVariables().duelSpaceReq++;
+			if (player.getInstance().playerEquipment[player.getInstance().duelSlot] > 0) {
+				if (!player.getInstance().duelRule[i]) {
+					player.getInstance().duelSpaceReq++;
 				} else {
-					player.getVariables().duelSpaceReq--;
+					player.getInstance().duelSpaceReq--;
 				}
 			}
 			
-			if (player.opponent.getVariables().playerEquipment[player.opponent.getVariables().duelSlot] > 0) {
+			if (player.opponent.getInstance().playerEquipment[player.opponent.getInstance().duelSlot] > 0) {
 				
-				if (!player.opponent.getVariables().duelRule[i]) {
-					player.opponent.getVariables().duelSpaceReq++;
+				if (!player.opponent.getInstance().duelRule[i]) {
+					player.opponent.getInstance().duelSpaceReq++;
 					
 				} else {
 					
-					player.opponent.getVariables().duelSpaceReq--;
+					player.opponent.getInstance().duelSpaceReq--;
 				}
 			}
 		}
@@ -1459,17 +1459,17 @@ public class DuelArena {
 		 * continue.
 		 */
 		if (i >= 11) {
-			if (player.getItems().freeSlots() < (player.getVariables().duelSpaceReq)
-					|| player.opponent.getItems().freeSlots() < (player.opponent.getVariables().duelSpaceReq)) {
+			if (player.getItems().freeSlots() < (player.getInstance().duelSpaceReq)
+					|| player.opponent.getItems().freeSlots() < (player.opponent.getInstance().duelSpaceReq)) {
 				
 				player.sendMessage("You or your opponent don't have the required space to set this rule.");
 				
-				if (player.getVariables().playerEquipment[player.getVariables().duelSlot] > 0) {
-					player.getVariables().duelSpaceReq--;
+				if (player.getInstance().playerEquipment[player.getInstance().duelSlot] > 0) {
+					player.getInstance().duelSpaceReq--;
 				}
 				
-				if (player.opponent.getVariables().playerEquipment[player.opponent.getVariables().duelSlot] > 0) {
-					player.opponent.getVariables().duelSpaceReq--;
+				if (player.opponent.getInstance().playerEquipment[player.opponent.getInstance().duelSlot] > 0) {
+					player.opponent.getInstance().duelSpaceReq--;
 				}
 				return;
 			}
@@ -1478,58 +1478,58 @@ public class DuelArena {
 		/**
 		 * Set the rule.
 		 */
-		if (!player.getVariables().duelRule[i]) {
-			player.getVariables().duelRule[i] = true;
-			player.getVariables().duelOption += player.getVariables().DUEL_RULE_ID[i];
+		if (!player.getInstance().duelRule[i]) {
+			player.getInstance().duelRule[i] = true;
+			player.getInstance().duelOption += player.getInstance().DUEL_RULE_ID[i];
 		} else {
-			player.getVariables().duelRule[i] = false;
-			player.getVariables().duelOption -= player.getVariables().DUEL_RULE_ID[i];
+			player.getInstance().duelRule[i] = false;
+			player.getInstance().duelOption -= player.getInstance().DUEL_RULE_ID[i];
 		}
 		
 		/**
 		 * Refresh the interface to reflect the rule that was changed.
 		 */
-		player.getPA().sendFrame87(286, player.getVariables().duelOption);
-		player.opponent.getVariables().duelOption = player.getVariables().duelOption;
-		player.opponent.getVariables().duelRule[i] = player.getVariables().duelRule[i];
-		player.opponent.getPA().sendFrame87(286, player.opponent.getVariables().duelOption);
+		player.getPA().sendFrame87(286, player.getInstance().duelOption);
+		player.opponent.getInstance().duelOption = player.getInstance().duelOption;
+		player.opponent.getInstance().duelRule[i] = player.getInstance().duelRule[i];
+		player.opponent.getPA().sendFrame87(286, player.opponent.getInstance().duelOption);
 		
 		/**
 		 * Handle obstacles/movement and set relevant coordinates.
 		 */
-		if (player.getVariables().duelRule[RULE_OBSTACLES]) {
+		if (player.getInstance().duelRule[RULE_OBSTACLES]) {
 			
-			if (player.getVariables().duelRule[RULE_MOVEMENT]) {
-				player.getVariables().duelTeleX = 3366 + Misc.random(12);
-				player.opponent.getVariables().duelTeleX = player.getVariables().duelTeleX - 1;
+			if (player.getInstance().duelRule[RULE_MOVEMENT]) {
+				player.getInstance().duelTeleX = 3366 + Misc.random(12);
+				player.opponent.getInstance().duelTeleX = player.getInstance().duelTeleX - 1;
 				
-				player.getVariables().duelTeleY = 3246 + Misc.random(6);
-				player.opponent.getVariables().duelTeleY = player.getVariables().duelTeleY;
+				player.getInstance().duelTeleY = 3246 + Misc.random(6);
+				player.opponent.getInstance().duelTeleY = player.getInstance().duelTeleY;
 			}
 			
 		} else {
 			
-			if (player.getVariables().duelRule[RULE_MOVEMENT]) {
-				player.getVariables().duelTeleX = 3335 + Misc.random(12);
-				player.opponent.getVariables().duelTeleX = player.getVariables().duelTeleX - 1;
+			if (player.getInstance().duelRule[RULE_MOVEMENT]) {
+				player.getInstance().duelTeleX = 3335 + Misc.random(12);
+				player.opponent.getInstance().duelTeleX = player.getInstance().duelTeleX - 1;
 				
-				player.getVariables().duelTeleY = 3246 + Misc.random(6);
-				player.opponent.getVariables().duelTeleY = player.getVariables().duelTeleY;
+				player.getInstance().duelTeleY = 3246 + Misc.random(6);
+				player.opponent.getInstance().duelTeleY = player.getInstance().duelTeleY;
 			}
 		}
 
 	}
 	
 	public void refreshDuelRules(Player player) {
-		for (int i = 0; i < player.getVariables().duelRule.length; i++) {
-			player.getVariables().duelRule[i] = false;
+		for (int i = 0; i < player.getInstance().duelRule.length; i++) {
+			player.getInstance().duelRule[i] = false;
 		}
 		/**
 		 * TODO what are these? They're the only things that cause this method
 		 * and the one below it to differ.
 		 */
 		player.getPA().sendFrame87(286, 0);
-		player.getVariables().duelOption = 0;
+		player.getInstance().duelOption = 0;
 	}
 	
 	/**
@@ -1539,8 +1539,8 @@ public class DuelArena {
 	 *            The player whose duel rules are to be reset.
 	 */
 	public void resetDuelRules(Player player) {
-		for (int i = 0; i < player.getVariables().duelRule.length; i++) {
-			player.getVariables().duelRule[i] = false;
+		for (int i = 0; i < player.getInstance().duelRule.length; i++) {
+			player.getInstance().duelRule[i] = false;
 		}
 	}
 
@@ -1552,9 +1552,9 @@ public class DuelArena {
 			}
 			player.getOutStream().createFrameVarSizeWord(53);
 			player.getOutStream().writeWord(6669);
-			player.getOutStream().writeWord(player.getVariables().stakedItems.toArray().length);
+			player.getOutStream().writeWord(player.getInstance().stakedItems.toArray().length);
 			int current = 0;
-			for (GameItem item : player.getVariables().stakedItems) {
+			for (GameItem item : player.getInstance().stakedItems) {
 				if (item.amount > 254) {
 					player.getOutStream().writeByte(255);
 					player.getOutStream().writeDWord_v2(item.amount);
@@ -1580,9 +1580,9 @@ public class DuelArena {
 
 			player.getOutStream().createFrameVarSizeWord(53);
 			player.getOutStream().writeWord(6670);
-			player.getOutStream().writeWord(player.opponent.getVariables().stakedItems.toArray().length);
+			player.getOutStream().writeWord(player.opponent.getInstance().stakedItems.toArray().length);
 			current = 0;
-			for (GameItem item : player.opponent.getVariables().stakedItems) {
+			for (GameItem item : player.opponent.getInstance().stakedItems) {
 				if (item.amount > 254) {
 					player.getOutStream().writeByte(255);
 					player.getOutStream().writeDWord_v2(item.amount);
@@ -1642,7 +1642,7 @@ public class DuelArena {
 		/**
 		 * Reset the head-icon hint.
 		 */
-		player.getVariables().headIconHints = 0;
+		player.getInstance().headIconHints = 0;
 		
 		/**
 		 * Iterate through all the duel rules and set them false.
@@ -1658,8 +1658,8 @@ public class DuelArena {
 		 * The player can now send offers. The player now has an inventory space
 		 * requirement of 0 for staking.
 		 */
-		player.getVariables().canOffer = true;
-		player.getVariables().duelSpaceReq = 0;
+		player.getInstance().canOffer = true;
+		player.getInstance().duelSpaceReq = 0;
 		
 		/**
 		 * Request appearance updates.
@@ -1675,7 +1675,7 @@ public class DuelArena {
 		 * A duel has just concluded -- the player has NOT sent a request to
 		 * anybody.
 		 */
-		player.getVariables().duelRequested = false;
+		player.getInstance().duelRequested = false;
 		
 		/**
 		 * If the player's opponent isn't already null, make it so. The player
@@ -1692,7 +1692,7 @@ public class DuelArena {
 		removeFromFirstInterface(player);
 		removeFromSecondInterface(player);
 		
-		player.getVariables().killedDuelOpponent = false;
+		player.getInstance().killedDuelOpponent = false;
 		player.opponent = null;
 	}
 	
@@ -1703,8 +1703,8 @@ public class DuelArena {
 	 *            The player whose interface to clear.
 	 */
 	public void resetDuelItems(Player player) {
-		player.getVariables().stakedItems.clear();
-		player.getVariables().otherStakedItems.clear();
+		player.getInstance().stakedItems.clear();
+		player.getInstance().otherStakedItems.clear();
 	}
 
 }

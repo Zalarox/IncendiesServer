@@ -17,10 +17,10 @@ public class Trade implements PacketType {
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
 		int tradeId = c.getInStream().readSignedWordBigEndian();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		if (tradeId > PlayerHandler.players.length) {
-			c.getVariables().playerIndex = -1;
+			c.getInstance().playerIndex = -1;
 			return;
 		}
 		Following.resetFollow(c);
@@ -28,7 +28,7 @@ public class Trade implements PacketType {
 			c.sendMessage("You can't trade inside the arena!");
 			return;
 		}
-		if (c.getVariables().playerRights == 2 && !Constants.ADMIN_CAN_TRADE) {
+		if (c.getInstance().playerRights == 2 && !Constants.ADMIN_CAN_TRADE) {
 			c.sendMessage("Trading as an admin has been disabled.");
 			return;
 		}

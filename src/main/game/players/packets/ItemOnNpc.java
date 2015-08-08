@@ -13,9 +13,9 @@ public class ItemOnNpc implements PacketType {
 		int i = c.getInStream().readSignedWordA();
 		int slot = c.getInStream().readSignedWordBigEndian();
 		int npcId = NPCHandler.npcs[i].npcType;
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
 		UseItem.ItemonNpc(c, itemId, npcId, slot);

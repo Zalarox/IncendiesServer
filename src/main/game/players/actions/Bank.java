@@ -21,13 +21,13 @@ public class Bank {
 	}
 
 	public int get(int i) {
-		return c.getVariables().bankItems[i] - 1;
+		return c.getInstance().bankItems[i] - 1;
 	}
 
 	public int getFreeSlots() {
 		int amount = 0;
 		for (int i = 0; i < capacity(); i++) {
-			if (c.getVariables().bankItems[i] > 0) {
+			if (c.getInstance().bankItems[i] > 0) {
 				amount++;
 			}
 		}
@@ -46,7 +46,7 @@ public class Bank {
 	public Item getItem(int itemId) {
 		for (int i = 0; i < capacity(); i++) {
 			if (get(i) == itemId) {
-				return new Item(get(i), c.getVariables().bankItemsN[i]);
+				return new Item(get(i), c.getInstance().bankItemsN[i]);
 			}
 		}
 		return null;

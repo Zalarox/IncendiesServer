@@ -105,7 +105,7 @@ public class Food {
 	}
 
 	public void eat(int id, int slot) {
-		if (c.isDead || c.getVariables().constitution <= 0) {
+		if (c.isDead || c.getInstance().lifePoints <= 0) {
 			return;
 		}
 		
@@ -114,25 +114,25 @@ public class Food {
 		 * 
 		 * - Branon McClellan (KeepBotting)
 		 */
-		if (c.getVariables().duelRule[DuelArena.RULE_FOOD]) {
+		if (c.getInstance().duelRule[DuelArena.RULE_FOOD]) {
 			c.sendMessage("Food has been disabled in this duel!");
 			return;
 		}
 		
-		if (System.currentTimeMillis() - c.getVariables().foodDelay >= 1600 && c.getVariables().constitution > 0) {
-			c.getVariables().attackTimer += 2;
+		if (System.currentTimeMillis() - c.getInstance().foodDelay >= 1600 && c.getInstance().lifePoints > 0) {
+			c.getInstance().attackTimer += 2;
 			c.startAnimation(829);
 			c.getItems().deleteItem(id, slot, 1);
 			FoodToEat f = FoodToEat.food.get(id);
-			if (c.getVariables().constitution < c.getVariables().calculateMaxLifePoints(c)) {
-				c.getVariables().constitution += f.getHeal() * 10;
-				if (c.getVariables().constitution > c.getVariables().calculateMaxLifePoints(c))
-					c.getVariables().constitution = c.getVariables().calculateMaxLifePoints(c);
+			if (c.getInstance().lifePoints < c.maxLP()) {
+				c.getInstance().lifePoints += f.getHeal() * 10;
+				if (c.getInstance().lifePoints > c.maxLP())
+					c.getInstance().lifePoints = c.maxLP();
 			}
 			c.getPA().refreshSkill(3);
 			c.sendMessage("You eat the " + f.getName().toLowerCase() + ".");
 			if (id != 10476) {
-				c.getVariables().foodDelay = System.currentTimeMillis();
+				c.getInstance().foodDelay = System.currentTimeMillis();
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
@@ -146,15 +146,15 @@ public class Food {
 					}
 				}, 2);
 			} else if (f.getId() == 15272 && !c.isDead) {
-				boolean heal = (c.getVariables().constitution < c.getPA()
-						.getLevelForXP(c.getVariables().playerXP[3] + 10));
+				boolean heal = (c.getInstance().lifePoints < c.getPA()
+						.getLevelForXP(c.getInstance().playerXP[3] + 10));
 				if (heal) {
-					c.getVariables().constitution += (23 + (Misc.random(10)));
+					c.getInstance().lifePoints += (23 + (Misc.random(10)));
 				}
 				c.getItems().deleteItem(id, slot, 1);
 				c.startAnimation(829);
 			}
-			c.getVariables().foodDelay = System.currentTimeMillis();
+			c.getInstance().foodDelay = System.currentTimeMillis();
 		}
 	}
 

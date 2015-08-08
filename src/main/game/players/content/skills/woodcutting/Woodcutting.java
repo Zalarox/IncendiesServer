@@ -128,50 +128,50 @@ public class Woodcutting extends SkillHandler {
 			return false;
 		}
 
-		if (c.getVariables().playerIsWoodcutting) {
-			c.getVariables().playerIsWoodcutting = false;
+		if (c.getInstance().playerIsWoodcutting) {
+			c.getInstance().playerIsWoodcutting = false;
 			return false;
 		}
 
-		c.getVariables().playerIsWoodcutting = true;
-		c.getVariables().stopPlayerSkill = true;
+		c.getInstance().playerIsWoodcutting = true;
+		c.getInstance().stopPlayerSkill = true;
 
-		c.getVariables().playerSkillProp[8][1] = Tree.getRespawnTime(); 
-		c.getVariables().playerSkillProp[8][2] = Tree.getReqLvl();
-		c.getVariables().playerSkillProp[8][3] = (int) Tree.getXp();
-		c.getVariables().playerSkillProp[8][4] = getAnimId(c);
-		c.getVariables().playerSkillProp[8][5] = Tree.getRespawnTime();
-		c.getVariables().playerSkillProp[8][6] = Tree.getLogId();
+		c.getInstance().playerSkillProp[8][1] = Tree.getRespawnTime(); 
+		c.getInstance().playerSkillProp[8][2] = Tree.getReqLvl();
+		c.getInstance().playerSkillProp[8][3] = (int) Tree.getXp();
+		c.getInstance().playerSkillProp[8][4] = getAnimId(c);
+		c.getInstance().playerSkillProp[8][5] = Tree.getRespawnTime();
+		c.getInstance().playerSkillProp[8][6] = Tree.getLogId();
 
-		c.getVariables().woodcuttingTree = obX + obY;
+		c.getInstance().woodcuttingTree = obX + obY;
 
-		if (!hasRequiredLevel(c, 8, c.getVariables().playerSkillProp[8][2], "woodcutting", "cut this tree")) {
+		if (!hasRequiredLevel(c, 8, c.getInstance().playerSkillProp[8][2], "woodcutting", "cut this tree")) {
 			resetWoodcutting(c);
 			return false;
 		}
 
-		c.startAnimation(c.getVariables().playerSkillProp[8][4]);
+		c.startAnimation(c.getInstance().playerSkillProp[8][4]);
 
 		if (Tree != null) {
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (!noInventorySpace(c, "woodcutting") || !c.getVariables().stopPlayerSkill
-							|| !c.getVariables().playerIsWoodcutting
+					if (!noInventorySpace(c, "woodcutting") || !c.getInstance().stopPlayerSkill
+							|| !c.getInstance().playerIsWoodcutting
 							|| !Constants.goodDistance(obX, obY, c.absX, c.absY, 3)) {
 						container.stop();
 					}
-					if (c.getVariables().playerSkillProp[8][6] > 0) {
-						if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == InfernoAdze.itemID)
-							c.getAdze().cutAndFire(c, c.getVariables().playerSkillProp[8][6]);
+					if (c.getInstance().playerSkillProp[8][6] > 0) {
+						if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == InfernoAdze.itemID)
+							c.getAdze().cutAndFire(c, c.getInstance().playerSkillProp[8][6]);
 						else
-							c.getItems().addItem(c.getVariables().playerSkillProp[8][6], 1);
+							c.getItems().addItem(c.getInstance().playerSkillProp[8][6], 1);
 					}
-					if (c.getVariables().playerSkillProp[8][3] > 0) {
-						c.getPA().addSkillXP(c.getVariables().playerSkillProp[8][3] * WOODCUTTING_XP, 8);
+					if (c.getInstance().playerSkillProp[8][3] > 0) {
+						c.getPA().addSkillXP(c.getInstance().playerSkillProp[8][3] * WOODCUTTING_XP, 8);
 					}
-					if (c.getVariables().playerSkillProp[8][6] > 0) {
-						c.sendMessage("You get some " + c.getItems().getItemName(c.getVariables().playerSkillProp[8][6])
+					if (c.getInstance().playerSkillProp[8][6] > 0) {
+						c.sendMessage("You get some " + c.getItems().getItemName(c.getInstance().playerSkillProp[8][6])
 								+ ".");
 					}
 					if (Misc.random(100) == 0) {
@@ -182,7 +182,7 @@ public class Woodcutting extends SkillHandler {
 						container.stop();
 					}
 					if ((tree != 1292 && Misc.random(100) <= Tree.getDecayChance())
-							&& c.getVariables().playerIsWoodcutting) {
+							&& c.getInstance().playerIsWoodcutting) {
 						createStump(c, tree, obX, obY);
 						container.stop();
 					}
@@ -192,16 +192,16 @@ public class Woodcutting extends SkillHandler {
 				public void stop() {
 					resetWoodcutting(c);
 				}
-			}, (Misc.random(5) + getAxeTime(c) + (10 - (int) Math.floor(c.getVariables().playerLevel[8] / 10))));
+			}, (Misc.random(5) + getAxeTime(c) + (10 - (int) Math.floor(c.getInstance().playerLevel[8] / 10))));
 			CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (!c.getVariables().stopPlayerSkill) {
+					if (!c.getInstance().stopPlayerSkill) {
 						resetWoodcutting(c);
 						container.stop();
 					}
-					if (c.getVariables().playerSkillProp[8][4] > 0 && c.getVariables().playerIsWoodcutting) {
-						c.startAnimation(c.getVariables().playerSkillProp[8][4]);
+					if (c.getInstance().playerSkillProp[8][4] > 0 && c.getInstance().playerIsWoodcutting) {
+						c.startAnimation(c.getInstance().playerSkillProp[8][4]);
 					}
 				}
 
@@ -220,8 +220,8 @@ public class Woodcutting extends SkillHandler {
 				Player person = PlayerHandler.players[i];
 				if (person != null) {
 					if (person.distanceToPoint(c.absX, c.absY) <= 10) {
-						if (c.getVariables().woodcuttingTree == person.getVariables().woodcuttingTree) {
-							person.getVariables().woodcuttingTree = -1;
+						if (c.getInstance().woodcuttingTree == person.getInstance().woodcuttingTree) {
+							person.getInstance().woodcuttingTree = -1;
 							resetWoodcutting(person);
 						}
 					}
@@ -263,16 +263,16 @@ public class Woodcutting extends SkillHandler {
 	public static void resetWoodcutting(Player c) {
 		c.startAnimation(65535);
 		c.getPA().removeAllWindows();
-		c.getVariables().playerIsWoodcutting = false;
+		c.getInstance().playerIsWoodcutting = false;
 		for (int i = 0; i < 9; i++) {
-			c.getVariables().playerSkillProp[8][i] = -1;
+			c.getInstance().playerSkillProp[8][i] = -1;
 		}
 	}
 
 	private static boolean hasAxe(Player c) {
 		boolean has = false;
 		for (int i = 0; i < axes.length; i++) {
-			if (c.getItems().playerHasItem(axes[i][0]) || c.getVariables().playerEquipment[3] == axes[i][0]) {
+			if (c.getItems().playerHasItem(axes[i][0]) || c.getInstance().playerEquipment[3] == axes[i][0]) {
 				has = true;
 			}
 		}
@@ -282,8 +282,8 @@ public class Woodcutting extends SkillHandler {
 	private static int getAxeTime(Player c) {
 		int axe = -1;
 		for (int i = 0; i < axes.length; i++) {
-			if (c.getVariables().playerLevel[8] >= axes[i][1]) {
-				if (c.getItems().playerHasItem(axes[i][0]) || c.getVariables().playerEquipment[3] == axes[i][0]) {
+			if (c.getInstance().playerLevel[8] >= axes[i][1]) {
+				if (c.getItems().playerHasItem(axes[i][0]) || c.getInstance().playerEquipment[3] == axes[i][0]) {
 					axe = axes[i][3];
 				}
 			}
@@ -294,8 +294,8 @@ public class Woodcutting extends SkillHandler {
 	private static int getAnimId(Player c) {
 		int anim = -1;
 		for (int i = 0; i < axes.length; i++) {
-			if (c.getVariables().playerLevel[8] >= axes[i][1]) {
-				if (c.getItems().playerHasItem(axes[i][0]) || c.getVariables().playerEquipment[3] == axes[i][0]) {
+			if (c.getInstance().playerLevel[8] >= axes[i][1]) {
+				if (c.getItems().playerHasItem(axes[i][0]) || c.getInstance().playerEquipment[3] == axes[i][0]) {
 					anim = axes[i][2];
 				}
 			}
@@ -307,10 +307,10 @@ public class Woodcutting extends SkillHandler {
 		if ((performCheck(c, 1349, 1) || performCheck(c, 1351, 1) || performCheck(c, 1353, 6)
 				|| performCheck(c, 1361, 6) || performCheck(c, 1355, 21) || performCheck(c, 1357, 31)
 				|| performCheck(c, 1359, 41) || performCheck(c, 6739, 61))
-				&& !(c.getVariables().playerEquipment[c.getVariables().playerWeapon] == InfernoAdze.itemID)) {
+				&& !(c.getInstance().playerEquipment[c.getInstance().playerWeapon] == InfernoAdze.itemID)) {
 			return true;
 		}
-		if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == InfernoAdze.itemID) {
+		if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == InfernoAdze.itemID) {
 			if (c.getAdze().getRequirements(c))
 				return true;
 		}
@@ -318,8 +318,8 @@ public class Woodcutting extends SkillHandler {
 	}
 
 	private static boolean performCheck(Player c, int i, int l) {
-		return (c.getItems().playerHasItem(i) || c.getVariables().playerEquipment[3] == i)
-				&& c.getVariables().playerLevel[8] >= l;
+		return (c.getItems().playerHasItem(i) || c.getInstance().playerEquipment[3] == i)
+				&& c.getInstance().playerLevel[8] >= l;
 	}
 
 	private static int[][] axes = { { 1351, 1, 879, 10 }, { 1349, 1, 877, 10 }, { 1353, 6, 875, 10 },

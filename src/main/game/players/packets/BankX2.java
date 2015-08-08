@@ -15,70 +15,70 @@ public class BankX2 implements PacketType {
 	@Override
 	public void processPacket(Player player, int packetType, int packetSize) {
 		int amount = player.getInStream().readDWord();
-		if (player.getVariables().teleTimer > 0) {
+		if (player.getInstance().teleTimer > 0) {
 			return;
 		}
 		if (amount == 0)
 			amount = 1;
-		SilverCrafting.makeSilver(player, player.getVariables().xInterfaceId, amount);
+		SilverCrafting.makeSilver(player, player.getInstance().xInterfaceId, amount);
 
-		if (player.getVariables().PrayX) {
-			Prayer.buryAltarBone(player, player.getVariables().prayerItemID, player.getVariables().altarXCoord,
-					player.getVariables().altarYCoord, amount);
-			player.getVariables().PrayX = false;
+		if (player.getInstance().PrayX) {
+			Prayer.buryAltarBone(player, player.getInstance().prayerItemID, player.getInstance().altarXCoord,
+					player.getInstance().altarYCoord, amount);
+			player.getInstance().PrayX = false;
 			return;
 		}
-		if (player.getVariables().bindX) {
+		if (player.getInstance().bindX) {
 			Items.bindStackable(player, amount);
-			player.getVariables().bindX = false;
+			player.getInstance().bindX = false;
 			return;
 		}
-		switch (player.getVariables().xInterfaceId) {
+		switch (player.getInstance().xInterfaceId) {
 
 		case 53150:
 			Cooking.handleCookingTick(player, amount);
 			break;
 
 		case 5064:
-			player.getItems().bankItem(player.getVariables().playerItems[player.getVariables().xRemoveSlot],
-					player.getVariables().xRemoveSlot, amount);
+			player.getItems().bankItem(player.getInstance().playerItems[player.getInstance().xRemoveSlot],
+					player.getInstance().xRemoveSlot, amount);
 			break;
 
 		case 5382:
-			player.getItems().fromBank(player.getVariables().xRemoveSlot, amount);
+			player.getItems().fromBank(player.getInstance().xRemoveSlot, amount);
 			break;
 
 		case 3322:
-			if (!player.getItems().playerHasItem(player.getVariables().xRemoveId, amount))
+			if (!player.getItems().playerHasItem(player.getInstance().xRemoveId, amount))
 				return;
 			if (!DuelArena.isDueling(player) && !DuelArena.isInFirstInterface(player)
 					&& !DuelArena.isInSecondInterface(player)) {
-				player.getTradeHandler().tradeItem(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot,
+				player.getTradeHandler().tradeItem(player.getInstance().xRemoveId, player.getInstance().xRemoveSlot,
 						amount);
 			} else {
-				player.Dueling.addStakedItem(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot, amount,
+				player.Dueling.addStakedItem(player.getInstance().xRemoveId, player.getInstance().xRemoveSlot, amount,
 						player);
 			}
 			break;
 
 		case 3415:
-			if (!player.getItems().playerHasItem(player.getVariables().xRemoveId, amount))
+			if (!player.getItems().playerHasItem(player.getInstance().xRemoveId, amount))
 				return;
 			if (!DuelArena.isDueling(player) && !DuelArena.isInFirstInterface(player)
 					&& !DuelArena.isInSecondInterface(player)) {
-				player.getTradeHandler().fromTrade(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot,
+				player.getTradeHandler().fromTrade(player.getInstance().xRemoveId, player.getInstance().xRemoveSlot,
 						amount);
 			}
 			break;
 
 		case 6669:
-			if (!player.getItems().playerHasItem(player.getVariables().xRemoveId, amount)) {
+			if (!player.getItems().playerHasItem(player.getInstance().xRemoveId, amount)) {
 				player.sendMessage("return1");// returns here in x not sure were
 				// in All
 				return;
 			}
 			player.sendMessage("bankX2");
-			player.Dueling.removeStakedItem(player.getVariables().xRemoveId, player.getVariables().xRemoveSlot, amount,
+			player.Dueling.removeStakedItem(player.getInstance().xRemoveId, player.getInstance().xRemoveSlot, amount,
 					player);
 			break;
 		}

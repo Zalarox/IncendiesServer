@@ -34,7 +34,7 @@ public class TradeHandler {
 	 * @return
 	 */
 	public boolean ableToTrade(Player target) {
-		if (p.getVariables().inTrade) {
+		if (p.getInstance().inTrade) {
 			declineTrade(false);
 			return false;
 		}
@@ -42,27 +42,27 @@ public class TradeHandler {
 			p.sendMessage("Other player is currently busy.");
 			return false;
 		}
-		if (target.getVariables().isBanking) {
+		if (target.getInstance().isBanking) {
 			p.sendMessage("Other player is busy at the moment.");
 			return false;
 		}
-		if (p.getVariables().isBanking) {
+		if (p.getInstance().isBanking) {
 			p.sendMessage("Close the bank before trading someone.");
 			return false;
 		}
-		if (target.getVariables().isShopping) {
+		if (target.getInstance().isShopping) {
 			p.sendMessage("Other player is busy at the moment.");
 			return false;
 		}
-		if (p.getVariables().isShopping) {
+		if (p.getInstance().isShopping) {
 			p.sendMessage("Close the shop before trading someone.");
 			return false;
 		}
-		if (System.currentTimeMillis() - p.getVariables().logoutDelay < 10000) {
+		if (System.currentTimeMillis() - p.getInstance().logoutDelay < 10000) {
 			p.sendMessage("You cannot trade anyone while in combat!");
 			return false;
 		}
-		if (System.currentTimeMillis() - target.getVariables().logoutDelay < 10000) {
+		if (System.currentTimeMillis() - target.getInstance().logoutDelay < 10000) {
 			p.sendMessage("Other player is busy at the moment.");
 			return false;
 		}
@@ -82,14 +82,14 @@ public class TradeHandler {
 			if (face)
 				p.turnPlayerTo(o.getX(), o.getY());
 			if (Constants.goodDistance(p.getX(), p.getY(), o.getX(), o.getY(), 1)) {
-				p.getVariables().tradeWith = id;
-				if (!p.getVariables().inTrade && o.getVariables().tradeRequested
-						&& o.getVariables().tradeWith == p.playerId) {
+				p.getInstance().tradeWith = id;
+				if (!p.getInstance().inTrade && o.getInstance().tradeRequested
+						&& o.getInstance().tradeWith == p.playerId) {
 					p.getTradeHandler().openTrade();
 					o.getTradeHandler().openTrade();
-				} else if (!p.getVariables().inTrade) {
+				} else if (!p.getInstance().inTrade) {
 
-					p.getVariables().tradeRequested = true;
+					p.getInstance().tradeRequested = true;
 					p.sendMessage("Sending trade request...");
 					
 					/**
@@ -100,11 +100,11 @@ public class TradeHandler {
 					o.sendMessage(p.getDisplayName() + ":tradereq:");			
 				}
 			} else {
-				p.getVariables().headingTowardsPlayer = true;
+				p.getInstance().headingTowardsPlayer = true;
 				CycleEventHandler.getInstance().addEvent(p, new CycleEvent() {
 					@Override
 					public void execute(CycleEventContainer container) {
-						if (!p.getVariables().headingTowardsPlayer)
+						if (!p.getInstance().headingTowardsPlayer)
 							container.stop();
 						if (Constants.goodDistance(p.getX(), p.getY(), o.getX(), o.getY(), 1)) {
 							if (o != null && p != null)
@@ -116,7 +116,7 @@ public class TradeHandler {
 					@Override
 					public void stop() {
 						if (p != null)
-							p.getVariables().headingTowardsPlayer = false;
+							p.getInstance().headingTowardsPlayer = false;
 					}
 				}, 1);
 			}
@@ -131,39 +131,39 @@ public class TradeHandler {
 	 * @param p
 	 */
 	public void displayWealthInfo(Player p) {
-		Player o = PlayerHandler.players[p.getVariables().tradeWith];
-		p.getVariables().playerTradeWealth = 0;
-		o.getVariables().playerTradeWealth = 0;
+		Player o = PlayerHandler.players[p.getInstance().tradeWith];
+		p.getInstance().playerTradeWealth = 0;
+		o.getInstance().playerTradeWealth = 0;
 		for (GameItem item : p.getTradeHandler().offeredItems) {
-			p.getVariables().playerTradeWealth += (p.getShops().getItemShopValue(item.id) * item.amount);
+			p.getInstance().playerTradeWealth += (p.getShops().getItemShopValue(item.id) * item.amount);
 		}
 
 		for (GameItem item : o.getTradeHandler().offeredItems) {
-			o.getVariables().playerTradeWealth += (o.getShops().getItemShopValue(item.id) * item.amount);
+			o.getInstance().playerTradeWealth += (o.getShops().getItemShopValue(item.id) * item.amount);
 		}
 
-		int playerDifference1 = (p.getVariables().playerTradeWealth - o.getVariables().playerTradeWealth);
-		int playerDifference2 = (o.getVariables().playerTradeWealth - p.getVariables().playerTradeWealth);
+		int playerDifference1 = (p.getInstance().playerTradeWealth - o.getInstance().playerTradeWealth);
+		int playerDifference2 = (o.getInstance().playerTradeWealth - p.getInstance().playerTradeWealth);
 
 		boolean player1HasMore = (playerDifference1 > playerDifference2);
-		boolean equalsSame = (p.getVariables().playerTradeWealth == o.getVariables().playerTradeWealth);
+		boolean equalsSame = (p.getInstance().playerTradeWealth == o.getInstance().playerTradeWealth);
 
-		if (p.getVariables().playerTradeWealth < -1) {
-			p.getVariables().playerTradeWealth = 2147483647;
+		if (p.getInstance().playerTradeWealth < -1) {
+			p.getInstance().playerTradeWealth = 2147483647;
 		}
-		if (o.getVariables().playerTradeWealth < -1) {
-			o.getVariables().playerTradeWealth = 2147483647;
+		if (o.getInstance().playerTradeWealth < -1) {
+			o.getInstance().playerTradeWealth = 2147483647;
 		}
 
-		String playerValue1 = "" + p.getPA().getTotalAmount(p.getVariables().playerTradeWealth) + " ("
-				+ Misc.format(p.getVariables().playerTradeWealth) + ")";
-		String playerValue2 = "" + p.getPA().getTotalAmount(o.getVariables().playerTradeWealth) + " ("
-				+ Misc.format(o.getVariables().playerTradeWealth) + ")";
+		String playerValue1 = "" + p.getPA().getTotalAmount(p.getInstance().playerTradeWealth) + " ("
+				+ Misc.format(p.getInstance().playerTradeWealth) + ")";
+		String playerValue2 = "" + p.getPA().getTotalAmount(o.getInstance().playerTradeWealth) + " ("
+				+ Misc.format(o.getInstance().playerTradeWealth) + ")";
 
-		if (p.getVariables().playerTradeWealth < -1) {
+		if (p.getInstance().playerTradeWealth < -1) {
 			playerValue1 = "+" + playerValue1;
 		}
-		if (o.getVariables().playerTradeWealth < -1) {
+		if (o.getInstance().playerTradeWealth < -1) {
 			playerValue2 = "+" + playerValue2;
 		}
 		if (equalsSame) {
@@ -194,7 +194,7 @@ public class TradeHandler {
 	 * Opens the trade menu
 	 */
 	public void openTrade() {
-		Player o = PlayerHandler.players[p.getVariables().tradeWith];
+		Player o = PlayerHandler.players[p.getInstance().tradeWith];
 
 		if (o == null) {
 			return;
@@ -203,22 +203,22 @@ public class TradeHandler {
 		o.getTradeHandler().offeredItems.clear();
 		p.turnPlayerTo(o.getX(), o.getY());
 		p.setBusy(true);
-		p.getVariables().inTrade = true;
-		p.getVariables().canOffer = true;
-		p.getVariables().tradeStatus = 1;
-		p.getVariables().tradeRequested = false;
-		p.getVariables().tradeConfirmed = false;
-		p.getVariables().tradeConfirmed2 = false;
-		p.getVariables().tradeAccepted = false;
-		p.getVariables().acceptedTrade = false;
+		p.getInstance().inTrade = true;
+		p.getInstance().canOffer = true;
+		p.getInstance().tradeStatus = 1;
+		p.getInstance().tradeRequested = false;
+		p.getInstance().tradeConfirmed = false;
+		p.getInstance().tradeConfirmed2 = false;
+		p.getInstance().tradeAccepted = false;
+		p.getInstance().acceptedTrade = false;
 		p.getItems().resetItems(3322);
 		resetTItems(3415);
 		resetOTItems(3416);
 		String out = o.playerName;
 
-		if (o.getVariables().playerRights == 1) {
+		if (o.getInstance().playerRights == 1) {
 			out = "@cr1@" + out;
-		} else if (o.getVariables().playerRights == 2) {
+		} else if (o.getInstance().playerRights == 2) {
 			out = "@cr2@" + out;
 		}
 		p.getPA().sendString(
@@ -258,24 +258,24 @@ public class TradeHandler {
 	}
 
 	public boolean fromTrade(int itemID, int fromSlot, int amount) {
-		Player o = PlayerHandler.players[p.getVariables().tradeWith];
+		Player o = PlayerHandler.players[p.getInstance().tradeWith];
 		if (o == null) {
 			return false;
 		}
 		try {
-			if (!p.getVariables().inTrade || !p.getVariables().canOffer) {
+			if (!p.getInstance().inTrade || !p.getInstance().canOffer) {
 				declineTrade(false);
 				return false;
 			}
 			if (!p.getItems().playerHasItem(itemID, amount)) // Dupe fix
 				return false;
 
-			if (itemID != p.getVariables().playerItems[fromSlot] - 1) { // Dupe
+			if (itemID != p.getInstance().playerItems[fromSlot] - 1) { // Dupe
 																		// fix
 				return false;
 			}
-			p.getVariables().tradeConfirmed = false;
-			o.getVariables().tradeConfirmed = false;
+			p.getInstance().tradeConfirmed = false;
+			o.getInstance().tradeConfirmed = false;
 			if (!ItemLoader.isStackable(itemID)) {
 				for (int a = 0; a < amount && a < 28; a++) {
 					for (GameItem item : offeredItems) {
@@ -303,8 +303,8 @@ public class TradeHandler {
 						}
 						o.getPA().sendString("Trading with: " + p.getDisplayName() + " who has @gre@"
 								+ p.getItems().freeSlots() + " free slots", 3417);
-						p.getVariables().tradeConfirmed = false;
-						o.getVariables().tradeConfirmed = false;
+						p.getInstance().tradeConfirmed = false;
+						o.getInstance().tradeConfirmed = false;
 						p.getItems().resetItems(3322);
 						resetTItems(3415);
 						o.getTradeHandler().resetOTItems(3416);
@@ -338,8 +338,8 @@ public class TradeHandler {
 			o.getPA().sendString(
 					"Trading with: " + p.getDisplayName() + " who has @gre@" + p.getItems().freeSlots() + " free slots",
 					3417);
-			p.getVariables().tradeConfirmed = false;
-			o.getVariables().tradeConfirmed = false;
+			p.getInstance().tradeConfirmed = false;
+			o.getInstance().tradeConfirmed = false;
 			p.getItems().resetItems(3322);
 			resetTItems(3415);
 			o.getTradeHandler().resetOTItems(3416);
@@ -363,7 +363,7 @@ public class TradeHandler {
 	}
 
 	public boolean tradeItem(int itemID, int fromSlot, int amount) {
-		Player o = PlayerHandler.players[p.getVariables().tradeWith];
+		Player o = PlayerHandler.players[p.getInstance().tradeWith];
 		if (o == null) {
 			return false;
 		}
@@ -371,8 +371,8 @@ public class TradeHandler {
 			p.sendMessage("You can't trade this item.");
 			return false;
 		}
-		p.getVariables().tradeConfirmed = false;
-		o.getVariables().tradeConfirmed = false;
+		p.getInstance().tradeConfirmed = false;
+		o.getInstance().tradeConfirmed = false;
 		if (!ItemLoader.isStackable(itemID) && !ItemLoader.isNote(itemID)) {
 			for (int a = 0; a < amount && a < 28; a++) {
 				if (p.getItems().playerHasItem(itemID, 1)) {
@@ -398,14 +398,14 @@ public class TradeHandler {
 				return false;
 		}
 
-		if (!p.getVariables().inTrade || !p.getVariables().canOffer) {
+		if (!p.getInstance().inTrade || !p.getInstance().canOffer) {
 			declineTrade(false);
 			return false;
 		}
 		if (!p.getItems().playerHasItem(itemID, amount))
 			return false;
 
-		if (itemID != p.getVariables().playerItems[fromSlot] - 1) {
+		if (itemID != p.getInstance().playerItems[fromSlot] - 1) {
 			return false;
 		}
 
@@ -446,35 +446,35 @@ public class TradeHandler {
 	 */
 	public void resetTrade() {
 		offeredItems.clear();
-		p.getVariables().inTrade = false;
-		p.getVariables().tradeWith = 0;
-		p.getVariables().canOffer = true;
-		p.getVariables().tradeConfirmed = false;
-		p.getVariables().tradeConfirmed2 = false;
-		p.getVariables().tradeAccepted = false;
-		p.getVariables().acceptedTrade = false;
+		p.getInstance().inTrade = false;
+		p.getInstance().tradeWith = 0;
+		p.getInstance().canOffer = true;
+		p.getInstance().tradeConfirmed = false;
+		p.getInstance().tradeConfirmed2 = false;
+		p.getInstance().tradeAccepted = false;
+		p.getInstance().acceptedTrade = false;
 		p.getPA().removeAllWindows();
-		p.getVariables().tradeResetNeeded = false;
+		p.getInstance().tradeResetNeeded = false;
 		p.getPA().sendString("Are you sure you want to make this trade?", 3535);
 	}
 
 	public void declineTrade(boolean r) {
-		p.getVariables().tradeStatus = 0;
+		p.getInstance().tradeStatus = 0;
 		declineTrade(true, r);
 	}
 
 	public void decline(boolean r) {
-		p.getVariables().tradeStatus = 0;
+		p.getInstance().tradeStatus = 0;
 		declineTrade(false, r);
 	}
 
 	public void declineTrade(boolean tellOther, boolean r) {
-		if (p.getVariables().tradeAccepted)
+		if (p.getInstance().tradeAccepted)
 			return;
 		if (!r && p != null) {
 			p.getPA().removeAllWindows();
 		}
-		Player o = PlayerHandler.players[p.getVariables().tradeWith];
+		Player o = PlayerHandler.players[p.getInstance().tradeWith];
 		if (o == null) {
 			return;
 		}
@@ -500,22 +500,22 @@ public class TradeHandler {
 				}
 			}
 		}
-		p.getVariables().canOffer = true;
-		p.getVariables().tradeConfirmed = false;
-		p.getVariables().tradeConfirmed2 = false;
-		p.getVariables().tradeAccepted = false;
+		p.getInstance().canOffer = true;
+		p.getInstance().tradeConfirmed = false;
+		p.getInstance().tradeConfirmed2 = false;
+		p.getInstance().tradeAccepted = false;
 		offeredItems.clear();
-		p.getVariables().inTrade = false;
-		p.getVariables().tradeWith = 0;
-		if (o != null && o.getVariables().tradeWith == p.playerId && !p.getVariables().closed) {
+		p.getInstance().inTrade = false;
+		p.getInstance().tradeWith = 0;
+		if (o != null && o.getInstance().tradeWith == p.playerId && !p.getInstance().closed) {
 			p.sendMessage("Other player has declined the trade.");
-			o.getVariables().tradeAccepted = false;
+			o.getInstance().tradeAccepted = false;
 		}
-		p.getVariables().closed = false;
+		p.getInstance().closed = false;
 	}
 
 	public void resetOTItems(int WriteFrame) {
-		Player o = PlayerHandler.players[p.getVariables().tradeWith];
+		Player o = PlayerHandler.players[p.getInstance().tradeWith];
 		if (o == null) {
 			return;
 		}
@@ -546,11 +546,11 @@ public class TradeHandler {
 	}
 
 	public void confirmScreen() {
-		Player o = PlayerHandler.players[p.getVariables().tradeWith];
+		Player o = PlayerHandler.players[p.getInstance().tradeWith];
 		if (o == null) {
 			return;
 		}
-		p.getVariables().canOffer = false;
+		p.getInstance().canOffer = false;
 		p.getItems().resetItems(3214);
 		String SendTrade = "Absolutely nothing!";
 		String SendAmount = "";
@@ -610,7 +610,7 @@ public class TradeHandler {
 
 	@SuppressWarnings("unused")
 	public void giveItems() {
-		Player o = PlayerHandler.players[p.getVariables().tradeWith];
+		Player o = PlayerHandler.players[p.getInstance().tradeWith];
 		
 		if (o == null) {
 			return;
@@ -627,17 +627,17 @@ public class TradeHandler {
 			for (GameItem item : o.getTradeHandler().offeredItems)
 				p.getPA().removeAllWindows();
 			
-			p.getVariables().tradeResetNeeded = true;
+			p.getInstance().tradeResetNeeded = true;
 			
 			CycleEventHandler.getInstance().addEvent(this, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (p.getVariables().inTrade && p.getVariables().tradeResetNeeded) {
-						Player o = PlayerHandler.players[p.getVariables().tradeWith];
+					if (p.getInstance().inTrade && p.getInstance().tradeResetNeeded) {
+						Player o = PlayerHandler.players[p.getInstance().tradeWith];
 						
 						if (o != null) {
 							
-							if (o.getVariables().tradeResetNeeded) {
+							if (o.getInstance().tradeResetNeeded) {
 								p.getTradeHandler().resetTrade();
 								o.getTradeHandler().resetTrade();
 								container.stop();
@@ -656,7 +656,7 @@ public class TradeHandler {
 
 				@Override
 				public void stop() {
-					p.getVariables().tradeResetNeeded = false;
+					p.getInstance().tradeResetNeeded = false;
 				}
 			}, 1);
 		} catch (Exception e) {

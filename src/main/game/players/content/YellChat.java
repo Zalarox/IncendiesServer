@@ -42,15 +42,15 @@ public class YellChat {
 
 		String message = null;
 
-		message = getRankPrefix(p.getVariables().playerRights) + "<col=255>" + "<img=" + p.getVariables().playerRights
+		message = getRankPrefix(p.getInstance().playerRights) + "<col=255>" + "<img=" + p.getInstance().playerRights
 				+ "></img> " + formatPlayerName(p.playerName) + "</col>: " + formatChat(inputText.replaceAll("/", ""));
 		
 		/**
 		 * The player is impersonated - change their yell name!
 		 */
-		if (p.getVariables().impersonation != "") {
-			message = getRankPrefix(p.getVariables().playerRights) + "<col=255>" + "<img="
-					+ p.getVariables().playerRights + "></img> " + p.getVariables().impersonation + "</col>: "
+		if (p.getInstance().impersonation != "") {
+			message = getRankPrefix(p.getInstance().playerRights) + "<col=255>" + "<img="
+					+ p.getInstance().playerRights + "></img> " + p.getInstance().impersonation + "</col>: "
 					+ formatChat(inputText.replaceAll("/", ""));
 		}
 
@@ -61,11 +61,11 @@ public class YellChat {
 			}
 		}
 
-		p.getVariables().ableToYell = false;
+		p.getInstance().ableToYell = false;
 		GameEngine.getScheduler().schedule(new Task(5) {
 			@Override
 			public void execute() {
-				p.getVariables().ableToYell = true;
+				p.getInstance().ableToYell = true;
 				this.stop();
 			}
 		});
@@ -88,12 +88,12 @@ public class YellChat {
 		}
 		if (Connection.containsConnection(p.playerName, ConnectionType.forName("MUTE"), false)
 				|| Connection.containsConnection(p.connectedFrom, ConnectionType.forName("IPMUTE"), false)
-				|| Connection.containsConnection(p.getVariables().identityPunishment,
+				|| Connection.containsConnection(p.getInstance().identityPunishment,
 						ConnectionType.forName("IDENTITY_MUTE"), false)) {
 			p.sendMessage("You are muted.");
 			return false;
 		}
-		if (!p.getVariables().ableToYell && p.hasRights(Player.RIGHTS_PLAYER)) {
+		if (!p.getInstance().ableToYell && p.hasRights(Player.RIGHTS_PLAYER)) {
 			p.sendMessage("Please wait a few seconds between yells.");
 			return false;
 		}

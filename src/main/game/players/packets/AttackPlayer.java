@@ -21,9 +21,9 @@ public class AttackPlayer implements PacketType {
 	@SuppressWarnings("static-access")
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
-		c.getVariables().playerIndex = 0;
-		c.getVariables().npcIndex = 0;
-		if (c.getVariables().resting) {
+		c.getInstance().playerIndex = 0;
+		c.getInstance().npcIndex = 0;
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
 
@@ -33,66 +33,66 @@ public class AttackPlayer implements PacketType {
 		 * Attack player
 		 **/
 		case ATTACK_PLAYER:
-			c.getVariables().playerIndex = c.getInStream().readSignedWordBigEndian();
-			if (c.getVariables().teleTimer > 0) {
-				c.getVariables().playerIndex = -1;
+			c.getInstance().playerIndex = c.getInStream().readSignedWordBigEndian();
+			if (c.getInstance().teleTimer > 0) {
+				c.getInstance().playerIndex = -1;
 				return;
 			}
-			if (c.getVariables().playerIndex > PlayerHandler.players.length) {
-				c.getVariables().playerIndex = -1;
+			if (c.getInstance().playerIndex > PlayerHandler.players.length) {
+				c.getInstance().playerIndex = -1;
 				return;
 			}
-			if (PlayerHandler.players[c.getVariables().playerIndex] == null) {
+			if (PlayerHandler.players[c.getInstance().playerIndex] == null) {
 				break;
 			}
 			if (c.party != null) {
-				Dungeon.inviteMember(c.getVariables().playerIndex, c);
-				c.getVariables().playerIndex = 0;
+				Dungeon.inviteMember(c.getInstance().playerIndex, c);
+				c.getInstance().playerIndex = 0;
 				return;
 			}
-			if (c.getVariables().respawnTimer > 0) {
+			if (c.getInstance().respawnTimer > 0) {
 				break;
 			}
 
-			if (c.getVariables().autocastId > 0)
-				c.getVariables().autocasting = true;
+			if (c.getInstance().autocastId > 0)
+				c.getInstance().autocasting = true;
 
-			if (!c.getVariables().autocasting && c.getVariables().spellId > 0) {
-				c.getVariables().spellId = 0;
+			if (!c.getInstance().autocasting && c.getInstance().spellId > 0) {
+				c.getInstance().spellId = 0;
 			}
-			c.getVariables().mageFollow = false;
-			c.getVariables().spellId = 0;
-			c.getVariables().usingMagic = false;
+			c.getInstance().mageFollow = false;
+			c.getInstance().spellId = 0;
+			c.getInstance().usingMagic = false;
 			boolean usingBow = false;
 			boolean usingOtherRangeWeapons = false;
 			boolean usingArrows = false;
-			boolean usingCross = c.getVariables().playerEquipment[c.getVariables().playerWeapon] == 9185
-					|| c.getVariables().playerEquipment[c.getVariables().playerWeapon] == 18357;
-			for (int bowId : c.getVariables().BOWS) {
-				if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == bowId) {
+			boolean usingCross = c.getInstance().playerEquipment[c.getInstance().playerWeapon] == 9185
+					|| c.getInstance().playerEquipment[c.getInstance().playerWeapon] == 18357;
+			for (int bowId : c.getInstance().BOWS) {
+				if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == bowId) {
 					usingBow = true;
-					for (int arrowId : c.getVariables().ARROWS) {
-						if (c.getVariables().playerEquipment[c.getVariables().playerArrows] == arrowId) {
+					for (int arrowId : c.getInstance().ARROWS) {
+						if (c.getInstance().playerEquipment[c.getInstance().playerArrows] == arrowId) {
 							usingArrows = true;
 						}
 					}
 				}
 			}
-			for (int otherRangeId : c.getVariables().OTHER_RANGE_WEAPONS) {
-				if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == otherRangeId) {
+			for (int otherRangeId : c.getInstance().OTHER_RANGE_WEAPONS) {
+				if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == otherRangeId) {
 					usingOtherRangeWeapons = true;
 				}
 			}
 			if (DuelArena.isDueling(c)) {
-				if (c.getVariables().duelCount > 0) {
+				if (c.getInstance().duelCount > 0) {
 					c.sendMessage("The duel hasn't started yet!");
-					c.getVariables().playerIndex = 0;
+					c.getInstance().playerIndex = 0;
 					return;
 				}
-				if (c.getVariables().duelRule[DuelArena.RULE_FUN_WEAPONS]) {
+				if (c.getInstance().duelRule[DuelArena.RULE_FUN_WEAPONS]) {
 					boolean canUseWeapon = false;
 					for (int funWeapon : Constants.FUN_WEAPONS) {
-						if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == funWeapon) {
+						if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == funWeapon) {
 							canUseWeapon = true;
 						}
 					}
@@ -102,47 +102,47 @@ public class AttackPlayer implements PacketType {
 					}
 				}
 
-				if (c.getVariables().duelRule[DuelArena.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
+				if (c.getInstance().duelRule[DuelArena.RULE_RANGED] && (usingBow || usingOtherRangeWeapons)) {
 					c.sendMessage("Range has been disabled in this duel!");
 					return;
 				}
-				if (c.getVariables().duelRule[DuelArena.RULE_MELEE] && (!usingBow && !usingOtherRangeWeapons)) {
+				if (c.getInstance().duelRule[DuelArena.RULE_MELEE] && (!usingBow && !usingOtherRangeWeapons)) {
 					c.sendMessage("Melee has been disabled in this duel!");
 					return;
 				}
 			}
 
-			if ((usingBow || c.getVariables().autocasting)
-					&& c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getVariables().playerIndex].getX(),
-							PlayerHandler.players[c.getVariables().playerIndex].getY(), 6)) {
-				c.getVariables().usingBow = true;
+			if ((usingBow || c.getInstance().autocasting)
+					&& c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getInstance().playerIndex].getX(),
+							PlayerHandler.players[c.getInstance().playerIndex].getY(), 6)) {
+				c.getInstance().usingBow = true;
 				c.stopMovement();
 			}
 
 			if (usingOtherRangeWeapons
-					&& c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getVariables().playerIndex].getX(),
-							PlayerHandler.players[c.getVariables().playerIndex].getY(), 3)) {
-				c.getVariables().usingRangeWeapon = true;
+					&& c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getInstance().playerIndex].getX(),
+							PlayerHandler.players[c.getInstance().playerIndex].getY(), 3)) {
+				c.getInstance().usingRangeWeapon = true;
 				c.stopMovement();
 			}
 			if (!usingBow)
-				c.getVariables().usingBow = false;
+				c.getInstance().usingBow = false;
 			if (!usingOtherRangeWeapons)
-				c.getVariables().usingRangeWeapon = false;
+				c.getInstance().usingRangeWeapon = false;
 
 			if (!usingCross && !usingArrows && usingBow
-					&& c.getVariables().playerEquipment[c.getVariables().playerWeapon] < 4212
-					&& c.getVariables().playerEquipment[c.getVariables().playerWeapon] > 4223) {
+					&& c.getInstance().playerEquipment[c.getInstance().playerWeapon] < 4212
+					&& c.getInstance().playerEquipment[c.getInstance().playerWeapon] > 4223) {
 				c.sendMessage("You have run out of arrows!");
 				return;
 			}
-			if (c.getCombat().correctBowAndArrows() < c.getVariables().playerEquipment[c.getVariables().playerArrows]
+			if (c.getCombat().correctBowAndArrows() < c.getInstance().playerEquipment[c.getInstance().playerArrows]
 					&& Constants.CORRECT_ARROWS && usingBow && !c.getCombat().usingCrystalBow() && !usingCross) {
 				c.sendMessage("You can't use "
-						+ c.getItems().getItemName(c.getVariables().playerEquipment[c.getVariables().playerArrows])
+						+ c.getItems().getItemName(c.getInstance().playerEquipment[c.getInstance().playerArrows])
 								.toLowerCase()
 						+ " with a "
-						+ c.getItems().getItemName(c.getVariables().playerEquipment[c.getVariables().playerWeapon])
+						+ c.getItems().getItemName(c.getInstance().playerEquipment[c.getInstance().playerWeapon])
 								.toLowerCase()
 						+ ".");
 				c.stopMovement();
@@ -156,11 +156,11 @@ public class AttackPlayer implements PacketType {
 				return;
 			}
 			if (c.getCombat().checkReqs()) {
-				if (!c.getVariables().usingMagic && !usingBow && !usingOtherRangeWeapons) {
-					Following.triggerFollowing(c.getVariables().playerIndex, 0, c);
-					c.getVariables().followDistance = 1;
+				if (!c.getInstance().usingMagic && !usingBow && !usingOtherRangeWeapons) {
+					Following.triggerFollowing(c.getInstance().playerIndex, 0, c);
+					c.getInstance().followDistance = 1;
 				}
-				if (c.getVariables().attackTimer <= 0) {
+				if (c.getInstance().attackTimer <= 0) {
 					// c.sendMessage("Tried to attack...");
 					// c.getCombat().attackPlayer(c.playerIndex);
 					// c.attackTimer++;
@@ -172,69 +172,69 @@ public class AttackPlayer implements PacketType {
 		 * Attack player with magic
 		 **/
 		case MAGE_PLAYER:
-			if (!c.getVariables().mageAllowed) {
-				c.getVariables().mageAllowed = true;
+			if (!c.getInstance().mageAllowed) {
+				c.getInstance().mageAllowed = true;
 				break;
 			}
 			c.getPA().walkTo(0, 0);
 			// c.usingSpecial = false;
 			// c.getItems().updateSpecialBar();
 
-			c.getVariables().playerIndex = c.getInStream().readSignedWordA();
-			if (c.getVariables().teleTimer > 0) {
-				c.getVariables().playerIndex = -1;
+			c.getInstance().playerIndex = c.getInStream().readSignedWordA();
+			if (c.getInstance().teleTimer > 0) {
+				c.getInstance().playerIndex = -1;
 				return;
 			}
-			if (c.getVariables().playerIndex > PlayerHandler.players.length) {
-				c.getVariables().playerIndex = -1;
+			if (c.getInstance().playerIndex > PlayerHandler.players.length) {
+				c.getInstance().playerIndex = -1;
 				return;
 			}
 			int castingSpellId = c.getInStream().readSignedWordBigEndian();
-			c.getVariables().usingMagic = false;
-			if (PlayerHandler.players[c.getVariables().playerIndex] == null) {
+			c.getInstance().usingMagic = false;
+			if (PlayerHandler.players[c.getInstance().playerIndex] == null) {
 				break;
 			}
-			if (c.getVariables().respawnTimer > 0) {
+			if (c.getInstance().respawnTimer > 0) {
 				break;
 			}
 
-			for (int i = 0; i < c.getVariables().MAGIC_SPELLS.length; i++) {
-				if (castingSpellId == c.getVariables().MAGIC_SPELLS[i][0]) {
-					c.getVariables().spellId = i;
-					c.getVariables().usingMagic = true;
+			for (int i = 0; i < c.getInstance().MAGIC_SPELLS.length; i++) {
+				if (castingSpellId == c.getInstance().MAGIC_SPELLS[i][0]) {
+					c.getInstance().spellId = i;
+					c.getInstance().usingMagic = true;
 					break;
 				}
 			}
 
-			if (c.getVariables().autocasting)
-				c.getVariables().autocasting = false;
+			if (c.getInstance().autocasting)
+				c.getInstance().autocasting = false;
 
 			if (!c.getCombat().checkReqs()) {
 				break;
 			}
 			if (DuelArena.isDueling(c)) {
-				if (c.getVariables().duelCount > 0) {
+				if (c.getInstance().duelCount > 0) {
 					c.sendMessage("The duel hasn't started yet!");
-					c.getVariables().playerIndex = 0;
+					c.getInstance().playerIndex = 0;
 					return;
 				}
-				if (c.getVariables().duelRule[DuelArena.RULE_MAGIC]) {
+				if (c.getInstance().duelRule[DuelArena.RULE_MAGIC]) {
 					c.sendMessage("Magic has been disabled in this duel!");
 					return;
 				}
 			}
 
-			for (int r = 0; r < c.getVariables().REDUCE_SPELLS.length; r++) { // reducing
+			for (int r = 0; r < c.getInstance().REDUCE_SPELLS.length; r++) { // reducing
 																				// spells,
 																				// confuse
 																				// etc
-				if (PlayerHandler.players[c.getVariables().playerIndex].getVariables().REDUCE_SPELLS[r] == c
-						.getVariables().MAGIC_SPELLS[c.getVariables().spellId][0]) {
-					if ((System.currentTimeMillis() - PlayerHandler.players[c.getVariables().playerIndex]
-							.getVariables().reduceSpellDelay[r]) < PlayerHandler.players[c.getVariables().playerIndex]
-									.getVariables().REDUCE_SPELL_TIME[r]) {
+				if (PlayerHandler.players[c.getInstance().playerIndex].getInstance().REDUCE_SPELLS[r] == c
+						.getInstance().MAGIC_SPELLS[c.getInstance().spellId][0]) {
+					if ((System.currentTimeMillis() - PlayerHandler.players[c.getInstance().playerIndex]
+							.getInstance().reduceSpellDelay[r]) < PlayerHandler.players[c.getInstance().playerIndex]
+									.getInstance().REDUCE_SPELL_TIME[r]) {
 						c.sendMessage("That player is currently immune to this spell.");
-						c.getVariables().usingMagic = false;
+						c.getInstance().usingMagic = false;
 						c.stopMovement();
 						c.getCombat().resetPlayerAttack();
 					}
@@ -243,12 +243,12 @@ public class AttackPlayer implements PacketType {
 			}
 
 			if (System.currentTimeMillis()
-					- PlayerHandler.players[c.getVariables().playerIndex]
-							.getVariables().teleBlockDelay < PlayerHandler.players[c.getVariables().playerIndex]
-									.getVariables().teleBlockLength
-					&& c.getVariables().MAGIC_SPELLS[c.getVariables().spellId][0] == 12445) {
+					- PlayerHandler.players[c.getInstance().playerIndex]
+							.getInstance().teleBlockDelay < PlayerHandler.players[c.getInstance().playerIndex]
+									.getInstance().teleBlockLength
+					&& c.getInstance().MAGIC_SPELLS[c.getInstance().spellId][0] == 12445) {
 				c.sendMessage("That player is already affected by this spell.");
-				c.getVariables().usingMagic = false;
+				c.getInstance().usingMagic = false;
 				c.stopMovement();
 				c.getCombat().resetPlayerAttack();
 			}
@@ -258,15 +258,15 @@ public class AttackPlayer implements PacketType {
 			 * c.getCombat().resetPlayerAttack(); break; }
 			 */
 
-			if (c.getVariables().usingMagic) {
-				if (c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getVariables().playerIndex].getX(),
-						PlayerHandler.players[c.getVariables().playerIndex].getY(), 7)) {
+			if (c.getInstance().usingMagic) {
+				if (c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getInstance().playerIndex].getX(),
+						PlayerHandler.players[c.getInstance().playerIndex].getY(), 7)) {
 					c.stopMovement();
 				}
 				if (c.getCombat().checkReqs()) {
 					Following.triggerFollowing(c.playerIndex, 0, c);
-					c.getVariables().mageFollow = true;
-					if (c.getVariables().attackTimer <= 0) {
+					c.getInstance().mageFollow = true;
+					if (c.getInstance().attackTimer <= 0) {
 						// c.getCombat().attackPlayer(c.playerIndex);
 						// c.attackTimer++;
 					}

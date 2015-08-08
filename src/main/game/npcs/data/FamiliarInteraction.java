@@ -127,7 +127,7 @@ public class FamiliarInteraction {
 		}
 		if (chat.equals("Null") || name.equals("Null") || chat == null || name == null)
 			return;
-		p.getVariables().nextChat = -1;
+		p.getInstance().nextChat = -1;
 		sendFamiliarChat(p, chat, name);
 	}
 

@@ -13,12 +13,12 @@ public class ItemOnPlayer implements PacketType {
 		int playerIndex = c.getInStream().readUnsignedWord();
 		int item = c.getInStream().readUnsignedWord();
 		int slot = c.getInStream().readUnsignedWordBigEndian();
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		if (playerIndex > PlayerHandler.players.length) {
 			return;
 		}
-		if (slot > c.getVariables().playerItems.length) {
+		if (slot > c.getInstance().playerItems.length) {
 			return;
 		}
 		if (PlayerHandler.players[playerIndex] == null) {

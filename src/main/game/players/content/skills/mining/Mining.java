@@ -106,7 +106,7 @@ public class Mining extends SkillHandler {
 
 	public static boolean hasPick(Player c) {
 		for (PickAxes p : PickAxes.values()) {
-			if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == p.itemId
+			if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == p.itemId
 					|| c.getItems().playerHasItem(p.itemId))
 				return true;
 		}
@@ -123,12 +123,12 @@ public class Mining extends SkillHandler {
 		if (!hasPick(player)) {
 			return false;
 		}
-		if (player.getVariables().playerEquipment[player.getVariables().playerWeapon] == InfernoAdze.itemID) {
+		if (player.getInstance().playerEquipment[player.getInstance().playerWeapon] == InfernoAdze.itemID) {
 			if (!player.getAdze().getRequirements(player))
 				return false;
 		}
-		if (player.getVariables().playerLevel[Constants.MINING] < Rocks.getRock(objectId).levelReq
-				&& !(player.getVariables().playerEquipment[player.getVariables().playerWeapon] == InfernoAdze.itemID)) {
+		if (player.getInstance().playerLevel[Constants.MINING] < Rocks.getRock(objectId).levelReq
+				&& !(player.getInstance().playerEquipment[player.getInstance().playerWeapon] == InfernoAdze.itemID)) {
 			return false;
 		}
 		return true;
@@ -137,13 +137,13 @@ public class Mining extends SkillHandler {
 	public static boolean mineOre(final Player player, final int objectId, final int obX, final int obY) {
 		final Rocks r = Rocks.getRock(objectId);
 		if (!canMine(player, objectId) || player == null || r == null
-				|| player.getVariables().playerSkilling[Constants.MINING])
+				|| player.getInstance().playerSkilling[Constants.MINING])
 			return false;
 		PickAxes pick = null;
 		for (PickAxes o : PickAxes.values()) {
-			if (player.getVariables().playerEquipment[player.getVariables().playerWeapon] == o.itemId
+			if (player.getInstance().playerEquipment[player.getInstance().playerWeapon] == o.itemId
 					|| player.getItems().playerHasItem(o.itemId)) {
-				if (player.getVariables().playerLevel[Constants.MINING] >= o.levelReq)
+				if (player.getInstance().playerLevel[Constants.MINING] >= o.levelReq)
 					pick = o;
 			}
 		}
@@ -159,14 +159,14 @@ public class Mining extends SkillHandler {
 		player.sendMessage("You swing your pick at the rock.");
 		player.getPA().resetSkills();
 		player.startAnimation(p.getAnim());
-		player.getVariables().playerSkilling[Constants.MINING] = true;
+		player.getInstance().playerSkilling[Constants.MINING] = true;
 		CycleEventHandler.getSingleton().addEvent(new CycleEvent() {
 
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (!player.getVariables().playerSkilling[Constants.MINING] || !canMine(player, objectId))
+				if (!player.getInstance().playerSkilling[Constants.MINING] || !canMine(player, objectId))
 					container.stop();
-				if (SkillHandler.skillCheck(player.getVariables().playerLevel[Constants.MINING], r.levelReq,
+				if (SkillHandler.skillCheck(player.getInstance().playerLevel[Constants.MINING], r.levelReq,
 						p.bonus * 20)) {
 					player.getItems().addItem(getItemReceived(objectId, r.oreItemId), 1);
 					player.sendMessage(
@@ -210,10 +210,10 @@ public class Mining extends SkillHandler {
 		CycleEventHandler.getSingleton().addEvent(player, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (player.getVariables().playerSkilling[Constants.MINING]) {
+				if (player.getInstance().playerSkilling[Constants.MINING]) {
 					player.startAnimation(p.anim);
 				}
-				if (!player.getVariables().playerSkilling[Constants.MINING]) {
+				if (!player.getInstance().playerSkilling[Constants.MINING]) {
 					resetMining(player);
 					container.stop();
 				}
@@ -368,9 +368,9 @@ public class Mining extends SkillHandler {
 
 	public static int getAnimation(Player c) {
 		for (PickAxes p : PickAxes.values()) {
-			if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == p.itemId
+			if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == p.itemId
 					|| c.getItems().playerHasItem(p.itemId)) {
-				if (c.getVariables().playerLevel[Constants.MINING] >= p.levelReq)
+				if (c.getInstance().playerLevel[Constants.MINING] >= p.levelReq)
 					return p.anim;
 			}
 		}
@@ -378,15 +378,15 @@ public class Mining extends SkillHandler {
 	}
 
 	public static void mineEss(final Player c) {
-		if (c.getItems().freeSlots() == 0 || c.getVariables().playerSkilling[Constants.MINING])
+		if (c.getItems().freeSlots() == 0 || c.getInstance().playerSkilling[Constants.MINING])
 			return;
 		if (!hasPick(c))
 			return;
 		PickAxes q = null;
 		for (PickAxes o : PickAxes.values()) {
-			if (c.getVariables().playerEquipment[c.getVariables().playerWeapon] == o.itemId
+			if (c.getInstance().playerEquipment[c.getInstance().playerWeapon] == o.itemId
 					|| c.getItems().playerHasItem(o.itemId)) {
-				if (c.getVariables().playerLevel[Constants.MINING] >= o.levelReq)
+				if (c.getInstance().playerLevel[Constants.MINING] >= o.levelReq)
 					q = o;
 			}
 		}
@@ -396,16 +396,16 @@ public class Mining extends SkillHandler {
 			return;
 		}
 		c.getPA().resetSkills();
-		final int essenceMined = c.getVariables().playerLevel[Constants.MINING] < 30 ? 1436 : 7936;
+		final int essenceMined = c.getInstance().playerLevel[Constants.MINING] < 30 ? 1436 : 7936;
 		c.sendMessage("You swing your pick at the rock.");
-		c.getVariables().playerSkilling[Constants.MINING] = true;
+		c.getInstance().playerSkilling[Constants.MINING] = true;
 		c.startAnimation(p.anim);
 		CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 			int timer = p.essMineCycles;
 
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (!c.getVariables().playerSkilling[Constants.MINING] || c.getItems().freeSlots() == 0)
+				if (!c.getInstance().playerSkilling[Constants.MINING] || c.getItems().freeSlots() == 0)
 					container.stop();
 				if (timer > 0)
 					timer--;
@@ -425,10 +425,10 @@ public class Mining extends SkillHandler {
 		CycleEventHandler.getSingleton().addEvent(c, new CycleEvent() {
 			@Override
 			public void execute(CycleEventContainer container) {
-				if (c.getVariables().playerSkilling[Constants.MINING]) {
+				if (c.getInstance().playerSkilling[Constants.MINING]) {
 					c.startAnimation(p.anim);
 				}
-				if (!c.getVariables().playerSkilling[Constants.MINING]) {
+				if (!c.getInstance().playerSkilling[Constants.MINING]) {
 					resetMining(c);
 					container.stop();
 				}

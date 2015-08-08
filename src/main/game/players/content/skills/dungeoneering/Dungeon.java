@@ -119,7 +119,7 @@ public class Dungeon {
 		if (p.party.floor == null)
 			return;
 		p.getDH().sendOption3("Open shop one", "Open shop two", "Open shop three");
-		p.getVariables().dialogueAction = 15;
+		p.getInstance().dialogueAction = 15;
 	}
 
 	public static void inviteMember(final int id, final Player p) {

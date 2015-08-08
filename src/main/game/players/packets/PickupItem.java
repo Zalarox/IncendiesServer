@@ -15,23 +15,23 @@ public class PickupItem implements PacketType {
 
 	@Override
 	public void processPacket(final Player c, int packetType, int packetSize) {
-		c.getVariables().pItemY = c.getInStream().readSignedWordBigEndian();
-		c.getVariables().pItemId = c.getInStream().readUnsignedWord();
-		c.getVariables().pItemX = c.getInStream().readSignedWordBigEndian();
+		c.getInstance().pItemY = c.getInStream().readSignedWordBigEndian();
+		c.getInstance().pItemId = c.getInStream().readUnsignedWord();
+		c.getInstance().pItemX = c.getInStream().readSignedWordBigEndian();
 		
-		if (c.getVariables().teleTimer > 0)
+		if (c.getInstance().teleTimer > 0)
 			return;
 		
-		if (Math.abs(c.getX() - c.getVariables().pItemX) > 25 || Math.abs(c.getY() - c.getVariables().pItemY) > 25) {
+		if (Math.abs(c.getX() - c.getInstance().pItemX) > 25 || Math.abs(c.getY() - c.getInstance().pItemY) > 25) {
 			c.resetWalkingQueue();
 			return;
 		}
 		
-		if (c.getVariables().playerSkilling[c.getVariables().playerFiremaking]) {
+		if (c.getInstance().playerSkilling[c.getInstance().playerFiremaking]) {
 			return;
 		}
 		
-		if (c.getVariables().resting) {
+		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 		}
 		
@@ -40,32 +40,32 @@ public class PickupItem implements PacketType {
 		/**
 		 * If the player is standing on the item
 		 */
-		if (c.getX() == c.getVariables().pItemX && c.getY() == c.getVariables().pItemY) {
-			ItemHandler.removeGroundItem(c, c.getVariables().pItemId, c.getVariables().pItemX, c.getVariables().pItemY,
-					true, Region.getRegion(c.getVariables().pItemX, c.getVariables().pItemY));
+		if (c.getX() == c.getInstance().pItemX && c.getY() == c.getInstance().pItemY) {
+			ItemHandler.removeGroundItem(c, c.getInstance().pItemId, c.getInstance().pItemX, c.getInstance().pItemY,
+					true, Region.getRegion(c.getInstance().pItemX, c.getInstance().pItemY));
 			return;
 			
 		/**
 		 * If they're not already on top of it, they've got to walk to it
 		 */
 		} else {
-			c.getVariables().walkingToItem = true;
+			c.getInstance().walkingToItem = true;
 			CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {
 				@Override
 				public void execute(CycleEventContainer container) {
-					if (!c.getVariables().walkingToItem)
+					if (!c.getInstance().walkingToItem)
 						container.stop();
-					if (c.getX() == c.getVariables().pItemX && c.getY() == c.getVariables().pItemY) {
-						ItemHandler.removeGroundItem(c, c.getVariables().pItemId, c.getVariables().pItemX,
-								c.getVariables().pItemY, true,
-								Region.getRegion(c.getVariables().pItemX, c.getVariables().pItemY));
+					if (c.getX() == c.getInstance().pItemX && c.getY() == c.getInstance().pItemY) {
+						ItemHandler.removeGroundItem(c, c.getInstance().pItemId, c.getInstance().pItemX,
+								c.getInstance().pItemY, true,
+								Region.getRegion(c.getInstance().pItemX, c.getInstance().pItemY));
 						container.stop();
 					}
 				}
 
 				@Override
 				public void stop() {
-					c.getVariables().walkingToItem = false;
+					c.getInstance().walkingToItem = false;
 				}
 			}, 1);
 		}

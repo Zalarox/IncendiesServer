@@ -94,7 +94,7 @@ public class Connection {
 		String toAdd = (type.toString().contains("IP") || type.toString().contains("STARTER"))
 				? player.playerName + ":" + player.connectedFrom
 				: type.toString().contains("IDENTITY_BAN")
-						? player.playerName + ":" + player.getVariables().identityPunishment : player.playerName;
+						? player.playerName + ":" + player.getInstance().identityPunishment : player.playerName;
 		type.getList().add(toAdd);
 		try {
 			writer = new BufferedWriter(new FileWriter(connectionFile));

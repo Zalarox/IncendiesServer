@@ -36,11 +36,11 @@ public class QuickPrayers {
 		canBeSelected(c, actionId);
 		for (int j = 0; j < data.length; j++) {
 			if (data[j][0] == actionId) {
-				if (c.getVariables().quickPrayers[data[j][2]]) {
-					c.getVariables().quickPrayers[data[j][2]] = false;
+				if (c.getInstance().quickPrayers[data[j][2]]) {
+					c.getInstance().quickPrayers[data[j][2]] = false;
 					c.getPA().sendFrame36(data[j][1], 0);
 				} else {
-					c.getVariables().quickPrayers[data[j][2]] = true;
+					c.getInstance().quickPrayers[data[j][2]] = true;
 					c.getPA().sendFrame36(data[j][1], 1);
 				}
 			}
@@ -49,7 +49,7 @@ public class QuickPrayers {
 
 	public static void loadCheckMarks(Player player) {
 		for (int j = 0; j < data.length; j++)
-			player.getPA().sendFrame36(data[j][1], player.getVariables().quickPrayers[data[j][2]] ? 1 : 0);
+			player.getPA().sendFrame36(data[j][1], player.getInstance().quickPrayers[data[j][2]] ? 1 : 0);
 	}
 
 	public static void canBeSelected(Player c, int actionId) {
@@ -228,7 +228,7 @@ public class QuickPrayers {
 		}
 		for (int i = 0; i < MAX_PRAYERS; i++) {
 			if (!prayer[i]) {
-				c.getVariables().quickPrayers[i] = false;
+				c.getInstance().quickPrayers[i] = false;
 				for (int j = 0; j < data.length; j++) {
 					if (i == data[j][2])
 						c.getPA().sendFrame36(data[j][1], 0);

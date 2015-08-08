@@ -36,13 +36,13 @@ public class ClanChatHandler {
 			for (int j = 0; j < clans[clanId].members.length; j++) {
 				if (clans[clanId].members[j] <= 0) {
 					clans[clanId].members[j] = playerId;
-					PlayerHandler.players[playerId].getVariables().clanId = clanId;
+					PlayerHandler.players[playerId].getInstance().clanId = clanId;
 					Player p = PlayerHandler.players[playerId];
 					p.sendMessage("Now talking in clan channel: " + clans[clanId].name);
 					p.sendMessage("To talk, start each line of chat with the / symbol.");
 					GameEngine.clanChat.clans[clanId].membersNumber += 1;
 					messageClan(PlayerHandler.players[playerId].playerName + " has joined the channel.", clanId);
-					p.getVariables().savedClan = PlayerHandler.players[playerId].playerName;
+					p.getInstance().savedClan = PlayerHandler.players[playerId].playerName;
 					p.getPA().sendFrame126("Leave chat", 18135);
 					updateClanChat(clanId);
 					return;
@@ -59,7 +59,7 @@ public class ClanChatHandler {
 	 */
 	public void handleClanChatJoin(Player p, String name) {
 		p.sendMessage("Attempting to join channel...");
-		if (p.getVariables().clanId != -1) {
+		if (p.getInstance().clanId != -1) {
 			p.sendMessage("You are already in a clan!");
 			p.getPA().sendFrame126("Leave chat", 18135);
 			return;
@@ -140,9 +140,9 @@ public class ClanChatHandler {
 	public void makeClan(Player p, String name) {
 		if (openClan() >= 0) {
 			if (validName(name)) {
-				p.getVariables().clanId = openClan();
+				p.getInstance().clanId = openClan();
 				loadClan(p.playerName, name, 0);
-				addToClan(p.playerId, p.getVariables().clanId);
+				addToClan(p.playerId, p.getInstance().clanId);
 				// Server.pJClans.saveClan(p.playerName, name, loot);
 			} else {
 				p.sendMessage("A clan with this name already exists.");
@@ -169,7 +169,7 @@ public class ClanChatHandler {
 			if (PlayerHandler.players[playerId] != null) {
 				Player p = PlayerHandler.players[playerId];
 				if (!logout) {
-					p.getVariables().savedClan = null;
+					p.getInstance().savedClan = null;
 					p.sendMessage("You have left the channel.");
 				}
 				p.getPA().sendFrame126("Join chat", 18135);
@@ -188,10 +188,10 @@ public class ClanChatHandler {
 			messageClan(PlayerHandler.players[playerId].playerName + " has left the channel.", clanId);
 			updateClanChat(clanId);
 			GameEngine.clanChat.clans[clanId].membersNumber -= 1;
-			PlayerHandler.players[playerId].getVariables().clanId = -1;
+			PlayerHandler.players[playerId].getInstance().clanId = -1;
 		} else {
 			Player p = PlayerHandler.players[playerId];
-			PlayerHandler.players[playerId].getVariables().clanId = -1;
+			PlayerHandler.players[playerId].getInstance().clanId = -1;
 			p.sendMessage("You are not in a clan.");
 		}
 	}
@@ -207,13 +207,13 @@ public class ClanChatHandler {
 			c.sendMessage("You cannot kick yourself from a channel!");
 			return;
 		}
-		if (c.getVariables().clanId < 0) {
+		if (c.getInstance().clanId < 0) {
 			c.sendMessage("You are not in a clan.");
 			return;
 		}
 		int rank;
-		rank = getRanks(c.playerName, c, c.playerId, c.getVariables().clanId);
-		if (rank < clans[c.getVariables().clanId].whoCanKickOnChat && !isOwner(c)) {
+		rank = getRanks(c.playerName, c, c.playerId, c.getInstance().clanId);
+		if (rank < clans[c.getInstance().clanId].whoCanKickOnChat && !isOwner(c)) {
 			c.sendMessage("You don't have high enough rank to kick.");
 			return;
 		}
@@ -226,31 +226,31 @@ public class ClanChatHandler {
 				if (PlayerHandler.players[i].playerName.equalsIgnoreCase(name)) {
 					Player c2 = PlayerHandler.players[i];
 
-					if (c2.getVariables().playerRights >= 2) {
+					if (c2.getInstance().playerRights >= 2) {
 						c.sendMessage("You may not kick a staff member from your clan.");
 						return;
 					}
 
-					GameEngine.clanChat.clans[c.getVariables().clanId].addName(c2.playerName, -1);
-					GameEngine.clanChat.clans[c2.getVariables().clanId].membersNumber -= 1;
+					GameEngine.clanChat.clans[c.getInstance().clanId].addName(c2.playerName, -1);
+					GameEngine.clanChat.clans[c2.getInstance().clanId].membersNumber -= 1;
 					
-					c2.getVariables().clanId = -1;
-					c2.getVariables().savedClan = null;
+					c2.getInstance().clanId = -1;
+					c2.getInstance().savedClan = null;
 					c2.getPA().sendFrame126("Join chat", 18135);
 					c2.sendMessage("You have been kicked from the channel.");
 					c2.getPA().clearClanChat();
 					
 					c.sendMessage("You have kicked " + c2.playerName + " from the channel.");
 					
-					for (int j = 0; j < clans[c.getVariables().clanId].members.length; j++) {
-						if (clans[c.getVariables().clanId].members[j] == i) {
-							clans[c.getVariables().clanId].members[j] = -1;
+					for (int j = 0; j < clans[c.getInstance().clanId].members.length; j++) {
+						if (clans[c.getInstance().clanId].members[j] == i) {
+							clans[c.getInstance().clanId].members[j] = -1;
 						}
 					}
 				}
 			}
 		}
-		updateClanChat(c.getVariables().clanId);
+		updateClanChat(c.getInstance().clanId);
 	}
 
 	/**
@@ -282,7 +282,7 @@ public class ClanChatHandler {
 	 * @return
 	 */
 	public boolean isOwner(Player p) {
-		return (clans[p.getVariables().clanId].owner.equalsIgnoreCase(p.playerName)
+		return (clans[p.getInstance().clanId].owner.equalsIgnoreCase(p.playerName)
 		/** || p.getVariables().playerRights >= 2 */
 		);
 	}
@@ -295,7 +295,7 @@ public class ClanChatHandler {
 	 * @return
 	 */
 	public boolean isOwnerByName(Player p, String name) {
-		return (clans[p.getVariables().clanId].owner.equalsIgnoreCase(name));
+		return (clans[p.getInstance().clanId].owner.equalsIgnoreCase(name));
 	}
 
 	/**
@@ -316,8 +316,8 @@ public class ClanChatHandler {
 				for (int i = 0; i < clans[clanId].members.length; i++) {
 					if (clans[clanId].members[i] > 0) {
 						if (PlayerHandler.players[clans[clanId].members[i]] != null) {
-							if (c.getVariables().clanId != -1) {
-								if (GameEngine.clanChat.clans[c.getVariables().clanId].owner
+							if (c.getInstance().clanId != -1) {
+								if (GameEngine.clanChat.clans[c.getInstance().clanId].owner
 										.equalsIgnoreCase(PlayerHandler.players[clans[clanId].members[i]].playerName)) {
 									name = "[OWN]" + PlayerHandler.players[clans[clanId].members[i]].playerName;
 								} else {
@@ -386,7 +386,7 @@ public class ClanChatHandler {
 				false)
 				|| Connection.containsConnection(PlayerHandler.players[playerId].connectedFrom,
 						ConnectionType.forName("IPMUTE"), false)
-				|| Connection.containsConnection(p.getVariables().identityPunishment,
+				|| Connection.containsConnection(p.getInstance().identityPunishment,
 						ConnectionType.forName("IDENTITY_MUTE"), false)) {
 			p.sendMessage("You are muted.");
 			return;
@@ -398,7 +398,7 @@ public class ClanChatHandler {
 				Player b = PlayerHandler.players[clans[clanId].members[j]];
 				b.sendClan(PlayerHandler.players[playerId].playerName, Misc.capitalizeFirstLetter(message),
 						Misc.capitalizeFirstLetter(clans[clanId].name),
-						PlayerHandler.players[playerId].getVariables().playerRights);
+						PlayerHandler.players[playerId].getInstance().playerRights);
 			}
 		}
 	}
@@ -429,54 +429,54 @@ public class ClanChatHandler {
 	 * @param p
 	 */
 	public void handleShareButton(Player p) {
-		if (System.currentTimeMillis() - p.getVariables().clanDelay >= 1500) {
-			if (p.getVariables().clanId >= 0
-					&& (GameEngine.clanChat.clans[p.getVariables().clanId].owner.equalsIgnoreCase(p.playerName)
-							|| PlayerHandler.players[p.playerId].getVariables().playerRights == 2
-							|| PlayerHandler.players[p.playerId].getVariables().playerRights == 3)) {
-				boolean lootShareOn = GameEngine.clanChat.clans[p.getVariables().clanId].lootshare == 1;
-				boolean bothOff = GameEngine.clanChat.clans[p.getVariables().clanId].lootshare == 0;
-				if (bothOff && GameEngine.clanChat.clans[p.getVariables().clanId].CSLS == 0) {
-					GameEngine.clanChat.clans[p.getVariables().clanId].CSLS = 1;
-					GameEngine.clanChat.clans[p.getVariables().clanId].lootshare = 1;
-					GameEngine.clanChat.sendToggleMessage(p.getVariables().clanId,
+		if (System.currentTimeMillis() - p.getInstance().clanDelay >= 1500) {
+			if (p.getInstance().clanId >= 0
+					&& (GameEngine.clanChat.clans[p.getInstance().clanId].owner.equalsIgnoreCase(p.playerName)
+							|| PlayerHandler.players[p.playerId].getInstance().playerRights == 2
+							|| PlayerHandler.players[p.playerId].getInstance().playerRights == 3)) {
+				boolean lootShareOn = GameEngine.clanChat.clans[p.getInstance().clanId].lootshare == 1;
+				boolean bothOff = GameEngine.clanChat.clans[p.getInstance().clanId].lootshare == 0;
+				if (bothOff && GameEngine.clanChat.clans[p.getInstance().clanId].CSLS == 0) {
+					GameEngine.clanChat.clans[p.getInstance().clanId].CSLS = 1;
+					GameEngine.clanChat.clans[p.getInstance().clanId].lootshare = 1;
+					GameEngine.clanChat.sendToggleMessage(p.getInstance().clanId,
 							"LootShare has been toggled to ON by the clan leader.", true);
-					GameEngine.clanChat.updateClanChat(p.getVariables().clanId);
+					GameEngine.clanChat.updateClanChat(p.getInstance().clanId);
 					return;
-				} else if (lootShareOn && GameEngine.clanChat.clans[p.getVariables().clanId].CSLS == 1) {
-					GameEngine.clanChat.clans[p.getVariables().clanId].CSLS = 2;
-					GameEngine.clanChat.clans[p.getVariables().clanId].lootshare = 0;
-					GameEngine.clanChat.sendToggleMessage(p.getVariables().clanId,
+				} else if (lootShareOn && GameEngine.clanChat.clans[p.getInstance().clanId].CSLS == 1) {
+					GameEngine.clanChat.clans[p.getInstance().clanId].CSLS = 2;
+					GameEngine.clanChat.clans[p.getInstance().clanId].lootshare = 0;
+					GameEngine.clanChat.sendToggleMessage(p.getInstance().clanId,
 							"LootShare has been toggled to OFF by the clan leader.", true);
-					GameEngine.clanChat.updateClanChat(p.getVariables().clanId);
+					GameEngine.clanChat.updateClanChat(p.getInstance().clanId);
 					return;
-				} else if (GameEngine.clanChat.clans[p.getVariables().clanId].CSLS == 2) {
-					if (GameEngine.clanChat.clans[p.getVariables().clanId].membersNumber <= 1) {
+				} else if (GameEngine.clanChat.clans[p.getInstance().clanId].CSLS == 2) {
+					if (GameEngine.clanChat.clans[p.getInstance().clanId].membersNumber <= 1) {
 						p.sendMessage("There must be at least two members in the channel to toggle CoinShare ON.");
-						GameEngine.clanChat.clans[p.getVariables().clanId].CSLS = 0;
-						GameEngine.clanChat.clans[p.getVariables().clanId].lootshare = 0;
-						GameEngine.clanChat.updateClanChat(p.getVariables().clanId);
+						GameEngine.clanChat.clans[p.getInstance().clanId].CSLS = 0;
+						GameEngine.clanChat.clans[p.getInstance().clanId].lootshare = 0;
+						GameEngine.clanChat.updateClanChat(p.getInstance().clanId);
 						return;
 					}
-					GameEngine.clanChat.clans[p.getVariables().clanId].CSLS = 3;
-					GameEngine.clanChat.clans[p.getVariables().clanId].lootshare = 2;
-					GameEngine.clanChat.sendToggleMessage(p.getVariables().clanId,
+					GameEngine.clanChat.clans[p.getInstance().clanId].CSLS = 3;
+					GameEngine.clanChat.clans[p.getInstance().clanId].lootshare = 2;
+					GameEngine.clanChat.sendToggleMessage(p.getInstance().clanId,
 							"CoinShare has been toggled to ON by the clan leader.", false);
-					GameEngine.clanChat.updateClanChat(p.getVariables().clanId);
+					GameEngine.clanChat.updateClanChat(p.getInstance().clanId);
 					return;
-				} else if (GameEngine.clanChat.clans[p.getVariables().clanId].lootshare == 2
-						&& GameEngine.clanChat.clans[p.getVariables().clanId].CSLS == 3) {
-					GameEngine.clanChat.clans[p.getVariables().clanId].CSLS = 0;
-					GameEngine.clanChat.clans[p.getVariables().clanId].lootshare = 0;
-					GameEngine.clanChat.sendToggleMessage(p.getVariables().clanId,
+				} else if (GameEngine.clanChat.clans[p.getInstance().clanId].lootshare == 2
+						&& GameEngine.clanChat.clans[p.getInstance().clanId].CSLS == 3) {
+					GameEngine.clanChat.clans[p.getInstance().clanId].CSLS = 0;
+					GameEngine.clanChat.clans[p.getInstance().clanId].lootshare = 0;
+					GameEngine.clanChat.sendToggleMessage(p.getInstance().clanId,
 							"CoinShare has been toggled to OFF by the clan leader.", false);
-					GameEngine.clanChat.updateClanChat(p.getVariables().clanId);
+					GameEngine.clanChat.updateClanChat(p.getInstance().clanId);
 					return;
 				}
 			} else {
 				p.sendMessage("Only the owner of the clan has the power to do that.");
 			}
-			p.getVariables().clanDelay = System.currentTimeMillis();
+			p.getInstance().clanDelay = System.currentTimeMillis();
 		}
 	}
 
@@ -499,7 +499,7 @@ public class ClanChatHandler {
 					final Player members = PlayerHandler.players[member];
 					if (p != members && !coinShare) {
 						members.sendMessage(message);
-						if (members.getVariables().goodLootDistance && !coinShare) {
+						if (members.getInstance().goodLootDistance && !coinShare) {
 							setLootSharePotential(members,
 									(members.getShops().getItemShopValue(itemReceived) * amount) / 5000);
 							members.sendMessage("Your chance of receiving loot has improved.");
@@ -534,11 +534,11 @@ public class ClanChatHandler {
 				return;
 			}
 		}
-		p.getVariables().goodLootDistance = false;
-		if (p.getVariables().clanId > -1) {
+		p.getInstance().goodLootDistance = false;
+		if (p.getInstance().clanId > -1) {
 			final int[] playersCC = new int[100];
 			int players = 0;
-			for (final int member : clans[p.getVariables().clanId].members) {
+			for (final int member : clans[p.getInstance().clanId].members) {
 				if (member < 1) {
 					continue;
 				}
@@ -547,17 +547,17 @@ public class ClanChatHandler {
 					if (Constants.goodDistance(o.absX, o.absY, x, y, 20) && p.heightLevel == o.heightLevel) {
 						playersCC[players] = o.playerId;
 						players++;
-						o.getVariables().goodLootDistance = true;
+						o.getInstance().goodLootDistance = true;
 					}
 					if (players > 98) {
 						break;
 					}
 				}
 			}
-			if (players < 2 || !p.getVariables().inMulti()) {
+			if (players < 2 || !p.getInstance().inMulti()) {
 				ItemHandler.createGroundItem(p, item, x, y, height, amount, p.playerId);
 				if (!coinShare) {
-					sendLootMessage(p, p.getVariables().clanId,
+					sendLootMessage(p, p.getInstance().clanId,
 							"You received: " + amount + "x " + p.getItems().getItemName(item) + ".",
 							p.playerName + " has just received " + amount + "x " + p.getItems().getItemName(item) + ".",
 							false, item, amount);
@@ -565,14 +565,14 @@ public class ClanChatHandler {
 			} else {
 				if (coinShare) {
 					int total = (p.getShops().getItemShopValue(item) * amount) / players;
-					for (final int member : clans[p.getVariables().clanId].members) {
+					for (final int member : clans[p.getInstance().clanId].members) {
 						if (member < 1) {
 							continue;
 						}
 						Player i = PlayerHandler.players[member];
-						if (i.getVariables().goodLootDistance) {
+						if (i.getInstance().goodLootDistance) {
 							ItemHandler.createGroundItem(i, 995, x, y, height, total, i.playerId);
-							sendLootMessage(i, i.getVariables().clanId,
+							sendLootMessage(i, i.getInstance().clanId,
 									"You received " + total + " gold as your split of this drop: " + amount + " x "
 											+ i.getItems().getItemName(item) + ".",
 									"You received " + total + " gold as your split of this drop: " + amount + " x "
@@ -586,12 +586,12 @@ public class ClanChatHandler {
 				for (int playerID : playersCC) {
 					Player player = PlayerHandler.players[playerID];
 					if (player != null)
-						if (highest == null || (player.getVariables().lootSharePotential > highest
-								.getVariables().lootSharePotential))
+						if (highest == null || (player.getInstance().lootSharePotential > highest
+								.getInstance().lootSharePotential))
 							highest = player;
 				}
 				ItemHandler.createGroundItem(highest, item, x, y, height, amount, highest.playerId);
-				sendLootMessage(highest, highest.getVariables().clanId,
+				sendLootMessage(highest, highest.getInstance().clanId,
 						"You received: " + amount + "x " + highest.getItems().getItemName(item) + ".",
 						highest.playerName + " has just received " + amount + "x "
 								+ highest.getItems().getItemName(item) + ".",
@@ -609,13 +609,13 @@ public class ClanChatHandler {
 	 */
 	public void setLootSharePotential(Player p, int toAdd) {
 		int daysWithoutKill = (int) TimeUnit.MILLISECONDS
-				.toDays(System.currentTimeMillis() - p.getVariables().lastLootDate);
+				.toDays(System.currentTimeMillis() - p.getInstance().lastLootDate);
 		if (daysWithoutKill > 0) {
-			float percentFromLSP = (float) (daysWithoutKill * (p.getVariables().lootSharePotential * 0.10));
-			p.getVariables().lootSharePotential -= percentFromLSP;
+			float percentFromLSP = (float) (daysWithoutKill * (p.getInstance().lootSharePotential * 0.10));
+			p.getInstance().lootSharePotential -= percentFromLSP;
 		}
-		p.getVariables().lootSharePotential += toAdd;
-		p.getVariables().lastLootDate = System.currentTimeMillis();
+		p.getInstance().lootSharePotential += toAdd;
+		p.getInstance().lastLootDate = System.currentTimeMillis();
 	}
 
 	/**
@@ -643,13 +643,13 @@ public class ClanChatHandler {
 	 */
 	public String getRankTag(String name, Player p, int playerId) {
 		String[] ranks = { "[MOD]", "[FRI]", "[REC]", "[COR]", "[SER]", "[LIE]", "[BER]", "[VR]" };
-		if (PlayerHandler.players[playerId].getVariables().playerRights == 2
-				|| PlayerHandler.players[playerId].getVariables().playerRights == 3)
+		if (PlayerHandler.players[playerId].getInstance().playerRights == 2
+				|| PlayerHandler.players[playerId].getInstance().playerRights == 3)
 			return ranks[0];
 		for (int rankNr = 2; rankNr < 8; rankNr++)
-			if (existantRanks(rankNr, p.getVariables().clanId, name))
+			if (existantRanks(rankNr, p.getInstance().clanId, name))
 				return ranks[rankNr];
-		if (clans[p.getVariables().clanId].isFriend(name))
+		if (clans[p.getInstance().clanId].isFriend(name))
 			return "[FRI]";
 		return "[REG]";
 	}
@@ -664,8 +664,8 @@ public class ClanChatHandler {
 	 * @return
 	 */
 	public int getRanks(String name, Player p, int playerId, int clanId) {
-		if (PlayerHandler.players[playerId].getVariables().playerRights == 2
-				|| PlayerHandler.players[playerId].getVariables().playerRights == 3)
+		if (PlayerHandler.players[playerId].getInstance().playerRights == 2
+				|| PlayerHandler.players[playerId].getInstance().playerRights == 3)
 			return 9;
 		if (existantRanks(0, clanId, name))
 			return -1;
