@@ -31,17 +31,18 @@ public class Equipment {
 	 * The index order of these constants conforms to PI's 
 	 * playerEquipment[] array.
 	 */
-	public final int EQUIPMENT_HEAD   = 0;
-	public final int EQUIPMENT_BACK   = 1;
-	public final int EQUIPMENT_NECK   = 2;
-	public final int EQUIPMENT_AMMO   = 13;
-	public final int EQUIPMENT_WEAPON = 3;
-	public final int EQUIPMENT_CHEST  = 4;
-	public final int EQUIPMENT_SHIELD = 5;
-	public final int EQUIPMENT_LEGS   = 7;
-	public final int EQUIPMENT_HANDS  = 9;
-	public final int EQUIPMENT_FEET   = 10;
-	public final int EQUIPMENT_RING   = 12;
+	public final static int 
+	EQUIPMENT_HEAD   = 0,
+	EQUIPMENT_BACK   = 1,
+    EQUIPMENT_NECK   = 2,
+    EQUIPMENT_AMMO   = 13,
+    EQUIPMENT_WEAPON = 3,
+    EQUIPMENT_CHEST  = 4,
+    EQUIPMENT_SHIELD = 5,
+    EQUIPMENT_LEGS   = 7,
+    EQUIPMENT_HANDS  = 9,
+    EQUIPMENT_FEET   = 10,
+    EQUIPMENT_RING   = 12;
 	
 	/**
 	 * Sends the equipment data to the client. Called on login,
@@ -654,6 +655,109 @@ public class Equipment {
 	
 	public boolean hasVoidKnightRange() {
 		return c.getEquipment().hasVoidKnightSet(VOID_KNIGHT_SET_RANGE);
+	}
+	
+	/**
+	 * An enumerated type containing the three types of Nex armor:
+	 * Torva,
+	 * Pernix,
+	 * Virtus
+	 * 
+	 * that can exist in one of three equipment slots:
+	 * EQUIPMENT_HEAD,
+	 * EQUIPMENT_CHEST,
+	 * EQUIPMENT_LEGS
+	 * 
+	 * This enum is used a bit different in that its enumerations correspond 
+	 * to equipment slots rather than equipment sets, and the values contained 
+	 * within said enumeration only correspond to items that reside in that 
+	 * particular equipment slot.
+	 * 
+	 * @author Branon McClellan (KeepBotting)
+	 *
+	 */
+	private enum NexArmor {
+		/* <type>, <slot>, <torva id>, <pernix id>, <virtus id>*/
+		
+	    HEAD  ("Head",  EQUIPMENT_HEAD,  20135, 20147, 20159),
+		CHEST ("Chest", EQUIPMENT_CHEST, 20139, 20151, 20163),
+		LEGS  ("Legs",  EQUIPMENT_LEGS,  20143, 20155, 20167);
+
+		private String type;
+		private int slot;
+		private int torva;
+		private int pernix;
+		private int virtus;
+		
+	    NexArmor(String type, int slot, int torva, int pernix, int virtus) {
+	        this.type  = type;
+	        this.slot  = slot;
+	        this.torva  = torva;
+	        this.pernix = pernix;
+	        this.virtus  = virtus;
+	    }
+	    
+		@SuppressWarnings("unused")
+		String type() {
+	    	return this.type;
+	    }
+		
+		int slot() {
+	    	return this.slot;
+	    }
+	    
+	    int torvaID() {
+	    	return this.torva;
+	    }
+	    
+	    int pernixID() {
+	    	return this.pernix;
+	    }
+	    
+	    int virtusID() {
+	    	return this.virtus;
+	    }
+	    
+	    }
+	
+	/**
+	 * Determines whether or not a player is wearing (one of the) three pieces of Nex armor in the given slot.
+	 * @param slot The slot.
+	 * 
+	 * @return True if the player is wearing (one of the) three pieces of Nex armor in the given slot, false otherwise.
+	 */
+	public boolean hasNexArmor(int slot) {
+		NexArmor n = null;
+		
+		switch (slot) {
+		case EQUIPMENT_HEAD:
+			n = NexArmor.HEAD;
+			break;
+		case EQUIPMENT_CHEST:
+			n = NexArmor.CHEST;
+			break;
+		case EQUIPMENT_LEGS:
+			n = NexArmor.LEGS;
+			break;
+		}
+		
+		if (c.getEquipment().getID(n.slot()) == n.torvaID()
+		 || c.getEquipment().getID(n.slot()) == n.pernixID()
+		 || c.getEquipment().getID(n.slot()) == n.virtusID()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Determines whether or not a player is wearing one of each piece of Nex armor.
+	 * @return True if the player is wearing one of each piece of Nex armor false otherwise.
+	 */
+	public boolean hasNexArmor() {
+		return c.getEquipment().hasNexArmor(EQUIPMENT_HEAD) 
+			&& c.getEquipment().hasNexArmor(EQUIPMENT_CHEST) 
+			&& c.getEquipment().hasNexArmor(EQUIPMENT_LEGS);
 	}
 }
 	

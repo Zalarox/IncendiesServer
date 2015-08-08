@@ -34,15 +34,21 @@ public class Developer extends Commands {
 			
 			if (cmd.equalsIgnoreCase("checkenums")) {
 				if (c.getEquipment().hasGuthan()) {
-					c.sendMessage("Have Dharok equipped!");
+					c.sendMessage("Have Guthan equipped!");
 				} else {
-					c.sendMessage("No Dharok :(");
+					c.sendMessage("No Guthan :(");
 				}
 				
 				if (c.getEquipment().hasVoidKnightMelee()) {
 					c.sendMessage("Have Void Knight melee equipped!");
 				} else {
 					c.sendMessage("No Void Knight melee :(");
+				}
+				
+				if (c.getEquipment().hasNexArmor(0)) {
+					c.sendMessage("You have a Nex helm equipped!");
+				} else {
+					c.sendMessage("No Nex helm :(");
 				}
 			}
 

@@ -1120,7 +1120,31 @@ public class Player {
 	public boolean inPcBoat() {
 		return absX >= 2660 && absX <= 2663 && absY >= 2638 && absY <= 2643;
 	}
-
+	
+	/**
+	 * TODO
+	 * 
+	 * Life points aren't always properly re-calculated when  
+	 * Nex armor is removed -- wearing a set of Nex armor, 
+	 * eating to full LP, and removing the Nex armor will leave  
+	 * a player's LP boosted, which isn't supposed to happen. 
+	 * This persists across logins and is only fixed by dying,
+	 * one of the few events that calculates LP properly.
+	 * 
+	 * Life point calculation (taking Nex armor into account)
+	 * is being done in the dumbest & most roundabout way possible. 
+	 * 
+	 * Ideally you'd have ONE method: getMaxLP(), calculateLP(), 
+	 * getLP() or something of the sort. Instead, this dumbass is
+	 * using THREE, and they don't even work right.
+	 * 
+	 * Also, smaller & more inconsequential things are done wrong:
+	 * the LP boost that the player has is not reflected in the head-icon
+	 * life point bar during combat. This means that, the LP bar is essentially
+	 * "over-filled" when wearing Nex armor, and will only begin to shrink
+	 * (turn red) once the boosted LP has been depleted, and the player's 
+	 * base LP begins to be affected by damage.
+	 */
 	public int calculateMaxLifePoints(Player p) {
 		int lifePoints = getLevelForXP(playerXP[3]) * 10;// The normal hp
 		if (isThereNexArmourEquipped(playerHat)) {
