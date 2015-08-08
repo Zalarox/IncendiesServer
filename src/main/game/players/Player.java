@@ -1134,7 +1134,7 @@ public class Player {
 	}
 	
 	int calculateMaxLP() {
-		int calculatedLP = 990;
+		int calculatedLP = getLevelForXP(playerXP[3]) * 10;
 		
 		if(equipment.hasNexArmor(Equipment.EQUIPMENT_HEAD)) {
 			calculatedLP += 66;

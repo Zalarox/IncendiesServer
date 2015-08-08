@@ -1,9 +1,9 @@
 package main.game.players;
 
 /**
- * A class tracking various equipment-related fields, along 
- * with helper methods for getting/setting equipment IDs or 
- * sets of IDs.
+ * A class tracking various equipment-related methods,
+ * fields, and enumerated types, along with helper methods  
+ * for getting/setting equipment IDs or sets of IDs.
  * 
  * @author Branon McClellan (KeepBotting)
  *
