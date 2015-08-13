@@ -146,6 +146,10 @@ public class TeleportHandler {
 	 * @return
 	 */
 	public static boolean ableToTeleport(Player player) {
+		if (player.getJail().isJailed()) {
+			player.sendMessage("Rule-breakers lack the privelege of teleportation.");
+			return false;
+		}
 		if (Boundaries.checkBoundaries(Area.GOD_WARS, player.getX(), player.getY())) {
 			Godwars.resetKills(player);
 		}

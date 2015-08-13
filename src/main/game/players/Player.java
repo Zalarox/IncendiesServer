@@ -1630,6 +1630,12 @@ public class Player {
 	public Equipment getEquipment() {
 		return equipment;
 	}
+	
+	public Jail jail = new Jail(this);
+	
+	public Jail getJail() {
+		return jail;
+	}
 
 	public boolean resting;
 	public int runEnergy = 200;// 200 so it lasts twice as long, otherwise it

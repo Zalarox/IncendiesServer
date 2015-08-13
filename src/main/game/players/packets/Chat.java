@@ -31,7 +31,15 @@ public class Chat implements PacketType {
 				&& !Connection.containsConnection(c.connectedFrom, ConnectionType.IPMUTE, false)
 				&& !Connection.containsConnection(c.getInstance().identityPunishment,
 						ConnectionType.forName("IDENTITY_MUTE"), false)) {
-			c.setChatTextUpdateRequired(true);
+			
+			if (!c.getJail().isJailed()) {
+				c.setChatTextUpdateRequired(true);
+			} else {
+				c.sendMessage("Rule-breakers lack the privelege of speech.");
+			}
+			
+		} else {
+			c.sendMessage("You are muted.");
 		}
 	}
 }

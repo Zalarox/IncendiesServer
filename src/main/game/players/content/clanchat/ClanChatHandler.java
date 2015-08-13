@@ -38,10 +38,14 @@ public class ClanChatHandler {
 					clans[clanId].members[j] = playerId;
 					PlayerHandler.players[playerId].getInstance().clanId = clanId;
 					Player p = PlayerHandler.players[playerId];
-					p.sendMessage("Now talking in clan channel: " + clans[clanId].name);
-					p.sendMessage("To talk, start each line of chat with the / symbol.");
+					
+					if (!p.getJail().isJailed()) {
+						p.sendMessage("Now talking in clan channel: " + clans[clanId].name);
+						p.sendMessage("To talk, start each line of chat with the / symbol.");
+					}
+					
 					GameEngine.clanChat.clans[clanId].membersNumber += 1;
-					messageClan(PlayerHandler.players[playerId].playerName + " has joined the channel.", clanId);
+					messageClan(PlayerHandler.getPlayer(playerId).getDisplayName() + " has joined the channel.", clanId);
 					p.getInstance().savedClan = PlayerHandler.players[playerId].playerName;
 					p.getPA().sendFrame126("Leave chat", 18135);
 					updateClanChat(clanId);
@@ -58,7 +62,21 @@ public class ClanChatHandler {
 	 * @param name
 	 */
 	public void handleClanChatJoin(Player p, String name) {
+		
+		/**
+		 * If a player is in Jail and not already in the help channel,
+		 * ignore their request and redirect them to the help channel.
+		 */
+		if (p.getJail().isJailed()) {
+			p.sendMessage("Rule-breakers lack the privelege of joining clan channels of their choosing.");
+			p.sendMessage("The system has redirected you to the help channel, it is the only one you may use.");
+			
+			joinClanSilent(p, "Incendius");
+			return;
+		}
+		
 		p.sendMessage("Attempting to join channel...");
+		
 		if (p.getInstance().clanId != -1) {
 			p.sendMessage("You are already in a clan!");
 			p.getPA().sendFrame126("Leave chat", 18135);
@@ -296,6 +314,23 @@ public class ClanChatHandler {
 	 */
 	public boolean isOwnerByName(Player p, String name) {
 		return (clans[p.getInstance().clanId].owner.equalsIgnoreCase(name));
+	}
+	
+	/**
+	 * Forces a player to join a specific clan chat (ignores kicks/bans/rank restrictions).
+	 * In addition, joins "silently," and does not notify the player that they have joined.
+	 * @param p
+	 * @param name
+	 */
+	public void joinClanSilent(Player p, String name) {
+		for (int j = 0; j < clans.length; j++) {
+			if (clans[j] != null) {
+				if (clans[j].owner.equalsIgnoreCase(name)) {
+					p.getPA().sendFrame126("Leave chat", 18135);
+					addToClan(p.playerId, j);
+				}
+			}
+		}	
 	}
 
 	/**

@@ -79,11 +79,16 @@ public class PrivateMessaging implements PacketType {
 								if (PlayerHandler.players[i2].getInstance().privateChat == 0
 										|| (PlayerHandler.players[i2].getInstance().privateChat == 1
 												&& o.getPA().isInPM(Misc.playerNameToInt64(c.playerName)))) {
-									o.getPA().sendPM(Misc.playerNameToInt64(c.playerName),
-											c.getInstance().playerRights, pmchatText, pmchatTextSize);
+									
+									if (c.getJail().isJailed() && o.getRights() < Player.RIGHTS_MODERATOR) {
+										c.sendMessage("Rule-breakers are only permitted to private-message staff members.");
+									} else {
+										o.getPA().sendPM(Misc.playerNameToInt64(c.getDisplayName()),
+												c.getInstance().playerRights, pmchatText, pmchatTextSize);
+					
+										c.getLogging().logPM(o.getDisplayName(), Misc.textUnpack(pmchatText, pmchatTextSize));
+									}
 									pmSent = true;
-				
-									c.getLogging().logPM(o.getDisplayName(), Misc.textUnpack(pmchatText, pmchatTextSize));
 								}
 							}
 							break;
