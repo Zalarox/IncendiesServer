@@ -14,23 +14,32 @@ public class Walking implements PacketType {
 
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
+		if (c.getJail().isJailed()) {
+			return;
+		}
+		
 		if (c.getInstance().resting) {
 			c.getPA().resetRest();
 			return;
 		}
+		
 		if (c.getInstance().doingAgility) {
 			return;
 		}
+		
 		c.sentWarning = false;
 		c.getPA().resetSkills();
+		
 		if (!DuelArena.isDueling(c))
 			c.getPA().closeActivities();
+		
 		if (DuelArena.isInFirstInterface(c) || DuelArena.isInSecondInterface(c)) {
 			if (c.opponent != null)
 				c.opponent.Dueling.declineDuel(c.opponent, true, true);
 			c.Dueling.declineDuel(c, true, true);
 			c.getPA().closeAllWindows();
 		}
+		
 		c.faceUpdate(0);
 		// c.playerIndex = 0;
 		c.getInstance().npcIndex = 0;
@@ -46,7 +55,9 @@ public class Walking implements PacketType {
 			if (c.getInstance().followId > 0 || c.getInstance().followId2 > 0)
 				Following.resetFollow(c);
 		}
+		
 		c.getPA().removeAllWindows();
+		
 		if (c.getInstance().duelRule[DuelArena.RULE_MOVEMENT] && DuelArena.isDueling(c)) {
 			if (PlayerHandler.players[c.getInstance().duelingWith] != null) {
 				if (!c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getInstance().duelingWith].getX(),
@@ -58,19 +69,24 @@ public class Walking implements PacketType {
 			c.getInstance().playerIndex = 0;
 			return;
 		}
+		
 		if (c.getInstance().playerSkilling[c.getInstance().playerFiremaking]) {
 			return;
 		}
+		
 		for (boolean ps : c.getInstance().playerSkilling) {
 			if (ps)
 				ps = false;
 		}
+		
 		if (c.getInstance().playerIsWoodcutting)
 			c.getInstance().playerIsWoodcutting = false;
+		
 		if (c.getInstance().teleTimer >= 1) {
 			c.getInstance().playerIndex = 0;
 			return;
 		}
+		
 		if (c.getInstance().freezeTimer > 0) {
 			if (PlayerHandler.players[c.getInstance().playerIndex] != null) {
 				if (c.goodDistance(c.getX(), c.getY(), PlayerHandler.players[c.getInstance().playerIndex].getX(),
@@ -79,10 +95,12 @@ public class Walking implements PacketType {
 					return;
 				}
 			}
+			
 			if (packetType != 98) {
 				c.sendMessage("A magical force stops you from moving.");
 				c.getInstance().playerIndex = 0;
 			}
+			
 			return;
 		}
 
@@ -91,6 +109,7 @@ public class Walking implements PacketType {
 			c.getInstance().playerIndex = 0;
 			return;
 		}
+		
 		if (SkillHandler.playerIsBusy(c))
 			if (c.getInstance().playerIsFishing) {
 				c.startAnimation(65535);
@@ -120,20 +139,26 @@ public class Walking implements PacketType {
 		if (c.getInstance().respawnTimer > 3) {
 			return;
 		}
+		
 		if (c.getInstance().inTrade) {
 			c.getTradeHandler().declineTrade(false);
 			return;
 		}
+		
 		if (packetType == 248) {
 			packetSize -= 14;
 		}
+		
 		c.newWalkCmdSteps = (packetSize - 5) / 2;
+		
 		if (++c.newWalkCmdSteps > c.walkingQueueSize) {
 			c.newWalkCmdSteps = 0;
 			return;
 		}
+		
 		c.getInstance().interfaceIdOpen = 0;
 		c.getNewWalkCmdX()[0] = c.getNewWalkCmdY()[0] = 0;
+		
 		final int firstStepX = c.getInStream().readSignedWordBigEndianA() - c.getMapRegionX() * 8;
 		for (int i = 1; i < c.newWalkCmdSteps; i++) {
 			c.getNewWalkCmdX()[i] = c.getInStream().readSignedByte();
@@ -146,8 +171,10 @@ public class Walking implements PacketType {
 			c.getNewWalkCmdX()[i1] += firstStepX;
 			c.getNewWalkCmdY()[i1] += firstStepY;
 		}
+		
 		if ((c.absX - (c.mapRegionX * 8)) - firstStepX != 0 || (c.absY - (c.mapRegionY * 8)) - firstStepY != 0)
 			c.startAnimation(65535);
+		
 		c.updateWalkEntities();
 	}
 

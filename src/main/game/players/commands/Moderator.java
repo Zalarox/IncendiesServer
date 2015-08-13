@@ -205,6 +205,27 @@ public class Moderator extends Commands {
 					}
 				}
 			}
+			
+			if (cmd.startsWith("jail")) {
+				String name = cmd.substring(5);
+				
+				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
+					if (PlayerHandler.getPlayer(i) != null) {
+						Player c2 = PlayerHandler.getPlayer(i);
+						if (c2.getDisplayName().equalsIgnoreCase(name)) {
+							c2.getJail().jail();
+							
+							if (c.getJail().isJailed()) {
+								c.sendMessage("You have sent " + c2.getDisplayName() + " to jail.");
+							} else {
+								c.sendMessage("Unable to jail " + c2.getDisplayName());
+							}
+							
+						}
+					}
+				}
+				
+			}
 		}
 	}
 }
