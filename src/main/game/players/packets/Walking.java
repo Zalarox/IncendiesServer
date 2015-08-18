@@ -14,7 +14,7 @@ public class Walking implements PacketType {
 
 	@Override
 	public void processPacket(Player c, int packetType, int packetSize) {
-		if (c.getJail().isJailed()) {
+		if (c.isJailed()) {
 			return;
 		}
 		

@@ -80,7 +80,7 @@ public class PrivateMessaging implements PacketType {
 										|| (PlayerHandler.players[i2].getInstance().privateChat == 1
 												&& o.getPA().isInPM(Misc.playerNameToInt64(c.playerName)))) {
 									
-									if (c.getJail().isJailed() && o.getRights() < Player.RIGHTS_MODERATOR) {
+									if (c.isJailed() && o.getRights() < Player.RIGHTS_MODERATOR) {
 										c.sendMessage("Rule-breakers are only permitted to private-message staff members.");
 									} else {
 										o.getPA().sendPM(Misc.playerNameToInt64(c.getDisplayName()),

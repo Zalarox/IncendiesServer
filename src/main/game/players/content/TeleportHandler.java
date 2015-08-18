@@ -146,7 +146,7 @@ public class TeleportHandler {
 	 * @return
 	 */
 	public static boolean ableToTeleport(Player player) {
-		if (player.getJail().isJailed()) {
+		if (player.isJailed()) {
 			player.sendMessage("Rule-breakers lack the privelege of teleportation.");
 			return false;
 		}

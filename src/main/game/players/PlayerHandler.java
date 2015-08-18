@@ -43,6 +43,29 @@ public class PlayerHandler {
 	public static Player getPlayer(int idx) {
 		return players[idx];
 	}
+	
+	/**
+	 * Returns a Player object based on their name.
+	 * 
+	 * @param name
+	 *            The name of the specified player.
+	 *            
+	 * @return The Player object.
+	 */
+	public static Player getPlayerByName(String name) {
+		Player c = null;
+		
+		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
+			if (getPlayer(i) != null) {
+				if (getPlayer(i).getDisplayName().equalsIgnoreCase(name)) {
+					c = getPlayer(i);
+					break;
+				}
+			}
+		}
+		
+		return c;
+	}
 
 	public boolean newPlayerPlayer(Player player1) {
 		int slot = -1;

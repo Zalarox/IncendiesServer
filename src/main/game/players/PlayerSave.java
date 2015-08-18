@@ -77,6 +77,8 @@ public class PlayerSave {
 						p.getInstance().lastAbsY = p.teleportToY;
 					} else if (token.equals("character-rights")) {
 						p.getInstance().playerRights = Integer.parseInt(token2);
+					} else if (token.equals("isJailed")) {
+						p.setJailed(Boolean.parseBoolean(token2));
 					} else if (token.equals("hasSavedClan")) {
 						p.getInstance().hasSavedClan = Boolean.parseBoolean(token2);
 					} else if (token.equals("savedClan")) {
@@ -397,6 +399,9 @@ public class PlayerSave {
 			characterfile.write("character-rights = ", 0, 19);
 			characterfile.write(Integer.toString(p.getInstance().playerRights), 0,
 					Integer.toString(p.getInstance().playerRights).length());
+			characterfile.newLine();
+			characterfile.write("isJailed = ", 0, 11);
+			characterfile.write(String.valueOf(p.isJailed()), 0, String.valueOf(p.isJailed()).length());
 			characterfile.newLine();
 			characterfile.write("Donator = ", 0, 10);
 			characterfile.write(Integer.toString(p.getInstance().isDonator), 0,

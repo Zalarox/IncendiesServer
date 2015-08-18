@@ -3,6 +3,7 @@ package main.game.players.commands;
 import main.Connection;
 import main.Connection.ConnectionType;
 import main.Constants;
+import main.game.players.JailHandler;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.packets.Commands;
@@ -187,44 +188,68 @@ public class Moderator extends Commands {
 			 */
 			if (cmd.startsWith("goto")) {
 				String name = cmd.substring(5);
-				
+
 				if (name.equalsIgnoreCase(c.getDisplayName())) {
 					c.sendMessage("Why would you want to teleport to yourself?");
 					return;
 				}
-
-				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-					if (PlayerHandler.getPlayer(i) != null) {
-						Player c2 = PlayerHandler.getPlayer(i);
-						if (c2.getDisplayName().equalsIgnoreCase(name)) {
-							c.getPA().movePlayer(c2.getX(), c2.getY(), c2.getZ());
-							
-							c.sendMessage("You have teleported to " + c2.getDisplayName() + ".");
-							c2.sendMessage(c.getDisplayName() + " has teleported to you.");
-						}
-					}
+				
+				Player c2 = PlayerHandler.getPlayerByName(name);
+				
+				if (c2 != null) {
+					c.getPA().movePlayer(c2.getX(), c2.getY(), c2.getZ());
+					c.sendMessage("You have teleported to " + c2.getDisplayName() + ".");
+					c2.sendMessage(c.getDisplayName() + " has teleported to you.");
+				} else {
+					c.sendMessage("Unable to find " + name + ".");
 				}
+
 			}
 			
 			if (cmd.startsWith("jail")) {
 				String name = cmd.substring(5);
-				
-				for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-					if (PlayerHandler.getPlayer(i) != null) {
-						Player c2 = PlayerHandler.getPlayer(i);
-						if (c2.getDisplayName().equalsIgnoreCase(name)) {
-							c2.getJail().jail();
-							
-							if (c.getJail().isJailed()) {
-								c.sendMessage("You have sent " + c2.getDisplayName() + " to jail.");
-							} else {
-								c.sendMessage("Unable to jail " + c2.getDisplayName());
-							}
-							
-						}
+
+				Player c2 = PlayerHandler.getPlayerByName(name);
+
+				if (c2 != null) {
+
+					/**
+					 * Since the Jail class does all our work for us, we can use
+					 * a single simple conditional over here in the command.
+					 */
+					if (JailHandler.jail(c2)) {
+						c.sendMessage("You have sent " + c2.getDisplayName() + " to jail.");
+					} else {
+						c.sendMessage("Unable to jail " + c2.getDisplayName() + ".");
 					}
+					
+				} else {
+					c.sendMessage("Unable to find " + name + ".");
 				}
-				
+
+			}
+			
+			if (cmd.startsWith("unjail")) {
+				String name = cmd.substring(7);
+
+				Player c2 = PlayerHandler.getPlayerByName(name);
+
+				if (c2 != null) {
+
+					/**
+					 * Since the Jail class does all our work for us, we can use
+					 * a single simple conditional over here in the command.
+					 */
+					if (JailHandler.unjail(c2)) {
+						c.sendMessage("You have freed " + c2.getDisplayName() + " from jail.");
+					} else {
+						c.sendMessage("Unable to unjail " + c2.getDisplayName() + ".");
+					}
+					
+				} else {
+					c.sendMessage("Unable to find " + name + ".");
+				}
+
 			}
 		}
 	}

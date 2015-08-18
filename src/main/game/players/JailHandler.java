@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import main.Constants;
+import main.GameEngine;
+
 /**
  * A class tracking methods used on players who are
  * in "jail," a game mechanic defining player accounts
@@ -19,13 +22,7 @@ import java.util.Random;
  *
  */
 
-public class Jail {
-
-	static Player c;
-
-	public Jail(Player c) {
-		this.c = c;
-	}
+public class JailHandler {
 	
 	private static final Random r = new Random();
 	
@@ -82,7 +79,7 @@ public class Jail {
 	    	return this.z;
 	    }
 	    
-	    boolean isIn() {
+	    boolean isIn(Player c) {
 	    	return (c.getX() == this.getX() 
 	    		 && c.getY() == this.getY() 
 	    		 && c.getZ() == this.getZ());
@@ -105,19 +102,13 @@ public class Jail {
 	    }
 	
 	/**
-	 * Determining if a player is jailed works off a location basis.
+	 * Uses the player's location to determine whether or not they are in jail.
 	 * 
-	 * No non-jailed player will ever enter this area, and players
-	 * who become jailed are always sent straight to this area.
-	 * 
-	 * Thus it is safe to assume that players existing here are in jail.
-	 * This prevents us having to add an <isJailed> token to the character file.
-	 * 
-	 * @return Whether or not the player is jailed.
+	 * @return Whether or not the player is in a jail.
 	 */
-	public boolean isJailed() {
+	public static boolean isJailed(Player c) {
 		for (Jails j : Jails.values()) {
-			if (j.isIn()) {
+			if (j.isIn(c)) {
 				return true;
 			}
 		}
@@ -125,20 +116,56 @@ public class Jail {
 	}
 	
 	/**
-	 * Sends a player to jail. Since jail-checking works on the location
-	 * basis, the only thing needed to jail a player is a simple method that
-	 * teleports them to the appropriate spot.
+	 * Sends a player to jail.
 	 * 
 	 * Since we're cool, we'll give the player a random jail cell.
 	 */
-	public void jail() {
-		if (c.getJail().isJailed()) {
-			return;
+	public static boolean jail(Player c) {
+		
+		if (c.isJailed() && isJailed(c)) {
+			return true;
 		}
 		
 		Jails j = Jails.random();
 		c.getPA().movePlayer(j.getX(), j.getY(), j.getZ());
 		c.sendMessage("You broke a rule, and have been locked up in the " + j.getName() + ".");
+		c.setJailed(true);
+		
+		return (c.isJailed() ? true : false);
+		
 	}
-
+	
+	/**
+	 * Returns a player from jail.
+	 */
+	public static boolean unjail(Player c) {
+		
+		if (!c.isJailed()) {
+			return true;
+		}
+		
+		c.getPA().movePlayer(Constants.RESPAWN_X, Constants.RESPAWN_Y, 0);
+		c.sendMessage("Your jail sentance has ended.");
+		c.sendMessage("In the future, don't break the rules and you won't end up here.");
+		c.setJailed(false);
+		
+		return (!c.isJailed() ? true : false);
+	}
+	
+	/**
+	 * Handles escaped inmates.
+	 */
+	public static void process() {
+		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
+			if (PlayerHandler.getPlayer(i) != null && !PlayerHandler.getPlayer(i).disconnected) {
+				Player c = PlayerHandler.getPlayer(i);
+				
+				if (c.isJailed() && !isJailed(c)) {
+					if (jail(c)) {
+						GameEngine.sendStaffNotice("the system has returned @red@" + c.getDisplayName() + "@bla@ to jail.");
+					} 
+				}	
+			}
+		}
+	}
 }

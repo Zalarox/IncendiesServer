@@ -1631,10 +1631,14 @@ public class Player {
 		return equipment;
 	}
 	
-	public Jail jail = new Jail(this);
+	private boolean jailed = false;
 	
-	public Jail getJail() {
-		return jail;
+	public boolean isJailed() {
+		return jailed;
+	}
+	
+	public void setJailed(boolean b) {
+		jailed = b;
 	}
 
 	public boolean resting;

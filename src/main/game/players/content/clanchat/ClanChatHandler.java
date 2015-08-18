@@ -39,7 +39,7 @@ public class ClanChatHandler {
 					PlayerHandler.players[playerId].getInstance().clanId = clanId;
 					Player p = PlayerHandler.players[playerId];
 					
-					if (!p.getJail().isJailed()) {
+					if (!p.isJailed()) {
 						p.sendMessage("Now talking in clan channel: " + clans[clanId].name);
 						p.sendMessage("To talk, start each line of chat with the / symbol.");
 					}
@@ -64,14 +64,14 @@ public class ClanChatHandler {
 	public void handleClanChatJoin(Player p, String name) {
 		
 		/**
-		 * If a player is in Jail and not already in the help channel,
+		 * If a player is in jail and not already in the help channel,
 		 * ignore their request and redirect them to the help channel.
 		 */
-		if (p.getJail().isJailed()) {
+		if (p.isJailed()) {
 			p.sendMessage("Rule-breakers lack the privelege of joining clan channels of their choosing.");
 			p.sendMessage("The system has redirected you to the help channel, it is the only one you may use.");
 			
-			joinClanSilent(p, "Incendius");
+			joinHelpChannel(p);
 			return;
 		}
 		
@@ -322,10 +322,10 @@ public class ClanChatHandler {
 	 * @param p
 	 * @param name
 	 */
-	public void joinClanSilent(Player p, String name) {
+	public void joinHelpChannel(Player p) {
 		for (int j = 0; j < clans.length; j++) {
 			if (clans[j] != null) {
-				if (clans[j].owner.equalsIgnoreCase(name)) {
+				if (clans[j].owner.equalsIgnoreCase("Incendius")) {
 					p.getPA().sendFrame126("Leave chat", 18135);
 					addToClan(p.playerId, j);
 				}

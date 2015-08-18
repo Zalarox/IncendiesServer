@@ -16,6 +16,7 @@ import main.game.npcs.NPCHandler;
 import main.game.npcs.data.EmoteHandler;
 import main.game.npcs.data.NPCDefinition;
 import main.game.npcs.data.NPCDrops;
+import main.game.players.JailHandler;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.PlayerSave;
@@ -146,6 +147,7 @@ public class GameEngine {
 			HunterNpcs.process();
 			CycleEventHandler.getSingleton().process();
 			objectHandler.process();
+			JailHandler.process();
 		} catch (Exception ex) {
 			System.out.println("A fatal error has occured during the game engine's cycling process.");
 			ex.printStackTrace();
@@ -179,7 +181,9 @@ public class GameEngine {
 		if (System.currentTimeMillis() - lastMassSave > Constants.SAVE_TIMER) {
 			System.out.println("Mass save for everybody.");
 			for (int i = 0; i < PlayerHandler.getPlayerCount() + 1; i++) {
-				if (PlayerHandler.getPlayer(i) != null) {
+				
+				//Don't save players who have disconnected, they've already been saved by destruct()
+				if (PlayerHandler.getPlayer(i) != null && !PlayerHandler.getPlayer(i).disconnected) {
 					Player c = PlayerHandler.getPlayer(i);
 					PlayerSave.saveGame(c);
 				}
@@ -312,5 +316,16 @@ public class GameEngine {
 	public static TaskScheduler getScheduler() {
 		return scheduler;
 	}
-
+	
+	public static void sendStaffNotice(String message) {
+		for (int i = 0; i < PlayerHandler.players.length; i++) {
+			if (PlayerHandler.getPlayer(i) != null) {
+				Player p = PlayerHandler.getPlayer(i);
+				
+				if (p.getRights() >= Player.RIGHTS_MODERATOR) {
+					p.sendMessage("@blu@Staff Notice: @bla@" + message);
+				}
+			}
+		}
+	}
 }

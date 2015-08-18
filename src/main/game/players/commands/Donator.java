@@ -25,7 +25,7 @@ public class Donator extends Commands {
 		if (c.getInstance().isDonator == 1 || c.getRights() >= Player.RIGHTS_MODERATOR) {
 			
 			if (cmd.startsWith("yell")) {
-				if (c.getJail().isJailed()) {
+				if (c.isJailed()) {
 					c.sendMessage("Rule-breakers lack the privelege of using the yell channel.");
 				} else {
 					c.getYell().shout(c, cmd.substring(5));

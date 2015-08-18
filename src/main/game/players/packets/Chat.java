@@ -32,7 +32,7 @@ public class Chat implements PacketType {
 				&& !Connection.containsConnection(c.getInstance().identityPunishment,
 						ConnectionType.forName("IDENTITY_MUTE"), false)) {
 			
-			if (!c.getJail().isJailed()) {
+			if (!c.isJailed()) {
 				c.setChatTextUpdateRequired(true);
 			} else {
 				c.sendMessage("Rule-breakers lack the privelege of speech.");
