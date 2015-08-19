@@ -64,10 +64,22 @@ public class GameEngine {
 	 */
 	private static long minutesCounter;
 	
+	public static long getMinutesCounter() {
+		return minutesCounter;
+	}
+	
 	/**
 	 * Used for timing mass-saves.
 	 */
-	public static long lastMassSave = System.currentTimeMillis();
+	private static long lastMassSave = System.currentTimeMillis();
+	
+	public static long getLastMassSave() {
+		return System.currentTimeMillis() - lastMassSave;
+	}
+	
+	public static void setLastMassSave(long l) {
+		lastMassSave = l;
+	}
 
 	/**
 	 * Used to identify the server port.
@@ -80,6 +92,9 @@ public class GameEngine {
 	 */
 	private final static int cycleRate = 600;
 
+	/**
+	 * Constructors for the core subsystems.
+	 */
 	public static ItemHandler itemHandler = new ItemHandler();
 	public static PlayerHandler playerHandler = new PlayerHandler();
 	public static NPCHandler npcHandler = new NPCHandler();
@@ -93,6 +108,12 @@ public class GameEngine {
 	public static ClanChatHandler clanChat = new ClanChatHandler();
 	public static Clans pJClans = new Clans();
 	public static FightCaves fightCaves = new FightCaves();
+	
+	private static final TaskScheduler scheduler = new TaskScheduler();
+
+	public static TaskScheduler getScheduler() {
+		return scheduler;
+	}
 
 	public static Player[] developer = new Player[Constants.DEVELOPER_AMOUNT];
 
@@ -101,6 +122,7 @@ public class GameEngine {
 	 * 
 	 * @param args
 	 *            the program arguments
+	 *            
 	 * @throws IOException
 	 * @throws UnsupportedLookAndFeelException
 	 * @throws IllegalAccessException
@@ -125,8 +147,8 @@ public class GameEngine {
 				save();
 				sleep();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -134,10 +156,11 @@ public class GameEngine {
 	/**
 	 * Performs a server cycle. This is where the magic happens. Each of the
 	 * core subsystems will perform their process() for each cycle. At the end
-	 * of the cycle, we'll sleep for however much time we have remaining
+	 * of the cycle, we'll sleep for however much time we have remaining.
 	 */
 	private static void cycle() {
 		try {
+			
 			playerHandler.process();
 			npcHandler.process();
 			shopHandler.process();
@@ -148,9 +171,11 @@ public class GameEngine {
 			CycleEventHandler.getSingleton().process();
 			objectHandler.process();
 			JailHandler.process();
-		} catch (Exception ex) {
-			System.out.println("A fatal error has occured during the game engine's cycling process.");
-			ex.printStackTrace();
+			
+		} catch (Exception e) {
+			System.out.println("A fatal error has occured during the game engine's cycling process. The server will be halted immediately.");
+			shutdownServer = true;
+			e.printStackTrace();
 		}
 	}
 	
@@ -178,17 +203,14 @@ public class GameEngine {
 	 * couldn't get above ~80-100 players without lagging, this is why.
 	 */
 	private static void save() {
-		if (System.currentTimeMillis() - lastMassSave > Constants.SAVE_TIMER) {
+		if (getLastMassSave() > Constants.SAVE_TIMER) {
 			System.out.println("Mass save for everybody.");
 			for (int i = 0; i < PlayerHandler.getPlayerCount() + 1; i++) {
-				
-				//Don't save players who have disconnected, they've already been saved by destruct()
-				if (PlayerHandler.getPlayer(i) != null && !PlayerHandler.getPlayer(i).disconnected) {
-					Player c = PlayerHandler.getPlayer(i);
-					PlayerSave.saveGame(c);
+				if (PlayerHandler.isValid(i)) {
+					PlayerSave.saveGame(PlayerHandler.getPlayer(i));
 				}
 			}
-			lastMassSave = System.currentTimeMillis();
+			setLastMassSave(System.currentTimeMillis());
 		}
 
 	}
@@ -305,16 +327,6 @@ public class GameEngine {
 		System.out.println("[6/7] Loaded item data.");
 		Connection.loadConnectionData(false);
 		Connection.loadConnectionData(true);
-	}
-
-	public static long getMinutesCounter() {
-		return minutesCounter;
-	}
-
-	private static final TaskScheduler scheduler = new TaskScheduler();
-
-	public static TaskScheduler getScheduler() {
-		return scheduler;
 	}
 	
 	public static void sendStaffNotice(String message) {

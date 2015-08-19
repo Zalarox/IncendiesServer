@@ -7,6 +7,7 @@ import java.util.Random;
 
 import main.Constants;
 import main.GameEngine;
+import main.util.Misc;
 
 /**
  * A class tracking methods used on players who are
@@ -104,6 +105,9 @@ public class JailHandler {
 	/**
 	 * Uses the player's location to determine whether or not they are in jail.
 	 * 
+	 * @param c
+	 *            The player whom we are checking.
+	 *            
 	 * @return Whether or not the player is in a jail.
 	 */
 	public static boolean isJailed(Player c) {
@@ -119,6 +123,8 @@ public class JailHandler {
 	 * Sends a player to jail.
 	 * 
 	 * Since we're cool, we'll give the player a random jail cell.
+	 * 
+	 * @param c The player who is being sent to jail.
 	 */
 	public static boolean jail(Player c) {
 		
@@ -137,16 +143,18 @@ public class JailHandler {
 	
 	/**
 	 * Returns a player from jail.
+	 * 
+	 * @param c The player who is returning from jail.
 	 */
 	public static boolean unjail(Player c) {
 		
-		if (!c.isJailed()) {
+		if (!c.isJailed() && !isJailed(c)) {
 			return true;
 		}
 		
 		c.getPA().movePlayer(Constants.RESPAWN_X, Constants.RESPAWN_Y, 0);
 		c.sendMessage("Your jail sentance has ended.");
-		c.sendMessage("In the future, don't break the rules and you won't end up here.");
+		c.sendMessage("In the future, don't break the rules and you won't end up there.");
 		c.setJailed(false);
 		
 		return (!c.isJailed() ? true : false);
@@ -154,15 +162,27 @@ public class JailHandler {
 	
 	/**
 	 * Handles escaped inmates.
+	 * 
+	 * TODO change this so it 
+	 * - is not looping through every online player 
+	 * - doesn't need to be called every cycle
+	 * - doesn't mistake a player who is in the process 
+	 *   of loading into the region where their jail cell is
+	 *   located as an escapee
 	 */
 	public static void process() {
 		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-			if (PlayerHandler.getPlayer(i) != null && !PlayerHandler.getPlayer(i).disconnected) {
+			if (PlayerHandler.isValid(i)) {
 				Player c = PlayerHandler.getPlayer(i);
 				
+				/**
+				 * If the player is marked as jailed but is not in jail, send
+				 * them back and notify staff that a player has broken out.
+				 */
 				if (c.isJailed() && !isJailed(c)) {
 					if (jail(c)) {
-						GameEngine.sendStaffNotice("the system has returned @red@" + c.getDisplayName() + "@bla@ to jail.");
+						GameEngine.sendStaffNotice("the system has returned @red@" + Misc.capitalize(c.getDisplayName())
+								+ "@bla@ to jail.");
 					} 
 				}	
 			}

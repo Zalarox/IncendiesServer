@@ -40,8 +40,8 @@ public class PlayerHandler {
 	 *            
 	 * @return The Player object.
 	 */
-	public static Player getPlayer(int idx) {
-		return players[idx];
+	public static Player getPlayer(int i) {
+		return players[i];
 	}
 	
 	/**
@@ -52,20 +52,34 @@ public class PlayerHandler {
 	 *            
 	 * @return The Player object.
 	 */
-	public static Player getPlayerByName(String name) {
+	public static Player getPlayer(String s) {
 		Player c = null;
 		
 		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-			if (getPlayer(i) != null) {
-				if (getPlayer(i).getDisplayName().equalsIgnoreCase(name)) {
+			if (isValid(i)) {
+				if (getPlayer(i).hasDisplayName(s)) {
 					c = getPlayer(i);
 					break;
 				}
 			}
 		}
-		
 		return c;
 	}
+	
+	/**
+	 * Returns true if a player is "valid," defined by the following conditions:
+	 * - not <null>
+	 * - not disconnected
+	 * 
+	 * @param i
+	 *            The player's index.
+	 *            
+	 * @return Whether or not they are disconnected.
+	 */
+	public static boolean isValid(int i) {
+		return getPlayer(i) != null && !getPlayer(i).disconnected;
+	}
+
 
 	public boolean newPlayerPlayer(Player player1) {
 		int slot = -1;
@@ -121,11 +135,14 @@ public class PlayerHandler {
 		return count;
 	}
 
-	public static boolean isPlayerOn(final String playerName) {
-		for (int d = 0; d < players.length; d++) {
-			if (PlayerHandler.players[d] != null) {
-				final Player p = PlayerHandler.players[d];
-				if (p.playerName.toLowerCase().equals(playerName.toLowerCase())) {
+	/*
+	 * Returns true if a player with the given name is already logged in.
+	 */
+	public static boolean existsPlayer(final String name) {
+		for (int i = 0; i < players.length; i++) {
+			if (getPlayer(i) != null) {
+				final Player p = getPlayer(i);
+				if (p.playerName.toLowerCase().equals(name.toLowerCase())) {
 					return true;
 				}
 			}
@@ -507,18 +524,15 @@ public class PlayerHandler {
 			}
 
 			plr.addNewPlayer(players[id], str, updateBlock);
-			plr.getInstance().addPlayerSize--; // you could just put these in
-												// player.java
-			plr.addPlayerList.remove((Integer) id); // but for the sake of the
-													// tutorial, it's right
-													// here.
+			plr.getInstance().addPlayerSize--; 
+			plr.addPlayerList.remove((Integer) id);
 		}
 
 		if (plr.getInstance().addPlayerSize > 0) {
 			plr.getInstance().addPlayerSize = 0;
 			plr.addPlayerList.clear();
 		}
-		// here
+
 		if (updateBlock.currentOffset > 0) {
 			str.writeBits(11, 2047);
 			str.finishBitAccess();
@@ -526,6 +540,7 @@ public class PlayerHandler {
 		} else {
 			str.finishBitAccess();
 		}
+		
 		str.endFrameVarSizeWord();
 
 	}

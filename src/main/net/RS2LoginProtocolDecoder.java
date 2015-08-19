@@ -29,17 +29,17 @@ import main.util.Misc;
 public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 
 	/**
-	 * Parses the data in the provided byte buffer and writes it to
-	 * <code>out</code> as a <code>Packet</code>.
+	 * Parses the data in the provided byte buffer and writes it to <out> as a
+	 * <Packet>.
 	 *
 	 * @param session
-	 *            The IoSession the data was read from
+	 *            The IoSession the data was read from.
 	 * @param in
-	 *            The buffer
+	 *            The buffer.
 	 * @param out
-	 *            The decoder output stream to which to write the
-	 *            <code>Packet</code>
-	 * @return Whether enough data was available to create a packet
+	 *            The decoder output stream to which to write the <Packet>.
+	 * 
+	 * @return Whether enough data was available to create a packet.
 	 */
 	@Override
 	public boolean doDecode(IoSession session, ByteBuffer in, ProtocolDecoderOutput out) {
@@ -51,6 +51,7 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 			}
 			// Logger.log("recv login packet, stage: "+loginStage);
 			switch (loginStage) {
+
 			case 0:
 				if (2 <= in.remaining()) {
 					int protocol = in.get() & 0xff;
@@ -61,7 +62,7 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 								+ (long) (java.lang.Math.random() * 99999999D);
 						StaticPacketBuilder s1Response = new StaticPacketBuilder();
 						s1Response.setBare(true).addBytes(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 }).addByte((byte) 0)
-								.addLong(serverSessionKey);
+						.addLong(serverSessionKey);
 						session.setAttribute("SERVER_SESSION_KEY", serverSessionKey);
 						session.write(s1Response.toPacket());
 						session.setAttribute("LOGIN_STAGE", 1);
@@ -71,6 +72,7 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 					in.rewind();
 					return false;
 				}
+
 			case 1:
 				@SuppressWarnings("unused")
 				int loginType = -1, loginPacketSize = -1, loginEncryptPacketSize = -1;
@@ -83,10 +85,12 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 						session.close();
 						return false;
 					}
+
 				} else {
 					in.rewind();
 					return false;
 				}
+
 				if (loginPacketSize <= in.remaining()) {
 					int magic = in.get() & 0xff;
 					int version = in.getUnsignedShort();
@@ -95,51 +99,66 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 						session.close();
 						return false;
 					}
+
 					if (version != 1) {
-						// Dont Add Anything
+						// Do nothing.
 					}
+
 					@SuppressWarnings("unused")
 					int lowMem = in.get() & 0xff;
 					for (int i = 0; i < 9; i++) {
 						in.getInt();
 					}
+
 					loginEncryptPacketSize--;
+
 					if (loginEncryptPacketSize != (in.get() & 0xff)) {
 						System.out.println("Encrypted size mismatch.");
 						session.close();
 						return false;
 					}
+
 					if ((in.get() & 0xff) != 10) {
 						System.out.println("Encrypted id != 10.");
 						session.close();
 						return false;
 					}
+
 					long clientSessionKey = in.getLong();
 					long serverSessionKey = in.getLong();
 					int uid = in.getInt();
+
 					if (uid != (1945275396 >> 2) * 2) {
 						session.close();
 						return false;
 					}
+
 					String name = readRS2String(in);
 					String pass = readRS2String(in);
+
 					boolean registerState = false;// in.get() == 1;
 					String identity = readRS2String(in);
 					int sessionKey[] = new int[4];
+
 					sessionKey[0] = (int) (clientSessionKey >> 32);
 					sessionKey[1] = (int) clientSessionKey;
 					sessionKey[2] = (int) (serverSessionKey >> 32);
 					sessionKey[3] = (int) serverSessionKey;
+
 					ISAACRandomGen inC = new ISAACRandomGen(sessionKey);
+
 					for (int i = 0; i < 4; i++)
 						sessionKey[i] += 50;
+
 					ISAACRandomGen outC = new ISAACRandomGen(sessionKey);
+
 					load(session, identity, registerState, uid, name, pass, inC, outC, version);
-					// WorkerThread.load(session, name, pass, inC, outC);
+
 					session.getFilterChain().remove("protocolFilter");
 					session.getFilterChain().addLast("protocolFilter",
 							new ProtocolCodecFilter(new GameCodecFactory(inC)));
 					return true;
+
 				} else {
 					in.rewind();
 					return false;
@@ -152,15 +171,17 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 	@SuppressWarnings("unused")
 	private synchronized void load(final IoSession session, final String identity, boolean register, final int uid,
 			String name, String pass, final ISAACRandomGen inC, ISAACRandomGen outC, int version) {
+
 		session.setAttribute("opcode", -1);
 		session.setAttribute("size", -1);
+
 		int loginDelay = 1;
 		int returnCode = 2;
+
 		name = name.trim();
 		name = Misc.capitalize(name);
 		pass = pass.toLowerCase();
 
-		/* if(!register) { */
 		if (!name.matches("[A-Za-z0-9 ]+")) {
 			returnCode = 4;
 		}
@@ -168,11 +189,13 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 		if (name.length() > 12) {
 			returnCode = 8;
 		}
-		/* } */
+
 		Player cl = new Player(session, -1);
+
 		cl.playerName = name;
 		cl.playerName2 = cl.playerName;
 		cl.playerPass = pass;
+
 		cl.setInStreamDecryption(inC);
 		cl.setOutStreamDecryption(outC);
 		cl.outStream.packetEncryption = outC;
@@ -183,13 +206,11 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 		cl.getInstance().properName = Character.toUpperCase(first) + name.substring(1, name.length());
 		cl.identityPunishment = identity;
 
-		/* if(!register) { */
 		if (Connection.containsConnection(cl.playerName, ConnectionType.forName("BAN"), false)
 				|| Connection.containsConnection(cl.playerName, ConnectionType.forName("IDENTITY_BAN"), false)) {
 			returnCode = 4;
-			/* } */
 
-			if (PlayerHandler.isPlayerOn(name)) {
+			if (PlayerHandler.existsPlayer(name)) {
 				returnCode = 5;
 			}
 
@@ -197,37 +218,38 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 				returnCode = 7;
 			}
 		}
+
 		if (GameEngine.UpdateServer) {
 			returnCode = 14;
 		}
 
 		if (returnCode == 2) {
 			int load = PlayerSave.loadGame(cl, cl.playerName, cl.playerPass);
+
 			if (load == 0) {
-				/* if(register) { */
 				cl.getInstance().addStarter = true;
-				/*
-				 * returnCode = 24; } else returnCode = 23;
-				 */
 			}
+
 			if (load == 3) {
 				returnCode = /* register ? 22 : */ 3;
 				cl.getInstance().saveFile = false;
+
 			} else {
+				
 				for (int i = 0; i < cl.getInstance().playerEquipment.length; i++) {
 					if (cl.getInstance().playerEquipment[i] == 0) {
 						cl.getInstance().playerEquipment[i] = -1;
 						cl.getInstance().playerEquipmentN[i] = 0;
 					}
 				}
-				if (!GameEngine.playerHandler.newPlayerPlayer(cl)/* && !register */) {
+
+				if (!GameEngine.playerHandler.newPlayerPlayer(cl)) {
 					returnCode = 7;
 					cl.getInstance().saveFile = false;
 				} else {
 					cl.getInstance().saveFile = true;
 				}
 			}
-			/* if(!register && returnCode != 23) */
 			GameProcessor.startPlayerProcess(cl.playerId);
 		}
 
@@ -237,18 +259,26 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 		StaticPacketBuilder bldr = new StaticPacketBuilder();
 		bldr.setBare(true);
 		bldr.addByte((byte) returnCode);
+
 		if (returnCode == 2) {
 			cl.getInstance().saveCharacter = true;
 			bldr.addByte((byte) cl.getInstance().playerRights);
+
 		} else if (returnCode == 21) {
 			bldr.addByte((byte) loginDelay);
+
 		} else {
 			bldr.addByte((byte) 0);
 		}
+
 		cl.isActive = true;
+
 		bldr.addByte((byte) 0);
+
 		Packet pkt = bldr.toPacket();
+
 		final Player fcl = cl;
+
 		session.setAttachment(cl);
 		session.write(pkt).addListener(new IoFutureListener() {
 			@Override
@@ -262,9 +292,11 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 	private synchronized String readRS2String(ByteBuffer in) {
 		StringBuilder sb = new StringBuilder();
 		byte b;
+
 		while ((b = in.get()) != 10) {
 			sb.append((char) b);
 		}
+
 		return sb.toString();
 	}
 

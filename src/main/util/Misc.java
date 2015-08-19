@@ -40,18 +40,18 @@ public class Misc {
 	public static void setTheme() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+			
+		} catch (InstantiationException ie) {
+			ie.printStackTrace();
+			
+		} catch (IllegalAccessException iae) {
+			iae.printStackTrace();
+			
+		} catch (UnsupportedLookAndFeelException ulafe) {
+			ulafe.printStackTrace();
 		}
 	}
 
@@ -69,8 +69,8 @@ public class Misc {
 
 			return sb.toString();
 
-		} catch (java.security.NoSuchAlgorithmException e) {
-			e.printStackTrace();
+		} catch (java.security.NoSuchAlgorithmException nsae) {
+			nsae.printStackTrace();
 		}
 		return null;
 	}

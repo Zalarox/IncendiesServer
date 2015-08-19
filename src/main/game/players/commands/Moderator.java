@@ -194,7 +194,7 @@ public class Moderator extends Commands {
 					return;
 				}
 				
-				Player c2 = PlayerHandler.getPlayerByName(name);
+				Player c2 = PlayerHandler.getPlayer(name);
 				
 				if (c2 != null) {
 					c.getPA().movePlayer(c2.getX(), c2.getY(), c2.getZ());
@@ -209,7 +209,7 @@ public class Moderator extends Commands {
 			if (cmd.startsWith("jail")) {
 				String name = cmd.substring(5);
 
-				Player c2 = PlayerHandler.getPlayerByName(name);
+				Player c2 = PlayerHandler.getPlayer(name);
 
 				if (c2 != null) {
 
@@ -232,7 +232,7 @@ public class Moderator extends Commands {
 			if (cmd.startsWith("unjail")) {
 				String name = cmd.substring(7);
 
-				Player c2 = PlayerHandler.getPlayerByName(name);
+				Player c2 = PlayerHandler.getPlayer(name);
 
 				if (c2 != null) {
 

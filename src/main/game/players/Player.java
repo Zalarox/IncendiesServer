@@ -842,7 +842,7 @@ public class Player {
 	}
 
 	public void questTab() {
-		getPA().sendFrame126("Player Statistics", 19155);
+		getPA().sendFrame126("Incendius", 19155);
 		getPA().sendFrame126("-- PVP --", 19161);
 		getPA().sendFrame126("", 19162);
 		getPA().sendFrame126("Kills:" + KC, 19163);
@@ -967,8 +967,6 @@ public class Player {
 
 		/**
 		 * If they don't have a display name, ensure their playerName is shown.
-		 * 
-		 * - Branon McClellan (KeepBotting)
 		 */
 		if (displayName.equalsIgnoreCase("") || displayName == null) {
 			displayName = playerName;
@@ -3498,6 +3496,10 @@ public class Player {
 
 	public String getDisplayName() {
 		return (displayName == "" ? playerName : displayName);
+	}
+	
+	public boolean hasDisplayName(String s) {
+		return (getDisplayName().equalsIgnoreCase(s) ? true : false);
 	}
 	
 	/**
