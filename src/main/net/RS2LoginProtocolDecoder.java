@@ -15,6 +15,7 @@ import main.GameEngine;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.PlayerSave;
+import main.game.players.punishments.PunishmentHandler;
 import main.processors.GameProcessor;
 import main.util.ISAACRandomGen;
 import main.util.Misc;
@@ -206,8 +207,7 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 		cl.getInstance().properName = Character.toUpperCase(first) + name.substring(1, name.length());
 		cl.identityPunishment = identity;
 
-		if (Connection.containsConnection(cl.playerName, ConnectionType.forName("BAN"), false)
-				|| Connection.containsConnection(cl.playerName, ConnectionType.forName("IDENTITY_BAN"), false)) {
+		if (PunishmentHandler.isBanned(cl)) {
 			returnCode = 4;
 
 			if (PlayerHandler.existsPlayer(name)) {

@@ -6,6 +6,7 @@ import main.Constants;
 import main.game.players.Player;
 import main.game.players.PlayerHandler;
 import main.game.players.packets.Commands;
+import main.game.players.punishments.PunishmentHandler;
 import main.handlers.ItemHandler;
 
 public class Administrator extends Commands {
@@ -189,9 +190,9 @@ public class Administrator extends Commands {
 						if (PlayerHandler.getPlayer(i) != null) {
 							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToBan)) {
 								Player c2 = PlayerHandler.getPlayer(i);
-								Connection.addConnection(c2, ConnectionType.IPBAN);
-								c.sendMessage("You have IP-banned " + c2.getDisplayName() + ", whose host is "
-										+ c2.getHost() + ".");
+								//PunishmentHandler.banIP(c2);
+								c.sendMessage("You have IP-banned " + c2.getDisplayName() + ", whose IP is "
+										+ c2.getIP() + ".");
 								c2.disconnect();
 							}
 						}

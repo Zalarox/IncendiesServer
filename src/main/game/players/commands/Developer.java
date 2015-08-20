@@ -88,7 +88,7 @@ public class Developer extends Commands {
 								Player c2 = PlayerHandler.getPlayer(i);
 								Connection.addConnection(c2, ConnectionType.IDENTITY_BAN);
 								c.sendMessage("You have MAC-banned " + c2.getDisplayName() + ", whose host is "
-										+ c2.getHost() + ".");
+										+ c2.getIP() + ".");
 								c2.disconnect();
 							}
 						}

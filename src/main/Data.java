@@ -21,8 +21,6 @@ public class Data {
 	
 	/**
 	 * The map directory, containing the server's mapdata in .gz format.
-	 * 
-	 * TODO transfer mapdata to this directory instead of MAP_CONFIG_DIRECTORY
 	 */
 	public static final String MAP_DIRECTORY        = DATA_DIRECTORY + "map/";
 	
@@ -106,4 +104,20 @@ public class Data {
 	public static final String CHAT_LOG    = LOG_DIRECTORY + "chat.log";
 	public static final String DUEL_LOG    = LOG_DIRECTORY + "duel.log";
 	public static final String PM_LOG      = LOG_DIRECTORY + "pm.log";
+	
+	/**
+	 * The punishment directory, containing information about disciplined players.
+	 */
+	public static final String PUNISHMENT_DIRECTORY = DATA_DIRECTORY + "punishments/";
+	
+	/**
+	 * Individual punishment registers.
+	 */
+	public static final String PUNISHMENT_MUTE    = PUNISHMENT_DIRECTORY + "mute.txt";
+	public static final String PUNISHMENT_BAN     = PUNISHMENT_DIRECTORY + "ban.txt";
+	public static final String PUNISHMENT_IPMUTE  = PUNISHMENT_DIRECTORY + "ipmute.txt";
+	public static final String PUNISHMENT_IPBAN   = PUNISHMENT_DIRECTORY + "ipban.txt";
+	public static final String PUNISHMENT_MACMUTE = PUNISHMENT_DIRECTORY + "macmute.txt";
+	public static final String PUNISHMENT_MACBAN  = PUNISHMENT_DIRECTORY + "macban.txt";
+	public static final String PUNISHMENT_JAIL    = PUNISHMENT_DIRECTORY + "jail.txt";
 }

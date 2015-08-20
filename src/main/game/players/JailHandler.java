@@ -120,6 +120,20 @@ public class JailHandler {
 	}
 	
 	/**
+	 * Registers that the specified player is indeed jailed.
+	 * 
+	 * @param c
+	 *            The player who is jailed.
+	 */
+	private void registerJail(Player c) {
+		
+		if (!c.isJailed() && !isJailed(c)) {
+			return;
+		}
+		
+	}
+	
+	/**
 	 * Sends a player to jail.
 	 * 
 	 * Since we're cool, we'll give the player a random jail cell.
@@ -161,31 +175,42 @@ public class JailHandler {
 	}
 	
 	/**
+	 * Used for timing process()'s execution.
+	 */
+	private static long check = System.currentTimeMillis();
+	
+	private static long getLastCheck() {
+		return System.currentTimeMillis() - check;
+	}
+	
+	private static void setLastCheck(long l) {
+		check = l;
+	}
+	
+	/**
 	 * Handles escaped inmates.
 	 * 
-	 * TODO change this so it 
-	 * - is not looping through every online player 
-	 * - doesn't need to be called every cycle
-	 * - doesn't mistake a player who is in the process 
-	 *   of loading into the region where their jail cell is
-	 *   located as an escapee
+	 * TODO change this so it is not looping through every online player 
 	 */
 	public static void process() {
-		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-			if (PlayerHandler.isValid(i)) {
-				Player c = PlayerHandler.getPlayer(i);
-				
-				/**
-				 * If the player is marked as jailed but is not in jail, send
-				 * them back and notify staff that a player has broken out.
-				 */
-				if (c.isJailed() && !isJailed(c)) {
-					if (jail(c)) {
-						GameEngine.sendStaffNotice("the system has returned @red@" + Misc.capitalize(c.getDisplayName())
-								+ "@bla@ to jail.");
-					} 
-				}	
+		if (getLastCheck() > 10000) {
+			for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
+				if (PlayerHandler.isValid(i)) {
+					Player c = PlayerHandler.getPlayer(i);
+					/**
+					 * If the player is marked as jailed but is not in jail,
+					 * send them back and notify staff that a player has broken
+					 * out.
+					 */
+					if ((c.isJailed() && !isJailed(c))) {
+						if (jail(c)) {
+							GameEngine.sendStaffNotice("the system has returned @red@"
+									+ Misc.formatName(c.getDisplayName()) + "@bla@ to jail.");
+						}
+					}
+				}
 			}
+			setLastCheck(System.currentTimeMillis());
 		}
 	}
 }

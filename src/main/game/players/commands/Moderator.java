@@ -197,9 +197,11 @@ public class Moderator extends Commands {
 				Player c2 = PlayerHandler.getPlayer(name);
 				
 				if (c2 != null) {
+					
 					c.getPA().movePlayer(c2.getX(), c2.getY(), c2.getZ());
 					c.sendMessage("You have teleported to " + c2.getDisplayName() + ".");
 					c2.sendMessage(c.getDisplayName() + " has teleported to you.");
+					
 				} else {
 					c.sendMessage("Unable to find " + name + ".");
 				}
@@ -210,8 +212,26 @@ public class Moderator extends Commands {
 				String name = cmd.substring(5);
 
 				Player c2 = PlayerHandler.getPlayer(name);
+				
+				if (name.equalsIgnoreCase(c.getDisplayName())) {
+					c.sendMessage("Why would you want to jail yourself?");
+					return;
+				}
 
 				if (c2 != null) {
+					
+					if ((c2.getRights() == c.getRights()) && (c.getRights() < Player.RIGHTS_DEVELOPER)) {
+						c.sendMessage("You may not jail a staff member with a rank equal to yourself.");
+						return;
+					} else if ((c2.getRights() >= c.getRights()) && (c.getRights() < Player.RIGHTS_DEVELOPER)) {
+						c.sendMessage("You may not jail a staff member with a higher rank than you.");
+						return;
+					}
+					
+					if (c2.isJailed() && JailHandler.isJailed(c2)) {
+						c.sendMessage("That player is already in jail!");
+						return;
+					}
 
 					/**
 					 * Since the Jail class does all our work for us, we can use
@@ -235,7 +255,12 @@ public class Moderator extends Commands {
 				Player c2 = PlayerHandler.getPlayer(name);
 
 				if (c2 != null) {
-
+					
+					if (!c2.isJailed() && !JailHandler.isJailed(c2)) {
+						c.sendMessage("That player isn't in jail!");
+						return;
+					}
+					
 					/**
 					 * Since the Jail class does all our work for us, we can use
 					 * a single simple conditional over here in the command.

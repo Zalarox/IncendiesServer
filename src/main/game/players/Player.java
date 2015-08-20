@@ -101,6 +101,9 @@ public class Player {
 
 	/**
 	 * Some Variables used for Bone Burying
+	 * 
+	 * ^yeah fucking right, this class contains variables for fucking
+	 * EVERYTHING, just tossed in here every which way
 	 */
 
 	public Player getInstance() {
@@ -3482,15 +3485,19 @@ public class Player {
 		return playerId;
 	}
 	
-	public String getHost() {
+	public String getIP() {
 		return connectedFrom;
+	}
+	
+	public String getMAC() {
+		return identityPunishment;
 	}
 	
 	public void disconnect() {
 		disconnected = true;
 	}
 	
-	public String getPlayerName() {
+	public String getName() {
 		return playerName;
 	}
 
@@ -3506,8 +3513,9 @@ public class Player {
 	 * TODO transition playerRights and everything dealing with player rights to
 	 * its own class, main.game.players.Rights
 	 * 
-	 * Eventually we'll phase out PlayerVariables entirely because it's just a
-	 * dumping ground for PI's shit
+	 * Eventually we'll phase out the majority of fields, the Player class is
+	 * just a dumping ground for PI's shit and I'd like to see a lot of this
+	 * stuff in its own classes which are instanced here.
 	 */
 	
 	public static int

@@ -90,6 +90,30 @@ public class Misc {
 		return s;
 	}
 
+	/**
+	 * Capitalizes the first letter of each word in the given string.
+	 * 
+	 * "this is a name" == "This Is A Name"
+	 * 
+	 * Most often used for properly formatting player names.
+	 * 
+	 * @param s The string to format.
+	 * @return The formatted string.
+	 */
+	public static String formatName(String  s) {
+	    StringBuffer sb = new StringBuffer();
+	    String[] strArr = s.split(" ");
+	    
+	    for (String str : strArr) {
+	        char[] stringArray = str.trim().toCharArray();
+	        stringArray[0] = Character.toUpperCase(stringArray[0]);
+	        str = new String(stringArray);
+	        sb.append(str).append(" ");
+	    }
+	    
+        return sb.toString().trim();
+	}
+
 	public static String determineAorAn(String nextWord) {
 		String[] c = { "a", "e", "i", "o", "u", "y" };
 		for (String firstLetter : c) {

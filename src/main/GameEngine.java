@@ -27,6 +27,7 @@ import main.game.players.content.minigames.impl.FightCaves;
 import main.game.players.content.minigames.impl.PestControl;
 import main.game.players.content.skills.hunter.HunterGui;
 import main.game.players.content.skills.hunter.HunterNpcs;
+import main.game.players.punishments.PunishmentHandler;
 import main.handlers.ItemHandler;
 import main.net.ConnectionHandler;
 import main.net.ConnectionThrottleFilter;
@@ -80,6 +81,14 @@ public class GameEngine {
 	public static void setLastMassSave(long l) {
 		lastMassSave = l;
 	}
+	
+	
+	private static long loadTime = System.currentTimeMillis();
+	
+	public static void resetLoadTime() {
+		System.out.println(System.currentTimeMillis() - loadTime + "ms");
+		loadTime = System.currentTimeMillis();
+	}
 
 	/**
 	 * Used to identify the server port.
@@ -131,14 +140,20 @@ public class GameEngine {
 	 */
 	public static void main(final String[] args) throws IOException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException {
-		System.out.println("[1/7] Starting the server...");
+		System.out.println("Launching Project Insanity...");
+		System.out.println();
+		
 		loadServerData();
 		bind();
+		
 		cycleTimer = new Misc.Stopwatch();
-		System.out.println("[7/7] The server has loaded and is accepting connections.");
+		
+		System.out.println();
+		System.out.println("The server is listening on port " + serverlistenerPort + ".");
+		
 		try {
 			/**
-			 * Here it is -- the massive loop that PI is so famous for. Using a
+			 * Here it is: the massive loop that PI is so famous for. Using a
 			 * loop to manage some events in a game isn't a bad thing -- unless
 			 * EVERYTHING is handled by the same loop.
 			 */
@@ -306,27 +321,50 @@ public class GameEngine {
 	 */
 	static void loadServerData() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException, IOException {
+		
+		try {
+			
 		Connection.loadConnectionData(false);
 		Connection.loadConnectionData(true);
+		
 		try {
 			NPCDefinition.init();
 		} catch (Exception e) {
 		}
+		
+		System.out.print("Loading object data... ");
 		ObjectDef.loadConfig();
-		System.out.println("[2/7] Loaded object configuration data.");
+		resetLoadTime();
+		
+		System.out.print("Loading region data... ");
 		Region.load();
-		System.out.println("[3/7] Loaded region data.");
+		resetLoadTime();
+		
+		System.out.print("Loading clan data... ");
 		pJClans.initialize();
 		pJClans.loadOptions();
-		System.out.println("[4/7] Loaded clan data.");
-		HunterGui.showGUI = false;
+		resetLoadTime();
+		
+		System.out.print("Loading NPC data... ");
 		npcHandler.loadNpcs();
-		System.out.println("[5/7] Loaded NPC data.");
-		new HunterGui();
+		resetLoadTime();
+		
+		System.out.print("Loading item data... ");
 		ItemLoader.load();
-		System.out.println("[6/7] Loaded item data.");
+		resetLoadTime();
+		
+		System.out.print("Loading punishment data... ");
 		Connection.loadConnectionData(false);
 		Connection.loadConnectionData(true);
+		PunishmentHandler.load();
+		resetLoadTime();
+		
+		} catch (Exception e) {
+			System.out.println("A fatal error has occured during the server's startup process.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
 	}
 	
 	public static void sendStaffNotice(String message) {
