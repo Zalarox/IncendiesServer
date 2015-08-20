@@ -8,8 +8,6 @@ import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
-import main.Connection;
-import main.Connection.ConnectionType;
 import main.Constants;
 import main.GameEngine;
 import main.game.players.Player;
@@ -209,14 +207,14 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 
 		if (PunishmentHandler.isBanned(cl)) {
 			returnCode = 4;
+		}
 
-			if (PlayerHandler.existsPlayer(name)) {
-				returnCode = 5;
-			}
+		if (PlayerHandler.existsPlayer(name)) {
+			returnCode = 5;
+		}
 
-			if (PlayerHandler.playerCount >= Constants.MAX_PLAYERS) {
-				returnCode = 7;
-			}
+		if (PlayerHandler.playerCount >= Constants.MAX_PLAYERS) {
+			returnCode = 7;
 		}
 
 		if (GameEngine.UpdateServer) {

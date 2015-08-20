@@ -7,14 +7,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import main.Data;
-import main.Connection.ConnectionType;
 import main.game.players.Player;
-import main.game.players.packets.ClickingButtons;
 
 /**
  * A class for handling punishments.
@@ -29,12 +26,7 @@ public class PunishmentHandler {
 	 */
 	public static Collection<String> loginLimitExceeded = new ArrayList<String>();
 	
-	private static File connectionFile; //del
 	private static File f;
-	
-	private static BufferedReader reader;//del
-	private static BufferedWriter writer; //del
-	
 	private static BufferedReader in;
 	private static BufferedWriter out;
 	
@@ -59,9 +51,9 @@ public class PunishmentHandler {
 	 * MAC-based punishment  (MAC-ban, MAC-mute) == level 3
 	 */
 	private final static int
-	PUNISHMENT_LEVEL_1 = 0,
-	PUNISHMENT_LEVEL_2 = 1,
-	PUNISHMENT_LEVEL_3 = 2;
+	PUNISHMENT_LEVEL_1 = 1,
+	PUNISHMENT_LEVEL_2 = 2,
+	PUNISHMENT_LEVEL_3 = 3;
 
 	/**
 	 * An enumerated type containing information about the various types of
@@ -217,9 +209,7 @@ public class PunishmentHandler {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	public static void load() {
-		int count = 0;
 		
 		/**
 		 * Get the directory of all the punishment files.
@@ -232,6 +222,7 @@ public class PunishmentHandler {
 		 */
 		for (File file : directory.listFiles()) {
 			Punishments p = Punishments.forName(file.getName().replace(".txt", ""));
+			String line;
 			
 			if (p == null)
 				continue;
@@ -239,22 +230,20 @@ public class PunishmentHandler {
 			try {
 				
 				in = new BufferedReader(new FileReader(file));
-				String line;
 				
 				try {
 					
 					while ((line = in.readLine()) != null) {
 						line = line.trim();
 						p.getList().add(line);
-						count++;
 					}
 					
 				} finally {
 					in.close();
 				}
 				
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
 			}
 		}
 	}
@@ -284,9 +273,10 @@ public class PunishmentHandler {
 		 * Retrieve the relevant data.
 		 */
 		String data = Punishments.getData(c, p);
-		
+
 		/**
-		 * Add the relevant data to the relevant list.
+		 * Add the relevant data to the relevant list. This allows us to load
+		 * new punishments on the fly.
 		 */
 		p.getList().add(data);
 		
@@ -327,15 +317,13 @@ public class PunishmentHandler {
 	 */
 	private static boolean isPunished(Player c, int id) {
 		Punishments p = Punishments.forID(id);
-		boolean b = false;
 		ArrayList<String> data = new ArrayList<String>();
-		String line;
+		boolean b = false;
 		
 		/**
 		 * The player's name is always needed. Add it no matter what.
 		 */
 		data.add(c.getName());
-		System.out.println("[PunishmentHandler]: Checking for punshments registered on " + c.getName());
 		
 		switch (p.getLevel()) {
 		/**
@@ -343,7 +331,6 @@ public class PunishmentHandler {
 		 * needn't search for anything else. Do nothing.
 		 */
 		case PUNISHMENT_LEVEL_1:
-			System.out.println("[PunishmentHandler]: Level 1.");
 			break;
 		/**
 		 * However, for a level-2 punishment, we must take into account the
@@ -352,18 +339,14 @@ public class PunishmentHandler {
 		 */
 		case PUNISHMENT_LEVEL_2:
 			data.add(c.getIP());
-			System.out.println("[PunishmentHandler]: Level 2.");
 			break;
 		/**
 		 * Similarly, for a level-3 punishment, the player MAC must also be checked.
 		 */
 		case PUNISHMENT_LEVEL_3:
-			System.out.println("[PunishmentHandler]: Level 3.");
 			data.add(c.getMAC());
 			break;
 		}
-		
-		System.out.println("[PunishmentHandler]: Data: " + data);
 
 		try {
 			
@@ -371,24 +354,21 @@ public class PunishmentHandler {
 			 * Get the file.
 			 */
 			f = new File(p.getFile());
-			System.out.println("[PunishmentHandler]: File: " + f);
 
 			try {
 				/**
-				 * Use the BufferedReader to iterate through existing lines.
+				 * Iterate through the punishment list.
 				 */
-				while ((line = in.readLine()) != null) {
-					System.out.println("[PunishmentHandler]: Line not null.");
+				for (int i = 0; i < p.getList().size(); i++) {
 					/**
-					 * Use a for-loop to make each check that we have determined
-					 * is necessary.
+					 * Iterate through each check that we have determined is
+					 * necessary.
 					 */
-					for (int i = 0; i < data.size(); i++) {
-						System.out.println("[PunishmentHandler]: Iterating. Length: " + data.size());
+					for (int j = 0; j < data.size(); j++) {
 						/**
-						 * If the line contains any of the data that we're
-						 * checking for, then this player should be considered
-						 * punished.
+						 * If the entry in the list contains any of the data
+						 * that we're checking for, then this player should be
+						 * considered punished.
 						 * 
 						 * This works because of the following scenarios:
 						 * 
@@ -412,17 +392,8 @@ public class PunishmentHandler {
 						 * These three scenarios work the same way for level 1,
 						 * 2, and 3 mutes as well as bans.
 						 */
-						if (line.toLowerCase().contains(data.get(i))) {
+						if (p.getList().get(i).toLowerCase().contains(data.get(j).toLowerCase())) {
 							b = true;
-							System.out.print("[PunishmentHandler]: found a " + p.getName() + " (level-" + p.getLevel()
-									+ " for " + c.getDisplayName() + ".");
-							
-							if (p.isBan()) {
-								System.out.println(" Denied login.");
-							} else {
-								System.out.println();
-							}
-							
 							break;
 						}
 					}
@@ -451,136 +422,4 @@ public class PunishmentHandler {
 			 || isPunished(c, PUNISHMENT_MACMUTE));
 	}
 
-	public static void quash(String toRemove, Punishments type) {
-		connectionFile = new File(Data.DATA_DIRECTORY + "/bans/" + type.toString().toLowerCase() + ".txt");
-		type.getList().remove(toRemove);
-		try {
-			writer = new BufferedWriter(new FileWriter(connectionFile));
-			reader = new BufferedReader(new FileReader(connectionFile));
-			String line;
-			try {
-				while ((line = reader.readLine()) != null) {
-					line = line.trim();
-					if (!line.equalsIgnoreCase(toRemove)) {
-						writer.write(line);
-					}
-				}
-			} finally {
-				writer.close();
-				reader.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Checks if a connection of the specified type exists for the specified
-	 * player name.
-	 * 
-	 * @param toRemove
-	 *            The string to remove from the file.
-	 * @param type
-	 *            The type of connection.
-	 */
-	public static boolean connectionExists(String player, Punishments type) {
-		connectionFile = new File(Data.DATA_DIRECTORY + "/bans/" + type.toString().toLowerCase() + ".txt");
-		boolean success = false;
-		try {
-
-			reader = new BufferedReader(new FileReader(connectionFile));
-			String line;
-			try {
-
-				while ((line = reader.readLine()) != null) {
-					if (line.toLowerCase().contains(player.toLowerCase())) {
-						success = true;
-					}
-				}
-
-			} finally {
-				reader.close();
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return success;
-	}
-
-	/**
-	 * Loads all punishments.
-	 */
-	/*public static void loadConnectionData(boolean starter) {
-		File ff = new File(Data.DATA_DIRECTORY + (starter ? "starters" : "/bans/"));
-		for (File f : ff.listFiles()) {
-			Punishments type = Punishments.forName(f.getName().replace(".txt", ""));
-			if (type == null)
-				continue;
-			try {
-				reader = new BufferedReader(new FileReader(f));
-				String line;
-				try {
-					while ((line = reader.readLine()) != null) {
-						line = line.trim();
-						type.getList().add(line);
-					}
-				} finally {
-					reader.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}*/
-
-	/**
-	 * Checks if a player is registered for a certain connetion type.
-	 * 
-	 * @param playerName
-	 *            The player.
-	 * @param type
-	 *            The connetion type.
-	 * @return <code>true</code> if the player is punished for the type,
-	 *         otherwise <code>false</code>.
-	 */
-	public static boolean containsConnection(String playerName, Punishments type, boolean starter) {
-		try {
-			connectionFile = new File(
-					Data.DATA_DIRECTORY + (starter ? "starters" : "/bans/") + type.toString().toLowerCase() + ".txt");
-			reader = new BufferedReader(new FileReader(connectionFile));
-			try {
-				String line;
-				while ((line = reader.readLine()) != null) {
-					if (line.toLowerCase().contains(playerName.toLowerCase()))
-						return true;
-				}
-			} finally {
-				reader.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	/**
-	 * Checks if an ip has reached its login limit.
-	 * 
-	 * @param IP
-	 *            The ip.
-	 * @return <code>true</code> if the ip has reached its login limit,
-	 *         otherwise <code>false</code>.
-	 */
-	public static boolean checkLoginList(String IP) {
-		loginLimitExceeded.add(IP);
-		int num = 0;
-		for (String ips : loginLimitExceeded) {
-			if (IP.equals(ips)) {
-				num++;
-			}
-		}
-		return num > 5;
-	}
 }
