@@ -43,6 +43,12 @@ public class Administrator extends Commands {
 		 * levels of 2 and above.
 		 */
 		if (c.getRights() >= Player.RIGHTS_ADIMINISTRATOR) {
+			
+			if (cmd.startsWith("xunban")) {
+				String sss = cmd.substring(7);
+
+				PunishmentHandler.quash(sss, 0);
+			}
 
 			if (cmd.startsWith("ban")) {
 				try {

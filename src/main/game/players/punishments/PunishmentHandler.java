@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +15,7 @@ import main.Data;
 import main.game.players.Player;
 
 /**
- * A class for handling punishments.
+ * Handles punishments.
  * 
  * @author Branon McClellan (KeepBotting)
  *
@@ -24,6 +25,8 @@ public class PunishmentHandler {
 	/**
 	 * Some fields used by PunishmentHandler's core.
 	 */
+	public static boolean hasLoaded = false;
+	
 	public static Collection<String> loginLimitExceeded = new ArrayList<String>();
 	
 	private static File f;
@@ -48,44 +51,63 @@ public class PunishmentHandler {
 	 * 
 	 * Name-based punishment (ban, mute, jail)   == level 1
 	 * Host-based punishment (IP-ban, IP-mute)   == level 2
-	 * MAC-based punishment  (MAC-ban, MAC-mute) == level 3
+	 * UUID-based punishment (MAC-ban, MAC-mute) == level 3
 	 */
 	private final static int
 	PUNISHMENT_LEVEL_1 = 1,
 	PUNISHMENT_LEVEL_2 = 2,
 	PUNISHMENT_LEVEL_3 = 3;
-
+	
+	/**
+	 * Used to add "cushion" characters to player data.
+	 * 
+	 * Colons (:) are used throughout this class as "cushion" characters.
+	 * 
+	 * This prevents the system from exhibiting such undesirable behavior as: 
+	 * - equating the banned player "Bob" with the unbanned player "Bob123" 
+	 * - equating the banned IP "123.45" with the unbanned IP "123.456"
+	 */
+	private static String cushion(String s) {
+		return (":" + s + ":");
+	}
+	
+	private static String cushion(String s, String ss) {
+		return (":" + s + ":" + ss + ":");
+	}
+	
 	/**
 	 * An enumerated type containing information about the various types of
 	 * punishments.
 	 * 
 	 * ArrayLists are used because the server loads data into those lists upon
 	 * startup, then uses them to track punishments instead of constant I/O on
-	 * the actual punishment files.
+	 * multiple punishment files.
 	 *
 	 * @author Branon McClellan (KeepBotting)
 	 */
 	private enum Punishments {
-		/* <name>, <arraylist>, <data file>, <level> */
+		/* <name>, <id>, <arraylist>, <data file>, <level> */
 		
-		BAN    ("ban",      new ArrayList<String>(), Data.PUNISHMENT_BAN,  PUNISHMENT_LEVEL_1), 
-		MUTE   ("mute",     new ArrayList<String>(), Data.PUNISHMENT_MUTE, PUNISHMENT_LEVEL_1),
-		JAIL   ("jail",     new ArrayList<String>(), Data.PUNISHMENT_JAIL, PUNISHMENT_LEVEL_1),
+		BAN    ("ban",  PUNISHMENT_BAN,  new ArrayList<String>(), Data.PUNISHMENT_BAN,  PUNISHMENT_LEVEL_1), 
+		MUTE   ("mute", PUNISHMENT_MUTE, new ArrayList<String>(), Data.PUNISHMENT_MUTE, PUNISHMENT_LEVEL_1),
+		JAIL   ("jail", PUNISHMENT_JAIL, new ArrayList<String>(), Data.PUNISHMENT_JAIL, PUNISHMENT_LEVEL_1),
 		
-		IPBAN  ("IP-ban",   new ArrayList<String>(), Data.PUNISHMENT_IPBAN,  PUNISHMENT_LEVEL_2), 
-		IPMUTE ("IP-mute",  new ArrayList<String>(), Data.PUNISHMENT_IPMUTE, PUNISHMENT_LEVEL_2),
+		IPBAN  ("ipban",  PUNISHMENT_IPBAN,  new ArrayList<String>(), Data.PUNISHMENT_IPBAN,  PUNISHMENT_LEVEL_2), 
+		IPMUTE ("ipmute", PUNISHMENT_IPMUTE, new ArrayList<String>(), Data.PUNISHMENT_IPMUTE, PUNISHMENT_LEVEL_2),
 		
-		MACBAN ("MAC-ban",  new ArrayList<String>(), Data.PUNISHMENT_MACBAN,  PUNISHMENT_LEVEL_3), 
-		MACMUTE("MAC-mute", new ArrayList<String>(), Data.PUNISHMENT_MACMUTE, PUNISHMENT_LEVEL_3);
+		MACBAN ("macban",  PUNISHMENT_MACBAN,  new ArrayList<String>(), Data.PUNISHMENT_MACBAN,  PUNISHMENT_LEVEL_3), 
+		MACMUTE("macmute", PUNISHMENT_MACMUTE, new ArrayList<String>(), Data.PUNISHMENT_MACMUTE, PUNISHMENT_LEVEL_3);
 		;
 
 		private String name;
+		private int id;
 		private List<String> list;
 		private String file;
 		private int level;
 
-		private Punishments(String name, List<String> list, String file, int level) {
+		private Punishments(String name, int id, List<String> list, String file, int level) {
 			this.name  = name;
+			this.id    = id;
 			this.list  = list;
 			this.file  = file;
 			this.level = level;
@@ -93,6 +115,10 @@ public class PunishmentHandler {
 		
 		public String getName() {
 			return name;
+		}
+		
+		public int getID() {
+			return id;
 		}
 
 		public List<String> getList() {
@@ -109,10 +135,9 @@ public class PunishmentHandler {
 		
 		/**
 		 * Determines whether or not the punishment is one of the following:
-		 * 
-		 * - Ban
-		 * - IP-ban
-		 * - MAC-ban
+		 * - ban
+		 * - ipban
+		 * - macban
 		 */
 		public boolean isBan() {
 			return getName().contains("ban");
@@ -129,63 +154,37 @@ public class PunishmentHandler {
 		public static Punishments forID(int id) {
 			Punishments p = null;
 			
-			switch (id) {
-			case PUNISHMENT_BAN:
-				p = Punishments.BAN;
-				break;
-			case PUNISHMENT_MUTE:
-				p = Punishments.MUTE;
-				break;
-			case PUNISHMENT_IPBAN:
-				p = Punishments.IPBAN;
-				break;
-			case PUNISHMENT_IPMUTE:
-				p = Punishments.IPMUTE;
-				break;
-			case PUNISHMENT_MACBAN:
-				p = Punishments.MACBAN;
-				break;
-			case PUNISHMENT_MACMUTE:
-				p = Punishments.MACMUTE;
-				break;
-			case PUNISHMENT_JAIL:
-				p = Punishments.JAIL;
-				break;
-			}
-			return p;
-		}
-		
-		public static Punishments forName(String name) {
-			Punishments p = null;
-			
-			switch (name) {
-			case "ban":
-				p = Punishments.BAN;
-				break;
-			case "mute":
-				p = Punishments.MUTE;
-				break;
-			case "ipban":
-				p = Punishments.IPBAN;
-				break;
-			case "ipmute":
-				p = Punishments.IPMUTE;
-				break;
-			case "macban":
-				p = Punishments.MACBAN;
-				break;
-			case "macmute":
-				p = Punishments.MACMUTE;
-				break;
-			case "jail":
-				p = Punishments.JAIL;
-				break;
+			for (Punishments pp : Punishments.values()) {
+				if (pp.getID() == id) {
+					p = pp;
+					break;
+				}
 			}
 			return p;
 		}
 		
 		/**
-		 * Returns the data relevant to the specific level of punishment.
+		 * Returns a <Punishments> object based on the given name.
+		 * 
+		 * @param name
+		 *            The name of the <Punishments>.
+		 *            
+		 * @return The <Punishments>.
+		 */
+		public static Punishments forName(String name) {	
+			Punishments p = null;
+			
+			for (Punishments pp : Punishments.values()) {
+				if (pp.getName().equalsIgnoreCase(name)) {
+					p = pp;
+					break;
+				}
+			}
+			return p;
+		}
+		
+		/**
+		 * Returns player information relevant to the specific level of punishment.
 		 * 
 		 * Ban/mute/jail    (level 1) == player name
 		 * IP-ban/IP-mute   (level 2) == player name & player IP
@@ -196,21 +195,21 @@ public class PunishmentHandler {
 			
 			switch (p.getLevel()) {
 			case PUNISHMENT_LEVEL_1:
-				s = c.getName();
-				
+				s = cushion(c.getName());
+				break;
 			case PUNISHMENT_LEVEL_2:
-				s = (c.getName() + ":" + c.getIP());
-				
+				s = cushion(c.getName(), c.getIP());
+				break;
 			case PUNISHMENT_LEVEL_3:	
-				s = (c.getName() + ":" + c.getMAC());
+				s = cushion(c.getName(), c.getMAC());
+				break;
 			}
-			
 		return s;
+		
 		}
 	}
 	
 	public static void load() {
-		
 		/**
 		 * Get the directory of all the punishment files.
 		 */
@@ -228,11 +227,15 @@ public class PunishmentHandler {
 				continue;
 			
 			try {
-				
+				/**
+				 * Initialize the BufferedReader using the current file.
+				 */
 				in = new BufferedReader(new FileReader(file));
 				
 				try {
-					
+					/**
+					 * Add all non-null lines to the relevant list.
+					 */
 					while ((line = in.readLine()) != null) {
 						line = line.trim();
 						p.getList().add(line);
@@ -244,6 +247,9 @@ public class PunishmentHandler {
 				
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
+				
+			} finally {
+				hasLoaded = true;
 			}
 		}
 	}
@@ -257,6 +263,15 @@ public class PunishmentHandler {
 	 *            The ID of the punishment to apply.
 	 */
 	public static void punish(Player c, int id) {
+		
+		if (!hasLoaded) {
+			load();
+		}
+		
+		if (isPunished(c, id)) {
+			return;
+		}
+		
 		/**
 		 * Determine the relevant punishment.
 		 */
@@ -275,8 +290,9 @@ public class PunishmentHandler {
 		String data = Punishments.getData(c, p);
 
 		/**
-		 * Add the relevant data to the relevant list. This allows us to load
-		 * new punishments on the fly.
+		 * Add the relevant data to the relevant list. This allows us to
+		 * register new punishments instantly, on the fly, without having to
+		 * re-read the file.
 		 */
 		p.getList().add(data);
 		
@@ -284,6 +300,7 @@ public class PunishmentHandler {
 		 * Write the relevant data to the relevant file.
 		 */
 		try {
+			
 			out = new BufferedWriter(new FileWriter(f));
 			
 			try {
@@ -291,19 +308,103 @@ public class PunishmentHandler {
 			} finally {
 				out.newLine();
 				out.close();
-				System.out.print("Registered a " + p.getName() + " for " + c.getDisplayName() + ".");
 			}
 			
-		} catch (IOException e) {
-			System.out.println("Error writing the data for " + c.getDisplayName() + "'s " + p.getName() + ".");
-			e.printStackTrace();
+		} catch (IOException ioe) {
+			System.out.println("[WARNING]: An error occured while registering punishment data!");
+			ioe.printStackTrace();
 			return;
 		}
 		
 		if (p.isBan()) {
 			c.disconnect();
-			System.out.println(" -- player kicked.");
-		}	
+		}
+	}
+	
+	/**
+	 * Removes the specified punishment for the specified player name.
+	 * 
+	 * @param name
+	 *            The name of the player who has served their punishment.
+	 * @param id
+	 *            The ID of the punishment to remove.
+	 */
+	public static void quash(String name, int id) {
+		
+		/**
+		 * This method will eventually wipe & re-write the entire file relevant
+		 * to the punishment it is removing. Very bad idea to do this if we
+		 * haven't actually loaded the punishments yet.
+		 */
+		if (!hasLoaded) {
+			load();
+		}
+		
+		Punishments p = Punishments.forID(id);
+		f = new File(p.getFile());
+		String data = cushion(name);
+		
+		System.out.println("Removing a " + p.getName() + " for " + name + ".");
+		
+		/**
+		 * Loop through and remove the data from the list.
+		 * 
+		 * Since this method must accept the name as a string, since it needs to
+		 * be able to work with offline as well as online players, we're only
+		 * going to search for the name.
+		 * 
+		 * If the name is found, remove that index from the list. Essentially,
+		 * this will clear any punishments of the specified level that are
+		 * registered under the specified name.
+		 */
+		for (int i = 0; i < p.getList().size(); i++) {
+			if (p.getList().get(i).contains(data)) {
+				p.getList().remove(i);
+			}
+		}
+
+		try {
+			
+			/**
+			 * Initialize and immediately close a new PrintWriter on the
+			 * relevant file. This effectively clears all data from the file.
+			 */
+			PrintWriter pw = new PrintWriter(f);
+			pw.close();
+			
+			/**
+			 * Then open a new BufferedWriter and point it to the file we just
+			 * cleared. We're going to write the list back to the file.
+			 * 
+			 * The list no longer contains the punishment that we removed, so
+			 * the punishment has effectively been quashed for the current
+			 * instance of the server ONLY.
+			 * 
+			 * To ensure that the punishment is not re-loaded the next time the
+			 * server starts, we need to make sure it no longer exists in the
+			 * file as well.
+			 */
+			out = new BufferedWriter(new FileWriter(f));
+
+			try {
+				
+				/**
+				 * Loop through the list, add the data back one at a time.
+				 */
+				for (int i = 0; i < p.getList().size(); i++) {
+					out.write(p.getList().get(i));
+					out.newLine();
+				}
+				
+			} finally {
+				out.close();
+			}
+
+		} catch (IOException ioe) {
+			System.out.println("[WARNING]: An error occured while removing punishment data!");
+			ioe.printStackTrace();
+			return;
+		}
 	}
 	
 	/**
@@ -319,12 +420,12 @@ public class PunishmentHandler {
 		Punishments p = Punishments.forID(id);
 		ArrayList<String> data = new ArrayList<String>();
 		boolean b = false;
-		
+
 		/**
 		 * The player's name is always needed. Add it no matter what.
 		 */
-		data.add(c.getName());
-		
+		data.add(cushion(c.getName()));
+
 		switch (p.getLevel()) {
 		/**
 		 * If we're attempting to determine if a level-1 punishment exists, we
@@ -332,81 +433,60 @@ public class PunishmentHandler {
 		 */
 		case PUNISHMENT_LEVEL_1:
 			break;
-		/**
-		 * However, for a level-2 punishment, we must take into account the
-		 * IP address as well. If either the name or the IP exists, the player is
-		 * considered to be punished.
-		 */
-		case PUNISHMENT_LEVEL_2:
-			data.add(c.getIP());
-			break;
-		/**
-		 * Similarly, for a level-3 punishment, the player MAC must also be checked.
-		 */
-		case PUNISHMENT_LEVEL_3:
-			data.add(c.getMAC());
-			break;
-		}
-
-		try {
-			
 			/**
-			 * Get the file.
+			 * However, for a level-2 punishment, we must take into account the IP
+			 * address as well. If either the name or the IP exists, the player is
+			 * considered to be punished.
 			 */
-			f = new File(p.getFile());
-
-			try {
-				/**
-				 * Iterate through the punishment list.
-				 */
-				for (int i = 0; i < p.getList().size(); i++) {
-					/**
-					 * Iterate through each check that we have determined is
-					 * necessary.
-					 */
-					for (int j = 0; j < data.size(); j++) {
-						/**
-						 * If the entry in the list contains any of the data
-						 * that we're checking for, then this player should be
-						 * considered punished.
-						 * 
-						 * This works because of the following scenarios:
-						 * 
-						 * Player <A> attempts to log in and is banned
-						 * (level-1). The system reads through the ban file and
-						 * checks every entry for Player <A>'s name. If it is
-						 * found, Player <A> is not allowed to log in.
-						 * 
-						 * Player <B> attempts to log in and is IP-banned
-						 * (level-2). The system reads through the IP-ban file
-						 * and checks every entry for Player <B>'s IP. If it is
-						 * found (even under a different player's name), Player
-						 * <B> is not allowed to log in.
-						 * 
-						 * Player <C> attempts to log in and is MAC-banned
-						 * (level-3). The system reads through the MAC-ban file
-						 * and checks every entry for Player <C>'s MAC. If it is
-						 * found (even under a different player's name), Player
-						 * <C> is not allowed to log in.
-						 * 
-						 * These three scenarios work the same way for level 1,
-						 * 2, and 3 mutes as well as bans.
-						 */
-						if (p.getList().get(i).toLowerCase().contains(data.get(j).toLowerCase())) {
-							b = true;
-							break;
-						}
-					}
-				}
-
-			} finally {
-				in.close();
-			}
-
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		case PUNISHMENT_LEVEL_2:
+			data.add(cushion(c.getIP()));
+			break;
+			/**
+			 * Similarly, for a level-3 punishment, the player MAC must also be
+			 * checked.
+			 */
+		case PUNISHMENT_LEVEL_3:
+			data.add(cushion(c.getMAC()));
+			break;
 		}
-		
+
+		/**
+		 * Iterate through the punishment list.
+		 */
+		for (int i = 0; i < p.getList().size(); i++) {
+			/**
+			 * Iterate through each check that we have determined is necessary.
+			 */
+			for (int j = 0; j < data.size(); j++) {
+				/**
+				 * If the entry in the list contains any of the data that we're
+				 * checking for, then this player should be considered punished.
+				 * 
+				 * This works because it covers all of the following possible
+				 * scenarios:
+				 * 
+				 * Player <A> attempts to log in and is banned. The system finds
+				 * Player <A>'s name in the ban file and denies login.
+				 * 
+				 * Player <B> attempts to log in and is IP-banned. The system
+				 * finds Player <B>'s IP (under ANY name) in the IP-ban file and
+				 * denies login.
+				 * 
+				 * Player <C> attempts to log in and is MAC-banned. The system
+				 * finds Player <C>'s MAC (under ANY name) in the MAC-ban file
+				 * and denies login.
+				 * 
+				 * These three scenarios work the same way for both mutes and
+				 * bans.
+				 * 
+				 * TODO determine if the lowercasing is actually needed.
+				 */
+				if (p.getList().get(i).toLowerCase().contains(data.get(j).toLowerCase())) {
+					b = true;
+					break;
+				}
+			}
+		}
 		return b;
 	}
 	

@@ -353,6 +353,7 @@ public class Region {
 				}
 				try {
 					loadMaps(regionIds[i], new ByteStream(file1), new ByteStream(file2));
+					//System.out.println("Loaded map region: " + regionIds[i]);
 				} catch (Exception e) {
 					//System.out.println("Error loading map region: " + regionIds[i]);
 				}

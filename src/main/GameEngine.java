@@ -74,15 +74,17 @@ public class GameEngine {
 	 */
 	private static long lastMassSave = System.currentTimeMillis();
 	
-	public static long getLastMassSave() {
+	private static long getLastMassSave() {
 		return System.currentTimeMillis() - lastMassSave;
 	}
 	
-	public static void setLastMassSave(long l) {
-		lastMassSave = l;
+	public static void setLastMassSave() {
+		lastMassSave = System.currentTimeMillis();
 	}
 	
-	
+	/**
+	 * Used for debugging load times.
+	 */
 	private static long loadTime = System.currentTimeMillis();
 	
 	public static void resetLoadTime() {
@@ -93,7 +95,7 @@ public class GameEngine {
 	/**
 	 * Used to identify the server port.
 	 */
-	public static int serverlistenerPort = 43594;
+	public static int port = 43594;
 
 	/**
 	 * Defines the cycle rate. PI cycles at 600 milliseconds, meaning that as
@@ -143,13 +145,13 @@ public class GameEngine {
 		System.out.println("Launching Project Insanity...");
 		System.out.println();
 		
-		loadServerData();
+		load();
 		bind();
 		
 		cycleTimer = new Misc.Stopwatch();
 		
 		System.out.println();
-		System.out.println("The server is listening on port " + serverlistenerPort + ".");
+		System.out.println("The server is listening on port " + port + ".");
 		
 		try {
 			/**
@@ -166,6 +168,81 @@ public class GameEngine {
 			e.printStackTrace();
 		}
 
+	}
+	
+	/**
+	 * Initialize core subsystems.
+	 * 
+	 * @throws IOException
+	 * @throws UnsupportedLookAndFeelException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws ClassNotFoundException
+	 */
+	static void load() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
+			UnsupportedLookAndFeelException, IOException {
+		
+		try {
+			
+		Connection.loadConnectionData(false);
+		Connection.loadConnectionData(true);
+		
+		try {
+			NPCDefinition.init();
+		} catch (Exception e) {
+		}
+		
+		System.out.print("Loading object data... ");
+		ObjectDef.loadConfig();
+		resetLoadTime();
+		
+		System.out.print("Loading region data... ");
+		Region.load();
+		resetLoadTime();
+		
+		System.out.print("Loading clan data... ");
+		pJClans.initialize();
+		pJClans.loadOptions();
+		resetLoadTime();
+		
+		System.out.print("Loading NPC data... ");
+		npcHandler.loadNpcs();
+		resetLoadTime();
+		
+		System.out.print("Loading item data... ");
+		ItemLoader.load();
+		resetLoadTime();
+		
+		System.out.print("Loading punishment data... ");
+		Connection.loadConnectionData(false);
+		Connection.loadConnectionData(true);
+		PunishmentHandler.load();
+		resetLoadTime();
+		
+		} catch (Exception e) {
+			System.out.println("A fatal error has occured during the server's startup process.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+	}
+	
+	/**
+	 * Binds the server to the port.
+	 * 
+	 * @throws IOException
+	 */
+	public static void bind() throws IOException {
+		acceptor = new SocketAcceptor();
+		connectionHandler = new ConnectionHandler();
+		SocketAcceptorConfig sac = new SocketAcceptorConfig();
+		sac.getSessionConfig().setTcpNoDelay(false);
+		sac.setReuseAddress(true);
+		sac.setBacklog(100);
+
+		throttleFilter = new ConnectionThrottleFilter(Constants.CONNECTION_DELAY);
+		sac.getFilterChain().addFirst("throttleFilter", throttleFilter);
+		acceptor.bind(new InetSocketAddress(port), connectionHandler, sac);
 	}
 
 	/**
@@ -219,13 +296,12 @@ public class GameEngine {
 	 */
 	private static void save() {
 		if (getLastMassSave() > Constants.SAVE_TIMER) {
-			System.out.println("Mass save for everybody.");
 			for (int i = 0; i < PlayerHandler.getPlayerCount() + 1; i++) {
 				if (PlayerHandler.isValid(i)) {
 					PlayerSave.saveGame(PlayerHandler.getPlayer(i));
 				}
 			}
-			setLastMassSave(System.currentTimeMillis());
+			setLastMassSave();
 		}
 
 	}
@@ -290,81 +366,6 @@ public class GameEngine {
 					+ (100 + Math.abs(engineLoad)) + "%");
 		}
 		cycleTimer.reset();
-	}
-
-	/**
-	 * Binds the server to the port.
-	 * 
-	 * @throws IOException
-	 */
-	public static void bind() throws IOException {
-		acceptor = new SocketAcceptor();
-		connectionHandler = new ConnectionHandler();
-		SocketAcceptorConfig sac = new SocketAcceptorConfig();
-		sac.getSessionConfig().setTcpNoDelay(false);
-		sac.setReuseAddress(true);
-		sac.setBacklog(100);
-
-		throttleFilter = new ConnectionThrottleFilter(Constants.CONNECTION_DELAY);
-		sac.getFilterChain().addFirst("throttleFilter", throttleFilter);
-		acceptor.bind(new InetSocketAddress(serverlistenerPort), connectionHandler, sac);
-	}
-
-	/**
-	 * Initialize core subsystems.
-	 * 
-	 * @throws IOException
-	 * @throws UnsupportedLookAndFeelException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 * @throws ClassNotFoundException
-	 */
-	static void loadServerData() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-			UnsupportedLookAndFeelException, IOException {
-		
-		try {
-			
-		Connection.loadConnectionData(false);
-		Connection.loadConnectionData(true);
-		
-		try {
-			NPCDefinition.init();
-		} catch (Exception e) {
-		}
-		
-		System.out.print("Loading object data... ");
-		ObjectDef.loadConfig();
-		resetLoadTime();
-		
-		System.out.print("Loading region data... ");
-		Region.load();
-		resetLoadTime();
-		
-		System.out.print("Loading clan data... ");
-		pJClans.initialize();
-		pJClans.loadOptions();
-		resetLoadTime();
-		
-		System.out.print("Loading NPC data... ");
-		npcHandler.loadNpcs();
-		resetLoadTime();
-		
-		System.out.print("Loading item data... ");
-		ItemLoader.load();
-		resetLoadTime();
-		
-		System.out.print("Loading punishment data... ");
-		Connection.loadConnectionData(false);
-		Connection.loadConnectionData(true);
-		PunishmentHandler.load();
-		resetLoadTime();
-		
-		} catch (Exception e) {
-			System.out.println("A fatal error has occured during the server's startup process.");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
 	}
 	
 	public static void sendStaffNotice(String message) {
