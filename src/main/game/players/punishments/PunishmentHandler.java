@@ -34,7 +34,7 @@ public class PunishmentHandler {
 	/**
 	 * Some integer constants representing the various punishments.
 	 */
-	private final static int
+	public final static int
 	PUNISHMENT_BAN     = 0,
 	PUNISHMENT_IPBAN   = 1,
 	PUNISHMENT_MUTE    = 2,
@@ -332,7 +332,8 @@ public class PunishmentHandler {
 	 * @param id
 	 *            The ID of the punishment to remove.
 	 */
-	public static void quash(String name, int id) {
+	public static boolean quash(String name, int id) {
+		boolean b = false;
 		
 		/**
 		 * This method will eventually wipe & re-write the entire file relevant
@@ -366,6 +367,8 @@ public class PunishmentHandler {
 			 */
 			if (p.getList().get(i).contains(cushion(name))) {
 				p.getList().remove(i);
+				b = true;
+				break;
 			}
 		}
 
@@ -409,8 +412,9 @@ public class PunishmentHandler {
 		} catch (IOException ioe) {
 			System.out.println("[WARNING]: An error occured while writing punishment data!");
 			ioe.printStackTrace();
-			return;
+			return false;
 		}
+		return b;
 	}
 	
 	/**

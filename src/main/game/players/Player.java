@@ -835,6 +835,18 @@ public class Player {
 			outStream.endFrameVarSize();
 		}
 	}
+	
+	public void sendMessage(String s[]) {
+		if (getOutStream() != null) {
+			outStream.createFrameVarSize(253);
+			
+			for (int i = 0; i < s.length; i++) {
+				outStream.writeString(s[i]);
+			}
+			
+			outStream.endFrameVarSize();
+		}
+	}
 
 	public void setSidebarInterface(int menuId, int form) {
 		if (getOutStream() != null) {

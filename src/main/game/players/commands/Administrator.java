@@ -44,45 +44,99 @@ public class Administrator extends Commands {
 		 */
 		if (c.getRights() >= Player.RIGHTS_ADIMINISTRATOR) {
 			
-			if (cmd.startsWith("xunban")) {
-				String sss = cmd.substring(7);
-
-				PunishmentHandler.quash(sss, 0);
-			}
-
+			/**
+			 * Ban a player.
+			 */
 			if (cmd.startsWith("ban")) {
+				String s = cmd.substring(4);
+				
 				try {
-					String playerToBan = cmd.substring(4);
-					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.players[i] != null) {
-							if (PlayerHandler.players[i].playerName.equalsIgnoreCase(playerToBan)) {
-								Connection.addConnection(PlayerHandler.players[i], ConnectionType.BAN);
-								PlayerHandler.players[i].disconnected = true;
-							}
-						}
+					
+					Player c2 = PlayerHandler.getPlayer(s);
+					
+					if (c2 != null) {
+						PunishmentHandler.punish(c2, PunishmentHandler.PUNISHMENT_BAN);
+						c.sendMessage(c2.getDisplayName() + " has been banned.");
+					} else {
+						String ss[] = {"Unable to find that player.", "Note that currently, only online players can be punished."};
+						c.sendMessage(ss);
 					}
+					
 				} catch (Exception e) {
 					c.sendMessage("Exception!");
 				}
 			}
 
+			/**
+			 * Unban a player.
+			 */
 			if (cmd.startsWith("unban")) {
+				String s = cmd.substring(6);
+				
 				try {
-					String playerToBan = cmd.substring(6);
+					
+					if (PunishmentHandler.quash(s, PunishmentHandler.PUNISHMENT_BAN)) {
+						c.sendMessage(s + " has been unbanned.");
+					} else {
+						c.sendMessage("Player is not registered for that punishment type.");
+					}
+					
+					
+				} catch (Exception e) {
+					c.sendMessage("Exception!");
+				}
+			}
+			
+			/**
+			 * IP-ban a player.
+			 */
+			if (cmd.startsWith("ipban")) {
+				String s = cmd.substring(6);
+				
+				try {
+					
+					Player c2 = PlayerHandler.getPlayer(s);
+					
+					if (c2 != null) {
+						PunishmentHandler.punish(c2, PunishmentHandler.PUNISHMENT_IPBAN);
+						c.sendMessage(c2.getDisplayName() + " has been IP-banned.");
+					} else {
+						String ss[] = {"Unable to find that player.", "Note that currently, only online players can be punished."};
+						c.sendMessage(ss);
+					}
+					
+				} catch (Exception e) {
+					c.sendMessage("Exception!");
+				}
+			}
 
-					Connection.removeConnection(playerToBan, ConnectionType.BAN);
-					c.sendMessage(playerToBan + " has been unbanned.");
+			/**
+			 * Unban a player.
+			 */
+			if (cmd.startsWith("unipban")) {
+				String s = cmd.substring(8);
+				
+				try {
+					
+					if (PunishmentHandler.quash(s, PunishmentHandler.PUNISHMENT_IPBAN)) {
+						c.sendMessage(s + " has been un-IP-banned.");
+					} else {
+						c.sendMessage("Player is not registered for that punishment type.");
+					}
+					
+					
 				} catch (Exception e) {
 					c.sendMessage("Exception!");
 				}
 			}
 
 			if (cmd.startsWith("tele")) {
-				String[] arg = cmd.split(" ");
-				if (arg.length > 3)
-					c.getPA().movePlayer(Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), Integer.parseInt(arg[3]));
-				else if (arg.length == 3)
-					c.getPA().movePlayer(Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), c.getZ());
+				String[] args = cmd.split(" ");
+				
+				if (args.length > 3)
+					c.getPA().movePlayer(Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+				else if (args.length == 3)
+					c.getPA().movePlayer(Integer.parseInt(args[1]), Integer.parseInt(args[2]), c.getZ());
 			}
 
 			if (cmd.equalsIgnoreCase("master") || cmd.equalsIgnoreCase("max")) {
@@ -96,6 +150,7 @@ public class Administrator extends Commands {
 
 					c.getInstance().lifePoints = 990;
 					c.getPA().requestUpdates();
+					
 				} catch (Exception e) {
 					c.sendMessage("Exception!");
 				}
@@ -169,7 +224,7 @@ public class Administrator extends Commands {
 						}
 						p.sendMessage("You have been healed by " + c.playerName + ".");
 					} else {
-						c.sendMessage("Player must be offline.");
+						c.sendMessage("No player by that name.");
 					}
 				} else {
 					for (int i = 0; i < 22; i++) {
@@ -185,49 +240,6 @@ public class Administrator extends Commands {
 
 			if (cmd.equalsIgnoreCase("bank")) {
 				c.getPA().openUpBank();
-			}
-
-			if (cmd.startsWith("ipban")) {
-				String ipToBan = cmd.substring(6);
-
-				try {
-
-					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.getPlayer(i) != null) {
-							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToBan)) {
-								Player c2 = PlayerHandler.getPlayer(i);
-								//PunishmentHandler.banIP(c2);
-								c.sendMessage("You have IP-banned " + c2.getDisplayName() + ", whose IP is "
-										+ c2.getIP() + ".");
-								c2.disconnect();
-							}
-						}
-					}
-
-				} catch (Exception e) {
-					c.sendMessage("Exception!");
-				}
-			}
-
-			if (cmd.startsWith("unipban")) {
-				String ipToUnban = cmd.substring(8);
-
-				try {
-
-					for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
-						if (PlayerHandler.getPlayer(i) != null) {
-							if (PlayerHandler.getPlayer(i).getDisplayName().equalsIgnoreCase(ipToUnban)) {
-								Player c2 = PlayerHandler.getPlayer(i);
-								Connection.removeConnection(ipToUnban, ConnectionType.IPBAN);
-								c.sendMessage("You have un-IP-banned " + c2.getDisplayName() + ".");
-								break;
-							}
-						}
-					}
-
-				} catch (Exception e) {
-					c.sendMessage("Exception!");
-				}
 			}
 
 			if (cmd.startsWith("copy")) {
