@@ -31,18 +31,18 @@ public class AuditInterface {
 	}
 
 	private void writeInterfaceItem(int id[]) {
-		c.outStream.createFrameVarSizeWord(53);
-		c.outStream.writeWord(8847); // 8847
-		c.outStream.writeWord(id.length);
+		c.getOutStream().createFrameVarSizeWord(53);
+		c.getOutStream().writeWord(8847); // 8847
+		c.getOutStream().writeWord(id.length);
 		for (int i = 0; i < id.length; i++) {
-			c.outStream.writeByte(1);
+			c.getOutStream().writeByte(1);
 			if (id[i] > 0) {
-				c.outStream.writeWordBigEndianA(id[i] + 1);
+				c.getOutStream().writeWordBigEndianA(id[i] + 1);
 			} else {
-				c.outStream.writeWordBigEndianA(0);
+				c.getOutStream().writeWordBigEndianA(0);
 			}
 		}
-		c.outStream.endFrameVarSizeWord();
+		c.getOutStream().endFrameVarSizeWord();
 		c.flushOutStream();
 	}
 
@@ -67,15 +67,15 @@ public class AuditInterface {
 	}
 
 	void accountInfo() {
-		menuLine("Test information about the player", -1, 0);
-		menuLine("Test line 2", -1, 1);
-		menuLine("Test line 3", -1, 2);
+		menuLine("Account information about this player", -1, 0);
+		menuLine("Original name: " + c.getName(), -1, 1);
+		menuLine("Current name: " + c.getDisplayName(), -1, 2);
+		menuLine("Original IP: " + c.getIP(), -1, 3);
+		menuLine("Original MAC: " + c.getMAC(), -1, 4);
 	}
 
 	void bankInfo() {
-		menuLine("Test information about the bank", -1, 0);
-		menuLine("Test line 2", -1, 1);
-		menuLine("Test line 3", -1, 2);
+		//I believe this should just close the interface and open the player's bank
 	}
 
 	void equipInfo() {

@@ -13,6 +13,7 @@ import java.util.List;
 
 import main.Data;
 import main.game.players.Player;
+import main.util.Misc;
 
 /**
  * Handles punishments.
@@ -22,16 +23,13 @@ import main.game.players.Player;
  */
 public class PunishmentHandler {
 	
-	/**
-	 * Some fields used by PunishmentHandler's core.
-	 */
 	public static boolean hasLoaded = false;
-	
-	public static Collection<String> loginLimitExceeded = new ArrayList<String>();
 	
 	private static File f;
 	private static BufferedReader in;
 	private static BufferedWriter out;
+	
+	public static Collection<String> ipList = new ArrayList<String>();
 	
 	/**
 	 * Some integer constants representing the various punishments.
@@ -64,8 +62,11 @@ public class PunishmentHandler {
 	 * Colons (:) are used throughout this class as "cushion" characters.
 	 * 
 	 * This prevents the system from exhibiting such undesirable behavior as: 
-	 * - equating the banned player "Bob" with the unbanned player "Bob123" 
-	 * - equating the banned IP "123.45" with the unbanned IP "123.456"
+	 * - equating the banned player "Bob" with the unbanned player "Bob123"
+	 * - equating the banned IP "123.456" with the unbanned IP "123.456.789"
+	 * 
+	 * This allows us to use contains() on our strings without fear of mistaking
+	 * one set of data for another.
 	 */
 	private static String cushion(String s) {
 		return (":" + s + ":");
@@ -220,7 +221,7 @@ public class PunishmentHandler {
 		 * <Punishments> object based on the files' names.
 		 */
 		for (File file : directory.listFiles()) {
-			Punishments p = Punishments.forName(file.getName().replace(".txt", ""));
+			Punishments p = Punishments.forName(Misc.trimFileExtension(file.getName()));
 			String line;
 			
 			if (p == null)
@@ -248,10 +249,9 @@ public class PunishmentHandler {
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 				
-			} finally {
-				hasLoaded = true;
 			}
 		}
+		hasLoaded = true;
 	}
 	
 	/**
@@ -311,7 +311,7 @@ public class PunishmentHandler {
 			}
 			
 		} catch (IOException ioe) {
-			System.out.println("[WARNING]: An error occured while registering punishment data!");
+			System.out.println("[WARNING]: An error occured while writing punishment data!");
 			ioe.printStackTrace();
 			return;
 		}
@@ -322,7 +322,10 @@ public class PunishmentHandler {
 	}
 	
 	/**
-	 * Removes the specified punishment for the specified player name.
+	 * Removes the specified punishment for the specified player name. Takes a
+	 * string instead of a Player because oftentimes, players who are punished
+	 * cannot log in, and their Player objects will never exist. Thus we have
+	 * nothing to pull a name from.
 	 * 
 	 * @param name
 	 *            The name of the player who has served their punishment.
@@ -333,8 +336,8 @@ public class PunishmentHandler {
 		
 		/**
 		 * This method will eventually wipe & re-write the entire file relevant
-		 * to the punishment it is removing. Very bad idea to do this if we
-		 * haven't actually loaded the punishments yet.
+		 * to the type of punishment that it is removing. Very bad idea to do
+		 * this if we haven't actually loaded the punishments yet.
 		 */
 		if (!hasLoaded) {
 			load();
@@ -342,23 +345,26 @@ public class PunishmentHandler {
 		
 		Punishments p = Punishments.forID(id);
 		f = new File(p.getFile());
-		String data = cushion(name);
 		
-		System.out.println("Removing a " + p.getName() + " for " + name + ".");
+		System.out.println("Removing a " + p.getName() + " for " + Misc.formatName(name) + ".");
 		
 		/**
 		 * Loop through and remove the data from the list.
 		 * 
-		 * Since this method must accept the name as a string, since it needs to
-		 * be able to work with offline as well as online players, we're only
-		 * going to search for the name.
+		 * This method accepts a player name as a string, rather than accepting
+		 * a Player object and pulling the name from it later.
 		 * 
-		 * If the name is found, remove that index from the list. Essentially,
-		 * this will clear any punishments of the specified level that are
-		 * registered under the specified name.
+		 * This is done because the method needs to be able to work with offline
+		 * as well as online players. Because of this, we're only going to
+		 * search for the name.
 		 */
 		for (int i = 0; i < p.getList().size(); i++) {
-			if (p.getList().get(i).contains(data)) {
+			/**
+			 * If the name is found, remove that index from the list.
+			 * Essentially, this will clear any punishments of the specified
+			 * level that are registered under the specified name.
+			 */
+			if (p.getList().get(i).contains(cushion(name))) {
 				p.getList().remove(i);
 			}
 		}
@@ -401,7 +407,7 @@ public class PunishmentHandler {
 			}
 
 		} catch (IOException ioe) {
-			System.out.println("[WARNING]: An error occured while removing punishment data!");
+			System.out.println("[WARNING]: An error occured while writing punishment data!");
 			ioe.printStackTrace();
 			return;
 		}

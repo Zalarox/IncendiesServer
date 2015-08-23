@@ -91,14 +91,12 @@ public class Misc {
 	}
 
 	/**
-	 * Capitalizes the first letter of each word in the given string.
+	 * Capitalizes the first letter of each word in the given string, removing
+	 * underscores as it goes.
 	 * 
-	 * "this is a name" == "This Is A Name"
+	 * "this_is a_player name" == "This Is A Player Name"
 	 * 
 	 * Most often used for properly formatting player names.
-	 * 
-	 * @param s The string to format.
-	 * @return The formatted string.
 	 */
 	public static String formatName(String  s) {
 	    StringBuffer sb = new StringBuffer();
@@ -111,7 +109,7 @@ public class Misc {
 	        sb.append(str).append(" ");
 	    }
 	    
-        return sb.toString().trim();
+        return sb.toString().replace("_", " ").trim();
 	}
 
 	public static String determineAorAn(String nextWord) {
@@ -129,11 +127,12 @@ public class Misc {
 			return s;
 		return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
 	}
-
-	public static String formatPlayerName(String str) {
-		str = ucFirst(str);
-		str.replace("_", " ");
-		return str;
+	
+	/**
+	 * Uses regular expressions to trim the extension off the end of a file name.
+	 */
+	public static String trimFileExtension(String s) {
+		return s.replaceFirst("[.][^.]+$", "");
 	}
 
 	public static int random3(int range) {

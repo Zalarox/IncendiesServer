@@ -213,7 +213,7 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 			returnCode = 5;
 		}
 
-		if (PlayerHandler.playerCount >= Constants.MAX_PLAYERS) {
+		if (PlayerHandler.getPlayerCount() >= Constants.MAX_PLAYERS) {
 			returnCode = 7;
 		}
 

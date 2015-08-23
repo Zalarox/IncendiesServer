@@ -184,9 +184,9 @@ public class TradeHandler {
 		p.getPA().sendFrame126(playerValue2, 53507);
 		o.getPA().sendFrame126(playerValue2, 53506);
 		o.getPA().sendFrame126(playerValue1, 53507);
-		p.getPA().sendFrame126(Misc.formatPlayerName(o.getDisplayName()) + " has\\n " + o.getItems().freeSlots()
+		p.getPA().sendFrame126(Misc.formatName(o.getDisplayName()) + " has\\n " + o.getItems().freeSlots()
 				+ " free\\n inventory slots.", 53505);
-		o.getPA().sendFrame126(Misc.formatPlayerName(p.getDisplayName()) + " has\\n " + p.getItems().freeSlots()
+		o.getPA().sendFrame126(Misc.formatName(p.getDisplayName()) + " has\\n " + p.getItems().freeSlots()
 				+ " free\\n inventory slots.", 53505);
 	}
 
