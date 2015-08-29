@@ -35,116 +35,116 @@ public class DialogueHandler {
 			c.getInstance().nextChat = 255;
 			break;
 		case 321:
-			this.sendOption2("How many kills do I have remaining?", "Never mind!");
+			this.sendOption2("How many kills do I have remaining?", "Nevermind");
 			c.getInstance().dialogueAction = 121;
 			break;
 		case 255:
-			sendPlayerChat1("Okay thanks a lot Sigmund!", 9850);
+			sendPlayerChat1("I'll consider it.", 9850);
 			c.getInstance().nextChat = 0;
 			break;
 		case 170:
-			sendNpcChat4("Hello there " + c.getDisplayName() + "!", "If you have a skill level 99 in any given skill,",
-					"and wish to buy a cape of achievment.", "Then please trade me to purchase a cape.",
+			sendNpcChat4("Hello " + c.getDisplayName() + "!", "Get 99 in any skill and",
+					"I will allow you to buy my skillcapes.", "Trade me to buy them.",
 					c.getInstance().talkingNpc, "Wise Old Man");
 			c.getInstance().nextChat = 171;
 			break;
 		case 171:
-			sendPlayerChat1("Okay thanks a lot Wise Old Man.", 9850);
+			sendPlayerChat1("Got it, thanks.", 9850);
 			c.getInstance().nextChat = 0;
 			break;
 		case 180:
-			sendNpcChat4("Hello there " + c.getDisplayName() + ".", "I am the Pest control points, shopkeeper.",
-					"I sell various Void Knight items for points which",
-					"can be obtained through winning Pest control games.", c.getInstance().talkingNpc, "Void Knight");
+			sendNpcChat4("Hello traveller.", "I am the Pest Control shopkeeper.",
+					"I sell Void Knight items for points which you",
+					"can obtain by playing Pest control games.", c.getInstance().talkingNpc, "Void Knight");
 			c.getInstance().nextChat = 181;
 			break;
 		case 181:
-			sendPlayerChat1("Okay great, I'm sure I will be back soon!", 9850);
+			sendPlayerChat1("Alright, I'll play some if I want to buy that.", 9850);
 			c.getInstance().nextChat = 0;
 			break;
 		case 198:
-			sendNpcChat3("Hello there " + c.getDisplayName() + ".", "I am Thok, the dungeoneering master, I can lead you to ",
-					"the dungeoneering lobby, would you like to?", c.getInstance().talkingNpc,
+			sendNpcChat3("Halt, " + c.getDisplayName() + "!", "I am THOK, the dungeoneering master! Come with me to ",
+					"the dungeoneering lobby!", c.getInstance().talkingNpc,
 					"Thok, Master of Dungeoneering");
 			c.getInstance().nextChat = 199;
 			break;
 		case 199:
-			sendOption2("Yes, please.", "May be later.");
+			sendOption2("Yes, sir!", "I'll... just go now.");
 			c.getInstance().dialogueId = 3622;
 			break;
 		case 208:
-			sendNpcChat1("Good luck completing the dungeon!", c.getInstance().talkingNpc,
+			sendNpcChat1("THOK WISHES YOU LUCK!", c.getInstance().talkingNpc,
 					"Thok, Master of Dungeoneering");
 			break;
 		case 204:
-			sendNpcChat2("Oh i see you decided to come.", "So what do you want to do?", c.getInstance().talkingNpc,
+			sendNpcChat2("THOK WELCOMES YOU.", "What do you wish for?", c.getInstance().talkingNpc,
 					"Thok, Master of Dungeoneering");
 			c.getInstance().nextChat = 209;
 			break;
 		case 209:
-			sendOption4("Trade", "Start Floor 1(small/medium)", "Start Floor 2(medium/large)", "Cancel");
+			sendOption4("Trade...", "Start Floor 1(small/medium)", "Start Floor 2(medium/large)", "Cancel");
 			c.getInstance().dialogueAction = 3683;
 			break;
 		case 150:
-			sendNpcChat4("Hello there " + c.getDisplayName() + "!", "I am the mage of Zamorak and I can teleport",
-					"you to a number of Runecrafting altars.", "Which Runecrafting Altar do you want to go to?",
+			sendNpcChat4("Ssssup " + c.getDisplayName() + "...", "I am the mage of Zamorak and I can teleport",
+					"you to a number of Runecrafting altars.", "Which one will you go to today?",
 					c.getInstance().talkingNpc, "Mage of Zamorak");
 			c.getInstance().nextChat = 151;
 			break;
 		case 151:
-			sendOption5("Air", "Mind", "Water", "Earth", "More");
+			sendOption5("Air Altar", "Mind Altar", "Water Altar", "Earth Altar", "Something else...");
 			c.getInstance().dialogueAction = 10;
 			c.getInstance().dialogueId = 151;
 			c.getInstance().teleAction = -1;
 			break;
 		case 152:
-			sendOption5("Fire", "Body", "Cosmic", "Astral", "More");
+			sendOption5("Fire Altar", "Body Altar", "Cosmic Altar", "Astral Altar", "Something else...");
 			c.getInstance().dialogueAction = 11;
 			c.getInstance().dialogueId = 152;
 			c.getInstance().teleAction = -1;
 			break;
 		case 153:
-			sendOption5("Nature", "Law", "Death", "Blood", "Nowhere");
+			sendOption5("Nature Altar", "Law Altar", "Death Altar", "Blood Altar", "I think I'll stay here.");
 			c.getInstance().dialogueAction = 12;
 			c.getInstance().dialogueId = 153;
 			c.getInstance().teleAction = -1;
 			break;
 		case 250:
-			sendNpcChat4("Hello there " + c.getDisplayName() + "!", "I am the Incendius Guide and I offer advice for",
-					"Incendius beginners about all they need to know to begin",
-					"there adventure, would you like to see the information I offer?", c.getInstance().talkingNpc,
+			sendNpcChat4("Greetings " + c.getDisplayName() + "!", "I am the Incendius Guide and I offer advice for",
+					"Incendius beginners. Check out the forums for more!",
+					"So... would you like to see the information I offer?", c.getInstance().talkingNpc,
 					"Incendius Guide");
 			c.getInstance().nextChat = 251;
 			break;
 		case 251:
-			sendPlayerChat1("Okay great! Yes please show me the information.", 9850);
+			sendPlayerChat1("Sure, I guess.", 9850);
 			c.getInstance().nextChat = 252;
 			break;
 
 		case 340:
 			break;
 		case 111:
-			sendNpcChat4("Hello!", "My name is Kuradal and I am a master of the slayer skill.",
-					"I can assign you a slayer task suitable to your combat level.", "Would you like a slayer task?",
+			sendNpcChat4("Hello adventurer!", "My name is Kuradal and I am a master of the slayer!",
+					"I can assign you a slayer task suitable to your combat level.", "Would you like one?",
 					c.getInstance().talkingNpc, "Kuradal");
 			c.getInstance().nextChat = 112;
 			break;
 		case 112:
-			sendOption2("Yes I would like a slayer task please.",
-					"No I would not like a slayer task right now thanks.");
+			sendOption2("Yeah, give me some stuff to kill.",
+					"No slayer for me, thanks.");
 			c.getInstance().dialogueAction = 5;
 			break;
 		case 113:
-			sendNpcChat2("I see I have already assigned you a task to complete.",
-					"Would you like me to give you an easier task?", c.getInstance().talkingNpc, "Kuradal");
+			sendNpcChat2("Hmm... It seems I have already assigned you a task to complete.",
+					"Would you like me to make it easier on you?", c.getInstance().talkingNpc, "Kuradal");
 			c.getInstance().nextChat = 114;
 			break;
 		case 114:
-			sendOption2("Yes I would like an easier task.", "No I would like to keep my task.");
+			sendOption2("Yeah, something easier would be nice.", "No I can deal with this.");
 			c.getInstance().dialogueAction = 6;
 			break;
 		case 320: // Mage of zamorak
-			sendNpcChat2("This is no place to talk!", "We are in the middle of the Wilderness..",
+			sendNpcChat2("Dude like, wasssssup with you!", "People can kill you here and stuff...",
 					c.getInstance().talkingNpc, "Mage of Zamorak");
 			c.getInstance().nextChat = 0;
 			break;
@@ -153,28 +153,28 @@ public class DialogueHandler {
 			c.getInstance().nextChat = 5;
 			break;
 		case 5:
-			sendNpcChat1("Sure, what type of wares are you interested in seeing?", c.getInstance().talkingNpc,
+			sendNpcChat1("Sure, what are you interested in buying?", c.getInstance().talkingNpc,
 					"Nastroth");
 			c.getInstance().nextChat = 6;
 			break;
 		case 6:
-			sendOption4("Melee Gear", "Magic Gear", "Ranged Gear", "Supplies");
+			sendOption4("Show me Melee Gear", "Show me Magic Gear", "Show me Ranged Gear", "Some Supplies, perhaps");
 			c.getInstance().dialogueAction = 2;
 			c.getInstance().nextChat = 0;
 			break;
 		case 7:
-			sendNpcChat1("Hello " + c.getDisplayName() + ", what can I do for you?", c.getInstance().talkingNpc,
+			sendNpcChat1("Hi " + c.getDisplayName() + ", what can I do for you today?", c.getInstance().talkingNpc,
 					"Strange Old Man");
 			c.getInstance().nextChat = 8;
 			break;
 		case 8:
-			sendOption4("I would like to reset my Barrows kills.", "I need my Barrows items fixed.",
-					"Do you know where can I get a spade from?", "Never mind.");
+			sendOption4("Could you reset my Barrows kills?", "I need my Barrows items fixed.",
+					"Where do I find myself a spade?", "Nothing, I'm good.");
 			c.getInstance().nextChat = 0;
 			c.getInstance().dialogueAction = 50;
 			break;
 		case 9:
-			sendNpcChat1("You can buy a spade from the general store at home.", c.getInstance().talkingNpc,
+			sendNpcChat1("You can buy a spade from the General Store at home.", c.getInstance().talkingNpc,
 					"Strange Old Man");
 			c.getInstance().nextChat = 10;
 			break;
@@ -183,7 +183,7 @@ public class DialogueHandler {
 			c.nextChat = 0;
 			break;
 		case 13:
-			sendNpcChat1("Sure thing, hand it over.", c.getInstance().talkingNpc, "Strange Old Man");
+			sendNpcChat1("Sure thing, hand the items over.", c.getInstance().talkingNpc, "Strange Old Man");
 			c.getInstance().nextChat = 14;
 			break;
 		case 14:
@@ -203,21 +203,21 @@ public class DialogueHandler {
 			c.getInstance().nextChat = 52;
 			break;
 		case 52:
-			sendOption2("Yes Please!", "Not now thanks.");
+			sendOption2("Yeah, teleport me.", "Not now, thanks.");
 			c.getInstance().dialogueAction = 60;
 			c.getInstance().nextChat = 0;
 			break;
 		case 155:
-			sendOption2("Yeah I'm fearless", "No way that looks scary");
+			sendOption2("Yeah, I'm fearless!", "No way, that looks scary.");
 			c.getInstance().dialogueAction = 982;
 			break;
 		case 30:
-			sendNpcChat3("Hello there " + c.getDisplayName() + ".", "If you are interested in training the farming skill,",
-					"then please trade with me to buy farming supplies.", c.getInstance().talkingNpc, "Vanessa");
+			sendNpcChat3("Hello " + c.getDisplayName() + ".", "If you are interested in farming",
+					"then you can trade me to buy farming supplies.", c.getInstance().talkingNpc, "Vanessa");
 			c.getInstance().nextChat = 31;
 			break;
 		case 31:
-			sendPlayerChat1("Okay great! Thanks Vanessa.", 9850);
+			sendPlayerChat1("Sure thing, Venessa.", 9850);
 			c.getInstance().nextChat = 0;
 			break;
 		case 200:
@@ -225,7 +225,7 @@ public class DialogueHandler {
 			c.getInstance().nextChat = 201;
 			break;
 		case 201:
-			sendNpcChat3("Yes of course I can " + c.getDisplayName() + ". You can buy a any Pickaxe",
+			sendNpcChat3("Yes of course I can. You can buy any Pickaxe",
 					"you need from me, for a certain price. All the ore you can mine",
 					"can be found around this area, and in the Guild located South. ", c.getInstance().talkingNpc,
 					"Bob");
@@ -236,18 +236,18 @@ public class DialogueHandler {
 			c.getInstance().nextChat = 0;
 			break;
 		case 205:
-			sendPlayerChat1("Hello there, what is through that gate if I may ask?", 9850);
+			sendPlayerChat1("Hello there, what's through that gate?", 9850);
 			c.getInstance().nextChat = 206;
 			break;
 		case 206:
-			sendNpcChat3("Well " + c.getDisplayName() + ", through this gate is the Mining Guild.",
+			sendNpcChat3("Well, through this gate is the Mining Guild.",
 					"Any player with a Mining level of 85+ can enter through the",
 					"gate to mine the best and more valuable ore on Incendius.", c.getInstance().talkingNpc,
 					"Mining Instructor");
 			c.getInstance().nextChat = 207;
 			break;
 		case 207:
-			sendPlayerChat1("Okay great, thanks a lot!", 9850);
+			sendPlayerChat1("Ah I see, thanks a lot!", 9850);
 			c.getInstance().nextChat = 0;
 			break;
 		case 300:
@@ -255,19 +255,19 @@ public class DialogueHandler {
 			c.getInstance().nextChat = 311;
 			break;
 		case 311:
-			sendNpcChat4("Indeed I do " + c.getDisplayName() + ", I sell a wide range of rare and",
+			sendNpcChat4("Of course! I sell a wide range of rare and",
 					"powerful items in exchange for Donator Points. You can get",
 					"Donator Points by simply typing ::Donate and by following",
-					"the instructions on that page or by talking to Raw Envy.", c.getInstance().talkingNpc, "Zambo");
+					"the instructions on that page or by talking to the staff.", c.getInstance().talkingNpc, "Zambo");
 			c.getInstance().nextChat = 312;
 			break;
 
 		case 312:
-			sendPlayerChat1("Okay thanks a lot Zambo, loving the outfit by the way!", 9850);
+			sendPlayerChat1("Okay thanks!", 9850);
 			c.getInstance().nextChat = 313;
 			break;
 		case 313:
-			sendNpcChat1("No problem my friend and thanks!", c.getInstance().talkingNpc, "Zambo");
+			sendNpcChat1("Don't forget to vote for free benefits!", c.getInstance().talkingNpc, "Zambo");
 			c.getInstance().nextChat = 0;
 			break;
 
@@ -276,9 +276,9 @@ public class DialogueHandler {
 			c.getInstance().nextChat = 216;
 			break;
 		case 216:
-			sendNpcChat3("Well " + c.getDisplayName() + ", I sell a wide range of rare and",
-					"expensive items in exchange for Voting Points. You can",
-					"obtain voting Points & a reward by Voting every 24 hours!", c.getInstance().talkingNpc, "Grum");
+			sendNpcChat3("I'll sell you a variety of unique items",
+					"in exchange for Voting Points. You can obtain them",
+					"by voting once per 24 hours!", c.getInstance().talkingNpc, "Grum");
 			c.getInstance().nextChat = 217;
 			break;
 
@@ -305,7 +305,7 @@ public class DialogueHandler {
 			break;
 		case 18:
 			sendNpcChat3("Yes, I do. I sell a large variety of powerful items in exchange",
-					"for player killing points. Feel free to browse through my wares",
+					"for PK points. Feel free to browse through my wares",
 					"until you find what you're looking for.", c.getInstance().talkingNpc, "Mandrith");
 			c.getInstance().nextChat = 19;
 			break;
@@ -320,12 +320,12 @@ public class DialogueHandler {
 			c.getInstance().nextChat = 0;
 			break;
 		case 19:
-			sendOption4("View the Pk Points shop", "View my current amount of Pk Points",
-					"Exchange PvP Artifacts for Pk Points", "Cancel");
+			sendOption4("View PK Points shop", "My current PK Points",
+					"Exchange PvP Artifacts for PK Points", "Cancel");
 			c.getInstance().dialogueAction = 0;
 			break;
 		case 20:
-			sendOption4("Pk Locations", "Minigames", "Monsters", "Cancel");
+			sendOption4("PK Locations", "Minigames", "Monsters", "Cancel");
 			c.getInstance().dialogueAction = 55;
 			break;
 		case 21:
@@ -402,11 +402,11 @@ public class DialogueHandler {
 			c.getPA().closeAllWindows();
 			break;
 		case 77:
-			sendNpcChat4("" + c.getDisplayName() + " you have Failed.", "You didn't participate enough to take down",
-					"the portals. ", "Try Harder next time.", c.getInstance().talkingNpc, "Void Knight");
+			sendNpcChat4("" + c.getDisplayName() + " you have failed.", "You didn't participate enough to take down",
+					"the portals. ", "Try harder next time.", c.getInstance().talkingNpc, "Void Knight");
 			break;
 		case 78:
-			sendNpcChat4("All is Lost!", "You could not take down the portals in time.", " ", "Try Harder next time.",
+			sendNpcChat4("All is lost!", "You could not take down the portals in time.", " ", "Try harder next time.",
 					c.getInstance().talkingNpc, "Void Knight");
 			break;
 		case 79:
