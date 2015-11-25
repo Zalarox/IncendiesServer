@@ -31,7 +31,7 @@
 
 - Update the 655 (634?) model header to prevent the client from incorrectly applying transparency to certain items
 
-- Fix timing for poision so it actually has a chance to hit before wearing off
+- Fix timing for poison so it actually has a chance to hit before wearing off
 
 - Remove famished mage-eyes from Relekka slayer dungeon & the list of possible slayer tasks
 	
