@@ -265,7 +265,8 @@ public class GameEngine {
 			JailHandler.process();
 			
 		} catch (Exception e) {
-			System.out.println("A fatal error has occured during the game engine's cycling process. The server will be halted immediately.");
+			System.out.println(
+					"A fatal error has occured during the game engine's cycling process. The server will be halted immediately.");
 			shutdownServer = true;
 			e.printStackTrace();
 		}
@@ -351,7 +352,7 @@ public class GameEngine {
 		long engineLoad = (100 - (Math.abs(sleepTime) / (cycleRate / 100)));
 		
 		if(engineLoad > 60) {
-			System.out.println("WARNING: Cycle rate: " + cycleTimer.elapsed() + " ms, engine load: " + engineLoad + "%");
+			System.out.println("WARNING: Cycle rate " + cycleTimer.elapsed() + " ms, engine load " + engineLoad + "%");
 		}
 		
 		if (sleepTime > 0) {

@@ -98,7 +98,7 @@ public class PlayerHandler {
 		players[slot].isActive = true;
 		players[slot].connectedFrom = ((InetSocketAddress) player1.getSession().getRemoteAddress()).getAddress()
 				.getHostAddress();
-		if (Constants.SERVER_VERBOSE_DEBUG) {
+		if (Constants.SERVER_DEBUG_VERBOSE) {
 			Misc.println("Player Slot " + slot + " slot 0 " + players[0] + " Player Hit " + players[slot]);
 		}
 		return true;

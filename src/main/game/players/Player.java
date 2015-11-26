@@ -948,7 +948,7 @@ public class Player {
 		if (specAmount > 10) {
 			specAmount = 10;
 		}
-		sendMessage("Welcome to " + Constants.SERVER_NAME + ", " + Constants.SERVER_VERSION_VERBOSE + ""
+		sendMessage("Welcome to " + Constants.SERVER_NAME + ", " + Constants.SERVER_VERSION_VERBOSE + " "
 				+ Constants.SERVER_VERSION_MAJOR + "." + Constants.SERVER_VERSION_MINOR);
 		sendMessage(Constants.SERVER_MOTD);
 		getPA().showOption(4, 0, "Follow", 4);

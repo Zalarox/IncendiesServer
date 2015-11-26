@@ -66,7 +66,7 @@ public class Commands implements PacketType {
 				e.printStackTrace();
 			}
 		}
-		if (Constants.SERVER_VERBOSE_DEBUG)
+		if (Constants.SERVER_DEBUG_VERBOSE)
 			Misc.println(p.playerName + " playerCommand: " + playerCommand);
 		if (playerCommand.startsWith("/") && playerCommand.length() > 1) {
 			if (p.getInstance().clanId >= 0) {

@@ -2,14 +2,14 @@ package main;
 
 public class Constants {
 
-	public static final boolean SERVER_VERBOSE_DEBUG = false;
+	public static final boolean SERVER_DEBUG_VERBOSE = false;
 
 	public static final String SERVER_NAME = "Incendius";
 	public static final String SERVER_MOTD = "";
 	
 	public static final String SERVER_VERSION_VERBOSE = "developer snapshot";
 	public static final String SERVER_VERSION_MAJOR = "2015-Nov-25";
-	public static final String SERVER_VERSION_MINOR = "0";
+	public static final String SERVER_VERSION_MINOR = "";
 	
 	public static final String SERVER_FORUMS_URL = "";
 	
@@ -18,7 +18,7 @@ public class Constants {
 	public static final int CASTLE_WARS_X = 2439;
 	public static final int CASTLE_WARS_Y = 3087;
 
-	public static final int CLIENT_VERSION = 999999; // TODO change this.
+	public static final int CLIENT_VERSION = 999999; //Unused
 
 	public static final int ITEM_LIMIT = 25000;
 	public static final int MAXITEM_AMOUNT = Integer.MAX_VALUE;
