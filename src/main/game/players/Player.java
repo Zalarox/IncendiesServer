@@ -948,9 +948,9 @@ public class Player {
 		if (specAmount > 10) {
 			specAmount = 10;
 		}
-		sendMessage("Welcome to " + Constants.SERVER_NAME + ".");
-		sendMessage(Constants.WELCOME_MESSAGE);
-		sendMessage("@blu@Latest Update: @bla@" + Constants.LATEST_UPDATE);
+		sendMessage("Welcome to " + Constants.SERVER_NAME + ", " + Constants.SERVER_VERSION_VERBOSE + ""
+				+ Constants.SERVER_VERSION_MAJOR + "." + Constants.SERVER_VERSION_MINOR);
+		sendMessage(Constants.SERVER_MOTD);
 		getPA().showOption(4, 0, "Follow", 4);
 		getPA().showOption(5, 0, "Trade With", 3);
 		getItems().resetItems(3214);

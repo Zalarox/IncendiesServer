@@ -351,7 +351,7 @@ public class GameEngine {
 		long engineLoad = (100 - (Math.abs(sleepTime) / (cycleRate / 100)));
 		
 		if(engineLoad > 60) {
-			System.out.println("Cycle rate: " + cycleTimer.elapsed() + " ms, engine load: " + engineLoad + "%");
+			System.out.println("WARNING: Cycle rate: " + cycleTimer.elapsed() + " ms, engine load: " + engineLoad + "%");
 		}
 		
 		if (sleepTime > 0) {
@@ -362,8 +362,8 @@ public class GameEngine {
 			 * engine load of 100% or greater.
 			 */
 		} else {
-			System.out.println("[WARNING]: Server is over-cycling by " + Math.abs(sleepTime) + "ms, engine load: "
-					+ (100 + Math.abs(engineLoad)) + "%");
+			System.out.println("Can't keep up! Running " + Math.abs(sleepTime) + "ms behind, skipping "
+					+ (Math.abs(sleepTime) / cycleRate) + " cycle(s)");
 		}
 		cycleTimer.reset();
 	}

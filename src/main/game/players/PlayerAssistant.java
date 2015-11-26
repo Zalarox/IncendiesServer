@@ -2686,7 +2686,7 @@ public class PlayerAssistant {
 			}
 			return false;
 		}
-		xpAmmount *= Constants.SERVER_EXP_BONUS;
+		xpAmmount *= Constants.SERVER_GLOBAL_XP_MULTIPLIER;
 		int oldLevel = getLevelForXP(c.getInstance().playerXP[skill]);
 		c.getInstance().playerXP[skill] += xpAmmount;
 		if (oldLevel < getLevelForXP(c.getInstance().playerXP[skill])) {

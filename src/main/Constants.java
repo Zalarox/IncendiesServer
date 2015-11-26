@@ -2,13 +2,18 @@ package main;
 
 public class Constants {
 
-	public static final boolean SERVER_DEBUG = false;
+	public static final boolean SERVER_VERBOSE_DEBUG = false;
 
 	public static final String SERVER_NAME = "Incendius";
-	public static final String WELCOME_MESSAGE = "Drop by our forums at www.incendi.us & don't forget to vote daily for rewards!";
-	public static final String LATEST_UPDATE = "Changes as often as the weather!";
-	public static final String FORUMS = "";
-	public static final double SERVER_EXP_BONUS = 1.0; // XP bonus multiplier
+	public static final String SERVER_MOTD = "";
+	
+	public static final String SERVER_VERSION_VERBOSE = "developer snapshot";
+	public static final String SERVER_VERSION_MAJOR = "2015-Nov-25";
+	public static final String SERVER_VERSION_MINOR = "0";
+	
+	public static final String SERVER_FORUMS_URL = "";
+	
+	public static final double SERVER_GLOBAL_XP_MULTIPLIER = 1.0;
 
 	public static final int CASTLE_WARS_X = 2439;
 	public static final int CASTLE_WARS_Y = 3087;
