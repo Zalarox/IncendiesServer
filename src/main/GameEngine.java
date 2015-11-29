@@ -25,7 +25,6 @@ import main.game.players.content.clanchat.load.Clans;
 import main.game.players.content.minigames.impl.CastleWars;
 import main.game.players.content.minigames.impl.FightCaves;
 import main.game.players.content.minigames.impl.PestControl;
-import main.game.players.content.skills.hunter.HunterGui;
 import main.game.players.content.skills.hunter.HunterNpcs;
 import main.game.players.punishments.PunishmentHandler;
 import main.handlers.ItemHandler;
@@ -93,17 +92,6 @@ public class GameEngine {
 	}
 
 	/**
-	 * Used to identify the server port.
-	 */
-	public static int port = 43594;
-
-	/**
-	 * Defines the cycle rate. PI cycles at 600 milliseconds, meaning that as
-	 * far as this game engine is concerned, one "game tick" == 600ms.
-	 */
-	private final static int cycleRate = 600;
-
-	/**
 	 * Constructors for the core subsystems.
 	 */
 	public static ItemHandler itemHandler = new ItemHandler();
@@ -125,8 +113,6 @@ public class GameEngine {
 	public static TaskScheduler getScheduler() {
 		return scheduler;
 	}
-
-	public static Player[] developer = new Player[Constants.DEVELOPER_AMOUNT];
 
 	/**
 	 * Launches the game server.
@@ -151,7 +137,7 @@ public class GameEngine {
 		cycleTimer = new Misc.Stopwatch();
 		
 		System.out.println();
-		System.out.println("The server is listening on port " + port + ".");
+		System.out.println("The server is listening on port " + Constants.SERVER_PORT + ".");
 		
 		try {
 			/**
@@ -240,9 +226,9 @@ public class GameEngine {
 		sac.setReuseAddress(true);
 		sac.setBacklog(100);
 
-		throttleFilter = new ConnectionThrottleFilter(Constants.CONNECTION_DELAY);
+		throttleFilter = new ConnectionThrottleFilter(Constants.MINIMUM_DELAY_REQUIRED_BETWEEN_CONNECTIONS_MS);
 		sac.getFilterChain().addFirst("throttleFilter", throttleFilter);
-		acceptor.bind(new InetSocketAddress(port), connectionHandler, sac);
+		acceptor.bind(new InetSocketAddress(Constants.SERVER_PORT), connectionHandler, sac);
 	}
 
 	/**
@@ -348,8 +334,8 @@ public class GameEngine {
 		 * The time we sleep is set to the server's cycle rate minus the time it
 		 * took to complete the cycle.
 		 */
-		long sleepTime = cycleRate - cycleTimer.elapsed();
-		long engineLoad = (100 - (Math.abs(sleepTime) / (cycleRate / 100)));
+		long sleepTime = Constants.SERVER_CYCLE_RATE_MS - cycleTimer.elapsed();
+		long engineLoad = (100 - (Math.abs(sleepTime) / (Constants.SERVER_CYCLE_RATE_MS / 100)));
 		
 		if(engineLoad > 60) {
 			System.out.println("WARNING: Cycle rate " + cycleTimer.elapsed() + " ms, engine load " + engineLoad + "%");
@@ -364,7 +350,7 @@ public class GameEngine {
 			 */
 		} else {
 			System.out.println("Can't keep up! Running " + Math.abs(sleepTime) + "ms behind, skipping "
-					+ (Math.abs(sleepTime) / cycleRate) + " cycle(s)");
+					+ (Math.abs(sleepTime) / Constants.SERVER_CYCLE_RATE_MS) + " cycle(s)");
 		}
 		cycleTimer.reset();
 	}

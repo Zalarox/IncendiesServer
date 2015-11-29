@@ -376,11 +376,11 @@ public class ItemAssistant {
 				if (c.getInstance().playerItems[i] == item + 1 && ItemLoader.isStackable(item)
 						&& c.getInstance().playerItems[i] > 0) {
 					c.getInstance().playerItems[i] = (item + 1);
-					if (c.getInstance().playerItemsN[i] + amount < Constants.MAXITEM_AMOUNT
+					if (c.getInstance().playerItemsN[i] + amount < Constants.ITEM_STACK_LIMIT
 							&& c.getInstance().playerItemsN[i] + amount > -1) {
 						c.getInstance().playerItemsN[i] += amount;
 					} else {
-						c.getInstance().playerItemsN[i] = Constants.MAXITEM_AMOUNT;
+						c.getInstance().playerItemsN[i] = Constants.ITEM_STACK_LIMIT;
 					}
 					if (c.getOutStream() != null && c != null) {
 						c.getOutStream().createFrameVarSizeWord(34);
@@ -403,14 +403,14 @@ public class ItemAssistant {
 			for (int i = 0; i < c.getInstance().playerItems.length; i++) {
 				if (c.getInstance().playerItems[i] <= 0) {
 					c.getInstance().playerItems[i] = item + 1;
-					if (amount < Constants.MAXITEM_AMOUNT && amount > -1) {
+					if (amount < Constants.ITEM_STACK_LIMIT && amount > -1) {
 						c.getInstance().playerItemsN[i] = 1;
 						if (amount > 1) {
 							c.getItems().addItem(item, amount - 1);
 							return true;
 						}
 					} else {
-						c.getInstance().playerItemsN[i] = Constants.MAXITEM_AMOUNT;
+						c.getInstance().playerItemsN[i] = Constants.ITEM_STACK_LIMIT;
 					}
 					resetItems(3214);
 					i = 30;
@@ -1908,7 +1908,7 @@ public class ItemAssistant {
 					if (amount < amount) {
 						amount = amount;
 					}
-					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.MAXITEM_AMOUNT
+					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.ITEM_STACK_LIMIT
 							&& (c.getInstance().bankItemsN[toBankSlot] + amount) > -1) {
 						c.getInstance().bankItemsN[toBankSlot] += amount;
 					} else {
@@ -1919,7 +1919,7 @@ public class ItemAssistant {
 					resetBank();
 					return true;
 				} else if (alreadyInBank) {
-					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.MAXITEM_AMOUNT
+					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.ITEM_STACK_LIMIT
 							&& (c.getInstance().bankItemsN[toBankSlot] + amount) > -1) {
 						c.getInstance().bankItemsN[toBankSlot] += amount;
 					} else {
@@ -2036,7 +2036,7 @@ public class ItemAssistant {
 					if (amount < amount) {
 						amount = amount;
 					}
-					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.MAXITEM_AMOUNT
+					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.ITEM_STACK_LIMIT
 							&& (c.getInstance().bankItemsN[toBankSlot] + amount) > -1) {
 						c.getInstance().bankItemsN[toBankSlot] += amount;
 					} else {
@@ -2047,7 +2047,7 @@ public class ItemAssistant {
 					resetBank();
 					return true;
 				} else if (alreadyInBank) {
-					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.MAXITEM_AMOUNT
+					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.ITEM_STACK_LIMIT
 							&& (c.getInstance().bankItemsN[toBankSlot] + amount) > -1) {
 						c.getInstance().bankItemsN[toBankSlot] += amount;
 					} else {
@@ -2178,7 +2178,7 @@ public class ItemAssistant {
 					if (c.getInstance().playerItemsN[fromSlot] < amount) {
 						amount = c.getInstance().playerItemsN[fromSlot];
 					}
-					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.MAXITEM_AMOUNT
+					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.ITEM_STACK_LIMIT
 							&& (c.getInstance().bankItemsN[toBankSlot] + amount) > -1) {
 						c.getInstance().bankItemsN[toBankSlot] += amount;
 					} else {
@@ -2190,7 +2190,7 @@ public class ItemAssistant {
 					resetBank();
 					return true;
 				} else if (alreadyInBank) {
-					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.MAXITEM_AMOUNT
+					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.ITEM_STACK_LIMIT
 							&& (c.getInstance().bankItemsN[toBankSlot] + amount) > -1) {
 						c.getInstance().bankItemsN[toBankSlot] += amount;
 					} else {
@@ -2305,7 +2305,7 @@ public class ItemAssistant {
 					if (c.getInstance().playerItemsN[fromSlot] < amount) {
 						amount = c.getInstance().playerItemsN[fromSlot];
 					}
-					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.MAXITEM_AMOUNT
+					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.ITEM_STACK_LIMIT
 							&& (c.getInstance().bankItemsN[toBankSlot] + amount) > -1) {
 						c.getInstance().bankItemsN[toBankSlot] += amount;
 					} else {
@@ -2316,7 +2316,7 @@ public class ItemAssistant {
 					resetBank();
 					return true;
 				} else if (alreadyInBank) {
-					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.MAXITEM_AMOUNT
+					if ((c.getInstance().bankItemsN[toBankSlot] + amount) <= Constants.ITEM_STACK_LIMIT
 							&& (c.getInstance().bankItemsN[toBankSlot] + amount) > -1) {
 						c.getInstance().bankItemsN[toBankSlot] += amount;
 					} else {

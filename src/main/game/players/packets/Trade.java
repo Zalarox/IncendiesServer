@@ -28,7 +28,7 @@ public class Trade implements PacketType {
 			c.sendMessage("You can't trade inside the arena!");
 			return;
 		}
-		if (c.getInstance().playerRights == 2 && !Constants.ADMIN_CAN_TRADE) {
+		if (c.getInstance().playerRights == 2 && !Constants.ADMINISTRATORS_CAN_TRADE_ITEMS) {
 			c.sendMessage("Trading as an admin has been disabled.");
 			return;
 		}

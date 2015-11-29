@@ -679,15 +679,6 @@ public class Player {
 		 */
 		killPlayerTasks();
 
-		if (playerRights == 3) {
-			for (int i = 0; i < GameEngine.developer.length; i++) {
-				if (GameEngine.developer[i] == this) {
-					GameEngine.developer[i] = null;
-					break;
-				}
-			}
-		}
-
 		/**
 		 * Get their summoned creature out of the way, if they have one.
 		 */
@@ -1003,14 +994,7 @@ public class Player {
 			c.getPA().sendString(Integer.toString(c.specRestoreTimer), 17021);
 			c.getPA().sendFrame75(getSummoning().summonedFamiliar.npcId, 17027);
 		}
-		if (playerRights == 3) {
-			for (int i = 0; i < GameEngine.developer.length; i++) {
-				if (GameEngine.developer[i] == null) {
-					GameEngine.developer[i] = this;
-					break;
-				}
-			}
-		}
+
 		if (Boundaries.checkBoundaries(Area.ARENAS, getX(), getY()))
 			c.getPA().movePlayer(DuelArena.LOSER_X_COORD, DuelArena.LOSER_Y_COORD, 0);
 		Following.resetFollow(this);

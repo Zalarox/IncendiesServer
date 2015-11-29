@@ -2,40 +2,40 @@ package main;
 
 public class Constants {
 
-	public static final boolean SERVER_DEBUG_VERBOSE = false;
+	public static final boolean SERVER_DEBUG_VERBOSE = false; //Enable verbose debug, both to STDOUT and to developers' chat boxes.
+	public static final boolean SERVER_LOG_STDOUT = false; //Whether or not to periodically flush STDOUT to disk. (un-implemented)
 
 	public static final String SERVER_NAME = "Incendius";
 	public static final String SERVER_MOTD = "";
 	
+	public static final int SERVER_PORT          = 43594;
+	public static final int SERVER_CYCLE_RATE_MS = 600;
+	
 	public static final String SERVER_VERSION_VERBOSE = "developer snapshot";
-	public static final String SERVER_VERSION_MAJOR = "2015-Nov-25";
-	public static final String SERVER_VERSION_MINOR = "";
+	public static final String SERVER_VERSION_MAJOR   = "2015-Nov-29";
+	public static final String SERVER_VERSION_MINOR   = "";
 	
 	public static final String SERVER_FORUMS_URL = "";
 	
 	public static final double SERVER_GLOBAL_XP_MULTIPLIER = 1.0;
+	
+	public static final int MINIMUM_DELAY_REQUIRED_BETWEEN_CONNECTIONS_MS = 100; //Used for the connection throttle filter.
+	public static final int MAXIMUM_CONCURRENT_CONNECTIONS_FROM_SINGLE_IP_ADDRESS = 2; //Used for handling multilogging.
 
-	public static final int CASTLE_WARS_X = 2439;
-	public static final int CASTLE_WARS_Y = 3087;
+	public static final boolean ADMINISTRATORS_CAN_TRADE_ITEMS = true;
+	public static final boolean ADMINISTRATORS_CAN_SELL_ITEMS  = true;
+	public static final boolean ADMINISTRATORS_CAN_DROP_ITEMS  = true;
 
-	public static final int CLIENT_VERSION = 999999; //Unused
+	public static final int ITEM_LIMIT       = 25000; //Amount of items that can exist in the game.
+	public static final int ITEM_STACK_LIMIT = Integer.MAX_VALUE; //Maximum instances of an item that can exist in a single stack.
+	
+	public static final int BANK_SIZE = 352; //Amount of spaces in players' banks.
+	public static final int MAX_PLAYERS = 1024; //Maximum amount of concurrent players that the server will accept.
+	public static final int MAX_CLANS = 3000; //Maximum amount of clans that can exist.
 
-	public static final int ITEM_LIMIT = 25000;
-	public static final int MAXITEM_AMOUNT = Integer.MAX_VALUE;
-	public static final int BANK_SIZE = 352;
-	public static final int MAX_PLAYERS = 1024; // TODO change this to whatever is good.
-	public static final int MAX_CLANS = 3000;
+	public static final int CLIENT_VERSION = 999999; //Unused, guessing it was once meant for server-sided version checks.
 
-	/**
-	 * How many developers there are. The server will not allow more than this
-	 * number of developers to be logged in at once.
-	 */
-	public static final int DEVELOPER_AMOUNT = 5;
-
-	public static final int CONNECTION_DELAY = 100; // How long one IP can connect (?)
-	public static final int IPS_ALLOWED = 2; // How many IPs are allowed (?)
-
-	public static final boolean WORLD_LIST_FIX = true;
+	public static final boolean WORLD_LIST_FIX = true; //Used for something involving the PM system, unsure what...
 
 	// Misnomer: This is what items CANNOT be sold.
 	public static final int[] ITEM_SELLABLE = { 20072, 18349, 18351, 18353, 18355, 18335, 18357, 3842, 3844, 3840, 8844,
@@ -66,10 +66,6 @@ public class Constants {
 
 	public static final int[] FUN_WEAPONS = { 2460, 2461, 2462, 2463, 2464, 2465, 2466, 2467, 2468, 2469, 2470, 2471,
 			2471, 2473, 2474, 2475, 2476, 2477 };
-
-	public static final boolean ADMIN_CAN_TRADE = true;
-	public static final boolean ADMIN_CAN_SELL_ITEMS = true;
-	public static final boolean ADMIN_DROP_ITEMS = true;
 
 	public static final int START_LOCATION_X = 3080;
 	public static final int START_LOCATION_Y = 3504;
@@ -214,7 +210,6 @@ public class Constants {
 	public static final int GHORROCK_Y = 3873;
 
 	public static final int TIMEOUT = 20;
-	public static final int CYCLE_TIME = 600;
 	public static final int BUFFER_SIZE = 10025;
 
 	/**
@@ -270,8 +265,6 @@ public class Constants {
 			0, 4, 0, 0, 0, 0, -1, 0, -1, 4, // 240
 			0, 0, 6, 6, 0, 0, 0 // 250
 	};
-
-	public static final int SERVER_PORT = 43594;
 
 	public static final boolean MYSQL_ACTIVE = true;
 
