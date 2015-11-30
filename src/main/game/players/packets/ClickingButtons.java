@@ -420,9 +420,9 @@ public class ClickingButtons implements PacketType {
 			break;
 
 		case 82024: // Deposit equipment
-			p.setMaxLP(p.maxLP());
-			p.setMaxLP(p.maxLP());
-			p.setMaxLP(p.maxLP());
+			p.setMaxLP(p.getMaxLP()); //TODO why the fuck are there four calls in this case?
+			p.setMaxLP(p.getMaxLP());
+			p.setMaxLP(p.getMaxLP());
 			
 			for (int i = 0; i < p.getInstance().playerEquipment.length; i++) {
 				int itemId = p.getInstance().playerEquipment[i];
@@ -430,7 +430,7 @@ public class ClickingButtons implements PacketType {
 				p.getItems().removeItem(itemId, i);
 				p.getItems().bankItem(itemId, p.getItems().getItemSlot(itemId), itemAmount);
 			}
-			p.getInstance().maxLifePoints = p.maxLP();
+			p.setMaxLP(p.getMaxLP());
 			break;
 
 		case 82020: // Deposit Inventory

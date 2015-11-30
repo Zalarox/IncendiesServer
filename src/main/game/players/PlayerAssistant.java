@@ -1446,7 +1446,7 @@ public class PlayerAssistant {
 	 * Dying
 	 **/
 	public void applyDead() {
-		c.maxLP();
+		c.getMaxLP(); //Should be calculateMaxLP()? Test death later.
 		if (c.getSummoning().summonedFamiliar != null && c.getInstance().summoned != null) {
 			c.getInstance().summoned.npcTeleport(0, 0, 0);
 			c.getSummoning().dismissFamiliar();
@@ -1475,7 +1475,7 @@ public class PlayerAssistant {
 						o.faceUpdate(-1);
 						o.getInstance().freezeTimer = 0;
 						CombatPrayer.resetPrayers(o);
-						o.maxLP();
+						o.getMaxLP(); //Should be calculateMaxLP()? Test death later.
 						for (int i = 0; i < 23; i++) {
 							o.getInstance().playerLevel[i] = getLevelForXP(o.getInstance().playerXP[i]);
 							o.getPA().refreshSkill(i);
@@ -1805,7 +1805,7 @@ public class PlayerAssistant {
 			FightPits.handleDeath(c);
 		}
 		CombatPrayer.resetPrayers(c);
-		c.maxLP();
+		c.getMaxLP(); //Should be calculateMaxLP()? Test death later.
 		for (int i = 0; i < 20; i++) {
 			c.playerLevel[i] = getLevelForXP(c.playerXP[i]);
 			refreshSkill(i);

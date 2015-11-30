@@ -1715,7 +1715,7 @@ public class ItemAssistant {
 						return;
 					}
 					if (addItem(c.getInstance().playerEquipment[slot], c.getInstance().playerEquipmentN[slot])) {
-						c.maxLP();
+						c.setMaxLP(c.calculateMaxLP());
 						c.getPA().refreshSkill(3);
 						c.getInstance().playerEquipment[slot] = -1;
 						c.getInstance().playerEquipmentN[slot] = 0;

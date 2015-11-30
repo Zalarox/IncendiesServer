@@ -903,7 +903,7 @@ public class Player {
 		getPA().sendFrame126("" + playerLevel[23], 4030);
 		getPA().sendFrame126("" + playerLevel[5], 34555);
 		getPA().sendFrame126("" + getPA().getLevelForXP(playerXP[5]), 34556);
-		maxLifePoints = maxLP();
+		maxLifePoints = calculateMaxLP();
 		getPA().sendString("Join chat", 18135);
 		// getActionSender().sendCrashFrame();
 		getPA().handleWeaponStyle();
@@ -1130,7 +1130,7 @@ public class Player {
 		return absX >= 2660 && absX <= 2663 && absY >= 2638 && absY <= 2643;
 	}
 	
-	int calculateMaxLP() {
+	public int calculateMaxLP() {
 		int calculatedLP = getLevelForXP(playerXP[3]) * 10;
 		
 		if(equipment.hasNexArmor(Equipment.EQUIPMENT_HEAD)) {
@@ -1145,6 +1145,8 @@ public class Player {
 			calculatedLP += 134;
 		}
 		
+		GameEngine.sendDeveloperNotice("Re-calculated your max life points, they are now " + calculatedLP + ".");
+		
 		if(getLP() > calculatedLP) {
 			setLP(calculatedLP);
 		}
@@ -1152,8 +1154,7 @@ public class Player {
 		return calculatedLP;
 	}
 	
-	public int maxLP() {
-		setMaxLP(calculateMaxLP()); // TODO refactor this method to getMaxLP when all possibilities set.
+	public int getMaxLP() {
 		return maxLifePoints;
 	}
 
@@ -2887,7 +2888,7 @@ public class Player {
 	}
 
 	protected void appendPlayerAppearance(Stream str) {
-		maxLifePoints = getLevelForXP(playerXP[3]) * 10;
+		//maxLifePoints = getLevelForXP(playerXP[3]) * 10;
 
 		playerProps.currentOffset = 0;
 		playerProps.writeByte(playerAppearance[0]);
@@ -2980,8 +2981,8 @@ public class Player {
 		playerProps.writeWord(playerTurn90CWIndex); // turn90CWAnimIndex
 		playerProps.writeWord(playerTurn90CCWIndex); // turn90CCWAnimIndex
 		playerProps.writeWord(playerRunIndex); // runAnimIndex
-		playerProps.writeWord(lifePoints);
-		playerProps.writeWord(maxLP());
+		playerProps.writeWord(getLP()); //Life points
+		playerProps.writeWord(getMaxLP()); //Max life points
 
 		/**
 		 * Handling for display names.
@@ -3247,8 +3248,8 @@ public class Player {
 		}
 		str.writeByte(hitIcon);
 		str.writeWordA(soakDamage);
-		str.writeWordA(lifePoints);
-		str.writeWordA(maxLP());
+		str.writeWordA(getLP());
+		str.writeWordA(getMaxLP());
 
 	}
 
@@ -3262,8 +3263,8 @@ public class Player {
 		}
 		str.writeByte(hitIcon2);
 		str.writeWordA(soakDamage2);
-		str.writeWordA(lifePoints);
-		str.writeWordA(maxLP());
+		str.writeWordA(getLP());
+		str.writeWordA(getMaxLP());
 
 	}
 
@@ -3273,7 +3274,7 @@ public class Player {
 	public boolean korasiSpec;
 
 	public void appendPlayerUpdateBlock(Stream str) {
-		maxLifePoints = getLevelForXP(playerXP[3]) * 10;
+		//maxLifePoints = getLevelForXP(playerXP[3]) * 10;
 
 		if (!updateRequired && !isChatTextUpdateRequired()) {
 			return; // nothing required

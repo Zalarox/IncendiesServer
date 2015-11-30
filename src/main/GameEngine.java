@@ -366,4 +366,16 @@ public class GameEngine {
 			}
 		}
 	}
+	
+	public static void sendDeveloperNotice(String message) {
+		for (int i = 0; i < PlayerHandler.players.length; i++) {
+			if (PlayerHandler.getPlayer(i) != null) {
+				Player p = PlayerHandler.getPlayer(i);
+				
+				if (p.getRights() >= Player.RIGHTS_DEVELOPER) {
+					p.sendMessage("[Debug]: " + message);
+				}
+			}
+		}
+	}
 }

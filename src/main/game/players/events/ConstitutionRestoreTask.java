@@ -5,18 +5,19 @@ import main.game.players.Player;
 
 public class ConstitutionRestoreTask extends Task {
 
-	private Player player;
+	private Player c;
 
 	public ConstitutionRestoreTask(Player player) {
 		super(10);
-		this.player = player;
+		this.c = player;
 	}
 
 	@Override
 	protected void execute() {
-		if (player.getInstance().lifePoints < player.getInstance().maxLP()) {
-			if (player.getInstance().lifePoints != 0)
-				player.getInstance().lifePoints += 1;
+		if (c.getLP() < c.getMaxLP()) {
+			if (c.getLP() != 0) {
+				c.lifePoints += 1;
+			}
 		}
 	}
 }

@@ -111,8 +111,6 @@ public class Food {
 		
 		/**
 		 * Can't eat in duels if the relevant rule is toggled.
-		 * 
-		 * - Branon McClellan (KeepBotting)
 		 */
 		if (c.getInstance().duelRule[DuelArena.RULE_FOOD]) {
 			c.sendMessage("Food has been disabled in this duel!");
@@ -121,16 +119,21 @@ public class Food {
 		
 		if (System.currentTimeMillis() - c.getInstance().foodDelay >= 1600 && c.getInstance().lifePoints > 0) {
 			c.getInstance().attackTimer += 2;
+			
 			c.startAnimation(829);
 			c.getItems().deleteItem(id, slot, 1);
+			
 			FoodToEat f = FoodToEat.food.get(id);
-			if (c.getInstance().lifePoints < c.maxLP()) {
-				c.getInstance().lifePoints += f.getHeal() * 10;
-				if (c.getInstance().lifePoints > c.maxLP())
-					c.getInstance().lifePoints = c.maxLP();
+			
+			if (c.getLP() < c.getMaxLP()) {
+				c.lifePoints += (f.getHeal() * 10);
+			} else if (c.getLP() >= c.getMaxLP()) {
+				c.lifePoints = c.getMaxLP();
 			}
+			
 			c.getPA().refreshSkill(3);
 			c.sendMessage("You eat the " + f.getName().toLowerCase() + ".");
+			
 			if (id != 10476) {
 				c.getInstance().foodDelay = System.currentTimeMillis();
 				CycleEventHandler.getInstance().addEvent(c, new CycleEvent() {

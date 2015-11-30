@@ -45,7 +45,7 @@ public class WearItem implements PacketType {
 		// c.attackTimer = oldCombatTimer;
 		c.getPA().resetSkills();
 		c.getItems().wearItem(c.getInstance().wearId, c.getInstance().wearSlot);
-		c.maxLP();
+		c.setMaxLP(c.calculateMaxLP()); //Re-calculate max LP value - Nex armors
 		c.getPA().refreshSkill(3);
 		if (c.getInstance().interfaceIdOpen == 15106) {
 		} else {

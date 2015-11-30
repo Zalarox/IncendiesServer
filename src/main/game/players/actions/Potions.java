@@ -339,8 +339,8 @@ public class Potions {
 			c.getPA().refreshSkill(toNormalise[i]);
 		}
 		c.sendMessage("The effects of the potion have worn off...");
-		if (c.lifePoints > c.getInstance().maxLP()) {
-			c.lifePoints = c.getInstance().maxLP();
+		if (c.getLP() > c.getMaxLP()) {
+			c.lifePoints = c.getMaxLP();
 		}
 	}
 
@@ -639,8 +639,8 @@ public class Potions {
 		c.getPA().refreshSkill(1);
 
 		c.getInstance().lifePoints += getBrewStat(3, .15) * 10;
-		if (c.getInstance().lifePoints > (c.getInstance().maxLP() * 1.17 + 1)) {
-			c.getInstance().lifePoints = (int) (c.getInstance().maxLP() * 1.17);
+		if (c.getLP() > (c.getMaxLP() * 1.17 + 1)) {
+			c.lifePoints = (int) (c.getMaxLP() * 1.17);
 		}
 	}
 

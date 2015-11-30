@@ -706,7 +706,7 @@ public class DuelArena {
 		/**
 		 * Boost their hitpoints up to maximum.
 		 */
-		player.getInstance().lifePoints = player.getInstance().maxLP();
+		player.getInstance().lifePoints = player.getInstance().getMaxLP();
 		
 		/**
 		 * Refresh skills once more, now that they're in the arena.
