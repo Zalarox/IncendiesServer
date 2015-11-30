@@ -282,7 +282,7 @@ public class GameEngine {
 	 * couldn't get above ~80-100 players without lagging, this is why.
 	 */
 	private static void save() {
-		if (getLastMassSave() > Constants.SAVE_TIMER) {
+		if (getLastMassSave() > Constants.SERVER_MASS_SAVE_RATE_MS) {
 			for (int i = 0; i < PlayerHandler.getPlayerCount() + 1; i++) {
 				if (PlayerHandler.isValid(i)) {
 					PlayerSave.saveGame(PlayerHandler.getPlayer(i));

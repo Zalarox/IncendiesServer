@@ -8,8 +8,9 @@ public class Constants {
 	public static final String SERVER_NAME = "Incendius";
 	public static final String SERVER_MOTD = "";
 	
-	public static final int SERVER_PORT          = 43594;
-	public static final int SERVER_CYCLE_RATE_MS = 600;
+	public static final int SERVER_PORT              = 43594;
+	public static final int SERVER_CYCLE_RATE_MS     = 600;
+	public static final int SERVER_MASS_SAVE_RATE_MS = 30000;
 	
 	public static final String SERVER_VERSION_VERBOSE = "developer snapshot";
 	public static final String SERVER_VERSION_MAJOR   = "2015-Nov-29";
@@ -123,8 +124,6 @@ public class Constants {
 			REDUCE_SPELLS[] = { 1153, 1157, 1161, 1542, 1543, 1562 },
 			DUEL_RULE_ID[] = { 1, 2, 16, 32, 64, 128, 256, 512, 1024, 4096, 8192, 16384, 32768, 65536, 131072, 262144,
 					524288, 2097152, 8388608, 16777216, 67108864, 134217728 };
-
-	public static final int SAVE_TIMER = 30000; //Used over in GameEngine, mass-saves players every thirty seconds.
 	
 	// The square grid the NPC cannot move out of (3x3 apparently?)
 	public static final int NPC_RANDOM_WALK_DISTANCE = 5; 
