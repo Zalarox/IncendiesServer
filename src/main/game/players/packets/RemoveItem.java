@@ -31,6 +31,8 @@ public class RemoveItem implements PacketType {
 			break;
 		case 1688:
 			c.getItems().removeItem(removeId, slot);
+			c.setMaxLP(c.calculateMaxLP()); //Re-calculate max LP value - Nex armors
+			c.getPA().refreshSkill(3);
 			break;
 
 		case 5064:

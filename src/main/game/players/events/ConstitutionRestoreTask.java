@@ -14,10 +14,8 @@ public class ConstitutionRestoreTask extends Task {
 
 	@Override
 	protected void execute() {
-		if (c.getLP() < c.getMaxLP()) {
-			if (c.getLP() != 0) {
-				c.lifePoints += 1;
-			}
+		if ((c.getLP() < c.getMaxLP()) && (c.getLP() != 0)) {
+			c.lifePoints += 1;
 		}
 	}
 }
